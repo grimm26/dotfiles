@@ -31,9 +31,9 @@ fi
 
 # Here is the list of plugins
 declare -A plugins
-plugins['commentary']='https://tpope.io/vim/commentary.git'
+plugins['vim-commentary']='https://github.com/tpope/vim-commentary.git'
 plugins['nerdtree']='https://github.com/scrooloose/nerdtree.git'
-plugins['surround']='https://tpope.io/vim/surround.git'
+plugins['vim-surround']='https://github.com/tpope/vim-surround.git'
 plugins['syntastic']='https://github.com/scrooloose/syntastic.git'
 plugins['vim-airline']='https://github.com/vim-airline/vim-airline'
 plugins['vim-airline-themes']='https://github.com/vim-airline/vim-airline-themes'
@@ -53,11 +53,15 @@ clone_or_update_plugin(){
   if [[ -d ~/.vim/pack/plugins/start/${name} ]]; then
     echo "Updating $name plugin via git pull"
     cd ~/.vim/pack/plugins/start/${name} && git pull
+    # Update helptags (docs)
+    [[ -d ./doc ]] && vim -u NONE -c "helptags doc" -c q
     cd $BASE_CWD
     echo ""
   else
     echo "Installing $name plugin"
     git clone $origin ~/.vim/pack/plugins/start/${name}
+    # Update helptags (docs)
+    [[ -d ~/.vim/pack/plugins/start/${name}/doc ]] && vim -u NONE -c "helptags ~/.vim/pack/plugins/start/${name}/doc" -c q
     echo ""
   fi
 }
