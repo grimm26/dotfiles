@@ -1,5 +1,5 @@
-if [[ -r ~/.enova.env ]]; then
-  source ~/.enova.env
+if [[ -r ~/.zshenv.private ]]; then
+  source ~/.zshenv.private
 fi
 if (( ! ${fpath[(I)/usr/local/share/zsh/site-functions]} )); then
   FPATH=/usr/local/share/zsh/site-functions:$FPATH

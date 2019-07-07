@@ -23,11 +23,6 @@ function zrcautoload () {
     return 0
 }
 
-if [[ -r /usr/local/share/antigen/antigen.zsh ]]; then
-  source /usr/local/share/antigen/antigen.zsh
-  antigen init ~/.antigenrc
-fi
-
 # append history list to the history file; this is the default but we make sure
 # because it's required for share_history.
 setopt append_history
@@ -57,6 +52,7 @@ setopt extended_glob
 # display PID when suspending processes as well
 setopt longlistjobs
 
+# Put local installs in front of path
 path+=('/usr/local/bin')
 path+=('/usr/local/sbin')
 path=("$HOME/bin" $path)
@@ -140,6 +136,10 @@ bindkey -M menuselect 'l' vi-forward-char         # right
 bindkey -M menuselect 'j' vi-down-line-or-history # bottom
 
 export DISABLE_AUTO_TITLE=true
-#if [ -x =nvim ]; then
-  #alias vim=nvim
-#fi
+
+## START: antigen init ##
+if [[ -r /usr/local/share/antigen/antigen.zsh ]]; then
+  source /usr/local/share/antigen/antigen.zsh
+  antigen init ~/.antigenrc
+fi
+## END: antigen init ##

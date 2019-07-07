@@ -25,37 +25,10 @@ else
   curl -L git.io/antigen > /usr/local/share/antigen/antigen.zsh
 fi
 
-if [[ ! -s ~/.antigenrc ]]; then
-cat << EOF > ~/.antigenrc
-antigen use oh-my-zsh
-#
-# Antigen Bundles
-#
-#
-antigen bundle git
-#antigen bundle tmuxinator
-antigen bundle greymd/tmux-xpanes
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-completions
-# commenting zsh-navigation-tools cuz it is bullshit
-#antigen bundle zsh-navigation-tools
-antigen bundle command-not-found
-antigen bundle vi-mode
-
-# OS specific plugins
-if [[ $(uname -s) == 'Darwin' ]]; then
-    #antigen bundle brew
-    #antigen bundle brew-cask
-    antigen bundle gem
-    antigen bundle osx
-fi
-antigen theme bureau
-
-antigen apply
-EOF
-
-# Put into .zshrc
-if [[ -r /usr/local/share/antigen/antigen.zsh ]]; then
-  source /usr/local/share/antigen/antigen.zsh
-  antigen init ~/.antigenrc
-fi
+for file in zshenv zlogin zshrc antigenrc; do
+  if [[ -s ~/.${file} ]]; then
+    echo "Saving ~/.${file} as ~/.${file}.save"
+    mv ~/.${file} ~/.${file}.save
+  fi
+  cp ./${file} ~/.${file}
+done

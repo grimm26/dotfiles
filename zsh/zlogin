@@ -1,3 +1,4 @@
+# Load up chruby or rvm
 if [ -s /usr/local/share/chruby/chruby.sh ]; then
   . /usr/local/share/chruby/chruby.sh
   . /usr/local/share/chruby/auto.sh
@@ -12,7 +13,7 @@ fi
 
 #export LSCOLORS="ehfxcxdxbxegedabagacad"
 #eval "$(hub alias -s)"
-# do stupid shit to avoid hub pr command
+# Have hub pr = hub pull-request like it was originally
 git () {
   if [ "pr" = "$1" ]; then
     hub pull-request
@@ -20,6 +21,8 @@ git () {
     hub "$@"
   fi
 }
+
+# mkdir and cd to it
 mcd () {
   if [ -d "$1" ]; then
     cd $1
@@ -28,16 +31,9 @@ mcd () {
   fi
 }
 
+# Run terragrunt with landscape.  Won't need with terraform >= 0.12
 tgl () {
-  if [ -x =scenery ]; then
-    case "$1" in
-      plan)
-        terragrunt "$@"| scenery
-        ;;
-      *)
-        terragrunt "$@"
-    esac
-  elif [ -x =landscape ]; then
+  if [ -x =landscape ]; then
     case "$1" in
       plan)
         terragrunt "$@"| landscape
@@ -69,12 +65,17 @@ zrcautoload compinit
 #fi
 #source /usr/local/bin/aws_zsh_completer.sh
 #source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-path=(~/tmux-master/bin $path)
+
+# Use local build of tmux until 3.0 released
+if [[ -d ~/tmux-master/bin ]]; then
+  path=(~/tmux-master/bin $path)
+fi
+
 typeset -U path
+
+# load up ssh keychain
 [[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval ~/.ssh/**/*id_*sa)
 #[[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval --confhost)
-
-#[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 setopt HIST_IGNORE_SPACE
 export LC_COLLATE=C
@@ -91,6 +92,7 @@ alias perldoc="PAGER=less perldoc"
 [[ -x =when ]] && when
 setopt vi
 setopt inc_append_history
+# alias ripgrep to be pretty and paged
 rg () { =rg --pretty $* |less -EFRX }
 source /usr/local/share/zsh-navigation-tools/zsh-navigation-tools.plugin.zsh
 
