@@ -20,7 +20,7 @@ mkdir -pv ~/.vim/pack/themes/opt
 # Clone or update solarized8 theme
 if [[ -d ~/.vim/pack/themes/opt/solarized8 ]]; then
   echo "Updating solarized8 theme via git pull"
-  cd ~/.vim/pack/themes/opt/solarized8 && git pull
+  cd ~/.vim/pack/themes/opt/solarized8 && git pull --no-rebase
   cd $BASE_CWD
   echo ""
 else
@@ -52,7 +52,7 @@ clone_or_update_plugin(){
   origin=$2
   if [[ -d ~/.vim/pack/plugins/start/${name} ]]; then
     echo "Updating $name plugin via git pull"
-    cd ~/.vim/pack/plugins/start/${name} && git pull
+    cd ~/.vim/pack/plugins/start/${name} && git pull --no-rebase
     # Update helptags (docs)
     [[ -d ./doc ]] && vim -u NONE -c "helptags doc" -c q
     cd $BASE_CWD
