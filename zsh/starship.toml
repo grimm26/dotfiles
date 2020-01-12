@@ -1,0 +1,51 @@
+[conda]
+disabled = true
+
+[directory]
+truncation_length=10
+truncate_to_repo=false
+
+[dotnet]
+disabled = true
+
+[git_status]
+show_sync_count=true
+
+[terraform]
+disabled=true
+
+[time]
+disabled = false
+
+[hostname]
+disabled=false
+ssh_only=false
+
+prompt_order = [
+    "username",
+    "hostname",
+    "kubernetes",
+    "directory",
+    "git_branch",
+    "git_state",
+    "git_status",
+    "package",
+    "dotnet",
+    "golang",
+    "java",
+    "nodejs",
+    "python",
+    "ruby",
+    "rust",
+    "nix_shell",
+    "conda",
+    "memory_usage",
+    "aws",
+    "env_var",
+    "cmd_duration",
+    "line_break",
+    "jobs",
+    "battery",
+    "time",
+    "character",
+]
