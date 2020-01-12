@@ -79,7 +79,7 @@ export MANPAGER='less -EFRX'
 alias chompeof="perl -pi -e 'chomp if eof && /^$/'"
 
 alias perldoc="PAGER=less perldoc"
-[[ -x =when ]] && when
+[ whence -p when &>/dev/null ] && when
 setopt vi
 setopt inc_append_history
 rg () { =rg --pretty $* |less -EFRX }
