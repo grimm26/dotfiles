@@ -23,10 +23,38 @@ function zrcautoload () {
     return 0
 }
 
-if [[ -r /usr/local/share/antigen/antigen.zsh ]]; then
-  source /usr/local/share/antigen/antigen.zsh
-  antigen init ~/.antigenrc
+# Check if zplug is installed
+if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    source ~/.zplug/init.zsh && zplug update --self
 fi
+
+# Essential
+source ~/.zplug/init.zsh
+zplug "plugins/git",   from:oh-my-zsh
+zplug "plugins/colorize",   from:oh-my-zsh
+zplug "plugins/gitignore",   from:oh-my-zsh
+zplug "plugins/tmux",   from:oh-my-zsh
+zplug "plugins/tmuxinator",   from:oh-my-zsh
+#zplug "plugins/vi-mode",   from:oh-my-zsh
+zplug "plugins/command-not-found",   from:oh-my-zsh
+zplug "plugins/gem", from:oh-my-zsh
+zplug "plugins/brew", from:oh-my-zsh
+zplug "plugins/osx", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
+
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "zsh-users/zsh-completions"
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+# Then, source plugins and add commands to $PATH
+zplug load
 
 # append history list to the history file; this is the default but we make sure
 # because it's required for share_history.

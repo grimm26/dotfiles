@@ -49,7 +49,9 @@ alias bu='brew upgrade'
 alias binfo='brew info'
 alias bs='brew search'
 
-export JAVA_HOME=$(/usr/libexec/java_home)
+if [[ -d /usr/libexec/java_home ]]; then
+  export JAVA_HOME=$(/usr/libexec/java_home)
+fi
 # completion system
 zrcautoload compinit
 #rm -f ~/.zcompdump
@@ -68,13 +70,14 @@ zrcautoload compinit
 
 setopt HIST_IGNORE_SPACE
 export LC_COLLATE=C
-alias ag="ag --pager='less -EFRX'"
+if [[ $(uname) == "Darwin" ]]; then
+  alias ldd="otool -L"
+fi
 alias cim=vim
-alias ldd="otool -L"
 export EDITOR=vim
 #export PAGER=vimpager
 #export MANPAGER=vimmanpager
-export PAGER='less -EFRX'
+export PAGER="bat"
 export MANPAGER='less -EFRX'
 alias chompeof="perl -pi -e 'chomp if eof && /^$/'"
 
@@ -83,7 +86,8 @@ alias perldoc="PAGER=less perldoc"
 setopt vi
 setopt inc_append_history
 rg () { =rg --pretty $* |less -EFRX }
-source /usr/local/share/zsh-navigation-tools/zsh-navigation-tools.plugin.zsh
+[ -f /usr/local/share/zsh-navigation-tools/zsh-navigation-tools.plugin.zsh ] \
+  && source /usr/local/share/zsh-navigation-tools/zsh-navigation-tools.plugin.zsh
 
 ## print hex value of a number
 hex() {
