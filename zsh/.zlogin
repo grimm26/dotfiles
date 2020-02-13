@@ -1,25 +1,6 @@
-if [ -s /usr/local/share/chruby/chruby.sh ]; then
-  . /usr/local/share/chruby/chruby.sh
-  . /usr/local/share/chruby/auto.sh
-  chruby ruby
-elif [ -s /usr/share/chruby/chruby.sh ]; then
-  . /usr/share/chruby/chruby.sh
-  . /usr/share/chruby/auto.sh
-  chruby ruby
-elif [ -s "$HOME/.rvm/scripts/rvm" ]; then
-  . "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-fi
-
 #export LSCOLORS="ehfxcxdxbxegedabagacad"
 eval "$(hub alias -s)"
-# do stupid shit to avoid hub pr command
-# git () {
-#   if [ "pr" = "$1" ]; then
-#     hub pull-request
-#   else
-#     hub "$@"
-#   fi
-# }
+
 mkcd () {
   if [ -d "$1" ]; then
     cd $1
@@ -218,4 +199,8 @@ alias viaws="vim -O ~/.aws/config ~/.aws/credentials"
 #source ~/.spaceshiprc
 [ -f /Users/mkeisler/Library/Preferences/org.dystroy.broot/launcher/bash/br ] && \
   source /Users/mkeisler/Library/Preferences/org.dystroy.broot/launcher/bash/br
+setopt prompt_subst
+setopt TRANSIENT_RPROMPT
+[ -r ~/.zplugrc ] && source ~/.zplugrc
+
 eval "$(starship init zsh)"
