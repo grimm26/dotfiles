@@ -1,0 +1,10 @@
+AddressFamily inet
+ControlMaster auto
+#ControlPath ~/.ssh/cm/ssh_mux_%n_%p_%r
+ControlPath ~/.ssh/cm/ssh_mux_%C
+ControlPersist 10m
+ServerAliveInterval 30
+
+#IdentityFile ~/.ssh/id_rsa
+# Host keys become more of a hinderance when your systems are ephemeral
+#CheckHostIP no
