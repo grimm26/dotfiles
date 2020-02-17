@@ -63,10 +63,10 @@ export MANPAGER='less -EFRX'
 alias chompeof="perl -pi -e 'chomp if eof && /^$/'"
 
 alias perldoc="PAGER=less perldoc"
-[ whence -p when &>/dev/null ] && when
+whence when &>/dev/null && when
 setopt vi
 setopt inc_append_history
-rg () { =rg --pretty $* |less -EFRX }
+#rg () { =rg --pretty $* |less -EFRX }
 [ -f /usr/local/share/zsh-navigation-tools/zsh-navigation-tools.plugin.zsh ] \
   && source /usr/local/share/zsh-navigation-tools/zsh-navigation-tools.plugin.zsh
 
@@ -201,6 +201,10 @@ alias viaws="vim -O ~/.aws/config ~/.aws/credentials"
   source /Users/mkeisler/Library/Preferences/org.dystroy.broot/launcher/bash/br
 setopt prompt_subst
 setopt TRANSIENT_RPROMPT
-[ -r ~/.zplugrc ] && source ~/.zplugrc
+[ -r ~/.zplugrc ] && echo "Loading zsh plugins" && source ~/.zplugrc && echo "Done."
+chruby ruby
 
-eval "$(starship init zsh)"
+whence starship &>/dev/null && \
+  eval "$(starship init zsh)"
+whence direnv &>/dev/null && \
+  eval "$(direnv hook zsh)"

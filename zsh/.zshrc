@@ -25,21 +25,21 @@ function zrcautoload () {
 
 [ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
-if [ -s $(brew --prefix)/opt/chruby/share/chruby/chruby.sh ]; then
-  source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
-  source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
-  chruby ruby
-elif [ -s /usr/local/share/chruby/chruby.sh ]; then
-  . /usr/local/share/chruby/chruby.sh
-  . /usr/local/share/chruby/auto.sh
-  chruby ruby
-elif [ -s /usr/share/chruby/chruby.sh ]; then
-  . /usr/share/chruby/chruby.sh
-  . /usr/share/chruby/auto.sh
-  chruby ruby
-elif [ -s "$HOME/.rvm/scripts/rvm" ]; then
-  . "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-fi
+# if [ -s $(brew --prefix)/opt/chruby/share/chruby/chruby.sh ]; then
+#   source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
+#   source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
+#   chruby ruby
+# elif [ -s /usr/local/share/chruby/chruby.sh ]; then
+#   . /usr/local/share/chruby/chruby.sh
+#   . /usr/local/share/chruby/auto.sh
+#   chruby ruby
+# elif [ -s /usr/share/chruby/chruby.sh ]; then
+#   . /usr/share/chruby/chruby.sh
+#   . /usr/share/chruby/auto.sh
+#   chruby ruby
+# elif [ -s "$HOME/.rvm/scripts/rvm" ]; then
+#   . "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# fi
 
 # append history list to the history file; this is the default but we make sure
 # because it's required for share_history.

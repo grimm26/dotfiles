@@ -6,17 +6,24 @@ fi
 
 # Essential
 source ~/.zplug/init.zsh
+SHOW_AWS_PROMPT=false
+zplug "plugins/aws",   from:oh-my-zsh
 zplug "plugins/git",   from:oh-my-zsh
-zplug "plugins/colorize",   from:oh-my-zsh
-zplug "plugins/gitignore",   from:oh-my-zsh
+#zplug "plugins/gitignore",   from:oh-my-zsh # Hardly use it and gets in the way of autocorrecting gi to git :)
+zplug "plugins/dircycle",   from:oh-my-zsh
+zplug "plugins/knife",   from:oh-my-zsh
+zplug "plugins/kitchen",   from:oh-my-zsh
+zplug "plugins/ripgrep",   from:oh-my-zsh
 zplug "plugins/tmux",   from:oh-my-zsh
 zplug "plugins/tmuxinator",   from:oh-my-zsh
 zplug "plugins/vi-mode",   from:oh-my-zsh
 zplug "plugins/command-not-found",   from:oh-my-zsh
 zplug "plugins/gem", from:oh-my-zsh
+zplug "plugins/chruby", from:oh-my-zsh
 zplug "plugins/brew", from:oh-my-zsh
 zplug "plugins/zsh-navigation-tools", from:oh-my-zsh
 zplug "plugins/ubuntu", from:oh-my-zsh, if:"[[ $VENDOR == ubuntu ]]"
+zplug "plugins/systemd", from:oh-my-zsh, if:"[[ $VENDOR == ubuntu ]]"
 zplug "lib/directories", from:oh-my-zsh
 zplug "lib/grep", from:oh-my-zsh
 zplug "plugins/osx", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
