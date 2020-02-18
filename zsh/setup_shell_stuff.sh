@@ -1,15 +1,16 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 #
-#set -x
+set -x
 
 echo $PATH
 # OS Type specific stuff first
 case $(uname) in
   Linux)
-    if whence -p brew ; then
+    if which brew &>/dev/null ; then
       echo "homebrew already installed"
     else
       echo "Installing homebrew"
+      exit
       sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
       eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
     fi
@@ -17,7 +18,7 @@ case $(uname) in
     sudo apt install gawk
     ;;
   Darwin)
-    if whence -p brew ; then
+    if which brew &>/dev/null ; then
       echo "homebrew already installed"
     else
       echo "Installing homebrew"
@@ -39,7 +40,7 @@ NEEDED_PACKAGES=(
   git
   bat
 )
-for pkg in $NEEDED_PACKAGES; do
-  whence $pkg &>/dev/null || \
+for pkg in ${NEEDED_PACKAGES[*]}; do
+  which $pkg &>/dev/null || \
     brew install $pkg
 done
