@@ -1,13 +1,8 @@
-# Check if zplug is installed
-if [[ ! -d ~/.zplug ]]; then
-    git clone https://github.com/zplug/zplug ~/.zplug
-    source ~/.zplug/init.zsh && zplug update --self
-fi
-
 # Essential
 source ~/.zplug/init.zsh
 SHOW_AWS_PROMPT=false
 zplug "plugins/aws",   from:oh-my-zsh
+zplug "MichaelAquilina/zsh-you-should-use"
 zplug "plugins/git",   from:oh-my-zsh
 #zplug "plugins/gitignore",   from:oh-my-zsh # Hardly use it and gets in the way of autocorrecting gi to git :)
 zplug "plugins/dircycle",   from:oh-my-zsh
