@@ -1,6 +1,7 @@
 # Essential
 source ~/.zplug/init.zsh
 SHOW_AWS_PROMPT=false
+zplug "greymd/tmux-xpanes"
 zplug "plugins/aws",   from:oh-my-zsh
 zplug "MichaelAquilina/zsh-you-should-use"
 zplug "plugins/git",   from:oh-my-zsh
