@@ -39,6 +39,7 @@ NEEDED_PACKAGES=(
   direnv
   git
   bat
+  fzf
 )
 for pkg in ${NEEDED_PACKAGES[*]}; do
   which $pkg &>/dev/null || \
