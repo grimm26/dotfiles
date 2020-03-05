@@ -40,10 +40,16 @@ NEEDED_PACKAGES=(
   git
   bat
   fzf
+  antibody
 )
 for pkg in ${NEEDED_PACKAGES[*]}; do
   which $pkg &>/dev/null || \
     brew install $pkg
 done
 
-curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+for z in .z* .config/*;do
+  if ! diff -q $z ~/${z} &>/dev/null; then
+    cp ~/${z} ~/${z}.prev
+  fi
+  cp $z ~
+done

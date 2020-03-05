@@ -72,6 +72,7 @@ setopt nobeep
 
 # don't push the same dir twice.
 setopt pushd_ignore_dups
+setopt pushdminus
 
 # * shouldn't match dotfiles. ever.
 setopt noglobdots

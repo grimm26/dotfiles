@@ -1,4 +1,3 @@
-#export LSCOLORS="ehfxcxdxbxegedabagacad"
 eval "$(hub alias -s)"
 
 mkcd () {
@@ -37,9 +36,89 @@ if [[ -d /usr/libexec/java_home ]]; then
 fi
 # completion system
 autoload -Uz compinit; compinit
+
+## oh-my-zsh lib/directories.zsh
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+
+alias -- -='cd -'
+alias 1='cd -'
+alias 2='cd -2'
+alias 3='cd -3'
+alias 4='cd -4'
+alias 5='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
+
+alias md='mkdir -p'
+alias rd=rmdir
+
+function d () {
+  if [[ -n $1 ]]; then
+    dirs "$@"
+  else
+    dirs -v | head -10
+  fi
+}
+compdef _dirs d
+
+# List directory contents
+alias lsa='ls -lah'
+alias l='ls -lah'
+alias ll='ls -lh'
+alias la='ls -lAh'
+##
+
+## oh-my-zsh lib/grep.zsh
+__GREP_CACHE_FILE="$ZSH_CACHE_DIR"/grep-alias
+
+# See if there's a cache file modified in the last day
+__GREP_ALIAS_CACHES=("$__GREP_CACHE_FILE"(Nm-1))
+if [[ -n "$__GREP_ALIAS_CACHES" ]]; then
+    source "$__GREP_CACHE_FILE"
+else
+    grep-flags-available() {
+        command grep "$@" "" &>/dev/null <<< ""
+    }
+
+    # Ignore these folders (if the necessary grep flags are available)
+    EXC_FOLDERS="{.bzr,CVS,.git,.hg,.svn,.idea,.tox}"
+
+    # Check for --exclude-dir, otherwise check for --exclude. If --exclude
+    # isn't available, --color won't be either (they were released at the same
+    # time (v2.5): https://git.savannah.gnu.org/cgit/grep.git/tree/NEWS?id=1236f007
+    if grep-flags-available --color=auto --exclude-dir=.cvs; then
+        GREP_OPTIONS="--color=auto --exclude-dir=$EXC_FOLDERS"
+    elif grep-flags-available --color=auto --exclude=.cvs; then
+        GREP_OPTIONS="--color=auto --exclude=$EXC_FOLDERS"
+    fi
+
+    if [[ -n "$GREP_OPTIONS" ]]; then
+        # export grep, egrep and fgrep settings
+        alias grep="grep $GREP_OPTIONS"
+        alias egrep="egrep $GREP_OPTIONS"
+        alias fgrep="fgrep $GREP_OPTIONS"
+
+        # write to cache file if cache directory is writable
+        if [[ -w "$ZSH_CACHE_DIR" ]]; then
+            alias -L grep egrep fgrep >| "$__GREP_CACHE_FILE"
+        fi
+    fi
+
+    # Clean up
+    unset GREP_OPTIONS EXC_FOLDERS
+    unfunction grep-flags-available
+fi
+
+unset __GREP_CACHE_FILE __GREP_ALIAS_CACHES
+##
+
 [[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval ~/.ssh/**/*id_*sa)
 #[[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval --confhost)
-
 
 setopt HIST_IGNORE_SPACE
 export LC_COLLATE=C
@@ -193,7 +272,19 @@ alias viaws="vim -O ~/.aws/config ~/.aws/credentials"
   source /Users/mkeisler/Library/Preferences/org.dystroy.broot/launcher/bash/br
 setopt prompt_subst
 setopt TRANSIENT_RPROMPT
-[ -r ~/.zplugrc ] && echo "Loading zsh plugins" && source ~/.zplugrc && echo "Done."
+if [[ -r ~/.zsh_plugins.sh ]]; then
+  echo "Statically loading ~/.zsh_plugins.sh"
+  # Regen with `antibody bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh`
+  source ~/.zsh_plugins.sh && echo "Done."
+elif whence antibody &>/dev/null; then
+  echo "Dynamically sourcing plugins with antibody"
+  source <(antibody init)
+  antibody bundle < ~/.zsh_plugins.txt
+  echo "Done."
+elif [[ -r ~/.zplugrc ]]; then
+  echo "Loading zsh plugins with zplug"
+  source ~/.zplugrc && echo "Done."
+fi
 chruby ruby
 
 whence starship &>/dev/null && \

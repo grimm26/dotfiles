@@ -1,0 +1,28 @@
+robbyrussell/oh-my-zsh path:plugins/aws
+robbyrussell/oh-my-zsh path:plugins/git
+robbyrussell/oh-my-zsh path:plugins/dircycle
+robbyrussell/oh-my-zsh path:plugins/knife
+robbyrussell/oh-my-zsh path:plugins/kitchen
+robbyrussell/oh-my-zsh path:plugins/ripgrep
+robbyrussell/oh-my-zsh path:plugins/tmux
+robbyrussell/oh-my-zsh path:plugins/tmuxinator
+robbyrussell/oh-my-zsh path:plugins/vi-mode
+robbyrussell/oh-my-zsh path:plugins/command-not-found
+robbyrussell/oh-my-zsh path:plugins/gem
+robbyrussell/oh-my-zsh path:plugins/chruby
+robbyrussell/oh-my-zsh path:plugins/brew
+robbyrussell/oh-my-zsh path:plugins/zsh-navigation-tools
+#robbyrussell/oh-my-zsh path:plugins/ubuntu
+#robbyrussell/oh-my-zsh path:plugins/systemd
+#robbyrussell/oh-my-zsh path:plugins/osx
+robbyrussell/oh-my-zsh path:plugins/history
+robbyrussell/oh-my-zsh path:plugins/fzf
+
+MichaelAquilina/zsh-you-should-use
+greymd/tmux-xpanes
+zsh-users/zsh-completions
+zsh-users/zsh-autosuggestions
+
+zsh-users/zsh-syntax-highlighting
+
+robbyrussell/oh-my-zsh path:plugins/history-substring-search
