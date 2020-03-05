@@ -1,28 +1,4 @@
 #zmodload zsh/zprof
-# autoload wrapper - use this one instead of autoload directly
-# We need to define this function as early as this, because autoloading
-# 'is-at-least()' needs it.
-function zrcautoload () {
-    emulate -L zsh
-    setopt extended_glob
-    local fdir ffile
-    local -i ffound
-
-    ffile=$1
-    (( ffound = 0 ))
-    for fdir in ${fpath} ; do
-        [[ -e ${fdir}/${ffile} ]] && (( ffound = 1 ))
-    done
-
-    (( ffound == 0 )) && return 1
-    if [[ $ZSH_VERSION == 3.1.<6-> || $ZSH_VERSION == <4->* ]] ; then
-        autoload -U ${ffile} || return 1
-    else
-        autoload ${ffile} || return 1
-    fi
-    return 0
-}
-
 [ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 # if [ -s $(brew --prefix)/opt/chruby/share/chruby/chruby.sh ]; then
@@ -115,8 +91,8 @@ zmodload -a  zsh/stat    zstat
 zmodload -a  zsh/zpty    zpty
 zmodload -ap zsh/mapfile mapfile
 
-zrcautoload zmv
-zrcautoload zed
+autoload -Uz zmv
+autoload -Uz zed
 
 setopt correct
 #setopt correctall
@@ -156,3 +132,4 @@ export DISABLE_AUTO_TITLE=true
 #if [ -x =nvim ]; then
   #alias vim=nvim
 #fi
+[ -d /usr/local/opt/openjdk/bin ] && export PATH="/usr/local/opt/openjdk/bin:$PATH"

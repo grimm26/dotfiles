@@ -24,41 +24,33 @@ tgl () {
   fi
 }
 # Homebrew
-alias bubo='brew update && echo "\nOutdated pkgs:" && brew outdated && echo "\nOutdated cask pkgs:" && brew cask outdated'
-alias brews='brew list -1'
-alias bu='brew upgrade'
 alias binfo='brew info'
 alias bs='brew search'
+
+#Git
+alias gnb='git nb'
+alias grtag='git rtag'
+alias ghpr='git pull-request'
 
 if [[ -d /usr/libexec/java_home ]]; then
   export JAVA_HOME=$(/usr/libexec/java_home)
 fi
 # completion system
-zrcautoload compinit
-#rm -f ~/.zcompdump
-#COMPDUMPFILE=${COMPDUMPFILE:-${ZDOTDIR:-${HOME}}/.zcompdump}
-#if zrcautoload compinit ; then
-   #compinit -C -d ${COMPDUMPFILE} || print 'Notice: no compinit available :('
-#else
-   #print 'Notice: no compinit available :('
-   #function compdef { }
-#fi
-#source /usr/local/bin/aws_zsh_completer.sh
-#source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+autoload -Uz compinit; compinit
 [[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval ~/.ssh/**/*id_*sa)
 #[[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval --confhost)
 
 
 setopt HIST_IGNORE_SPACE
 export LC_COLLATE=C
-if [[ $(uname) == "Darwin" ]]; then
+if [[ $OSTYPE == darwin* ]]; then
   alias ldd="otool -L"
 fi
 alias cim=vim
 export EDITOR=vim
 #export PAGER=vimpager
 #export MANPAGER=vimmanpager
-export PAGER="bat"
+export PAGER="less -EFRX"
 export MANPAGER='less -EFRX'
 alias chompeof="perl -pi -e 'chomp if eof && /^$/'"
 
@@ -66,7 +58,7 @@ alias perldoc="PAGER=less perldoc"
 whence when &>/dev/null && when
 setopt vi
 setopt inc_append_history
-#rg () { =rg --pretty $* |less -EFRX }
+rg () { =rg --pretty $* |less -EFRX }
 [ -f /usr/local/share/zsh-navigation-tools/zsh-navigation-tools.plugin.zsh ] \
   && source /usr/local/share/zsh-navigation-tools/zsh-navigation-tools.plugin.zsh
 

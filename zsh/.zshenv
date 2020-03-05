@@ -20,4 +20,3 @@ alias tf12="tfenv use 'latest:^0.12';ln -fs ~/bin/terragrunt_latest ~/bin/terrag
 alias tgi="terragrunt init -upgrade -reconfigure"
 alias tgu="terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="terraform 0.12upgrade -yes;chompeof *.tf"
-#  export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/usr/local/share/zsh-syntax-highlighting/highlighters
