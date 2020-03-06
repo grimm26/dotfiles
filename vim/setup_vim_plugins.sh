@@ -46,6 +46,8 @@ plugins['vim-json']='https://github.com/elzr/vim-json.git'
 plugins['vim-lastplace']='git://github.com/dietsche/vim-lastplace.git'
 plugins['vim-terraform']='https://github.com/hashivim/vim-terraform.git'
 plugins['vim-tmux']='git://github.com/tmux-plugins/vim-tmux.git'
+plugins['vim-gitgutter']='git://github.com/airblade/vim-gitgutter.git'
+plugins['vim-terminus']='git://github.com/wincent/terminus.git'
 
 clone_or_update_plugin(){
   name=$1
