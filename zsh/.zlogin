@@ -1,3 +1,4 @@
+#export LSCOLORS="ehfxcxdxbxegedabagacad"
 eval "$(hub alias -s)"
 
 mkcd () {

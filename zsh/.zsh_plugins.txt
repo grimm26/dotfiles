@@ -24,5 +24,4 @@ zsh-users/zsh-completions
 zsh-users/zsh-autosuggestions
 
 zsh-users/zsh-syntax-highlighting
-
-robbyrussell/oh-my-zsh path:plugins/history-substring-search
+zsh-users/zsh-history-substring-search
