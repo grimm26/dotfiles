@@ -281,16 +281,16 @@ elif whence antibody &>/dev/null; then
   echo "Dynamically sourcing plugins with antibody"
   source <(antibody init)
   # Base plugins
+  echo -n "... base plugins"
   antibody bundle < ~/.zsh_plugins.txt
   # Ubuntu plugins
   if [[ $OSTYPE == linux-gnu ]]; then
-    echo "Linux!"
     if [[ $(uname -v) =~ "Ubuntu" ]]; then
-      echo "Ubuntu!"
+      echo -n " ... Ubuntu plugins"
       antibody bundle < ~/.zsh_plugins_ubuntu.txt
     fi
   fi
-  echo "Done."
+  echo "\nDone."
 elif [[ -r ~/.zplugrc ]]; then
   echo "Loading zsh plugins with zplug"
   source ~/.zplugrc && echo "Done."
