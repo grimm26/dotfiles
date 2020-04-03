@@ -280,7 +280,16 @@ if [[ -r ~/.zsh_plugins.sh ]]; then
 elif whence antibody &>/dev/null; then
   echo "Dynamically sourcing plugins with antibody"
   source <(antibody init)
+  # Base plugins
   antibody bundle < ~/.zsh_plugins.txt
+  # Ubuntu plugins
+  if [[ $OSTYPE == linux-gnu ]]; then
+    echo "Linux!"
+    if [[ $(uname -v) =~ "Ubuntu" ]]; then
+      echo "Ubuntu!"
+      antibody bundle < ~/.zsh_plugins_ubuntu.txt
+    fi
+  fi
   echo "Done."
 elif [[ -r ~/.zplugrc ]]; then
   echo "Loading zsh plugins with zplug"
