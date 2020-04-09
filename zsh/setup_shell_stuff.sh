@@ -15,9 +15,14 @@ case $(uname) in
       eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
     fi
     # zplug will not work correctly without GNU awk.
-    sudo apt install gawk
+    sudo apt install -y gawk
     # Need these fints for starship
-    sudo apt install fonts-firacode
+    sudo apt install -y fonts-firacode
+    sudo apt install -y curl libcurl4-openssl-dev keychain bat jq
+    curl -L https://github.com/cheat/cheat/releases/latest/download/cheat-linux-amd64.gz -o /tmp/cheat-linux-amd64.gz && \
+      gunzip /tmp/cheat-linux-amd64.gz && mv /tmp/cheat-linux-amd64 ~/bin/cheat
+    curl -sL $(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest |jq -r '.assets[].browser_download_url' | grep amd64.deb) -o /tmp/ripgrep-latest.amd64.deb && \
+      sudo dpkg -i /tmp/ripgrep-latest.amd64.deb
     ;;
   Darwin)
     if which brew &>/dev/null ; then
@@ -28,6 +33,9 @@ case $(uname) in
     fi
     brew tap homebrew/cask-fonts
     brew cask install font-fira-code
+    brew install keychain bat ripgrep
+    curl -L https://github.com/cheat/cheat/releases/latest/download/cheat-darwin-amd64.gz -o /tmp/cheat-darwin-amd64.gz && \
+      gunzip /tmp/cheat-darwin-amd64.gz && mv /tmp/cheat-darwin-amd64 ~/bin/cheat
     ;;
   *)
     echo "Unknown OS type"
@@ -37,22 +45,20 @@ esac
 
 # Base stuff we need.
 NEEDED_PACKAGES=(
-  keychain
   hub
   direnv
   git
-  bat
-  antibody
   chruby
   ruby-install
-  ripgrep
 )
 for pkg in ${NEEDED_PACKAGES[*]}; do
   which $pkg &>/dev/null || \
     brew install $pkg
 done
 
-curl -fsSL https://starship.rs/install.sh | bash
+curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
+curl -fsSL https://starship.rs/install.sh | sudo bash -s - -y
+sudo chown root: /usr/local/bin/starship
 
 for z in .z* .config/*;do
   if ! diff -q $z ~/${z} &>/dev/null; then
