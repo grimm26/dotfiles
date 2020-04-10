@@ -43,6 +43,8 @@ case $(uname) in
     ;;
 esac
 
+chmod 755 ~/bin/cheat
+
 # Base stuff we need.
 NEEDED_PACKAGES=(
   hub
