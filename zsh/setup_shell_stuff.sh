@@ -8,7 +8,7 @@ case $(uname) in
   Linux)
     # Need these fonts for starship
     sudo apt install -y fonts-firacode
-    sudo apt install -y curl libcurl4-openssl-dev keychain bat jq tmux python3 python3-pip
+    sudo apt install -y curl libcurl4-openssl-dev keychain bat jq tmux python3 python3-pip source-highlight
     echo "pre-commit"
     pip3 install pre-commit
     cd /tmp
