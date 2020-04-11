@@ -1,28 +1,57 @@
 #!/usr/bin/env bash
 #
-set -x
+#set -x
 
-echo $PATH
+SCRIPT_HOME=$PWD
 # OS Type specific stuff first
 case $(uname) in
   Linux)
-    if which brew &>/dev/null ; then
-      echo "homebrew already installed"
-    else
-      echo "Installing homebrew"
-      exit
-      sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-      eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-    fi
-    # zplug will not work correctly without GNU awk.
-    sudo apt install -y gawk
-    # Need these fints for starship
+    # Need these fonts for starship
     sudo apt install -y fonts-firacode
-    sudo apt install -y curl libcurl4-openssl-dev keychain bat jq
-    curl -L https://github.com/cheat/cheat/releases/latest/download/cheat-linux-amd64.gz -o /tmp/cheat-linux-amd64.gz && \
+    sudo apt install -y curl libcurl4-openssl-dev keychain bat jq tmux python3 python3-pip
+    echo "pre-commit"
+    pip3 install pre-commit
+    cd /tmp
+    # cheat
+    echo "cheat"
+    curl -sL https://github.com/cheat/cheat/releases/latest/download/cheat-linux-amd64.gz -O && \
       gunzip /tmp/cheat-linux-amd64.gz && mv /tmp/cheat-linux-amd64 ~/bin/cheat
+    # ripgrep
+    echo "ripgrep"
     curl -sL $(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest |jq -r '.assets[].browser_download_url' | grep amd64.deb) -o /tmp/ripgrep-latest.amd64.deb && \
-      sudo dpkg -i /tmp/ripgrep-latest.amd64.deb
+      sudo dpkg --install --skip-same-version /tmp/ripgrep-latest.amd64.deb
+    # hub
+    echo "hub"
+    curl -sL $(curl -s https://api.github.com/repos/github/hub/releases/latest |jq -r '.assets[].browser_download_url' | grep linux-amd64) -o /tmp/hub-linux-amd64-latest.tgz && \
+      tar xzf /tmp/hub-linux-amd64-latest.tgz && \
+      rm /tmp/hub-linux-amd64-latest.tgz && \
+      cd hub-linux-amd64-* && \
+      sudo ./install ;cd /tmp
+    # chruby
+    echo "chruby"
+    curl -sL https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz -o chruby-0.3.9.tar.gz && \
+      tar -xzf chruby-0.3.9.tar.gz && \
+      cd chruby-0.3.9/ && \
+      sudo make install ; cd /tmp
+    # ruby-install
+    echo "ruby-install"
+    curl -sL https://github.com/postmodern/ruby-install/archive/v0.7.0.tar.gz -o ruby-install-0.7.0.tar.gz && \
+      tar -xzf ruby-install-0.7.0.tar.gz && \
+      cd ruby-install-0.7.0/ && \
+      sudo make install ; cd /tmp
+    # direnv
+    echo "direnv"
+    curl -sfL https://direnv.net/install.sh | bash 2>/dev/null
+    # awscli
+    echo "awscli"
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+      [[ -d aws ]] && rm -rf aws && unzip -q awscliv2.zip && \
+      if [[ -d /usr/local/aws-cli/v2 ]]; then
+        sudo ./aws/install --update
+      else
+        sudo ./aws/install
+      fi
+      cd /tmp
     ;;
   Darwin)
     if which brew &>/dev/null ; then
@@ -33,7 +62,21 @@ case $(uname) in
     fi
     brew tap homebrew/cask-fonts
     brew cask install font-fira-code
-    brew install keychain bat ripgrep
+    # Base stuff we need.
+    NEEDED_PACKAGES=(
+      keychain
+      bat
+      ripgrep
+      hub
+      git
+      chruby
+      ruby-install
+      direnv
+    )
+    for pkg in ${NEEDED_PACKAGES[*]}; do
+      which $pkg &>/dev/null || \
+        brew install $pkg
+    done
     curl -L https://github.com/cheat/cheat/releases/latest/download/cheat-darwin-amd64.gz -o /tmp/cheat-darwin-amd64.gz && \
       gunzip /tmp/cheat-darwin-amd64.gz && mv /tmp/cheat-darwin-amd64 ~/bin/cheat
     ;;
@@ -43,20 +86,8 @@ case $(uname) in
     ;;
 esac
 
+cd $SCRIPT_HOME
 chmod 755 ~/bin/cheat
-
-# Base stuff we need.
-NEEDED_PACKAGES=(
-  hub
-  direnv
-  git
-  chruby
-  ruby-install
-)
-for pkg in ${NEEDED_PACKAGES[*]}; do
-  which $pkg &>/dev/null || \
-    brew install $pkg
-done
 
 curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
 curl -fsSL https://starship.rs/install.sh | sudo bash -s - -y
