@@ -2,13 +2,23 @@
 #
 #set -x
 
+# Make ~/.local/bin our official user bin dir
+if [[ ! -d ${HOME}/.local/bin ]]; then
+  mkdir -p ~/.local/bin
+fi
+if [[ ! -h ${HOME}/bin ]]; then
+  cp -n ${HOME}/bin/* ${HOME}/.local/bin
+  mv ${HOME}/bin ${HOME}/bin-old
+  ln -s ${HOME}/.local/bin ${HOME}/bin
+fi
+
 SCRIPT_HOME=$PWD
 # OS Type specific stuff first
 case $(uname) in
   Linux)
     # Need these fonts for starship
     sudo apt install -y fonts-firacode
-    sudo apt install -y curl libcurl4-openssl-dev keychain bat jq tmux python3 python3-pip source-highlight
+    sudo apt install -y curl libcurl4-openssl-dev keychain bat jq tmux python3 python3-pip source-highlight golang-1.13
     echo "pre-commit"
     pip3 install pre-commit
     cd /tmp
@@ -52,6 +62,14 @@ case $(uname) in
         sudo ./aws/install
       fi
       cd /tmp
+    # shfmt
+    GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
+    # bat-extras
+    git clone https://github.com/eth-p/bat-extras.git && \
+      cd bat-extras && \
+      ./build.sh && \
+      cp bin/* ~/.local/bin
+    cd /tmp
     ;;
   Darwin)
     if which brew &>/dev/null ; then
@@ -65,8 +83,11 @@ case $(uname) in
     # Base stuff we need.
     NEEDED_PACKAGES=(
       keychain
+      go
+      shfmt
       bat
       ripgrep
+      eth-p/software/bat-extras
       hub
       git
       chruby
@@ -85,6 +106,7 @@ case $(uname) in
     exit
     ;;
 esac
+
 
 cd $SCRIPT_HOME
 chmod 755 ~/bin/cheat

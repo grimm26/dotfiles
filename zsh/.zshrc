@@ -48,7 +48,7 @@ setopt longlistjobs
 
 path+=('/usr/local/bin')
 path+=('/usr/local/sbin')
-path=("$HOME/.local/bin" "$HOME/bin" $path)
+path=("$HOME/.local/bin" $path)
 typeset -U path
 export PATH
 # report the status of backgrounds jobs immediately
