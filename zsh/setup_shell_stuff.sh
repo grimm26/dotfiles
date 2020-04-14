@@ -17,10 +17,12 @@ SCRIPT_HOME=$PWD
 case $(uname) in
   Linux)
     # Need these fonts for starship
-    sudo apt install -y fonts-firacode
-    sudo apt install -y curl libcurl4-openssl-dev keychain bat jq tmux python3 python3-pip source-highlight golang-go
+    for pkg in fonts-firacode curl libcurl4-openssl-dev keychain bat jq tmux python3 python3-pip source-highlight golang-go; do
+      dpkg -s $pkg &>/dev/null || \
+        sudo apt-get install -y $pkg
+    done
     echo "pre-commit"
-    pip3 install pre-commit
+    command -v pre-commit >/dev/null 2>&1 || pip3 install pre-commit
     cd /tmp
     # cheat
     echo "cheat"
@@ -73,14 +75,14 @@ case $(uname) in
     cd /tmp
     ;;
   Darwin)
-    if which brew &>/dev/null ; then
+    if command -v brew &>/dev/null ; then
       echo "homebrew already installed"
     else
       echo "Installing homebrew"
       /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
     brew tap homebrew/cask-fonts
-    brew cask install font-fira-code
+    brew cask list font-fira-code &>/dev/null || brew cask install font-fira-code
     # Base stuff we need.
     NEEDED_PACKAGES=(
       keychain
@@ -96,7 +98,7 @@ case $(uname) in
       direnv
     )
     for pkg in ${NEEDED_PACKAGES[*]}; do
-      which $pkg &>/dev/null || \
+      brew list $pkg &>/dev/null || \
         brew install $pkg
     done
     curl -L https://github.com/cheat/cheat/releases/latest/download/cheat-darwin-amd64.gz -o /tmp/cheat-darwin-amd64.gz && \
