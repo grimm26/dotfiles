@@ -18,7 +18,7 @@ case $(uname) in
   Linux)
     # Need these fonts for starship
     sudo apt install -y fonts-firacode
-    sudo apt install -y curl libcurl4-openssl-dev keychain bat jq tmux python3 python3-pip source-highlight golang-1.13
+    sudo apt install -y curl libcurl4-openssl-dev keychain bat jq tmux python3 python3-pip source-highlight golang-go
     echo "pre-commit"
     pip3 install pre-commit
     cd /tmp
@@ -65,9 +65,10 @@ case $(uname) in
     # shfmt
     GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
     # bat-extras
+    rm -rf bat-extras
     git clone https://github.com/eth-p/bat-extras.git && \
       cd bat-extras && \
-      ./build.sh && \
+      ./build.sh --no-verify && \
       cp bin/* ~/.local/bin
     cd /tmp
     ;;
