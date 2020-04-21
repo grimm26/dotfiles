@@ -3,11 +3,7 @@ if [[ -r ~/.zshenv.local ]]; then
 fi
 fpath+=( /usr/local/opt/curl/share/zsh/site-functions /usr/local/share/zsh/site-functions )
 typeset -U fpath
-export GOPATH=~/go
-export GOBIN=$GOPATH/bin
 export LESS="-EFRX"
-path=(${GOBIN} /usr/local/bin /bin /usr/bin /usr/sbin /usr/local/opt/go/libexec/bin)
-typeset -U path
 export CHEF_ENV_PATH="$HOME/git/chef/environments"
 export LC_COLLATE=C
 export EDITOR=vim

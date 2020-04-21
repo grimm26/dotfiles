@@ -48,6 +48,14 @@ setopt longlistjobs
 
 path+=('/usr/local/bin')
 path+=('/usr/local/sbin')
+export GOPATH=~/go
+export GOBIN=$GOPATH/bin
+path=(${GOBIN} /usr/local/bin /bin /usr/bin /usr/sbin /usr/local/opt/go/libexec/bin)
+if [[ -d /usr/local/opt/go/libexec/bin ]]; then
+  path+=('/usr/local/opt/go/libexec/bin')
+elif [[ -d /usr/local/go/bin ]]; then
+  path+=('/usr/local/go/bin')
+fi
 path=("$HOME/.local/bin" $path)
 typeset -U path
 export PATH

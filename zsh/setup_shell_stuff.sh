@@ -6,7 +6,7 @@
 if [[ ! -d ${HOME}/.local/bin ]]; then
   mkdir -p ~/.local/bin
 fi
-if [[ ! -h ${HOME}/bin ]]; then
+if [[ -d ${HOME}/bin && ! -h ${HOME}/bin ]]; then
   cp -n ${HOME}/bin/* ${HOME}/.local/bin
   mv ${HOME}/bin ${HOME}/bin-old
   ln -s ${HOME}/.local/bin ${HOME}/bin
@@ -17,17 +17,29 @@ SCRIPT_HOME=$PWD
 case $(uname) in
   Linux)
     # Need these fonts for starship
-    for pkg in fonts-firacode curl libcurl4-openssl-dev keychain bat jq tmux python3 python3-pip source-highlight golang-go; do
+    for pkg in fonts-firacode curl libcurl4-openssl-dev keychain jq tmux python3 python3-pip source-highlight; do
       dpkg -s $pkg &>/dev/null || \
         sudo apt-get install -y $pkg
     done
+    # golang 1.14.2
+    if [[ "go version go1.14.2 linux/amd64" != $(go version 2>/dev/null) ]]; then
+      echo "Downloading and installing go 1.14.2"
+      curl -sO https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz && \
+        rm -rf /usr/local/go 2>/dev/null && \
+        sudo tar -C /usr/local -xzf go1.14.2.linux-amd64.tar.gz
+      export PATH=${PATH}:/usr/local/go/bin
+    fi
     echo "pre-commit"
     command -v pre-commit >/dev/null 2>&1 || pip3 install pre-commit
     cd /tmp
     # cheat
     echo "cheat"
     curl -sL https://github.com/cheat/cheat/releases/latest/download/cheat-linux-amd64.gz -O && \
-      gunzip /tmp/cheat-linux-amd64.gz && mv /tmp/cheat-linux-amd64 ~/bin/cheat
+      gunzip -c /tmp/cheat-linux-amd64.gz > ~/.local/bin/cheat
+    # bat
+    echo "bat"
+    curl -sL $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest |jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb')   -o /tmp/bat-latest.amd64.deb && \
+      sudo dpkg --install --skip-same-version /tmp/bat-latest.amd64.deb
     # ripgrep
     echo "ripgrep"
     curl -sL $(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest |jq -r '.assets[].browser_download_url' | grep amd64.deb) -o /tmp/ripgrep-latest.amd64.deb && \
