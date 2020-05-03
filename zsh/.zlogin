@@ -118,7 +118,8 @@ fi
 unset __GREP_CACHE_FILE __GREP_ALIAS_CACHES
 ##
 
-[[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval ~/.ssh/**/*id_*sa)
+ssh_keys=(~/.ssh/**/*id_*sa)
+[[ -x =keychain ]] && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit any --eval $ssh_keys)
 #[[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval --confhost)
 
 setopt HIST_IGNORE_SPACE
@@ -297,7 +298,7 @@ elif [[ -r ~/.zplugrc ]]; then
   echo "Loading zsh plugins with zplug"
   source ~/.zplugrc && echo "Done."
 fi
-chruby ruby
+[[ $#RUBIES > 0 ]] && chruby ruby
 
 whence starship &>/dev/null && \
   eval "$(starship init zsh)"

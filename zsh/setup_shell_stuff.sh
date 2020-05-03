@@ -16,8 +16,10 @@ SCRIPT_HOME=$PWD
 # OS Type specific stuff first
 case $(uname) in
   Linux)
-    # Need these fonts for starship
-    for pkg in fonts-firacode curl libcurl4-openssl-dev keychain jq tmux python3 python3-pip source-highlight; do
+    # Latest git
+    sudo add-apt-repository --yes --update ppa:git-core/ppa
+    # Pkgs we need
+    for pkg in git fonts-firacode curl libcurl4-openssl-dev keychain jq tmux python3 python3-pip source-highlight; do
       dpkg -s $pkg &>/dev/null || \
         sudo apt-get install -y $pkg
     done
