@@ -119,7 +119,7 @@ unset __GREP_CACHE_FILE __GREP_ALIAS_CACHES
 ##
 
 ssh_keys=(~/.ssh/**/*id_*sa)
-[[ -x =keychain ]] && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit any --eval $ssh_keys)
+whence keychain &>/dev/null && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit any --eval $ssh_keys)
 #[[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval --confhost)
 
 setopt HIST_IGNORE_SPACE

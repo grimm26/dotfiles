@@ -17,9 +17,10 @@ SCRIPT_HOME=$PWD
 case $(uname) in
   Linux)
     # Latest git
-    sudo add-apt-repository --yes --update ppa:git-core/ppa
-    # Pkgs we need
-    for pkg in git fonts-firacode curl libcurl4-openssl-dev keychain jq tmux python3 python3-pip source-highlight; do
+    if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
+      sudo add-apt-repository -y -u ppa:git-core/ppa
+    fi
+    for pkg in fonts-firacode curl git libcurl4-openssl-dev keychain jq tmux python3 python3-pip source-highlight; do
       dpkg -s $pkg &>/dev/null || \
         sudo apt-get install -y $pkg
     done
@@ -29,6 +30,7 @@ case $(uname) in
       curl -sO https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz && \
         rm -rf /usr/local/go 2>/dev/null && \
         sudo tar -C /usr/local -xzf go1.14.2.linux-amd64.tar.gz
+      rm go1.14.2.linux-amd64.tar.gz
       export PATH=${PATH}:/usr/local/go/bin
     fi
     echo "pre-commit"
