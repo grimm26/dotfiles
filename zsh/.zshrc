@@ -46,11 +46,14 @@ setopt extended_glob
 # display PID when suspending processes as well
 setopt longlistjobs
 
-path+=('/usr/local/bin')
-path+=('/usr/local/sbin')
 export GOPATH=~/go
 export GOBIN=$GOPATH/bin
 path=(${GOBIN} /usr/local/bin /bin /usr/bin /usr/sbin /usr/local/opt/go/libexec/bin)
+path+=('/usr/local/bin')
+path+=('/usr/local/sbin')
+if [[ $OSTYPE == darwin* && -d ${HOME}/Library/Python/3.7/bin ]]; then
+  path+=("${HOME}/Library/Python/3.7/bin")
+fi
 if [[ -d /usr/local/opt/go/libexec/bin ]]; then
   path+=('/usr/local/opt/go/libexec/bin')
 elif [[ -d /usr/local/go/bin ]]; then
