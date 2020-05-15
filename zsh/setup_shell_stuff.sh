@@ -1,18 +1,31 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 #
 #set -x
 
+kernel=$(uname -s | tr "[:upper:]" "[:lower:]")
+case "$(uname -m)" in
+  x86_64)
+    machine=amd64
+    ;;
+  *)
+    die "Machine $(uname -m) not supported by the installer. Sorry\n"
+    ;;
+esac
+
 # Make ~/.local/bin our official user bin dir
-if [[ ! -d ${HOME}/.local/bin ]]; then
-  mkdir -p ~/.local/bin
+home_bin=~/.local/bin
+if [[ ! -d $home_bin ]]; then
+  mkdir -p $home_bin
 fi
 if [[ -d ${HOME}/bin && ! -h ${HOME}/bin ]]; then
   cp -n ${HOME}/bin/* ${HOME}/.local/bin
   mv ${HOME}/bin ${HOME}/bin-old
-  ln -s ${HOME}/.local/bin ${HOME}/bin
+  ln -s $home_bin ${HOME}/bin
 fi
 
-SCRIPT_HOME=$PWD
+INITIAL_PWD=$PWD
+SCRIPT_HOME=$(/bin/readlink -f ${0%/*})
+cd $SCRIPT_HOME
 # OS Type specific stuff first
 case $(uname) in
   Linux)
@@ -27,10 +40,10 @@ case $(uname) in
     # golang 1.14.2
     if [[ "go version go1.14.2 linux/amd64" != $(go version 2>/dev/null) ]]; then
       echo "Downloading and installing go 1.14.2"
-      curl -sO https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz && \
+      curl -sO https://dl.google.com/go/go1.14.2.${kernel}-${machine}.tar.gz && \
         rm -rf /usr/local/go 2>/dev/null && \
-        sudo tar -C /usr/local -xzf go1.14.2.linux-amd64.tar.gz
-      rm go1.14.2.linux-amd64.tar.gz
+        sudo tar -C /usr/local -xzf go1.14.2.${kernel}-${machine}.tar.gz
+      rm go1.14.2.${kernel}-${machine}.tar.gz
       export PATH=${PATH}:/usr/local/go/bin
     fi
     echo "pre-commit"
@@ -38,8 +51,8 @@ case $(uname) in
     cd /tmp
     # cheat
     echo "cheat"
-    curl -sL https://github.com/cheat/cheat/releases/latest/download/cheat-linux-amd64.gz -O && \
-      gunzip -c /tmp/cheat-linux-amd64.gz > ~/.local/bin/cheat
+    curl -sL https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -O && \
+      gunzip -c /tmp/cheat-${kernel}-${machine}.gz > ${home_bin}/cheat
     # bat
     echo "bat"
     curl -sL $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest |jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb')   -o /tmp/bat-latest.amd64.deb && \
@@ -50,10 +63,10 @@ case $(uname) in
       sudo dpkg --install --skip-same-version /tmp/ripgrep-latest.amd64.deb
     # hub
     echo "hub"
-    curl -sL $(curl -s https://api.github.com/repos/github/hub/releases/latest |jq -r '.assets[].browser_download_url' | grep linux-amd64) -o /tmp/hub-linux-amd64-latest.tgz && \
-      tar xzf /tmp/hub-linux-amd64-latest.tgz && \
-      rm /tmp/hub-linux-amd64-latest.tgz && \
-      cd hub-linux-amd64-* && \
+    curl -sL $(curl -s https://api.github.com/repos/github/hub/releases/latest |jq -r '.assets[].browser_download_url' | grep ${kernel}-${machine}) -o /tmp/hub-${kernel}-${machine}-latest.tgz && \
+      tar xzf /tmp/hub-${kernel}-${machine}-latest.tgz && \
+      rm /tmp/hub-${kernel}-${machine}-latest.tgz && \
+      cd hub-${kernel}-${machine}-* && \
       sudo ./install ;cd /tmp
     # chruby
     echo "chruby"
@@ -69,7 +82,16 @@ case $(uname) in
       sudo make install ; cd /tmp
     # direnv
     echo "direnv"
-    curl -sfL https://direnv.net/install.sh | bash 2>/dev/null
+    direnv_download_url=$(curl -s https://api.github.com/repos/direnv/direnv/releases/latest |jq -r '.assets[].browser_download_url' | grep "direnv.$kernel.$machine")
+    if whence direnv &> /dev/null; then
+      direnv_latest_version=$(cut -d/ -f8 <<< $direnv_download_url)
+      direnv_installed_version=$(direnv --version)
+      if [[ "$direnv_latest_version" != "v${direnv_installed_version}" ]]; then
+        curl -sL $direnv_download_url -o $home_bin/direnv && chmod 755 $home_bin/direnv ; cd /tmp
+      fi
+    else
+      curl -sL $direnv_download_url -o $home_bin/direnv && chmod 755 $home_bin/direnv ; cd /tmp
+    fi
     # awscli
     echo "awscli"
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
@@ -140,3 +162,4 @@ for z in .z* .config/*;do
   fi
   cp $z ~
 done
+cd $INITIAL_PWD
