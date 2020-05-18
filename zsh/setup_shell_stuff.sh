@@ -24,11 +24,11 @@ if [[ -d ${HOME}/bin && ! -h ${HOME}/bin ]]; then
 fi
 
 INITIAL_PWD=$PWD
-SCRIPT_HOME=$(/bin/readlink -f ${0%/*})
-cd $SCRIPT_HOME
 # OS Type specific stuff first
 case $(uname) in
   Linux)
+    SCRIPT_HOME=$(readlink -f ${0%/*})
+    cd /tmp
     # Latest git
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
       sudo add-apt-repository -y -u ppa:git-core/ppa
@@ -37,22 +37,18 @@ case $(uname) in
       dpkg -s $pkg &>/dev/null || \
         sudo apt-get install -y $pkg
     done
-    # golang 1.14.2
-    if [[ "go version go1.14.2 linux/amd64" != $(go version 2>/dev/null) ]]; then
-      echo "Downloading and installing go 1.14.2"
-      curl -sO https://dl.google.com/go/go1.14.2.${kernel}-${machine}.tar.gz && \
+    # golang 1.14.3
+    if [[ "go version go1.14.3 linux/amd64" != $(go version 2>/dev/null) ]]; then
+      echo "Downloading and installing go 1.14.3"
+      curl -sO https://dl.google.com/go/go1.14.3.${kernel}-${machine}.tar.gz && \
         rm -rf /usr/local/go 2>/dev/null && \
-        sudo tar -C /usr/local -xzf go1.14.2.${kernel}-${machine}.tar.gz
-      rm go1.14.2.${kernel}-${machine}.tar.gz
+        sudo tar -C /usr/local -xzf go1.14.3.${kernel}-${machine}.tar.gz
+      rm go1.14.3.${kernel}-${machine}.tar.gz
       export PATH=${PATH}:/usr/local/go/bin
     fi
     echo "pre-commit"
     command -v pre-commit >/dev/null 2>&1 || pip3 install pre-commit
     cd /tmp
-    # cheat
-    echo "cheat"
-    curl -sL https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -O && \
-      gunzip -c /tmp/cheat-${kernel}-${machine}.gz > ${home_bin}/cheat
     # bat
     echo "bat"
     curl -sL $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest |jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb')   -o /tmp/bat-latest.amd64.deb && \
@@ -124,6 +120,7 @@ case $(uname) in
     # Base stuff we need.
     NEEDED_PACKAGES=(
       keychain
+      coreutils
       go
       shfmt
       bat
@@ -139,8 +136,7 @@ case $(uname) in
       brew list $pkg &>/dev/null || \
         brew install $pkg
     done
-    curl -L https://github.com/cheat/cheat/releases/latest/download/cheat-darwin-amd64.gz -o /tmp/cheat-darwin-amd64.gz && \
-      gunzip /tmp/cheat-darwin-amd64.gz && mv /tmp/cheat-darwin-amd64 ~/bin/cheat
+    SCRIPT_HOME=$(greadlink -f ${0%/*})
     ;;
   *)
     echo "Unknown OS type"
@@ -149,13 +145,18 @@ case $(uname) in
 esac
 
 
-cd $SCRIPT_HOME
+# cheat
+echo "cheat"
+cd /tmp
+curl -sL https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -O && \
+  gunzip -c /tmp/cheat-${kernel}-${machine}.gz > ${home_bin}/cheat
 chmod 755 ~/bin/cheat
 
 curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
 curl -fsSL https://starship.rs/install.sh | sudo bash -s - -y
 sudo chown root: /usr/local/bin/starship
 
+cd $SCRIPT_HOME
 for z in .z* .config/*;do
   if ! diff -q $z ~/${z} &>/dev/null; then
     cp ~/${z} ~/${z}.prev
