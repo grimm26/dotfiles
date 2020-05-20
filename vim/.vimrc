@@ -3,6 +3,7 @@ runtime macros/matchit.vim
 "set shell=/usr/local/bin/zsh
 "au BufNewFile,BufRead /dev/shm/gopass.* setlocal noswapfile nobackup noundofile
 
+set updatetime=100
 " Turn on syntax highlighting
 syntax on
 syntax enable
@@ -152,3 +153,5 @@ let g:vim_json_syntax_conceal = 0
 " do good terraform stuff
 let g:terraform_fmt_on_save = 1
 let g:terraform_align = 1
+
+let g:TerminusMouse=0
