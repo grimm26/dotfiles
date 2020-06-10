@@ -1,29 +1,21 @@
-# Filename:      $HOME/.gitconfig
-# Purpose:       configuration file for git(1)
-# Authors:       grml-team (grml.org)
-# Bug-Reports:   see http://grml.org/bugs/
-# License:       This file is licensed under the GPL v2 or any later version.
-################################################################################
-
-# Notice: We do not set user section by default so syncing
-# with this file is as easy as possible. Use
 # GIT_AUTHOR_NAME, GIT_COMMITTER_NAME, GIT_AUTHOR_EMAIL and
-# GIT_COMMITTER_EMAIL via your shell environment instead.
-#[user]
-#    name = Grml User
-#    email = git@grml.org
+# GIT_COMMITTER_EMAIL via your shell environment will also set user name and email.
+[trim]
+	protected = origin-master,master
+	delete = all:mkeisler,merged:origin
 [push]
 	default = upstream
+[pull]
+	ff = only
 [rebase]
 	autostash = true
 [rerere]
-    enabled = true
+  enabled = true
 [core]
-    pager = bat
-    #pager = less -EFRX
+  pager = less -EFRX
 	editor = vim
 	excludesfile = ~/.gitignore_global
-    autocrlf = input
+  autocrlf = input
 [help]
 	autocorrect = 1
 [format]
@@ -31,10 +23,10 @@
 [tag]
 	sort = -version:refname
 [color]
-    branch = yes
-    diff   = auto
-    pager  = yes
-    status = auto
+  branch = yes
+  diff   = auto
+  pager  = yes
+  status = auto
 
 #[color "branch"]
 #    current = green
@@ -61,53 +53,44 @@
 [svn]
     rmdir = true
 [alias]
-    ass   = add
-    b     = branch
-    bdel  = !sh -c 'git branch -d "$1" && git push mkeisler --delete "$1"' -
-    bdd   = !sh -c 'git branch -D "$1" && git push mkeisler --delete "$1"' -
-    bm    = branch --merged master
-    ca    = commit -a
-    chgd  = diff HEAD
-    ci    = commit
-    co    = checkout
-    fpu   = format-patch -s -p origin/master
-    graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f]\\+/\"&\"/g' ; echo '}'; }; f"
-    hist = log --pretty=format:\"%Cgreen%h%Creset %Cblue%ad%Creset %s%C(yellow)%d%Creset %Cblue[%an]%Creset\" --graph --date=short
-    l   = log --date=short --pretty=format:'%C(bold magenta)%h %Creset%C(green)%cd%Creset %C(white)%aN%Creset %s %C(yellow)%d'
-    lg  = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
-    m     = checkout master
-    mnc   = merge --no-commit
-    #nb    = !sh -c 'git checkout -b "$1" && git push --set-upstream mkeisler "$1"' -
-    olg   = log --abbrev-commit --abbrev=6 --pretty=oneline
-    om    = checkout origin-master
-    files = diff-tree --no-commit-id --name-only -r
-    one   = "!sh -c 'git show -s --pretty=\"tformat:%h (%s, %ai\" \"$@\" | sed -e \"s/ [012][0-9]:[0-5][0-9]:[0-5][0-9] [-+][0-9][0-9][0-9][0-9]$/)/\"' -"
-    out   = !git push --dry-run
-    pr    = pull-request
-    purge = !git checkout $(git rev-parse --show-cdup) && git clean -xdf
-    rem   = remote
-    ru  = remote update
-    rup = remote update --prune
-    serve = !sh -c 'git daemon --reuseaddr --verbose \"$@\" --base-path=. --export-all ./.git' sh
-    stgd  = diff --cached
-    st    = status
-    sub   = submodule
-    sw = switch
-    tagme = !sh -c '[ -z "$1" ] && exit 1 || git tag -s v\"$1\" -m \"release \"$1\"\"' sh
-    tush  = push --tags
-    #um    = "!if git show-ref --verify --quiet refs/remotes/upstream/master;then git co master && git fetch upstream && git merge upstream/master;elif git show-ref --verify --quiet refs/remotes/origin/master && git show-ref --verify --quiet refs/remotes/mkeisler/master;then git co master && git fetch origin && git merge origin/master;fi"
-    who   = "!sh -c 'git log -1 --pretty=\"format:%an <%ae>\" --author=\"$1\"' -"
-	last = log -1 HEAD
+   ass   = add
+   b     = branch
+   bdel  = !sh -c 'git branch -d "$1" && git push mkeisler --delete "$1"' -
+   bdd   = !sh -c 'git branch -D "$1" && git push mkeisler --delete "$1"' -
+   bm    = branch --merged master
+   ca    = commit -a
+   chgd  = diff HEAD
+   ci    = commit
+   co    = checkout
+   fpu   = format-patch -s -p origin/master
+   graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f]\\+/\"&\"/g' ; echo '}'; }; f"
+   hist = log --pretty=format:\"%Cgreen%h%Creset %Cblue%ad%Creset %s%C(yellow)%d%Creset %Cblue[%an]%Creset\" --graph --date=short
+   l   = log --date=short --pretty=format:'%C(bold magenta)%h %Creset%C(green)%cd%Creset %C(white)%aN%Creset %s %C(yellow)%d'
+   lg  = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+   m     = checkout master
+   mnc   = merge --no-commit
+   olg   = log --abbrev-commit --abbrev=6 --pretty=oneline
+   om    = checkout origin-master
+   files = diff-tree --no-commit-id --name-only -r
+   one   = "!sh -c 'git show -s --pretty=\"tformat:%h (%s, %ai\" \"$@\" | sed -e \"s/ [012][0-9]:[0-5][0-9]:[0-5][0-9] [-+][0-9][0-9][0-9][0-9]$/)/\"' -"
+   out   = !git push --dry-run
+   purge = !git checkout $(git rev-parse --show-cdup) && git clean -xdf
+   rem   = remote
+   ru  = remote update
+   rup = remote update --prune
+   serve = !sh -c 'git daemon --reuseaddr --verbose \"$@\" --base-path=. --export-all ./.git' sh
+   stgd  = diff --cached
+   st    = status
+   sub   = submodule
+   sw = switch
+   tagme = !sh -c '[ -z "$1" ] && exit 1 || git tag -s v\"$1\" -m \"release \"$1\"\"' sh
+   tush  = push --tags
+   who   = "!sh -c 'git log -1 --pretty=\"format:%an <%ae>\" --author=\"$1\"' -"
+   last = log -1 HEAD
 [github]
-    user = mkeisler
+   user = mkeisler
 [hub]
-    host = git.enova.com
-	protocol = ssh
-#[sendemail]
-#    aliasesfile   = /home/grml/.gitaliases
-#    aliasfiletype = mutt
-#    chainreplyto  = false
-#    smtpserver = /usr/bin/msmtp
-
+   host = git.enova.com
+   protocol = ssh
 ## END OF FILE #################################################################
 # vim:tabstop=4 autoindent filetype=gitconfig expandtab
