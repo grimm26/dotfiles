@@ -145,6 +145,15 @@ case $(uname) in
 esac
 
 
+# k9s
+echo "k9s"
+curl -sL $(curl -s https://api.github.com/repos/derailed/k9s/releases/latest |jq -r '.assets[].browser_download_url' | grep -i ${kernel}_$(uname -m)) -o /tmp/k9s-latest.tgz && \
+  mkdir -p /tmp/k9s.$$ && \
+  tar -C /tmp/k9s.$$ -xzf /tmp/k9s-latest.tgz && \
+  rm /tmp/k9s-latest.tgz && \
+  cp /tmp/k9s.$$/k9s ${home_bin} && \
+  chmod 755 ${home_bin}/k9s; cd /tmp
+
 # cheat
 echo "cheat"
 cd /tmp
