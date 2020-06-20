@@ -131,6 +131,7 @@ case $(uname) in
       chruby
       ruby-install
       direnv
+      jq
     )
     for pkg in ${NEEDED_PACKAGES[*]}; do
       brew list $pkg &>/dev/null || \
