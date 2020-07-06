@@ -48,15 +48,12 @@ setopt longlistjobs
 
 export GOPATH=~/go
 export GOBIN=$GOPATH/bin
-path=(${GOBIN} /usr/local/bin /bin /usr/bin /usr/sbin /usr/local/opt/go/libexec/bin)
-path+=('/usr/local/bin')
-path+=('/usr/local/sbin')
+path+=(${GOBIN})
+path=('/usr/local/bin' '/usr/local/sbin' $path)
 if [[ $OSTYPE == darwin* && -d ${HOME}/Library/Python/3.7/bin ]]; then
   path+=("${HOME}/Library/Python/3.7/bin")
 fi
-if [[ -d /usr/local/opt/go/libexec/bin ]]; then
-  path+=('/usr/local/opt/go/libexec/bin')
-elif [[ -d /usr/local/go/bin ]]; then
+if [[ -d /usr/local/go/bin ]]; then
   path+=('/usr/local/go/bin')
 fi
 path=("$HOME/.local/bin" $path)
