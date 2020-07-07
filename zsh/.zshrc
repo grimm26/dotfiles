@@ -142,3 +142,69 @@ export DISABLE_AUTO_TITLE=true
   #alias vim=nvim
 #fi
 [ -d /usr/local/opt/openjdk/bin ] && export PATH="/usr/local/opt/openjdk/bin:$PATH"
+
+is_in_local_git() {
+    local branch=${1}
+    local existed_in_local=$(git branch --list ${branch})
+
+    if [[ "${existed_in_local}x" != "x" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+is_in_remote_git() {
+    local remote=${1}
+    local branch=${2}
+    local existed_in_remote=$(git ls-remote --heads ${remote} ${branch})
+
+    if [[ "${existed_in_remote}x" != "x" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+get_default_branch()
+{
+  command -v jq &>/dev/null || (echo "You need to install jq" && return 1)
+  if [ "${GITHUB_API_ENDPOINT}x" = "x" ]; then
+    GITHUB_API_ENDPOINT="https://api.github.com"
+  fi
+  GIT_SSH_REGEX="^git@"
+  GIT_RO_REGEX="^git:"
+  HTTPS_REGEX="^https:"
+  GITHUB_API_ENDPOINT=$(sed 's!/$!!' <<< $GITHUB_API_ENDPOINT)
+  FULL_ORIGIN=$(git remote get-url origin)
+  if [[ $FULL_ORIGIN =~ $GIT_SSH_REGEX ]]; then # git+ssh URL
+    REPOSITORY=$(echo $FULL_ORIGIN |cut -d: -f2 |sed 's/\.git//')
+    GITHUB_SITE=$(echo $FULL_ORIGIN | cut -d: -f1 |cut -d@ -f2)
+  elif [[ $FULL_ORIGIN =~ $GIT_RO_REGEX ]]; then # git:// URL
+    REPOSITORY=$(echo $FULL_ORIGIN |cut -d/ -f4,5 |sed 's/\.git//')
+    GITHUB_SITE=$(echo $FULL_ORIGIN | cut -d: -f3)
+  elif [[ $FULL_ORIGIN =~ $HTTPS_REGEX ]]; then # https:// URL
+    REPOSITORY=$(echo $FULL_ORIGIN |cut -d/ -f4,5 |sed 's/\.git//')
+    GITHUB_SITE=$(echo $FULL_ORIGIN | cut -d: -f3)
+  else
+    return 1
+  fi
+  DEFAULT_BRANCH=$(curl -s $([[ -n $GITHUB_TOKEN ]] && echo -n "-H \"Authorization: token $GITHUB_TOKEN\"") $GITHUB_API_ENDPOINT/repos/$REPOSITORY |jq -r '.default_branch')
+}
+get_repo_owner()
+{
+  GIT_SSH_REGEX="^git@"
+  GIT_RO_REGEX="^git:"
+  HTTPS_REGEX="^https:"
+  GITHUB_API_ENDPOINT=$(sed 's!/$!!' <<< $GITHUB_API_ENDPOINT)
+  FULL_ORIGIN=$(git remote get-url origin)
+  if [[ $FULL_ORIGIN =~ $GIT_SSH_REGEX ]]; then # git+ssh URL
+    REPOSITORY=$(echo $FULL_ORIGIN |cut -d: -f2 |sed 's/\.git//')
+  elif [[ $FULL_ORIGIN =~ $GIT_RO_REGEX ]]; then # git:// URL
+    REPOSITORY=$(echo $FULL_ORIGIN |cut -d/ -f4,5 |sed 's/\.git//')
+  elif [[ $FULL_ORIGIN =~ $HTTPS_REGEX ]]; then # https:// URL
+    REPOSITORY=$(echo $FULL_ORIGIN |cut -d/ -f4,5 |sed 's/\.git//')
+  else
+    return 1
+  fi
+
+  IFS='/' read GH_OWNER GH_REPO <<< "$REPOSITORY"
+}
