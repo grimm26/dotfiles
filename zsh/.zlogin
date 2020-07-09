@@ -158,6 +158,7 @@ if [[ $OSTYPE == darwin* ]]; then
 fi
 alias cim=vim
 export EDITOR=vim
+export SYSTEMD_EDITOR=vim
 #export PAGER=vimpager
 #export MANPAGER=vimmanpager
 export PAGER=less
