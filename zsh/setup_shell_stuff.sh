@@ -37,13 +37,13 @@ case $(uname) in
       dpkg -s $pkg &>/dev/null || \
         sudo apt-get install -y $pkg
     done
-    # golang 1.14.3
-    if [[ "go version go1.14.3 linux/amd64" != $(go version 2>/dev/null) ]]; then
-      echo "Downloading and installing go 1.14.3"
-      curl -sO https://dl.google.com/go/go1.14.3.${kernel}-${machine}.tar.gz && \
+    GOLANG_VERSION="1.14.4"
+    if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
+      echo "Downloading and installing go ${GOLANG_VERSION}"
+      curl -sO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz && \
         sudo rm -rf /usr/local/go 2>/dev/null && \
-        sudo tar -C /usr/local -xzf go1.14.3.${kernel}-${machine}.tar.gz
-      rm go1.14.3.${kernel}-${machine}.tar.gz
+        sudo tar -C /usr/local -xzf go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
+      rm go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
       export PATH=${PATH}:/usr/local/go/bin
     fi
     echo "pre-commit"
