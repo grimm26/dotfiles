@@ -166,6 +166,7 @@ is_in_remote_git() {
 }
 get_default_branch()
 {
+  local remote=${1-origin}
   command -v jq &>/dev/null || (echo "You need to install jq" && return 1)
   if [ "${GITHUB_API_ENDPOINT}x" = "x" ]; then
     GITHUB_API_ENDPOINT="https://api.github.com"
@@ -174,7 +175,7 @@ get_default_branch()
   GIT_RO_REGEX="^git:"
   HTTPS_REGEX="^https:"
   GITHUB_API_ENDPOINT=$(sed 's!/$!!' <<< $GITHUB_API_ENDPOINT)
-  FULL_ORIGIN=$(git remote get-url origin)
+  FULL_ORIGIN=$(git remote get-url $remote)
   if [[ $FULL_ORIGIN =~ $GIT_SSH_REGEX ]]; then # git+ssh URL
     REPOSITORY=$(echo $FULL_ORIGIN |cut -d: -f2 |sed 's/\.git//')
     GITHUB_SITE=$(echo $FULL_ORIGIN | cut -d: -f1 |cut -d@ -f2)
@@ -191,11 +192,15 @@ get_default_branch()
 }
 get_repo_owner()
 {
+  local remote=${1-origin}
   GIT_SSH_REGEX="^git@"
   GIT_RO_REGEX="^git:"
   HTTPS_REGEX="^https:"
+  if [ "${GITHUB_API_ENDPOINT}x" = "x" ]; then
+    GITHUB_API_ENDPOINT="https://api.github.com"
+  fi
   GITHUB_API_ENDPOINT=$(sed 's!/$!!' <<< $GITHUB_API_ENDPOINT)
-  FULL_ORIGIN=$(git remote get-url origin)
+  FULL_ORIGIN=$(git remote get-url $remote)
   if [[ $FULL_ORIGIN =~ $GIT_SSH_REGEX ]]; then # git+ssh URL
     REPOSITORY=$(echo $FULL_ORIGIN |cut -d: -f2 |sed 's/\.git//')
   elif [[ $FULL_ORIGIN =~ $GIT_RO_REGEX ]]; then # git:// URL
