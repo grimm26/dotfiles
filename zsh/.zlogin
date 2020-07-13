@@ -17,27 +17,6 @@ wttr()
     curl -H "Accept-Language: ${LANG%_*}" --compressed "$request"
 }
 
-gmom()
-{
-  if is_in_remote_git origin master; then
-    git merge origin/master
-  elif is_in_remote_git origin main; then
-    git merge origin/main
-  else
-    echo "Cannot find a main or master branch to merge"
-  fi
-}
-gcm()
-{
-  if is_in_local_git master; then
-    git checkout master
-  elif is_in_local_git main; then
-    git checkout main
-  else
-    echo "Cannot find a main or master branch to checkout"
-  fi
-}
-
 tgp () { terragrunt plan -no-color|awk 'BEGIN{f="/tmp/plan.txt"}/^---/{o=!o};{print};{if(o&&!/^---/){print>f}}'; }
 tgl () {
   if [ -x =landscape ]; then
@@ -329,8 +308,6 @@ elif [[ -r ~/.zplugrc ]]; then
   source ~/.zplugrc && echo "Done."
 fi
 [[ $#RUBIES > 0 ]] && chruby ruby
-unalias gcm
-unalias gmom
 
 whence starship &>/dev/null && \
   eval "$(starship init zsh)"
