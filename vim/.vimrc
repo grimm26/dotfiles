@@ -98,9 +98,10 @@ set nosmartcase
 """"""""""""""""""""""""""""""
 " Always show the status line
 set laststatus=2
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 " Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+"set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
 "
 " Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
 "nmap <M-j> mz:m+<cr>`z
@@ -134,6 +135,8 @@ map <leader>nf :NERDTreeFind<cr>
 " => vim-airline config (force color)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:airline_theme="solarized"
+let g:airline_solarized_bg='dark'
+let g:airline_powerline_fonts = 1
 "let g:airline_theme="luna"
 
 " Syntastic Settings
