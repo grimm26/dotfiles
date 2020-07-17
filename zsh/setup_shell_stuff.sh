@@ -107,6 +107,13 @@ case $(uname) in
       ./build.sh --no-verify && \
       cp bin/* ~/.local/bin
     cd /tmp
+    echo "kubectl"
+    KUBECTL_STABLE=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+    MY_KUBECTL_VERSION=$(kubectl version --client --short | awk '{print $3}')
+    if [[ $KUBECTL_STABLE != $MY_KUBECTL_VERSION ]]; then
+      curl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o  ~/.local/bin/kubectl && \
+        chmod 755 ~/.local/bin/kubectl
+    fi
     ;;
   Darwin)
     if command -v brew &>/dev/null ; then
@@ -120,6 +127,7 @@ case $(uname) in
     # Base stuff we need.
     NEEDED_PACKAGES=(
       keychain
+      kubernetes-cli
       coreutils
       go
       shfmt

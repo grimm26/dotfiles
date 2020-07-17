@@ -1,5 +1,6 @@
 #export LSCOLORS="ehfxcxdxbxegedabagacad"
 eval "$(hub alias -s)"
+export BAT_THEME="Solarized (dark)"
 
 mkcd () {
   if [ -d "$1" ]; then
@@ -309,6 +310,8 @@ elif [[ -r ~/.zplugrc ]]; then
 fi
 [[ $#RUBIES > 0 ]] && chruby ruby
 
+whence kubectl &>/dev/null && \
+  source <(kubectl completion zsh)
 whence starship &>/dev/null && \
   eval "$(starship init zsh)"
 whence direnv &>/dev/null && \
