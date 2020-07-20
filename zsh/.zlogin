@@ -309,6 +309,8 @@ elif [[ -r ~/.zplugrc ]]; then
   source ~/.zplugrc && echo "Done."
 fi
 [[ $#RUBIES > 0 ]] && chruby ruby
+alias gum='gcm && hub sync && gmum'
+alias gom='gcm && hub sync && gmom'
 
 whence kubectl &>/dev/null && \
   source <(kubectl completion zsh)
