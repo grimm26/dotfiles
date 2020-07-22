@@ -109,7 +109,7 @@ case $(uname) in
     cd /tmp
     echo "kubectl"
     KUBECTL_STABLE=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
-    MY_KUBECTL_VERSION=$(kubectl version --client --short | awk '{print $3}')
+    MY_KUBECTL_VERSION=$(kubectl version --client --short 2>/dev/null | awk '{print $3}')
     if [[ $KUBECTL_STABLE != $MY_KUBECTL_VERSION ]]; then
       curl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o  ~/.local/bin/kubectl && \
         chmod 755 ~/.local/bin/kubectl
