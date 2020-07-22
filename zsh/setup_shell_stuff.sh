@@ -179,6 +179,6 @@ for z in .z* .config/*;do
   if ! diff -q $z ~/${z} &>/dev/null; then
     cp ~/${z} ~/${z}.prev
   fi
-  cp $z ~
+  cp $z ~/${z}
 done
 cd $INITIAL_PWD
