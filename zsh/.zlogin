@@ -1,6 +1,7 @@
 #export LSCOLORS="ehfxcxdxbxegedabagacad"
 eval "$(hub alias -s)"
-export BAT_THEME="Solarized (dark)"
+# This seems to screw up the colors, so leave it out for now
+#export BAT_THEME="Solarized (dark)"
 
 mkcd () {
   if [ -d "$1" ]; then
