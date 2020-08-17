@@ -34,7 +34,7 @@ declare -A plugins
 plugins['vim-commentary']='https://github.com/tpope/vim-commentary.git'
 plugins['nerdtree']='https://github.com/scrooloose/nerdtree.git'
 plugins['vim-surround']='https://github.com/tpope/vim-surround.git'
-plugins['syntastic']='https://github.com/scrooloose/syntastic.git'
+plugins['syntastic']='https://github.com/vim-syntastic/syntastic.git'
 plugins['vim-airline']='https://github.com/vim-airline/vim-airline'
 plugins['vim-airline-themes']='https://github.com/vim-airline/vim-airline-themes'
 plugins['vim-colors-solarized']='https://github.com/altercation/vim-colors-solarized.git'
