@@ -140,10 +140,10 @@ let g:airline_powerline_fonts = 1
 "let g:airline_theme="luna"
 
 " Syntastic Settings
+" statusline stuff
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
 " Check my syntax
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 2
