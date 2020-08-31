@@ -53,6 +53,9 @@ case $(uname) in
     echo "bat"
     curl -sL $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest |jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb')   -o /tmp/bat-latest.amd64.deb && \
       sudo dpkg --install --skip-same-version /tmp/bat-latest.amd64.deb
+    echo "dive"
+    curl -sL $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -E '*_amd64.deb') -o /tmp/dive-latest.amd64.deb && \
+      sudo dpkg --install --skip-same-version /tmp/dive-latest.amd64.deb
     # ripgrep
     echo "ripgrep"
     curl -sL $(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest |jq -r '.assets[].browser_download_url' | grep amd64.deb) -o /tmp/ripgrep-latest.amd64.deb && \
@@ -145,6 +148,13 @@ case $(uname) in
       brew list $pkg &>/dev/null || \
         brew install $pkg
     done
+    # dive
+    curl -sL $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -i ${kernel}_${machine}) -o /tmp/dive-latest.tgz && \
+      mkdir -p /tmp/dive.$$ && \
+      tar -C /tmp/dive.$$ -xzf /tmp/dive-latest.tgz  && \
+      rm /tmp/dive-latest.tgz && \
+      cp /tmp/dive.$$/dive ${home_bin} && \
+      chmod 755 ${home_bin}/dive; cd /tmp
     SCRIPT_HOME=$(greadlink -f ${0%/*})
     ;;
   *)
