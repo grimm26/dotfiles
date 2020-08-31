@@ -148,6 +148,7 @@ case $(uname) in
       brew list $pkg &>/dev/null || \
         brew install $pkg
     done
+    SCRIPT_HOME=$(greadlink -f ${0%/*})
     # dive
     curl -sL $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -i ${kernel}_${machine}) -o /tmp/dive-latest.tgz && \
       mkdir -p /tmp/dive.$$ && \
@@ -155,7 +156,6 @@ case $(uname) in
       rm /tmp/dive-latest.tgz && \
       cp /tmp/dive.$$/dive ${home_bin} && \
       chmod 755 ${home_bin}/dive; cd /tmp
-    SCRIPT_HOME=$(greadlink -f ${0%/*})
     ;;
   *)
     echo "Unknown OS type"
