@@ -37,7 +37,14 @@ case $(uname) in
       dpkg -s $pkg &>/dev/null || \
         sudo apt-get install -y $pkg
     done
-    GOLANG_VERSION="1.14.4"
+    # Latest github cli
+    if ! grep -q cli.github /etc/apt/sources.list.d/*.list; then
+      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+      sudo apt-add-repository https://cli.github.com/packages
+      sudo apt update
+      sudo apt install gh
+    fi
+    GOLANG_VERSION="1.15.2"
     if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
       echo "Downloading and installing go ${GOLANG_VERSION}"
       curl -sO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz && \
@@ -143,6 +150,7 @@ case $(uname) in
       ruby-install
       direnv
       jq
+      gh
     )
     for pkg in ${NEEDED_PACKAGES[*]}; do
       brew list $pkg &>/dev/null || \
