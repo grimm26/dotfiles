@@ -45,6 +45,7 @@ disabled=true
 
 [time]
 disabled = false
+format = "[$time]($style) "
 
 [hostname]
 disabled=false
