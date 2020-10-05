@@ -291,12 +291,16 @@ if [[ -r ~/.zsh_plugins.sh ]]; then
   echo "Statically loading ~/.zsh_plugins.sh"
   # Regen with `antibody bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh`
   source ~/.zsh_plugins.sh && echo "Done."
+  source $(antibody path robbyrussell/oh-my-zsh)/lib/functions.zsh
+  source $(antibody path robbyrussell/oh-my-zsh)/lib/history.zsh
 elif whence antibody &>/dev/null; then
   echo "Dynamically sourcing plugins with antibody"
   source <(antibody init)
   # Base plugins
   echo -n "... base plugins"
   antibody bundle < ~/.zsh_plugins.txt
+  source $(antibody path robbyrussell/oh-my-zsh)/lib/functions.zsh
+  source $(antibody path robbyrussell/oh-my-zsh)/lib/history.zsh
   # Ubuntu plugins
   if [[ $OSTYPE == linux-gnu ]]; then
     if [[ $(uname -v) =~ "Ubuntu" ]]; then

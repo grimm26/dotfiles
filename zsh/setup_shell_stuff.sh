@@ -151,6 +151,7 @@ case $(uname) in
       direnv
       jq
       gh
+      hashicorp/tap/terraform
     )
     for pkg in ${NEEDED_PACKAGES[*]}; do
       brew list $pkg &>/dev/null || \
