@@ -31,37 +31,44 @@ fi
 
 # Here is the list of plugins
 declare -A plugins
-plugins['vim-commentary']='https://github.com/tpope/vim-commentary.git'
-plugins['nerdtree']='https://github.com/scrooloose/nerdtree.git'
-plugins['vim-surround']='https://github.com/tpope/vim-surround.git'
-plugins['syntastic']='https://github.com/vim-syntastic/syntastic.git'
-plugins['vim-airline']='https://github.com/vim-airline/vim-airline'
-plugins['vim-airline-themes']='https://github.com/vim-airline/vim-airline-themes'
-plugins['vim-colors-solarized']='https://github.com/altercation/vim-colors-solarized.git'
-plugins['vim-dirdiff']='git://github.com/will133/vim-dirdiff'
+plugins['vim-commentary']='git://github.com/tpope/vim-commentary.git'
+plugins['nerdtree']='git://github.com/preservim/nerdtree.git'
+plugins['vim-surround']='git://github.com/tpope/vim-surround.git'
+plugins['syntastic']='git://github.com/vim-syntastic/syntastic.git'
+plugins['vim-airline']='git://github.com/vim-airline/vim-airline'
+plugins['vim-airline-themes']='git://github.com/vim-airline/vim-airline-themes.git'
+plugins['vim-colors-solarized']='git://github.com/altercation/vim-colors-solarized.git'
+plugins['vim-dirdiff']='git://github.com/will133/vim-dirdiff.git'
 plugins['vim-endwise']='git://github.com/tpope/vim-endwise.git'
 plugins['vim-fugitive']='git://github.com/tpope/vim-fugitive.git'
-plugins['vim-go']='https://github.com/fatih/vim-go.git'
-plugins['vim-json']='https://github.com/elzr/vim-json.git'
+plugins['vim-go']='git://github.com/fatih/vim-go.git'
+plugins['vim-json']='git://github.com/elzr/vim-json.git'
 plugins['vim-lastplace']='git://github.com/dietsche/vim-lastplace.git'
-plugins['vim-terraform']='https://github.com/hashivim/vim-terraform.git'
+plugins['vim-terraform']='git://github.com/hashivim/vim-terraform.git'
 plugins['vim-tmux']='git://github.com/tmux-plugins/vim-tmux.git'
 plugins['vim-gitgutter']='git://github.com/airblade/vim-gitgutter.git'
 plugins['vim-terminus']='git://github.com/wincent/terminus.git'
 
 clone_or_update_plugin(){
   name=$1
-  origin=$2
+  origin_url=$2
   if [[ -d ~/.vim/pack/plugins/start/${name} ]]; then
     echo "Updating $name plugin via git pull"
-    cd ~/.vim/pack/plugins/start/${name} && git pull --no-rebase
+    cd ~/.vim/pack/plugins/start/${name}
+    current_origin_url=$(git config --get remote.origin.url)
+    if [[ $current_origin_url != $origin_url ]]; then
+      # github repo URL must have changed along the way.
+      echo "Updating origin of $name from $current_origin_url to $origin_url"
+      git remote set-url origin $origin_url
+    fi
+    git pull --no-rebase
     # Update helptags (docs)
     [[ -d ./doc ]] && vim -u NONE -c "helptags doc" -c q
     cd $BASE_CWD
     echo ""
   else
     echo "Installing $name plugin"
-    git clone $origin ~/.vim/pack/plugins/start/${name}
+    git clone $origin_url ~/.vim/pack/plugins/start/${name}
     # Update helptags (docs)
     [[ -d ~/.vim/pack/plugins/start/${name}/doc ]] && vim -u NONE -c "helptags ~/.vim/pack/plugins/start/${name}/doc" -c q
     echo ""
