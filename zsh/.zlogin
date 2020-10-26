@@ -314,6 +314,8 @@ elif [[ -r ~/.zplugrc ]]; then
   echo "Loading zsh plugins with zplug"
   source ~/.zplugrc && echo "Done."
 fi
+# The oh-my-zsh alias for this locks up
+alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
 [[ $#RUBIES > 0 ]] && chruby ruby
 alias gum='gcm && hub sync && gmum'
 alias gom='gcm && hub sync && gmom'
