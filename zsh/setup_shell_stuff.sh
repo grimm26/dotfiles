@@ -44,7 +44,7 @@ case $(uname) in
       sudo apt update
       sudo apt install gh
     fi
-    GOLANG_VERSION="1.15.2"
+    GOLANG_VERSION="1.15.4"
     if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
       echo "Downloading and installing go ${GOLANG_VERSION}"
       curl -sO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz && \
