@@ -13,11 +13,15 @@ alias tg=terragrunt
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
 tf11 () {
   ln -fs ~/bin/terragrunt_18 ~/bin/terragrunt
-  ln -fs ~/bin/terraform_0.11.14 ~/bin/terraform
+  tfenv use 0.11.14
 }
 tf12 () {
-  rm ~/bin/terragrunt
-  rm ~/bin/terraform
+  ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
+  tfenv use 0.12.29
+}
+tf13 () {
+  ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
+  tfenv use latest
 }
 alias tgi="terragrunt init -upgrade -reconfigure"
 alias tgu="terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
