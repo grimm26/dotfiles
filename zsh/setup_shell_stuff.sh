@@ -38,10 +38,9 @@ case $(uname) in
         sudo apt-get install -y $pkg
     done
     # Latest github cli
-    if ! grep -q cli.github /etc/apt/sources.list.d/*.list; then
+    if ! grep -q cli.github /etc/apt/sources.list; then
       sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-      sudo apt-add-repository https://cli.github.com/packages
-      sudo apt update
+      sudo apt-add-repository --update https://cli.github.com/packages
       sudo apt install gh
     fi
     GOLANG_VERSION="1.15.4"
@@ -56,9 +55,13 @@ case $(uname) in
     echo "pre-commit"
     command -v pre-commit >/dev/null 2>&1 || pip3 install pre-commit
     cd /tmp
+    # git-delta
+    echo "git-delta"
+    curl -sL $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest|jq -r '.assets[].browser_download_url' | grep -E 'git-delta_.*_amd64\.deb') -o /tmp/git-delta-latest_amd64.deb && \
+      sudo dpkg --install --skip-same-version /tmp/git-delta-latest_amd64.deb
     # bat
     echo "bat"
-    curl -sL $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest |jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb')   -o /tmp/bat-latest.amd64.deb && \
+    curl -sL $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest |jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb') -o /tmp/bat-latest.amd64.deb && \
       sudo dpkg --install --skip-same-version /tmp/bat-latest.amd64.deb
     echo "dive"
     curl -sL $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -E '*_amd64.deb') -o /tmp/dive-latest.amd64.deb && \
