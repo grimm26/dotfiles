@@ -13,16 +13,17 @@ alias tg=terragrunt
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
 tf11 () {
   ln -fs ~/bin/terragrunt_18 ~/bin/terragrunt
-  tfenv use 0.11.14
+  tfenv use 'latest:^0.11'
 }
 tf12 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfenv use 0.12.29
+  tfenv use 'latest:^0.12'
 }
 tf13 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfenv use latest
+  tfenv use 'latest:^0.13'
 }
 alias tgi="terragrunt init -upgrade -reconfigure"
 alias tgu="terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="terraform 0.12upgrade -yes;chompeof *.tf"
+export AWS_DEFAULT_REGION=us-east-2

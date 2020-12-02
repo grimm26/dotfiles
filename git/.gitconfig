@@ -15,10 +15,14 @@
 [rerere]
   enabled = true
 [core]
-  pager = less -EFRX
-	editor = vim
-	excludesfile = ~/.gitignore_global
+  #pager = less -EFRX
+  pager = delta
+  editor = vim
+  excludesfile = ~/.gitignore_global
   autocrlf = input
+[delta]
+  features = line-numbers side-by-side
+  syntax-theme =  Solarized (dark)
 [help]
 	autocorrect = 1
 [format]
