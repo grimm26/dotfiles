@@ -11,6 +11,7 @@ alias kit=kitchen
 alias tf=terraform
 alias tg=terragrunt
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
+path+=(~/.tfenv/bin)
 tf11 () {
   ln -fs ~/bin/terragrunt_18 ~/bin/terragrunt
   tfenv use 'latest:^0.11'

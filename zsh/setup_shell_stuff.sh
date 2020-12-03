@@ -53,7 +53,11 @@ case $(uname) in
       export PATH=${PATH}:/usr/local/go/bin
     fi
     echo "pre-commit"
-    command -v pre-commit >/dev/null 2>&1 || pip3 install pre-commit
+    if command -v pre-commit >/dev/null 2>&1;then
+      pip3 install --upgrade --user pre-commit
+    else
+      pip3 install --user pre-commit
+    fi
     cd /tmp
     # git-delta
     echo "git-delta"
@@ -154,7 +158,6 @@ case $(uname) in
       direnv
       jq
       gh
-      tfenv
     )
     for pkg in ${NEEDED_PACKAGES[*]}; do
       brew list $pkg &>/dev/null || \
@@ -175,6 +178,18 @@ case $(uname) in
     ;;
 esac
 
+# tfenv
+echo "tfenv"
+if [[ -d ~/.tfenv ]];then
+  cd ~/.tfenv
+  git pull --no-rebase
+  cd -
+else
+  git clone https://github.com/tfutils/tfenv.git ~/.tfenv
+fi
+~/.tfenv/bin/tfenv install 0.11.14
+~/.tfenv/bin/tfenv install 'latest:^0.12'
+~/.tfenv/bin/tfenv install 'latest:^0.13'
 
 # k9s
 echo "k9s"
@@ -192,7 +207,10 @@ curl -sL https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}
   gunzip -c /tmp/cheat-${kernel}-${machine}.gz > ${home_bin}/cheat
 chmod 755 ~/bin/cheat
 
+# antibody
+echo "antibody"
 curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
+# starship (prompt)
 curl -fsSL https://starship.rs/install.sh | sudo bash -s - -y
 sudo chown root: /usr/local/bin/starship
 
