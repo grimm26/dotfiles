@@ -11,18 +11,21 @@ alias kit=kitchen
 alias tf=terraform
 alias tg=terragrunt
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
-path+=(~/.tfenv/bin)
 tf11 () {
   ln -fs ~/bin/terragrunt_18 ~/bin/terragrunt
-  tfenv use 'latest:^0.11'
+  tfswitch 0.11.14
 }
 tf12 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfenv use 'latest:^0.12'
+  tfswitch 0.12.29
 }
 tf13 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfenv use 'latest:^0.13'
+  tfswitch 0.13.5
+}
+tf14 () {
+  ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
+  tfswitch 0.14.2
 }
 alias tgi="terragrunt init -upgrade -reconfigure"
 alias tgu="terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"

@@ -122,14 +122,14 @@ case $(uname) in
     git clone https://github.com/eth-p/bat-extras.git && \
       cd bat-extras && \
       ./build.sh --no-verify && \
-      cp bin/* ~/.local/bin
+      cp bin/* $home_bin
     cd /tmp
     echo "kubectl"
     KUBECTL_STABLE=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
     MY_KUBECTL_VERSION=$(kubectl version --client --short 2>/dev/null | awk '{print $3}')
     if [[ $KUBECTL_STABLE != $MY_KUBECTL_VERSION ]]; then
-      curl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o  ~/.local/bin/kubectl && \
-        chmod 755 ~/.local/bin/kubectl
+      curl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o  ${home_bin}/kubectl && \
+        chmod 755 ${home_bin}/kubectl
     fi
     ;;
   Darwin)
@@ -178,18 +178,9 @@ case $(uname) in
     ;;
 esac
 
-# tfenv
-echo "tfenv"
-if [[ -d ~/.tfenv ]];then
-  cd ~/.tfenv
-  git pull --no-rebase
-  cd -
-else
-  git clone https://github.com/tfutils/tfenv.git ~/.tfenv
-fi
-~/.tfenv/bin/tfenv install 0.11.14
-~/.tfenv/bin/tfenv install 'latest:^0.12'
-~/.tfenv/bin/tfenv install 'latest:^0.13'
+# tfswitch
+echo "tfswitch"
+curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
 
 # k9s
 echo "k9s"
@@ -209,10 +200,9 @@ chmod 755 ~/bin/cheat
 
 # antibody
 echo "antibody"
-curl -sfL git.io/antibody | sudo sh -s - -b /usr/local/bin
+curl -sfL git.io/antibody | bash -s - -b ${home_bin}
 # starship (prompt)
-curl -fsSL https://starship.rs/install.sh | sudo bash -s - -y
-sudo chown root: /usr/local/bin/starship
+curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin}
 
 cd $SCRIPT_HOME
 for z in .z* .config/*;do
