@@ -140,7 +140,7 @@ case $(uname) in
       /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
     brew tap homebrew/cask-fonts
-    brew cask list font-fira-code &>/dev/null || brew cask install font-fira-code
+    brew list font-fira-code --cask &>/dev/null || brew install font-fira-code --cask
     # Base stuff we need.
     NEEDED_PACKAGES=(
       keychain

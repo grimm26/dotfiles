@@ -25,7 +25,7 @@ tf13 () {
 }
 tf14 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfswitch 0.14.2
+  tfswitch 0.14.3
 }
 alias tgi="terragrunt init -upgrade -reconfigure"
 alias tgu="terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
