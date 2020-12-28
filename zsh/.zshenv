@@ -11,21 +11,23 @@ alias kit=kitchen
 alias tf=terraform
 alias tg=terragrunt
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
+export TFSWITCH_BIN=${HOME}/.local/bin/terraform
+alias tfsw="tfswitch --bin $TFSWITCH_BIN"
 tf11 () {
   ln -fs ~/bin/terragrunt_18 ~/bin/terragrunt
-  tfswitch 0.11.14
+  tfsw 0.11.14
 }
 tf12 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfswitch 0.12.29
+  tfsw 0.12.29
 }
 tf13 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfswitch 0.13.5
+  tfsw 0.13.5
 }
 tf14 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfswitch 0.14.3
+  tfsw 0.14.3
 }
 alias go13="tf 0.13upgrade -yes;audit-terraform-modules -r; atlantis_yaml_mod.rb --tfver v0.13.5"
 alias tgi="terragrunt init -upgrade -reconfigure"
