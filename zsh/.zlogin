@@ -41,7 +41,7 @@ alias bs='brew search'
 alias gnb='git nb'
 alias grtag='git rtag'
 alias ghpr='git pull-request'
-alias gpb='git prune-branches'
+alias gbp='git prune-branches'
 
 if [[ -d /usr/libexec/java_home ]]; then
   export JAVA_HOME=$(/usr/libexec/java_home)
