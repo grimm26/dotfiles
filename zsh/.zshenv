@@ -19,15 +19,15 @@ tf11 () {
 }
 tf12 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfsw 0.12.29
+  tfsw 0.12.30
 }
 tf13 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfsw 0.13.5
+  tfsw 0.13.6
 }
 tf14 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
-  tfsw 0.14.3
+  tfsw 0.14.4
 }
 alias go13="tf 0.13upgrade -yes;audit-terraform-modules -r; atlantis_yaml_mod.rb --tfver v0.13.5"
 alias tgi="terragrunt init -upgrade -reconfigure"
