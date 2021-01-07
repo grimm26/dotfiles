@@ -296,6 +296,7 @@ if [[ -r ~/.zsh_plugins.sh ]]; then
   # Regen with `antibody bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh`
   source $(antibody path robbyrussell/oh-my-zsh)/lib/functions.zsh
   source $(antibody path robbyrussell/oh-my-zsh)/lib/history.zsh
+  source $(antibody path robbyrussell/oh-my-zsh)/lib/clipboard.zsh
   source ~/.zsh_plugins.sh && echo "Done."
 elif whence antibody &>/dev/null; then
   echo "Dynamically sourcing plugins with antibody"
@@ -305,6 +306,7 @@ elif whence antibody &>/dev/null; then
   source $(antibody path robbyrussell/oh-my-zsh)/lib/functions.zsh
   source $(antibody path robbyrussell/oh-my-zsh)/lib/completion.zsh
   source $(antibody path robbyrussell/oh-my-zsh)/lib/history.zsh
+  source $(antibody path robbyrussell/oh-my-zsh)/lib/clipboard.zsh
   antibody bundle < ~/.zsh_plugins.txt
   # Ubuntu plugins
   if [[ $OSTYPE == linux-gnu ]]; then
