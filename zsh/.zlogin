@@ -40,7 +40,7 @@ alias bs='brew search'
 #Git
 alias gnb='git nb'
 alias grtag='git rtag'
-alias ghpr='git pull-request'
+alias ghpr='gh pr create'
 alias gbp='git prune-branches'
 
 if [[ -d /usr/libexec/java_home ]]; then
