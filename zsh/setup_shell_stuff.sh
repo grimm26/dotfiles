@@ -46,7 +46,7 @@ case $(uname) in
     GOLANG_VERSION="1.15.4"
     if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
       echo "Downloading and installing go ${GOLANG_VERSION}"
-      curl -sO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz && \
+      curl -sLSO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz && \
         sudo rm -rf /usr/local/go 2>/dev/null && \
         sudo tar -C /usr/local -xzf go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
       rm go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
@@ -61,41 +61,41 @@ case $(uname) in
     cd /tmp
     # git-delta
     echo "git-delta"
-    curl -sL $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest|jq -r '.assets[].browser_download_url' | grep -E 'git-delta_.*_amd64\.deb') -o /tmp/git-delta-latest_amd64.deb && \
+    curl -sLS $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest|jq -r '.assets[].browser_download_url' | grep -E 'git-delta_.*_amd64\.deb') -o /tmp/git-delta-latest_amd64.deb && \
       sudo dpkg --install --skip-same-version /tmp/git-delta-latest_amd64.deb
     # bat
     echo "bat"
-    curl -sL $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest |jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb') -o /tmp/bat-latest.amd64.deb && \
+    curl -sLS $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest |jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb') -o /tmp/bat-latest.amd64.deb && \
       sudo dpkg --install --skip-same-version /tmp/bat-latest.amd64.deb
     echo "dive"
-    curl -sL $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -E '*_amd64.deb') -o /tmp/dive-latest.amd64.deb && \
+    curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -E '*_amd64.deb') -o /tmp/dive-latest.amd64.deb && \
       sudo dpkg --install --skip-same-version /tmp/dive-latest.amd64.deb
     # ripgrep
     echo "ripgrep"
-    curl -sL $(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest |jq -r '.assets[].browser_download_url' | grep amd64.deb) -o /tmp/ripgrep-latest.amd64.deb && \
+    curl -sLS $(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest |jq -r '.assets[].browser_download_url' | grep amd64.deb) -o /tmp/ripgrep-latest.amd64.deb && \
       sudo dpkg --install --skip-same-version /tmp/ripgrep-latest.amd64.deb
     # hub
     echo "hub"
-    curl -sL $(curl -s https://api.github.com/repos/github/hub/releases/latest |jq -r '.assets[].browser_download_url' | grep ${kernel}-${machine}) -o /tmp/hub-${kernel}-${machine}-latest.tgz && \
+    curl -sLS $(curl -s https://api.github.com/repos/github/hub/releases/latest |jq -r '.assets[].browser_download_url' | grep ${kernel}-${machine}) -o /tmp/hub-${kernel}-${machine}-latest.tgz && \
       tar xzf /tmp/hub-${kernel}-${machine}-latest.tgz && \
       rm /tmp/hub-${kernel}-${machine}-latest.tgz && \
       cd hub-${kernel}-${machine}-* && \
       sudo ./install ;cd /tmp
     # chruby
     echo "chruby"
-    curl -sL https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz -o chruby-0.3.9.tar.gz && \
+    curl -sLS https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz -o chruby-0.3.9.tar.gz && \
       tar -xzf chruby-0.3.9.tar.gz && \
       cd chruby-0.3.9/ && \
       sudo make install ; cd /tmp
     # ruby-install
     echo "ruby-install"
-    curl -sL https://github.com/postmodern/ruby-install/archive/v0.8.1.tar.gz -o ruby-install-0.8.1.tar.gz && \
+    curl -sLS https://github.com/postmodern/ruby-install/archive/v0.8.1.tar.gz -o ruby-install-0.8.1.tar.gz && \
       tar -xzf ruby-install-0.8.1.tar.gz && \
       cd ruby-install-0.8.1/ && \
       sudo make install ; cd /tmp
     # direnv
     echo "direnv"
-    direnv_download_url=$(curl -s https://api.github.com/repos/direnv/direnv/releases/latest |jq -r '.assets[].browser_download_url' | grep "direnv.$kernel.$machine")
+    direnv_download_url=$(curl -sLS https://api.github.com/repos/direnv/direnv/releases/latest |jq -r '.assets[].browser_download_url' | grep "direnv.$kernel.$machine")
     if whence direnv &> /dev/null; then
       direnv_latest_version=$(cut -d/ -f8 <<< $direnv_download_url)
       direnv_installed_version=$(direnv --version)
@@ -107,7 +107,7 @@ case $(uname) in
     fi
     # awscli
     echo "awscli"
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    curl -sLS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
       [[ -d aws ]] && rm -rf aws && unzip -q awscliv2.zip && \
       if [[ -d /usr/local/aws-cli/v2 ]]; then
         sudo ./aws/install --update
@@ -125,10 +125,10 @@ case $(uname) in
       cp bin/* $home_bin
     cd /tmp
     echo "kubectl"
-    KUBECTL_STABLE=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+    KUBECTL_STABLE=$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
     MY_KUBECTL_VERSION=$(kubectl version --client --short 2>/dev/null | awk '{print $3}')
     if [[ $KUBECTL_STABLE != $MY_KUBECTL_VERSION ]]; then
-      curl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o  ${home_bin}/kubectl && \
+      curl -sLS https://storage.googleapis.com/kubernetes-release/release/$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o ${home_bin}/kubectl && \
         chmod 755 ${home_bin}/kubectl
     fi
     ;;
@@ -165,7 +165,7 @@ case $(uname) in
     done
     SCRIPT_HOME=$(greadlink -f ${0%/*})
     # dive
-    curl -sL $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -i ${kernel}_${machine}) -o /tmp/dive-latest.tgz && \
+    curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -i ${kernel}_${machine}) -o /tmp/dive-latest.tgz && \
       mkdir -p /tmp/dive.$$ && \
       tar -C /tmp/dive.$$ -xzf /tmp/dive-latest.tgz  && \
       rm /tmp/dive-latest.tgz && \
@@ -180,11 +180,11 @@ esac
 
 # tfswitch
 echo "tfswitch"
-curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
+curl -sLS https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
 
 # k9s
 echo "k9s"
-curl -sL $(curl -s https://api.github.com/repos/derailed/k9s/releases/latest |jq -r '.assets[].browser_download_url' | grep -i ${kernel}_$(uname -m)) -o /tmp/k9s-latest.tgz && \
+curl -sLS $(curl -sLS https://api.github.com/repos/derailed/k9s/releases/latest |jq -r '.assets[].browser_download_url' | grep -i ${kernel}_$(uname -m)) -o /tmp/k9s-latest.tgz && \
   mkdir -p /tmp/k9s.$$ && \
   tar -C /tmp/k9s.$$ -xzf /tmp/k9s-latest.tgz && \
   rm /tmp/k9s-latest.tgz && \
@@ -194,13 +194,13 @@ curl -sL $(curl -s https://api.github.com/repos/derailed/k9s/releases/latest |jq
 # cheat
 echo "cheat"
 cd /tmp
-curl -sL https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -O && \
+curl -sLS https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -O && \
   gunzip -c /tmp/cheat-${kernel}-${machine}.gz > ${home_bin}/cheat
 chmod 755 ~/bin/cheat
 
 # antibody
 echo "antibody"
-curl -sfL git.io/antibody | bash -s - -b ${home_bin}
+curl -sfLS git.io/antibody | bash -s - -b ${home_bin}
 # starship (prompt)
 curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin}
 
