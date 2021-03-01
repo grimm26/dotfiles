@@ -2,6 +2,12 @@
 #
 #set -x
 
+while getopts 'M' OPT; do
+  case $OPT in
+    M) setup_MINIMAL=1
+  esac
+done
+
 kernel=$(uname -s | tr "[:upper:]" "[:lower:]")
 case "$(uname -m)" in
   x86_64)
@@ -37,99 +43,103 @@ case $(uname) in
       dpkg -s $pkg &>/dev/null || \
         sudo apt-get install -y $pkg
     done
-    # Latest github cli
-    if ! grep -q cli.github /etc/apt/sources.list; then
-      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-      sudo apt-add-repository --update https://cli.github.com/packages
-      sudo apt install gh
-    fi
-    GOLANG_VERSION="1.15.8"
-    if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
-      echo "Downloading and installing go ${GOLANG_VERSION}"
-      curl -sLSO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz && \
-        sudo rm -rf /usr/local/go 2>/dev/null && \
-        sudo tar -C /usr/local -xzf go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
-      rm go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
-      export PATH=${PATH}:/usr/local/go/bin
-    fi
-    echo "pre-commit"
-    if command -v pre-commit >/dev/null 2>&1;then
-      pip3 install --upgrade --user pre-commit
-    else
-      pip3 install --user pre-commit
-    fi
-    cd /tmp
-    # git-delta
-    echo "git-delta"
-    curl -sLS $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest|jq -r '.assets[].browser_download_url' | grep -E 'git-delta_.*_amd64\.deb') -o /tmp/git-delta-latest_amd64.deb && \
-      sudo dpkg --install --skip-same-version /tmp/git-delta-latest_amd64.deb
-    # bat
-    echo "bat"
-    curl -sLS $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest |jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb') -o /tmp/bat-latest.amd64.deb && \
-      sudo dpkg --install --skip-same-version /tmp/bat-latest.amd64.deb
-    echo "dive"
-    curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -E '*_amd64.deb') -o /tmp/dive-latest.amd64.deb && \
-      sudo dpkg --install --skip-same-version /tmp/dive-latest.amd64.deb
-    # ripgrep
-    echo "ripgrep"
-    curl -sLS $(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest |jq -r '.assets[].browser_download_url' | grep amd64.deb) -o /tmp/ripgrep-latest.amd64.deb && \
-      sudo dpkg --install --skip-same-version /tmp/ripgrep-latest.amd64.deb
-    # hub
-    echo "hub"
-    curl -sLS $(curl -s https://api.github.com/repos/github/hub/releases/latest |jq -r '.assets[].browser_download_url' | grep ${kernel}-${machine}) -o /tmp/hub-${kernel}-${machine}-latest.tgz && \
-      tar xzf /tmp/hub-${kernel}-${machine}-latest.tgz && \
-      rm /tmp/hub-${kernel}-${machine}-latest.tgz && \
-      cd hub-${kernel}-${machine}-* && \
-      sudo ./install ;cd /tmp
-    # chruby
-    echo "chruby"
-    curl -sLS https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz -o chruby-0.3.9.tar.gz && \
-      tar -xzf chruby-0.3.9.tar.gz && \
-      cd chruby-0.3.9/ && \
-      sudo make install ; cd /tmp
-    # ruby-install
-    echo "ruby-install"
-    curl -sLS https://github.com/postmodern/ruby-install/archive/v0.8.1.tar.gz -o ruby-install-0.8.1.tar.gz && \
-      tar -xzf ruby-install-0.8.1.tar.gz && \
-      cd ruby-install-0.8.1/ && \
-      sudo make install ; cd /tmp
-    # direnv
-    echo "direnv"
-    direnv_download_url=$(curl -sLS https://api.github.com/repos/direnv/direnv/releases/latest |jq -r '.assets[].browser_download_url' | grep "direnv.$kernel.$machine")
-    if whence direnv &> /dev/null; then
-      direnv_latest_version=$(cut -d/ -f8 <<< $direnv_download_url)
-      direnv_installed_version=$(direnv --version)
-      if [[ "$direnv_latest_version" != "v${direnv_installed_version}" ]]; then
-        curl -sL $direnv_download_url -o $home_bin/direnv && chmod 755 $home_bin/direnv ; cd /tmp
+    if [[ ! -v setup_MINIMAL ]]; then
+      echo "Not minimal"
+      exit
+      # Latest github cli
+      if ! grep -q cli.github /etc/apt/sources.list; then
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+        sudo apt-add-repository --update https://cli.github.com/packages
+        sudo apt install gh
       fi
-    else
-      curl -sL $direnv_download_url -o $home_bin/direnv && chmod 755 $home_bin/direnv ; cd /tmp
-    fi
-    # awscli
-    echo "awscli"
-    curl -sLS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-      [[ -d aws ]] && rm -rf aws && unzip -q awscliv2.zip && \
-      if [[ -d /usr/local/aws-cli/v2 ]]; then
-        sudo ./aws/install --update
+      GOLANG_VERSION="1.15.8"
+      if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
+        echo "Downloading and installing go ${GOLANG_VERSION}"
+        curl -sLSO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz && \
+          sudo rm -rf /usr/local/go 2>/dev/null && \
+          sudo tar -C /usr/local -xzf go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
+        rm go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
+        export PATH=${PATH}:/usr/local/go/bin
+      fi
+      echo "pre-commit"
+      if command -v pre-commit >/dev/null 2>&1;then
+        pip3 install --upgrade --user pre-commit
       else
-        sudo ./aws/install
+        pip3 install --user pre-commit
       fi
       cd /tmp
-    # shfmt
-    GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
-    # bat-extras
-    rm -rf bat-extras
-    git clone https://github.com/eth-p/bat-extras.git && \
-      cd bat-extras && \
-      ./build.sh --no-verify && \
-      cp bin/* $home_bin
-    cd /tmp
-    echo "kubectl"
-    KUBECTL_STABLE=$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
-    MY_KUBECTL_VERSION=$(kubectl version --client --short 2>/dev/null | awk '{print $3}')
-    if [[ $KUBECTL_STABLE != $MY_KUBECTL_VERSION ]]; then
-      curl -sLS https://storage.googleapis.com/kubernetes-release/release/$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o ${home_bin}/kubectl && \
-        chmod 755 ${home_bin}/kubectl
+      # git-delta
+      echo "git-delta"
+      curl -sLS $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest|jq -r '.assets[].browser_download_url' | grep -E 'git-delta_.*_amd64\.deb') -o /tmp/git-delta-latest_amd64.deb && \
+        sudo dpkg --install --skip-same-version /tmp/git-delta-latest_amd64.deb
+      # bat
+      echo "bat"
+      curl -sLS $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest |jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb') -o /tmp/bat-latest.amd64.deb && \
+        sudo dpkg --install --skip-same-version /tmp/bat-latest.amd64.deb
+      echo "dive"
+      curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -E '*_amd64.deb') -o /tmp/dive-latest.amd64.deb && \
+        sudo dpkg --install --skip-same-version /tmp/dive-latest.amd64.deb
+      # ripgrep
+      echo "ripgrep"
+      curl -sLS $(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest |jq -r '.assets[].browser_download_url' | grep amd64.deb) -o /tmp/ripgrep-latest.amd64.deb && \
+        sudo dpkg --install --skip-same-version /tmp/ripgrep-latest.amd64.deb
+      # hub
+      echo "hub"
+      curl -sLS $(curl -s https://api.github.com/repos/github/hub/releases/latest |jq -r '.assets[].browser_download_url' | grep ${kernel}-${machine}) -o /tmp/hub-${kernel}-${machine}-latest.tgz && \
+        tar xzf /tmp/hub-${kernel}-${machine}-latest.tgz && \
+        rm /tmp/hub-${kernel}-${machine}-latest.tgz && \
+        cd hub-${kernel}-${machine}-* && \
+        sudo ./install ;cd /tmp
+      # chruby
+      echo "chruby"
+      curl -sLS https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz -o chruby-0.3.9.tar.gz && \
+        tar -xzf chruby-0.3.9.tar.gz && \
+        cd chruby-0.3.9/ && \
+        sudo make install ; cd /tmp
+      # ruby-install
+      echo "ruby-install"
+      curl -sLS https://github.com/postmodern/ruby-install/archive/v0.8.1.tar.gz -o ruby-install-0.8.1.tar.gz && \
+        tar -xzf ruby-install-0.8.1.tar.gz && \
+        cd ruby-install-0.8.1/ && \
+        sudo make install ; cd /tmp
+      # direnv
+      echo "direnv"
+      direnv_download_url=$(curl -sLS https://api.github.com/repos/direnv/direnv/releases/latest |jq -r '.assets[].browser_download_url' | grep "direnv.$kernel.$machine")
+      if whence direnv &> /dev/null; then
+        direnv_latest_version=$(cut -d/ -f8 <<< $direnv_download_url)
+        direnv_installed_version=$(direnv --version)
+        if [[ "$direnv_latest_version" != "v${direnv_installed_version}" ]]; then
+          curl -sL $direnv_download_url -o $home_bin/direnv && chmod 755 $home_bin/direnv ; cd /tmp
+        fi
+      else
+        curl -sL $direnv_download_url -o $home_bin/direnv && chmod 755 $home_bin/direnv ; cd /tmp
+      fi
+      # awscli
+      echo "awscli"
+      curl -sLS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+        [[ -d aws ]] && rm -rf aws && unzip -q awscliv2.zip && \
+        if [[ -d /usr/local/aws-cli/v2 ]]; then
+          sudo ./aws/install --update
+        else
+          sudo ./aws/install
+        fi
+        cd /tmp
+      # shfmt
+      GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
+      # bat-extras
+      rm -rf bat-extras
+      git clone https://github.com/eth-p/bat-extras.git && \
+        cd bat-extras && \
+        ./build.sh --no-verify && \
+        cp bin/* $home_bin
+      cd /tmp
+      echo "kubectl"
+      KUBECTL_STABLE=$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+      MY_KUBECTL_VERSION=$(kubectl version --client --short 2>/dev/null | awk '{print $3}')
+      if [[ $KUBECTL_STABLE != $MY_KUBECTL_VERSION ]]; then
+        curl -sLS https://storage.googleapis.com/kubernetes-release/release/$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o ${home_bin}/kubectl && \
+          chmod 755 ${home_bin}/kubectl
+      fi
     fi
     ;;
   Darwin)
@@ -178,25 +188,27 @@ case $(uname) in
     ;;
 esac
 
-# tfswitch
-echo "tfswitch"
-curl -sLS https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
+if [[ ! -v setup_MINIMAL ]]; then
+  # tfswitch
+  echo "tfswitch"
+  curl -sLS https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
 
-# k9s
-echo "k9s"
-curl -sLS $(curl -sLS https://api.github.com/repos/derailed/k9s/releases/latest |jq -r '.assets[].browser_download_url' | grep -i ${kernel}_$(uname -m)) -o /tmp/k9s-latest.tgz && \
-  mkdir -p /tmp/k9s.$$ && \
-  tar -C /tmp/k9s.$$ -xzf /tmp/k9s-latest.tgz && \
-  rm /tmp/k9s-latest.tgz && \
-  cp /tmp/k9s.$$/k9s ${home_bin} && \
-  chmod 755 ${home_bin}/k9s; cd /tmp
+  # k9s
+  echo "k9s"
+  curl -sLS $(curl -sLS https://api.github.com/repos/derailed/k9s/releases/latest |jq -r '.assets[].browser_download_url' | grep -i ${kernel}_$(uname -m)) -o /tmp/k9s-latest.tgz && \
+    mkdir -p /tmp/k9s.$$ && \
+    tar -C /tmp/k9s.$$ -xzf /tmp/k9s-latest.tgz && \
+    rm /tmp/k9s-latest.tgz && \
+    cp /tmp/k9s.$$/k9s ${home_bin} && \
+    chmod 755 ${home_bin}/k9s; cd /tmp
 
-# cheat
-echo "cheat"
-cd /tmp
-curl -sLS https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -O && \
-  gunzip -c /tmp/cheat-${kernel}-${machine}.gz > ${home_bin}/cheat
-chmod 755 ~/bin/cheat
+  # cheat
+  echo "cheat"
+  cd /tmp
+  curl -sLS https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -O && \
+    gunzip -c /tmp/cheat-${kernel}-${machine}.gz > ${home_bin}/cheat
+  chmod 755 ~/bin/cheat
+fi
 
 # antibody
 echo "antibody"
