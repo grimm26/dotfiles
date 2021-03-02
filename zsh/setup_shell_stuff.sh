@@ -44,8 +44,6 @@ case $(uname) in
         sudo apt-get install -y $pkg
     done
     if [[ ! -v setup_MINIMAL ]]; then
-      echo "Not minimal"
-      exit
       # Latest github cli
       if ! grep -q cli.github /etc/apt/sources.list; then
         sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
@@ -61,6 +59,35 @@ case $(uname) in
         rm go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
         export PATH=${PATH}:/usr/local/go/bin
       fi
+      # Build ugrep
+      echo "ugrep"
+      UGREP_NEED_BUILD=0
+      cd ~/git
+      if [[ -d ./ugrep ]]; then
+        cd ugrep
+        git remote update
+        local_ugrep_ref=$(git rev-parse @)
+        remote_ugrep_ref=$(git rev-parse @{u})
+        if [[ $local_ugrep_ref != $remote_ugrep_ref ]]; then
+          git pull
+          UGREP_NEED_BUILD=1
+        fi
+      else
+        git clone git://github.com/Genivia/ugrep
+        UGREP_NEED_BUILD=1
+        for pkg in libpcre2-dev zlib1g-dev libbz2-dev liblzma-dev liblz4-dev; do
+          dpkg -s $pkg &>/dev/null || \
+            sudo apt-get install -y $pkg
+        done
+        cd ugrep
+      fi
+      if [[ $UGREP_NEED_BUILD != 0 ]]; then
+        ./build.sh --quiet
+        cp bin/ugrep $home_bin
+        [[ -L $home_bin/ug ]] || cp /bin/ug $home_bin
+      fi
+      cd /tmp
+      ##
       echo "pre-commit"
       if command -v pre-commit >/dev/null 2>&1;then
         pip3 install --upgrade --user pre-commit
@@ -79,10 +106,6 @@ case $(uname) in
       echo "dive"
       curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -E '*_amd64.deb') -o /tmp/dive-latest.amd64.deb && \
         sudo dpkg --install --skip-same-version /tmp/dive-latest.amd64.deb
-      # ripgrep
-      echo "ripgrep"
-      curl -sLS $(curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest |jq -r '.assets[].browser_download_url' | grep amd64.deb) -o /tmp/ripgrep-latest.amd64.deb && \
-        sudo dpkg --install --skip-same-version /tmp/ripgrep-latest.amd64.deb
       # hub
       echo "hub"
       curl -sLS $(curl -s https://api.github.com/repos/github/hub/releases/latest |jq -r '.assets[].browser_download_url' | grep ${kernel}-${machine}) -o /tmp/hub-${kernel}-${machine}-latest.tgz && \
@@ -159,7 +182,7 @@ case $(uname) in
       go
       shfmt
       bat
-      ripgrep
+      ugrep
       eth-p/software/bat-extras
       hub
       git
