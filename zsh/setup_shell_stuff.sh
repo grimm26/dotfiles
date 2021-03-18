@@ -87,14 +87,6 @@ case $(uname) in
         [[ -L $home_bin/ug ]] || cp /bin/ug $home_bin
       fi
       cd /tmp
-      ##
-      echo "pre-commit"
-      if command -v pre-commit >/dev/null 2>&1;then
-        pip3 install --upgrade --user pre-commit
-      else
-        pip3 install --user pre-commit
-      fi
-      cd /tmp
       # git-delta
       echo "git-delta"
       curl -sLS $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest|jq -r '.assets[].browser_download_url' | grep -E 'git-delta_.*_amd64\.deb') -o /tmp/git-delta-latest_amd64.deb && \
@@ -231,6 +223,14 @@ if [[ ! -v setup_MINIMAL ]]; then
   curl -sLS https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -O && \
     gunzip -c /tmp/cheat-${kernel}-${machine}.gz > ${home_bin}/cheat
   chmod 755 ~/bin/cheat
+  ##
+  echo "pre-commit"
+  if command -v pre-commit >/dev/null 2>&1;then
+    pip3 install --upgrade --user pre-commit
+  else
+    pip3 install --user pre-commit
+  fi
+  cd /tmp
 fi
 
 # antibody
