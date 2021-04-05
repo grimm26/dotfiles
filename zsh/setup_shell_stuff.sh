@@ -232,7 +232,7 @@ if [[ ! -v setup_MINIMAL ]]; then
   cd /tmp
   curl -sLS https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -O && \
     gunzip -c /tmp/cheat-${kernel}-${machine}.gz > ${home_bin}/cheat
-  chmod 755 ~/bin/cheat
+  chmod 755 ${home_bin}/cheat
   ##
   echo "pre-commit"
   if command -v pre-commit >/dev/null 2>&1;then
