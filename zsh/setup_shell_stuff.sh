@@ -33,6 +33,11 @@ INITIAL_PWD=$PWD
 # OS Type specific stuff first
 case $(uname) in
   Linux)
+    source /etc/os-release
+    if [[ $ID != "ubuntu" ]]; then
+      echo "I only wrote this for ubuntu."
+      exit 1
+    fi
     SCRIPT_HOME=$(readlink -f ${0%/*})
     cd /tmp
     # Latest git
@@ -89,7 +94,12 @@ case $(uname) in
       cd /tmp
       # git-delta
       echo "git-delta"
-      curl -sLS $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest|jq -r '.assets[].browser_download_url' | grep -E 'git-delta_.*_amd64\.deb') -o /tmp/git-delta-latest_amd64.deb && \
+      if [[ $VERSION_ID -ge 19.10 ]]; then
+        gdelta_pkg="git-delta"
+      else
+        gdelta_pkg="git-delta-musl"
+      fi
+      curl -sLS $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest|jq -r '.assets[].browser_download_url' | grep -E "${gdelta_pkg}_.\*_amd64\.deb") -o /tmp/git-delta-latest_amd64.deb && \
         sudo dpkg --install --skip-same-version /tmp/git-delta-latest_amd64.deb
       # bat
       echo "bat"
