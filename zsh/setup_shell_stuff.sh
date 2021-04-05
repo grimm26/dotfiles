@@ -99,7 +99,7 @@ case $(uname) in
       else
         gdelta_pkg="git-delta-musl"
       fi
-      curl -sLS $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest|jq -r '.assets[].browser_download_url' | grep -E "${gdelta_pkg}_.\*_amd64\.deb") -o /tmp/git-delta-latest_amd64.deb && \
+      curl -sLS $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest|jq -r '.assets[].browser_download_url' | grep -E "${gdelta_pkg}_.*_amd64\.deb") -o /tmp/git-delta-latest_amd64.deb && \
         sudo dpkg --install --skip-same-version /tmp/git-delta-latest_amd64.deb
       # bat
       echo "bat"
