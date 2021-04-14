@@ -55,7 +55,7 @@ case $(uname) in
         sudo apt-add-repository --update https://cli.github.com/packages
         sudo apt install gh
       fi
-      GOLANG_VERSION="1.15.8"
+      GOLANG_VERSION="1.16.3"
       if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
         echo "Downloading and installing go ${GOLANG_VERSION}"
         curl -sLSO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz && \

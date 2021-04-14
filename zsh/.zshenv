@@ -29,6 +29,10 @@ tf14 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
   tfsw --latest-stable 0.14
 }
+tf15 () {
+  ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
+  tfsw --latest-stable 0.15
+}
 alias tfver=terraform version | awk '{print $2}'
 go13 () {
   tf13
@@ -40,6 +44,12 @@ go14 () {
   tf14
   audit-terraform-modules -r
   atlantis_yaml_mod.rb --tfver $(terraform version | awk '{print $2}')
+}
+go15 () {
+  tf15
+  audit-terraform-modules -r
+  atlantis_yaml_mod.rb --tfver $(terraform version | awk '{print $2}')
+  tf fmt
 }
 alias tgi="terragrunt init -upgrade -reconfigure"
 alias tgu="terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
