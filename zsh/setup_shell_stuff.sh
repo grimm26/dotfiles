@@ -141,14 +141,14 @@ case $(uname) in
       fi
       # awscli
       echo "awscli"
+      cd /tmp
       curl -sLS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-        [[ -d aws ]] && rm -rf aws && unzip -q awscliv2.zip && \
+        rm -rf aws && unzip -q awscliv2.zip && \
         if [[ -d /usr/local/aws-cli/v2 ]]; then
           sudo ./aws/install --update
         else
           sudo ./aws/install
         fi
-        cd /tmp
       # shfmt
       GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
       # bat-extras
