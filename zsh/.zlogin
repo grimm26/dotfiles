@@ -49,7 +49,7 @@ fi
 # completion system
 autoload -Uz compinit; compinit
 
-## oh-my-zsh lib/directories.zsh
+## ohmyzsh lib/directories.zsh
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
@@ -86,7 +86,7 @@ alias la='ls -lAh'
 alias lsd='ls -pl | grep /'
 ##
 
-## oh-my-zsh lib/grep.zsh
+## ohmyzsh lib/grep.zsh
 __GREP_CACHE_FILE="$ZSH_CACHE_DIR"/grep-alias
 
 # See if there's a cache file modified in the last day
@@ -295,19 +295,19 @@ setopt TRANSIENT_RPROMPT
 if [[ -r ~/.zsh_plugins.sh ]]; then
   echo "Statically loading ~/.zsh_plugins.sh"
   # Regen with `antibody bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh`
-  source $(antibody path robbyrussell/oh-my-zsh)/lib/functions.zsh
-  source $(antibody path robbyrussell/oh-my-zsh)/lib/history.zsh
-  source $(antibody path robbyrussell/oh-my-zsh)/lib/clipboard.zsh
+  source $(antibody path ohmyzsh/ohmyzsh)/lib/functions.zsh
+  source $(antibody path ohmyzsh/ohmyzsh)/lib/history.zsh
+  source $(antibody path ohmyzsh/ohmyzsh)/lib/clipboard.zsh
   source ~/.zsh_plugins.sh && echo "Done."
 elif whence antibody &>/dev/null; then
   echo "Dynamically sourcing plugins with antibody"
   source <(antibody init)
   # Base plugins
   echo -n "... base plugins"
-  source $(antibody path robbyrussell/oh-my-zsh)/lib/functions.zsh
-  source $(antibody path robbyrussell/oh-my-zsh)/lib/completion.zsh
-  source $(antibody path robbyrussell/oh-my-zsh)/lib/history.zsh
-  source $(antibody path robbyrussell/oh-my-zsh)/lib/clipboard.zsh
+  source $(antibody path ohmyzsh/ohmyzsh)/lib/functions.zsh
+  source $(antibody path ohmyzsh/ohmyzsh)/lib/completion.zsh
+  source $(antibody path ohmyzsh/ohmyzsh)/lib/history.zsh
+  source $(antibody path ohmyzsh/ohmyzsh)/lib/clipboard.zsh
   antibody bundle < ~/.zsh_plugins.txt
   # Ubuntu plugins
   if [[ $OSTYPE == linux-gnu ]]; then
@@ -321,7 +321,7 @@ elif [[ -r ~/.zplugrc ]]; then
   echo "Loading zsh plugins with zplug"
   source ~/.zplugrc && echo "Done."
 fi
-# The oh-my-zsh alias for this locks up
+# The ohmyzsh alias for this locks up
 alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
 [[ $#RUBIES > 0 ]] && chruby ruby
 alias gum='gcm && hub sync && gmum'
