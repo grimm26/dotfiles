@@ -18,6 +18,7 @@ format = """\
     $conda\
     $memory_usage\
     $aws\
+    $terraform\
     $env_var\
     $cmd_duration\
     $line_break\
@@ -26,6 +27,11 @@ format = """\
     $time\
     $character\
 """
+
+[character]
+vicmd_symbol = "[V](bold green) "
+success_symbol = "[➜](bold green) "
+error_symbol = "[✗](bold red) "
 
 [conda]
 disabled = true
@@ -38,10 +44,11 @@ truncate_to_repo=false
 disabled = true
 
 [git_status]
-show_sync_count=true
+disabled=false
 
 [terraform]
-disabled=true
+format = "[$symbol$version]($style) "
+disabled=false
 
 [time]
 disabled = false
