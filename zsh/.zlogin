@@ -130,6 +130,12 @@ fi
 unset __GREP_CACHE_FILE __GREP_ALIAS_CACHES
 ##
 
+#SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+if [[ -v SSH_AUTH_SOCK ]]; then
+  :
+elif [[ -S /run/user/$(id -u)/keyring/ssh ]]; then
+  export SSH_AUTH_SOCK=/run/user/$(id -u)/keyring/ssh
+fi
 unsetopt nomatch
 if ssh_keys=(~/.ssh/**/*id_*sa); then
   whence keychain &>/dev/null && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit any --eval $ssh_keys)
