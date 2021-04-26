@@ -131,14 +131,22 @@ unset __GREP_CACHE_FILE __GREP_ALIAS_CACHES
 ##
 
 #SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+KEYCHAIN_INHERIT="local-once"
 if [[ -v SSH_AUTH_SOCK ]]; then
-  :
-elif [[ -S /run/user/$(id -u)/keyring/ssh ]]; then
-  export SSH_AUTH_SOCK=/run/user/$(id -u)/keyring/ssh
+  KEYCHAIN_INHERIT="any-once"
+elif [[ -v SSH_AGENT_PID ]]; then
+  KEYCHAIN_INHERIT="local-once"
+else
+  if [[ -S /run/user/$(id -u)/keyring/ssh ]]; then
+    export SSH_AUTH_SOCK=/run/user/$(id -u)/keyring/ssh
+    KEYCHAIN_INHERIT="any-once"
+  elif [[ $(pgrep -u $USER ssh-agent | head -1) -gt 0 ]]; then
+    export SSH_AGENT_PID=$(pgrep -u $USER ssh-agent | head -1)
+  fi
 fi
 unsetopt nomatch
 if ssh_keys=(~/.ssh/**/*id_*sa); then
-  whence keychain &>/dev/null && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit any --eval $ssh_keys)
+  whence keychain &>/dev/null && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval $ssh_keys)
   #[[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval --confhost)
 fi
 setopt nomatch
