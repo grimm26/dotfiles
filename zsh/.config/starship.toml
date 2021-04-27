@@ -28,10 +28,12 @@ format = """\
     $character\
 """
 
+command_timeout = 750
+
 [character]
-vicmd_symbol = "[V](bold green) "
-success_symbol = "[➜](bold green) "
-error_symbol = "[✗](bold red) "
+vicmd_symbol = "[V](bold green)"
+success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
 
 [conda]
 disabled = true

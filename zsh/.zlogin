@@ -134,8 +134,7 @@ unset __GREP_CACHE_FILE __GREP_ALIAS_CACHES
 KEYCHAIN_INHERIT="local-once"
 if [[ -v SSH_AUTH_SOCK ]]; then
   KEYCHAIN_INHERIT="any"
-  # Just load up what was forwarded to us
-  whence keychain &>/dev/null && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval)
+  whence keychain &>/dev/null && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval --confhost)
 elif [[ -v SSH_AGENT_PID ]]; then
   KEYCHAIN_INHERIT="local-once"
 else

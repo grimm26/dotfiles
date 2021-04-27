@@ -15,7 +15,7 @@ export TFSWITCH_BIN=${HOME}/.local/bin/terraform
 alias tfsw="tfswitch --bin $TFSWITCH_BIN"
 tf11 () {
   ln -fs ~/bin/terragrunt_18 ~/bin/terragrunt
-  tfsw 0.11.14
+  tfsw --latest-stable 0.11
 }
 tf12 () {
   ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
