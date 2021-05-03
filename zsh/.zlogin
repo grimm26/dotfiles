@@ -1,5 +1,5 @@
 #export LSCOLORS="ehfxcxdxbxegedabagacad"
-eval "$(hub alias -s)"
+#eval "$(hub alias -s)"
 # This seems to screw up the colors, so leave it out for now
 #export BAT_THEME="Solarized (dark)"
 
@@ -134,7 +134,12 @@ unset __GREP_CACHE_FILE __GREP_ALIAS_CACHES
 KEYCHAIN_INHERIT="local-once"
 if [[ -v SSH_AUTH_SOCK ]]; then
   KEYCHAIN_INHERIT="any"
-  whence keychain &>/dev/null && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval --confhost)
+  # Load up whatever we got
+  unsetopt nomatch
+  if ssh_keys=(~/.ssh/**/*id_*sa); then
+    whence keychain &>/dev/null && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval $ssh_keys)
+    #whence keychain &>/dev/null && eval $(keychain --agents ssh --inherit  $KEYCHAIN_INHERIT --eval --confhost)
+  fi
 elif [[ -v SSH_AGENT_PID ]]; then
   KEYCHAIN_INHERIT="local-once"
 else
@@ -340,8 +345,8 @@ fi
 # The ohmyzsh alias for this locks up
 alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
 [[ $#RUBIES > 0 ]] && chruby ruby
-alias gum='gcm && hub sync && gmum'
-alias gom='gcm && hub sync && gmom'
+alias gum='gcm && gl'
+alias gom='gcm && gl'
 
 whence kubectl &>/dev/null && \
   source <(kubectl completion zsh)

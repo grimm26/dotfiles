@@ -108,13 +108,6 @@ case $(uname) in
       echo "dive"
       curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest |jq -r '.assets[].browser_download_url' | grep -E '*_amd64.deb') -o /tmp/dive-latest.amd64.deb && \
         sudo dpkg --install --skip-same-version /tmp/dive-latest.amd64.deb
-      # hub
-      echo "hub"
-      curl -sLS $(curl -s https://api.github.com/repos/github/hub/releases/latest |jq -r '.assets[].browser_download_url' | grep ${kernel}-${machine}) -o /tmp/hub-${kernel}-${machine}-latest.tgz && \
-        tar xzf /tmp/hub-${kernel}-${machine}-latest.tgz && \
-        rm /tmp/hub-${kernel}-${machine}-latest.tgz && \
-        cd hub-${kernel}-${machine}-* && \
-        sudo ./install ;cd /tmp
       # chruby
       echo "chruby"
       curl -sLS https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz -o chruby-0.3.9.tar.gz && \
@@ -186,7 +179,6 @@ case $(uname) in
       bat
       ugrep
       eth-p/software/bat-extras
-      hub
       git
       chruby
       ruby-install

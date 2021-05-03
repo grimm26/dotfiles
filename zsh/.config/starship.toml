@@ -10,7 +10,6 @@ format = """\
     $dotnet\
     $golang\
     $java\
-    $nodejs\
     $python\
     $ruby\
     $rust\
@@ -47,6 +46,9 @@ disabled = true
 
 [git_status]
 disabled=false
+
+[nodejs]
+disabled = true
 
 [terraform]
 format = "[$symbol$version]($style) "
