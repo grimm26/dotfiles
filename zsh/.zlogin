@@ -313,31 +313,35 @@ alias viaws="vim -O ~/.aws/config ~/.aws/credentials"
   source /Users/mkeisler/Library/Preferences/org.dystroy.broot/launcher/bash/br
 setopt prompt_subst
 setopt TRANSIENT_RPROMPT
-if [[ -r ~/.zsh_plugins.sh ]]; then
-  echo "Statically loading ~/.zsh_plugins.sh"
-  # Regen with `antibody bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh`
-  source $(antibody path ohmyzsh/ohmyzsh)/lib/functions.zsh
-  source $(antibody path ohmyzsh/ohmyzsh)/lib/history.zsh
-  source $(antibody path ohmyzsh/ohmyzsh)/lib/clipboard.zsh
-  source ~/.zsh_plugins.sh && echo "Done."
-elif whence antibody &>/dev/null; then
-  echo "Dynamically sourcing plugins with antibody"
-  source <(antibody init)
-  # Base plugins
-  echo -n "... base plugins"
-  source $(antibody path ohmyzsh/ohmyzsh)/lib/functions.zsh
-  source $(antibody path ohmyzsh/ohmyzsh)/lib/completion.zsh
-  source $(antibody path ohmyzsh/ohmyzsh)/lib/history.zsh
-  source $(antibody path ohmyzsh/ohmyzsh)/lib/clipboard.zsh
-  antibody bundle < ~/.zsh_plugins.txt
+if whence antibody &>/dev/null; then
+  ANTIBODY_PLUGIN_FILES=(~/.zsh_plugins.txt)
   # Ubuntu plugins
   if [[ $OSTYPE == linux-gnu ]]; then
     if [[ $(uname -v) =~ "Ubuntu" ]]; then
-      echo -n " ... Ubuntu plugins"
-      antibody bundle < ~/.zsh_plugins_ubuntu.txt
+      ANTIBODY_PLUGIN_FILES+=(~/.zsh_plugins_ubuntu.txt)
     fi
   fi
-  echo "\nDone."
+  # Alias to save a static antibody file
+  alias antistatic="cat $ANTIBODY_PLUGIN_FILES | $(whence -p antibody) bundle > ~/.zsh_plugins.sh"
+  if [[ -r ~/.zsh_plugins.sh ]]; then
+    echo "Statically loading ~/.zsh_plugins.sh"
+    source $(antibody path ohmyzsh/ohmyzsh)/lib/functions.zsh
+    source $(antibody path ohmyzsh/ohmyzsh)/lib/history.zsh
+    source $(antibody path ohmyzsh/ohmyzsh)/lib/clipboard.zsh
+    source ~/.zsh_plugins.sh && echo "Done."
+  elif [[ -r ~/.zsh_plugins.txt ]]; then
+    echo "Dynamically sourcing plugins with antibody"
+    source <(antibody init)
+    # Base plugins
+    source $(antibody path ohmyzsh/ohmyzsh)/lib/functions.zsh
+    source $(antibody path ohmyzsh/ohmyzsh)/lib/completion.zsh
+    source $(antibody path ohmyzsh/ohmyzsh)/lib/history.zsh
+    source $(antibody path ohmyzsh/ohmyzsh)/lib/clipboard.zsh
+    for bundle in $ANTIBODY_PLUGIN_FILES; do
+      antibody bundle < $bundle
+    done
+    echo "\nDone."
+  fi
 elif [[ -r ~/.zplugrc ]]; then
   echo "Loading zsh plugins with zplug"
   source ~/.zplugrc && echo "Done."
@@ -345,8 +349,8 @@ fi
 # The ohmyzsh alias for this locks up
 alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
 [[ $#RUBIES > 0 ]] && chruby ruby
-alias gum='gcm && gl'
-alias gom='gcm && gl'
+alias gum='gcm && grup --prune && gmum'
+alias gom='gcm && grup --prune && gmom'
 
 whence kubectl &>/dev/null && \
   source <(kubectl completion zsh)
