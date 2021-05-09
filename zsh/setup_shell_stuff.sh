@@ -142,6 +142,7 @@ case $(uname) in
         else
           sudo ./aws/install
         fi
+      /usr/local/bin/aws --version
       # shfmt
       GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
       # bat-extras
