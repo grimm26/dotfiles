@@ -49,85 +49,7 @@ fi
 # completion system
 autoload -Uz compinit; compinit
 
-## ohmyzsh lib/directories.zsh
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
-
-alias -- -='cd -'
-alias 1='cd -'
-alias 2='cd -2'
-alias 3='cd -3'
-alias 4='cd -4'
-alias 5='cd -5'
-alias 6='cd -6'
-alias 7='cd -7'
-alias 8='cd -8'
-alias 9='cd -9'
-
-alias md='mkdir -p'
-alias rd=rmdir
-
-function d () {
-  if [[ -n $1 ]]; then
-    dirs "$@"
-  else
-    dirs -v | head -10
-  fi
-}
-compdef _dirs d
-
-# List directory contents
-alias lsa='ls -lah'
-alias l='ls -lah'
-alias ll='ls -lh'
-alias la='ls -lAh'
 alias lsd='ls -pl | grep /'
-##
-
-## ohmyzsh lib/grep.zsh
-__GREP_CACHE_FILE="$ZSH_CACHE_DIR"/grep-alias
-
-# See if there's a cache file modified in the last day
-__GREP_ALIAS_CACHES=("$__GREP_CACHE_FILE"(Nm-1))
-if [[ -n "$__GREP_ALIAS_CACHES" ]]; then
-    source "$__GREP_CACHE_FILE"
-else
-    grep-flags-available() {
-        command grep "$@" "" &>/dev/null <<< ""
-    }
-
-    # Ignore these folders (if the necessary grep flags are available)
-    EXC_FOLDERS="{.bzr,CVS,.git,.hg,.svn,.idea,.tox}"
-
-    # Check for --exclude-dir, otherwise check for --exclude. If --exclude
-    # isn't available, --color won't be either (they were released at the same
-    # time (v2.5): https://git.savannah.gnu.org/cgit/grep.git/tree/NEWS?id=1236f007
-    if grep-flags-available --color=auto --exclude-dir=.cvs; then
-        GREP_OPTIONS="--color=auto --exclude-dir=$EXC_FOLDERS"
-    elif grep-flags-available --color=auto --exclude=.cvs; then
-        GREP_OPTIONS="--color=auto --exclude=$EXC_FOLDERS"
-    fi
-
-    if [[ -n "$GREP_OPTIONS" ]]; then
-        # export grep, egrep and fgrep settings
-        alias grep="grep $GREP_OPTIONS"
-        alias egrep="egrep $GREP_OPTIONS"
-        alias fgrep="fgrep $GREP_OPTIONS"
-
-        # write to cache file if cache directory is writable
-        if [[ -w "$ZSH_CACHE_DIR" ]]; then
-            alias -L grep egrep fgrep >| "$__GREP_CACHE_FILE"
-        fi
-    fi
-
-    # Clean up
-    unset GREP_OPTIONS EXC_FOLDERS
-    unfunction grep-flags-available
-fi
-
-unset __GREP_CACHE_FILE __GREP_ALIAS_CACHES
 ##
 
 #SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
@@ -324,19 +246,19 @@ if whence antibody &>/dev/null; then
   # Alias to save a static antibody file
   alias antistatic="cat $ANTIBODY_PLUGIN_FILES | $(whence -p antibody) bundle > ~/.zsh_plugins.sh"
   if [[ -r ~/.zsh_plugins.sh ]]; then
+    echo "Initializing oh-my-zsh."
+    export DISABLE_AUTO_UPDATE="true"
+    source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
+    unset DISABLE_AUTO_UPDATE
     echo "Statically loading ~/.zsh_plugins.sh"
-    source $(antibody path ohmyzsh/ohmyzsh)/lib/functions.zsh
-    source $(antibody path ohmyzsh/ohmyzsh)/lib/history.zsh
-    source $(antibody path ohmyzsh/ohmyzsh)/lib/clipboard.zsh
     source ~/.zsh_plugins.sh && echo "Done."
   elif [[ -r ~/.zsh_plugins.txt ]]; then
-    echo "Dynamically sourcing plugins with antibody"
     source <(antibody init)
-    # Base plugins
-    source $(antibody path ohmyzsh/ohmyzsh)/lib/functions.zsh
-    source $(antibody path ohmyzsh/ohmyzsh)/lib/completion.zsh
-    source $(antibody path ohmyzsh/ohmyzsh)/lib/history.zsh
-    source $(antibody path ohmyzsh/ohmyzsh)/lib/clipboard.zsh
+    echo "Initializing oh-my-zsh."
+    export DISABLE_AUTO_UPDATE="true"
+    source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
+    unset DISABLE_AUTO_UPDATE
+    echo "Dynamically sourcing plugins with antibody"
     for bundle in $ANTIBODY_PLUGIN_FILES; do
       antibody bundle < $bundle
     done
@@ -352,9 +274,12 @@ alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
 alias gum='gcm && grup --prune && gmum'
 alias gom='gcm && grup --prune && gmom'
 
+echo "Loading kubectl completions."
 whence kubectl &>/dev/null && \
   source <(kubectl completion zsh)
+echo "Loading starship prompt."
 whence starship &>/dev/null && \
   eval "$(starship init zsh)"
+echo "Loading direnv."
 whence direnv &>/dev/null && \
   eval "$(direnv hook zsh)"
