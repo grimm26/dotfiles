@@ -240,7 +240,9 @@ fi
 echo "antibody"
 curl -sfLS git.io/antibody | bash -s - -b ${home_bin}
 # starship (prompt)
+starship --version
 curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin}
+starship --version
 
 cd $SCRIPT_HOME
 for z in .z* .config/*;do
