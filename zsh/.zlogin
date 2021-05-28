@@ -224,39 +224,6 @@ alias viaws="vim -O ~/.aws/config ~/.aws/credentials"
   source /Users/mkeisler/Library/Preferences/org.dystroy.broot/launcher/bash/br
 setopt prompt_subst
 setopt TRANSIENT_RPROMPT
-if whence antibody &>/dev/null; then
-  ANTIBODY_PLUGIN_FILES=(~/.zsh_plugins.txt)
-  # Ubuntu plugins
-  if [[ $OSTYPE == linux-gnu ]]; then
-    if [[ $(uname -v) =~ "Ubuntu" ]]; then
-      ANTIBODY_PLUGIN_FILES+=(~/.zsh_plugins_ubuntu.txt)
-    fi
-  fi
-  # Alias to save a static antibody file
-  alias antistatic="cat $ANTIBODY_PLUGIN_FILES | $(whence -p antibody) bundle > ~/.zsh_plugins.sh"
-  if [[ -r ~/.zsh_plugins.sh ]]; then
-    echo "Initializing oh-my-zsh."
-    export DISABLE_AUTO_UPDATE="true"
-    source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
-    unset DISABLE_AUTO_UPDATE
-    echo "Statically loading ~/.zsh_plugins.sh"
-    source ~/.zsh_plugins.sh && echo "Done."
-  elif [[ -r ~/.zsh_plugins.txt ]]; then
-    source <(antibody init)
-    echo "Initializing oh-my-zsh."
-    export DISABLE_AUTO_UPDATE="true"
-    source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
-    unset DISABLE_AUTO_UPDATE
-    echo "Dynamically sourcing plugins with antibody"
-    for bundle in $ANTIBODY_PLUGIN_FILES; do
-      antibody bundle < $bundle
-    done
-    echo "\nDone."
-  fi
-elif [[ -r ~/.zplugrc ]]; then
-  echo "Loading zsh plugins with zplug"
-  source ~/.zplugrc && echo "Done."
-fi
 # The ohmyzsh alias for this locks up
 alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
 [[ $#RUBIES > 0 ]] && chruby ruby

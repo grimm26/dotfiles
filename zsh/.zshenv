@@ -55,3 +55,31 @@ alias tgi="terragrunt init -upgrade -reconfigure"
 alias tgu="terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="terraform 0.12upgrade -yes;chompeof *.tf"
 export AWS_DEFAULT_REGION=us-east-2
+# Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
+if whence antibody &>/dev/null; then
+  ANTIBODY_PLUGIN_FILES=(~/.zsh_plugins.txt)
+  # Ubuntu plugins
+  if [[ $OSTYPE == linux-gnu ]]; then
+    if [[ $(uname -v) =~ "Ubuntu" ]]; then
+      ANTIBODY_PLUGIN_FILES+=(~/.zsh_plugins_ubuntu.txt)
+    fi
+  fi
+  # Alias to save a static antibody file
+  alias antistatic="cat $ANTIBODY_PLUGIN_FILES | $(whence -p antibody) bundle > ~/.zsh_plugins.sh"
+  if [[ -r ~/.zsh_plugins.sh ]]; then
+    export DISABLE_AUTO_UPDATE="true"
+    source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
+    unset DISABLE_AUTO_UPDATE
+    source ~/.zsh_plugins.sh
+  elif [[ -r ~/.zsh_plugins.txt ]]; then
+    source <(antibody init)
+    export DISABLE_AUTO_UPDATE="true"
+    source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
+    unset DISABLE_AUTO_UPDATE
+    for bundle in $ANTIBODY_PLUGIN_FILES; do
+      antibody bundle < $bundle
+    done
+  fi
+elif [[ -r ~/.zplugrc ]]; then
+  source ~/.zplugrc
+fi
