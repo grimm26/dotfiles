@@ -13,6 +13,7 @@ ohmyzsh/ohmyzsh path:plugins/gem
 ohmyzsh/ohmyzsh path:plugins/chruby
 ohmyzsh/ohmyzsh path:plugins/brew
 ohmyzsh/ohmyzsh path:plugins/history
+ohmyzsh/ohmyzsh path:plugins/extract
 
 MichaelAquilina/zsh-you-should-use
 greymd/tmux-xpanes

@@ -56,12 +56,6 @@ alias lsd='ls -pl | grep /'
 KEYCHAIN_INHERIT="local-once"
 if [[ -v SSH_AUTH_SOCK ]]; then
   KEYCHAIN_INHERIT="any"
-  # Load up whatever we got
-  unsetopt nomatch
-  if ssh_keys=(~/.ssh/**/*id_*sa); then
-    whence keychain &>/dev/null && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval $ssh_keys)
-    #whence keychain &>/dev/null && eval $(keychain --agents ssh --inherit  $KEYCHAIN_INHERIT --eval --confhost)
-  fi
 elif [[ -v SSH_AGENT_PID ]]; then
   KEYCHAIN_INHERIT="local-once"
 else
@@ -71,14 +65,9 @@ else
   elif [[ $(pgrep -u $USER ssh-agent | head -1) -gt 0 ]]; then
     export SSH_AGENT_PID=$(pgrep -u $USER ssh-agent | head -1)
   fi
-  # Load up whatever we got
-  unsetopt nomatch
-  if ssh_keys=(~/.ssh/**/*id_*sa); then
-    whence keychain &>/dev/null && [[ $#ssh_keys > 0 ]] && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval $ssh_keys)
-    #[[ -x =keychain ]] && eval $(keychain --agents ssh --inherit any --eval --confhost)
-  fi
-  setopt nomatch
 fi
+# Just load the top keys. ~/.ssh/config should have AddKeysToAgent set to yes.
+whence keychain &>/dev/null && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval ~/.ssh/id_*sa)
 
 setopt HIST_IGNORE_SPACE
 export LC_COLLATE=C
