@@ -1,5 +1,4 @@
 #zmodload zsh/zprof
-[ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 # if [ -s $(brew --prefix)/opt/chruby/share/chruby/chruby.sh ]; then
 #   source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
@@ -46,19 +45,6 @@ setopt extended_glob
 # display PID when suspending processes as well
 setopt longlistjobs
 
-export GOPATH=~/go
-export GOBIN=$GOPATH/bin
-path+=(${GOBIN})
-path=('/usr/local/bin' '/usr/local/sbin' $path)
-if [[ $OSTYPE == darwin* && -d ${HOME}/Library/Python/3.9/bin ]]; then
-  path+=("${HOME}/Library/Python/3.9/bin")
-fi
-if [[ -d /usr/local/go/bin ]]; then
-  path+=('/usr/local/go/bin')
-fi
-path=("$HOME/.local/bin" $path)
-typeset -U path
-export PATH
 # report the status of backgrounds jobs immediately
 setopt notify
 
@@ -105,9 +91,6 @@ autoload -Uz zed
 
 setopt correct
 #setopt correctall
-
-# ignore ~/.ssh/known_hosts entries
-alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -o "PreferredAuthentications=password,keyboard-interactive"'
 
 ## global aliases (for those who like them) ##
 

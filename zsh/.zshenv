@@ -1,6 +1,25 @@
 if [[ -r ~/.zshenv.local ]]; then
   source ~/.zshenv.local
 fi
+
+[ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+export GOPATH=~/go
+export GOBIN=$GOPATH/bin
+path+=(${GOBIN})
+path=('/usr/local/bin' '/usr/local/sbin' $path)
+if [[ $OSTYPE == darwin* && -d ${HOME}/Library/Python/3.9/bin ]]; then
+  path+=("${HOME}/Library/Python/3.9/bin")
+fi
+if [[ -d /usr/local/go/bin ]]; then
+  path+=('/usr/local/go/bin')
+fi
+path=("$HOME/.local/bin" $path)
+typeset -U path
+export PATH
+
+# ignore ~/.ssh/known_hosts entries
+alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -o "PreferredAuthentications=password,keyboard-interactive"'
+
 fpath+=( /usr/local/opt/curl/share/zsh/site-functions /usr/local/share/zsh/site-functions )
 typeset -U fpath
 export LESS="-EFRX"
