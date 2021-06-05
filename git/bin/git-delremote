@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+REMOTE=${1}
+if [[ "${REMOTE}x" == "x" ]]; then
+  echo "Must supply an argument to indicate which remote to delete."
+  exit 1
+fi
+source ~/.git_functions
+if [ "${GITHUB_API_ENDPOINT}x" = "x" ]; then
+  GITHUB_API_ENDPOINT="https://api.github.com"
+fi
+
+if [ "${GITHUB_TOKEN}x" = "x" ]; then
+  echo "Please set GITHUB_TOKEN environment variable with a github Personal Access Token."
+  exit 1
+fi
+
+get_repo_owner $REMOTE
+curl -Ss -X DELETE \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  $GITHUB_API_ENDPOINT/repos/${GH_OWNER}/${GH_REPO}

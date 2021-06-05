@@ -1,0 +1,18 @@
+#!/usr/bin/env zsh
+
+command -v gh >/dev/null 2>&1 || { echo >&2 "gh does not appear to be installed."; exit 1; }
+
+if [[ -a ./metadata.rb ]]; then
+  cookbook_version=$(grep -w '^version' metadata.rb |awk '{print $2}' | tr -C -d "v[:digit:].")
+  tag="v${cookbook_version}"
+else
+  tag=${1}
+fi
+
+if [[ -z "${tag}" ]]; then
+  echo "Please provide a tag name like vX.X.X"
+  exit 1
+fi
+echo "Creating release tag ${tag}"
+
+gh release create $tag

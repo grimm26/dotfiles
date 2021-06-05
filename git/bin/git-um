@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+# um = update master/main
+# update remotes and merge upstream default branch into your fork's (origin) default branch.
+source ~/.git_functions
+CURRENT_BRANCH=$(git branch --show-current)
+get_default_branch
+get_repo_owner
+git remote update --prune
+# Try to figure out whether we are using remote upstream or remote origin
+if git show-ref --verify --quiet refs/remotes/upstream/$DEFAULT_BRANCH && git show-ref --verify --quiet refs/remotes/origin/$DEFAULT_BRANCH; then
+  git checkout master && git merge --ff-only upstream/$DEFAULT_BRANCH
+else
+  echo "Did not find origin and upstream remotes, so not sure what to do."
+fi
+git checkout $CURRENT_BRANCH
