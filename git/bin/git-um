@@ -1,12 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 set -e
 # um = update master/main
 # update remotes and merge upstream default branch into your fork's (origin) default branch.
-source ~/.git_functions
 CURRENT_BRANCH=$(git branch --show-current)
-get_default_branch
-get_repo_owner
+whence git_main_branch &>/dev/null || { echo "This script needs ohmyzsh git plugin's git_main_branch() function to work. Get it." && exit 1 }
+DEFAULT_BRANCH=$(git_main_branch)
 git remote update --prune
 # Try to figure out whether we are using remote upstream or remote origin
 if git show-ref --verify --quiet refs/remotes/upstream/$DEFAULT_BRANCH && git show-ref --verify --quiet refs/remotes/origin/$DEFAULT_BRANCH; then

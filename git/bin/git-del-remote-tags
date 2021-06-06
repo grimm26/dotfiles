@@ -1,8 +1,5 @@
 #!/usr/bin/env zsh
 
-whence git_main_branch &>/dev/null || { echo "This script needs ohmyzsh git plugin's git_main_branch() funciton to work. Get it." && exit 1 }
-DEFAULT_BRANCH=$(git_main_branch)
-
 THIS_ORIGIN=${1-origin}
 for t in $(git tag);do
   git push $THIS_ORIGIN :refs/tags/$t

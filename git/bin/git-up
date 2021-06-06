@@ -1,17 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
-# Check if main exists and use instead of master
-function git_main_branch() {
-  command git rev-parse --git-dir &>/dev/null || return
-  local branch
-  for branch in main trunk; do
-    if command git show-ref -q --verify refs/heads/$branch; then
-      echo $branch
-      return
-    fi
-  done
-  echo master
-}
+
+whence git_main_branch &>/dev/null || { echo "This script needs ohmyzsh git plugin's git_main_branch() function to work. Get it." && exit 1 }
 DEFAULT_BRANCH=$(git_main_branch)
 
 git remote update --prune # Not sure if this is needed with pull

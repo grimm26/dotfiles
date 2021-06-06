@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 # mf = make fork.
 # You should be starting with a clean clone of the repository
@@ -11,21 +11,26 @@
 # - update all remotes
 # - checkout the default branch of the new fork.
 
-source ~/.git_functions
-if [ "${GITHUB_API_ENDPOINT}x" = "x" ]; then
-  GITHUB_API_ENDPOINT="https://api.github.com"
-fi
+get_repo_owner()
+{
+  local remote=${1-origin}
+  GIT_SSH_REGEX="^git@"
+  GITHUB_API_ENDPOINT=$(sed 's!/$!!' <<< $GITHUB_API_ENDPOINT)
+  FULL_ORIGIN=$(git remote get-url ${remote})
+  if [[ $FULL_ORIGIN =~ $GIT_SSH_REGEX ]]; then # git+ssh URL
+    REPOSITORY=$(echo $FULL_ORIGIN |cut -d: -f2 |sed 's/\.git//')
+  else # git://  or https:// or ssh:// URL
+    REPOSITORY=$(echo $FULL_ORIGIN |cut -d/ -f4,5 |sed 's/\.git//')
+  fi
+  IFS='/' read GH_OWNER GH_REPO <<< "$REPOSITORY"
+}
 
-if [ "${GITHUB_TOKEN}x" = "x" ]; then
-  echo "Please set GITHUB_TOKEN environment variable with a github Personal Access Token."
-  exit 1
-fi
 
 set -e
-get_default_branch
-get_repo_owner
-UPSTREAM_OWNER=${GH_OWNER}
-UPSTREAM_REPO=${GH_REPO}
+whence git_main_branch &>/dev/null || { echo "This script needs ohmyzsh git plugin's git_main_branch() function to work. Get it." && exit 1 }
+DEFAULT_BRANCH=$(git_main_branch)
+IFS='/' read UPSTREAM_OWNER UPSTREAM_REPO <<< $(gh api repos/:owner/:repo -q '.full_name')
+
 gh repo fork --remote && sleep 5
 # Now get owner/repo for fork
 get_repo_owner
