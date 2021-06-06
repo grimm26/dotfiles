@@ -55,7 +55,7 @@ case $(uname) in
         sudo apt-add-repository --update https://cli.github.com/packages
         sudo apt install gh
       fi
-      GOLANG_VERSION="1.16.3"
+      GOLANG_VERSION="1.16.5"
       if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
         echo "Downloading and installing go ${GOLANG_VERSION}"
         curl -sLSO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz && \
@@ -139,6 +139,10 @@ case $(uname) in
         rm -rf aws && unzip -q awscliv2.zip && \
         if [[ -d /usr/local/aws-cli/v2 ]]; then
           sudo ./aws/install --update
+          # Prune old installs
+          for version in /usr/local/aws-cli/v2/?*.?*.?*; do
+            [[ $(readlink /usr/local/aws-cli/v2/current) == "$version" ]] || sudo rm -rf $version
+          done
         else
           sudo ./aws/install
         fi
