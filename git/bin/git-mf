@@ -35,10 +35,11 @@ gh repo fork --remote && sleep 5
 # Now get owner/repo for fork
 get_repo_owner
 # Change the name of the repo
-curl -s -X PATCH \
-  -d "{\"name\":\"${UPSTREAM_OWNER}-${UPSTREAM_REPO}\"}" \
-  -H "Authorization: token $GITHUB_TOKEN" \
-  $GITHUB_API_ENDPOINT/repos/$GH_OWNER/${GH_REPO} >/dev/null
+gh api repos/$GH_OWNER/{repo} --raw-field name="${UPSTREAM_OWNER}-${UPSTREAM_REPO}" --method PATCH --silent
+# curl -s -X PATCH \
+#   -d "{\"name\":\"${UPSTREAM_OWNER}-${UPSTREAM_REPO}\"}" \
+#   -H "Authorization: token $GITHUB_TOKEN" \
+#   $GITHUB_API_ENDPOINT/repos/$GH_OWNER/${GH_REPO} >/dev/null
 NEW_REMOTE_URL=$(git remote get-url origin | sed "s/$GH_REPO/${UPSTREAM_OWNER}-${GH_REPO}/")
 git remote set-url origin $NEW_REMOTE_URL && \
 git remote update --prune

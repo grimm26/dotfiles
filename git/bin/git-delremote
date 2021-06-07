@@ -6,17 +6,23 @@ if [[ "${REMOTE}x" == "x" ]]; then
   echo "Must supply an argument to indicate which remote to delete."
   exit 1
 fi
-source ~/.git_functions
-if [ "${GITHUB_API_ENDPOINT}x" = "x" ]; then
-  GITHUB_API_ENDPOINT="https://api.github.com"
-fi
 
-if [ "${GITHUB_TOKEN}x" = "x" ]; then
-  echo "Please set GITHUB_TOKEN environment variable with a github Personal Access Token."
-  exit 1
-fi
+get_repo_owner()
+{
+  local remote=${1-origin}
+  GIT_SSH_REGEX="^git@"
+  GITHUB_API_ENDPOINT=$(sed 's!/$!!' <<< $GITHUB_API_ENDPOINT)
+  FULL_ORIGIN=$(git remote get-url ${remote})
+  if [[ $FULL_ORIGIN =~ $GIT_SSH_REGEX ]]; then # git+ssh URL
+    REPOSITORY=$(echo $FULL_ORIGIN |cut -d: -f2 |sed 's/\.git//')
+  else # git://  or https:// or ssh:// URL
+    REPOSITORY=$(echo $FULL_ORIGIN |cut -d/ -f4,5 |sed 's/\.git//')
+  fi
+  IFS='/' read GH_OWNER GH_REPO <<< "$REPOSITORY"
+}
 
 get_repo_owner $REMOTE
-curl -Ss -X DELETE \
-  -H "Authorization: token $GITHUB_TOKEN" \
-  $GITHUB_API_ENDPOINT/repos/${GH_OWNER}/${GH_REPO}
+echo "Removing github repo ${GH_OWNER}/${GH_REPO}"
+gh api repos/${GH_OWNER}/${GH_REPO} --method DELETE
+echo "Removing remote $REMOTE on this clone."
+git remote remove $REMOTE
