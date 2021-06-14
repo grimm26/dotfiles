@@ -17,7 +17,6 @@ ohmyzsh/ohmyzsh path:plugins/extract
 ohmyzsh/ohmyzsh path:plugins/alias-finder
 ohmyzsh/ohmyzsh path:plugins/copyfile
 ohmyzsh/ohmyzsh path:plugins/copydir
-ohmyzsh/ohmyzsh path:plugins/vi-mode
 
 MichaelAquilina/zsh-you-should-use
 greymd/tmux-xpanes

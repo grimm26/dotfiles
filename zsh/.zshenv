@@ -13,7 +13,8 @@ fi
 if [[ -d /usr/local/go/bin ]]; then
   path+=('/usr/local/go/bin')
 fi
-path=("$HOME/.local/bin" $path)
+MY_BIN="$HOME/.local/bin"
+path=("$MY_BIN" $path)
 typeset -U path
 export PATH
 
@@ -33,24 +34,28 @@ alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
 export TFSWITCH_BIN=${HOME}/.local/bin/terraform
 alias tfsw="tfswitch --bin $TFSWITCH_BIN"
 tf11 () {
-  ln -fs ~/bin/terragrunt_18 ~/bin/terragrunt
+  ln -fs ~/bin/terragrunt_18 $MY_BIN/terragrunt
   tfsw --latest-stable 0.11
 }
 tf12 () {
-  ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
+  ln -fs ~/bin/terragrunt_24.4 $MY_BIN/terragrunt
   tfsw --latest-stable 0.12
 }
 tf13 () {
-  ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
+  ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
   tfsw --latest-stable 0.13
 }
 tf14 () {
-  ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
+  ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
   tfsw --latest-stable 0.14
 }
 tf15 () {
-  ln -fs ~/bin/terragrunt_latest ~/bin/terragrunt
+  ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
   tfsw --latest-stable 0.15
+}
+tf1.0 () {
+  ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
+  tfsw --latest-stable 1.0
 }
 alias tfver=terraform version | awk '{print $2}'
 go13 () {
