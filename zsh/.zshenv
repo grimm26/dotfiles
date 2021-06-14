@@ -99,6 +99,7 @@ if whence antibody &>/dev/null; then
       antibody bundle < $bundle
     done
   fi
+  alias af=alias-finder
 elif [[ -r ~/.zplugrc ]]; then
   source ~/.zplugrc
 fi
