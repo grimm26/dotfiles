@@ -4,8 +4,7 @@ fi
 
 [ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 export GOPATH=~/go
-export GOBIN=$GOPATH/bin
-path+=(${GOBIN})
+path+=(${GOPATH}/bin)
 path=('/usr/local/bin' '/usr/local/sbin' $path)
 if [[ $OSTYPE == darwin* && -d ${HOME}/Library/Python/3.9/bin ]]; then
   path+=("${HOME}/Library/Python/3.9/bin")
@@ -13,7 +12,7 @@ fi
 if [[ -d /usr/local/go/bin ]]; then
   path+=('/usr/local/go/bin')
 fi
-MY_BIN="$HOME/.local/bin"
+export MY_BIN="$HOME/.local/bin"
 path=("$MY_BIN" $path)
 typeset -U path
 export PATH
