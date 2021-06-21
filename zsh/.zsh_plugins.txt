@@ -4,7 +4,6 @@ ohmyzsh/ohmyzsh path:plugins/gh
 ohmyzsh/ohmyzsh path:plugins/dircycle
 ohmyzsh/ohmyzsh path:plugins/knife
 ohmyzsh/ohmyzsh path:plugins/kitchen
-ohmyzsh/ohmyzsh path:plugins/ripgrep
 ohmyzsh/ohmyzsh path:plugins/tmux
 ohmyzsh/ohmyzsh path:plugins/tmuxinator
 ohmyzsh/ohmyzsh path:plugins/vi-mode
@@ -17,6 +16,9 @@ ohmyzsh/ohmyzsh path:plugins/extract
 ohmyzsh/ohmyzsh path:plugins/alias-finder
 ohmyzsh/ohmyzsh path:plugins/copyfile
 ohmyzsh/ohmyzsh path:plugins/copydir
+ohmyzsh/ohmyzsh path:plugins/genpass
+ohmyzsh/ohmyzsh path:plugins/isodate
+ohmyzsh/ohmyzsh path:plugins/jsontools
 
 MichaelAquilina/zsh-you-should-use
 greymd/tmux-xpanes
