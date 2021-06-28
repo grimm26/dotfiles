@@ -20,8 +20,13 @@ export PATH
 # ignore ~/.ssh/known_hosts entries
 alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -o "PreferredAuthentications=password,keyboard-interactive"'
 
-fpath+=( /usr/local/opt/curl/share/zsh/site-functions /usr/local/share/zsh/site-functions )
+if [[ -d /usr/local/opt/curl/share/zsh/site-functions ]]; then
+  fpath+=( /usr/local/opt/curl/share/zsh/site-functions )
+elif [[ -d /usr/local/share/zsh/site-functions ]]; then
+  fpath+=( /usr/local/share/zsh/site-functions )
+fi
 typeset -U fpath
+
 export LESS="-EFRX"
 export CHEF_ENV_PATH="$HOME/git/chef/environments"
 export LC_COLLATE=C
