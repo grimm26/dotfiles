@@ -116,9 +116,9 @@ case $(uname) in
         sudo make install ; cd /tmp
       # ruby-install
       echo "ruby-install"
-      curl -sLS https://github.com/postmodern/ruby-install/archive/v0.8.1.tar.gz -o ruby-install-0.8.1.tar.gz && \
-        tar -xzf ruby-install-0.8.1.tar.gz && \
-        cd ruby-install-0.8.1/ && \
+      curl -sLS https://github.com/postmodern/ruby-install/archive/v0.8.2.tar.gz -o ruby-install-0.8.2.tar.gz && \
+        tar -xzf ruby-install-0.8.2.tar.gz && \
+        cd ruby-install-0.8.2/ && \
         sudo make install ; cd /tmp
       # direnv
       echo "direnv"
