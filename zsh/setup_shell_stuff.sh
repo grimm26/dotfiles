@@ -39,6 +39,9 @@ case $(uname) in
       exit 1
     fi
     SCRIPT_HOME=$(readlink -f ${0%/*})
+    # Versions
+    GOLANG_VERSION="1.16.5"
+    NODEJS_VERSION="16.4.2"
     cd /tmp
     # Latest git
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
@@ -55,7 +58,7 @@ case $(uname) in
         sudo apt-add-repository --update https://cli.github.com/packages
         sudo apt install gh
       fi
-      GOLANG_VERSION="1.16.5"
+      # golang
       if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
         echo "Downloading and installing go ${GOLANG_VERSION}"
         curl -sLSO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz && \
@@ -64,6 +67,19 @@ case $(uname) in
         rm go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
         export PATH=${PATH}:/usr/local/go/bin
       fi
+      # nodejs
+      if [[ "v${NODEJS_VERSION}" != $(node --version 2>/dev/null) ]]; then
+        echo "Downloading and installing nodejs $NODEJS_VERSION"
+        if [[ -L /usr/local/nodejs ]]; then
+          OLD_NODEJS=$(readlink /usr/local/nodejs)
+        fi
+        curl -sLSO https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz && \
+          sudo tar -xJvf node-$VERSION-linux-x64.tar.xz -C /usr/local/ &&
+          ln -sf /usr/local/node-v$VERSION-linux-x64 /usr/local/nodejs
+        [[ -v OLD_NODEJS ]] && rm -rf $OLD_NODEJS
+      fi
+      # jsonlint
+      npm install jsonlint -g
       # Build ugrep
       echo "ugrep"
       UGREP_NEED_BUILD=0
@@ -189,6 +205,7 @@ case $(uname) in
       ruby-install
       direnv
       jq
+      jsonlint
       gh
     )
     for pkg in ${NEEDED_PACKAGES[*]}; do

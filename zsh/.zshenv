@@ -12,6 +12,9 @@ fi
 if [[ -d /usr/local/go/bin ]]; then
   path+=('/usr/local/go/bin')
 fi
+if [[ -d /usr/local/nodejs/bin ]]; then
+  path+=('/usr/local/nodejs/bin')
+fi
 export MY_BIN="$HOME/.local/bin"
 path=("$MY_BIN" $path)
 typeset -U path
