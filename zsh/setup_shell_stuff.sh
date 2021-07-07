@@ -74,8 +74,8 @@ case $(uname) in
           OLD_NODEJS=$(readlink /usr/local/nodejs)
         fi
         curl -sLSO https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz && \
-          sudo tar -xJvf node-$VERSION-linux-x64.tar.xz -C /usr/local/ &&
-          ln -sf /usr/local/node-v$VERSION-linux-x64 /usr/local/nodejs
+          sudo tar -xJvf node-$NODEJS_VERSION-linux-x64.tar.xz -C /usr/local/ &&
+          ln -sf /usr/local/node-v$NODEJS_VERSION-linux-x64 /usr/local/nodejs
         [[ -v OLD_NODEJS ]] && rm -rf $OLD_NODEJS
       fi
       # jsonlint
