@@ -77,9 +77,12 @@ case $(uname) in
           sudo tar -xJvf node-v${NODEJS_VERSION}-linux-x64.tar.xz -C /usr/local/ &&
           sudo ln -sf /usr/local/node-v${NODEJS_VERSION}-linux-x64 /usr/local/nodejs
         [[ -v OLD_NODEJS ]] && sudo rm -rf $OLD_NODEJS
+        PATH=/usr/local/nodejs/bin:$PATH
       fi
-      # jsonlint
-      /usr/local/nodejs/bin/npm install jsonlint -g
+      # Make sure we set an npm prefix for our user.
+      npm config set prefix '~/.local/'
+      # Install jsonlint
+      npm install jsonlint -g
       # Build ugrep
       echo "ugrep"
       UGREP_NEED_BUILD=0
