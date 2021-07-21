@@ -40,8 +40,8 @@ case $(uname) in
     fi
     SCRIPT_HOME=$(readlink -f ${0%/*})
     # Versions
-    GOLANG_VERSION="1.16.5"
-    NODEJS_VERSION="16.4.2"
+    GOLANG_VERSION="1.16.6"
+    NODEJS_VERSION="16.5.0"
     cd /tmp
     # Latest git
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
@@ -129,16 +129,25 @@ case $(uname) in
         sudo dpkg --install --skip-same-version /tmp/dive-latest.amd64.deb
       # chruby
       echo "chruby"
-      curl -sLS https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz -o chruby-0.3.9.tar.gz && \
-        tar -xzf chruby-0.3.9.tar.gz && \
-        cd chruby-0.3.9/ && \
-        sudo make install ; cd /tmp
+      eval $(grep '^CHRUBY_VERSION' /usr/local/share/chruby/chruby.sh)
+      if [[ $CHRUBY_VERSION == "0.3.9" ]]; then
+        echo "up to date"
+      else
+        curl -sLS https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz -o chruby-0.3.9.tar.gz && \
+          tar -xzf chruby-0.3.9.tar.gz && \
+          cd chruby-0.3.9/ && \
+          sudo make install ; cd /tmp
+      fi
       # ruby-install
       echo "ruby-install"
-      curl -sLS https://github.com/postmodern/ruby-install/archive/v0.8.2.tar.gz -o ruby-install-0.8.2.tar.gz && \
-        tar -xzf ruby-install-0.8.2.tar.gz && \
-        cd ruby-install-0.8.2/ && \
-        sudo make install ; cd /tmp
+      if [[ $(ruby-install --version |awk '{print $2}') == "0.8.2" ]]; then
+        echo "up to date"
+      else
+        curl -sLS https://github.com/postmodern/ruby-install/archive/v0.8.2.tar.gz -o ruby-install-0.8.2.tar.gz && \
+          tar -xzf ruby-install-0.8.2.tar.gz && \
+          cd ruby-install-0.8.2/ && \
+          sudo make install ; cd /tmp
+      fi
       # direnv
       echo "direnv"
       direnv_download_url=$(curl -sLS https://api.github.com/repos/direnv/direnv/releases/latest |jq -r '.assets[].browser_download_url' | grep "direnv.$kernel.$machine")

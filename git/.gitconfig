@@ -13,16 +13,16 @@
 [rebase]
 	autostash = true
 [rerere]
-  enabled = true
+    enabled = true
 [core]
-  #pager = less -EFRX
-  pager = delta
-  editor = vim
-  excludesfile = ~/.gitignore_global
-  autocrlf = input
+    #pager = less -EFRX
+	pager = delta
+    editor = vim
+    excludesfile = ~/.gitignore_global
+    autocrlf = input
 [delta]
-  features = line-numbers side-by-side
-  syntax-theme =  Solarized (dark)
+    features = line-numbers side-by-side
+    syntax-theme =  Solarized (dark)
 [help]
 	autocorrect = 1
 [format]
@@ -30,71 +30,47 @@
 [tag]
 	sort = -version:refname
 [color]
-  branch = yes
-  diff   = auto
-  pager  = yes
-  status = auto
-
-#[color "branch"]
-#    current = green
-#    local   = yellow
-#    remote  = cyan
-#
-#[color "diff"]
-#    meta = yellow
-#    frag = magenta
-#    old  = red
-#    new  = green
-#
-#[color "status"]
-#    header    = magenta
-#    added     = yellow
-#    changed   = green
-#    untracked = cyan
-
-#[gui]
-#    fontui   = -family terminus -size 9 -weight normal -slant roman -underline 0 -overstrike 0
-#    fontdiff = -family terminus -size 9 -weight normal -slant roman -underline 0 -overstrike 0
-#    editor = gvim
+    branch = yes
+    diff   = auto
+    pager  = yes
+    status = auto
 
 [svn]
     rmdir = true
 [alias]
-   ass   = add
-   b     = branch
-   bm    = branch --merged main
-   ca    = commit -a
-   chgd  = diff HEAD
-   ci    = commit
-   co    = checkout
-   fpu   = format-patch -s -p origin/main
-   graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f]\\+/\"&\"/g' ; echo '}'; }; f"
-   hist = log --pretty=format:\"%Cgreen%h%Creset %Cblue%ad%Creset %s%C(yellow)%d%Creset %Cblue[%an]%Creset\" --graph --date=short
-   l   = log --date=short --pretty=format:'%C(bold magenta)%h %Creset%C(green)%cd%Creset %C(white)%aN%Creset %s %C(yellow)%d'
-   lg  = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
-   mnc   = merge --no-commit
-   olg   = log --abbrev-commit --abbrev=6 --pretty=oneline
-   om    = checkout origin-main
-   files = diff-tree --no-commit-id --name-only -r
-   one   = "!sh -c 'git show -s --pretty=\"tformat:%h (%s, %ai\" \"$@\" | sed -e \"s/ [012][0-9]:[0-5][0-9]:[0-5][0-9] [-+][0-9][0-9][0-9][0-9]$/)/\"' -"
-   out   = !git push --dry-run
-   purge = !git checkout $(git rev-parse --show-cdup) && git clean -xdf
-   rem   = remote
-   ru  = remote update
-   rup = remote update --prune
-   serve = !sh -c 'git daemon --reuseaddr --verbose \"$@\" --base-path=. --export-all ./.git' sh
-   stgd  = diff --cached
-   st    = status
-   sub   = submodule
-   sw = switch
-   tagme = !sh -c '[ -z "$1" ] && exit 1 || git tag -s v\"$1\" -m \"release \"$1\"\"' sh
-   tush  = push --tags
-   who   = "!sh -c 'git log -1 --pretty=\"format:%an <%ae>\" --author=\"$1\"' -"
-   last = log -1 HEAD
-[github]
-   user = mkeisler
+    ass   = add
+    b     = branch
+    bm    = branch --merged main
+    ca    = commit -a
+    chgd  = diff HEAD
+    ci    = commit
+    co    = checkout
+    fpu   = format-patch -s -p origin/main
+    graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f]\\+/\"&\"/g' ; echo '}'; }; f"
+    hist  = log --pretty=format:\"%Cgreen%h%Creset %Cblue%ad%Creset %s%C(yellow)%d%Creset %Cblue[%an]%Creset\" --graph --date=short
+    l     = log --date=short --pretty=format:'%C(bold magenta)%h %Creset%C(green)%cd%Creset %C(white)%aN%Creset %s %C(yellow)%d'
+    lg    = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+    mnc   = merge --no-commit
+    olg   = log --abbrev-commit --abbrev=6 --pretty=oneline
+    om    = checkout origin-main
+    files = diff-tree --no-commit-id --name-only -r
+    one   = "!sh -c 'git show -s --pretty=\"tformat:%h (%s, %ai\" \"$@\" | sed -e \"s/ [012][0-9]:[0-5][0-9]:[0-5][0-9] [-+][0-9][0-9][0-9][0-9]$/)/\"' -"
+    out   = !git push --dry-run
+    purge = !git checkout $(git rev-parse --show-cdup) && git clean -xdf
+    rem   = remote
+    ru    = remote update
+    rup   = remote update --prune
+    serve = !sh -c 'git daemon --reuseaddr --verbose \"$@\" --base-path=. --export-all ./.git' sh
+    stgd  = diff --cached
+    st    = status
+    sub   = submodule
+    sw = switch
+    tagme = !sh -c '[ -z "$1" ] && exit 1 || git tag -s v\"$1\" -m \"release \"$1\"\"' sh
+    tush  = push --tags
+    who   = "!sh -c 'git log -1 --pretty=\"format:%an <%ae>\" --author=\"$1\"' -"
+    last = log -1 HEAD
 [hub]
-   host = git.enova.com
-   protocol = ssh
+    host = git.enova.com
+    protocol = ssh
 ## END OF FILE #################################################################
 # vim:tabstop=4 autoindent filetype=gitconfig expandtab
