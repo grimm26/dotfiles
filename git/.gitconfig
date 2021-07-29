@@ -69,8 +69,5 @@
     tush  = push --tags
     who   = "!sh -c 'git log -1 --pretty=\"format:%an <%ae>\" --author=\"$1\"' -"
     last = log -1 HEAD
-[hub]
-    host = git.enova.com
-    protocol = ssh
 ## END OF FILE #################################################################
 # vim:tabstop=4 autoindent filetype=gitconfig expandtab

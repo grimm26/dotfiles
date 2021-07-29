@@ -1,6 +1,5 @@
 #!/usr/bin/env zsh
 #
-#set -x
 
 while getopts 'M' OPT; do
   case $OPT in
@@ -41,7 +40,7 @@ case $(uname) in
     SCRIPT_HOME=$(readlink -f ${0%/*})
     # Versions
     GOLANG_VERSION="1.16.6"
-    NODEJS_VERSION="16.5.0"
+    NODEJS_VERSION="14.17.4"
     cd /tmp
     # Latest git
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
@@ -74,9 +73,14 @@ case $(uname) in
           OLD_NODEJS=$(readlink /usr/local/nodejs)
         fi
         curl -sLSO https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz && \
-          sudo tar -xJvf node-v${NODEJS_VERSION}-linux-x64.tar.xz -C /usr/local/ &&
-          sudo ln -sf /usr/local/node-v${NODEJS_VERSION}-linux-x64 /usr/local/nodejs
-        [[ -v OLD_NODEJS ]] && sudo rm -rf $OLD_NODEJS
+          sudo tar -xJf node-v${NODEJS_VERSION}-linux-x64.tar.xz -C /usr/local/
+        if [[ -d /usr/local/node-v${NODEJS_VERSION}-linux-x64 ]]; then
+          sudo rm /usr/local/nodejs
+          sudo ln -s /usr/local/node-v${NODEJS_VERSION}-linux-x64 /usr/local/nodejs
+        fi
+        if [[ -v OLD_NODEJS && "$OLD_NODEJS" != $(readlink /usr/local/nodejs) ]]; then
+          sudo rm -rf $OLD_NODEJS
+        fi
         PATH=/usr/local/nodejs/bin:$PATH
       fi
       # Make sure we set an npm prefix for our user.
