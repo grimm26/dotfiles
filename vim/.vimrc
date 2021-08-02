@@ -157,6 +157,10 @@ let g:vim_json_syntax_conceal = 0
 let g:terraform_fmt_on_save = 1
 let g:terraform_align = 1
 
+" shfmt options
+let g:shfmt_extra_args = '-i 2 -bn -ci'
+let g:shfmt_fmt_on_save = 1
+
 let g:TerminusMouse=0
 " highlight trailing spaces
 highlight ExtraWhitespace ctermbg=red guibg=red

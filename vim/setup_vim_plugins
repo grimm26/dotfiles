@@ -2,13 +2,22 @@
 
 # First, I'm gonne be a dick and force you to live in this decade.
 # We need at least bash 4, dude
-[[ $(cut -d. -f1 <<< $BASH_VERSION) < 4 ]] && { echo >&2 "Sorry, this setup requires at least bash 4.  Srsly."; exit 1; }
+[[ $(cut -d. -f1 <<<$BASH_VERSION) < 4 ]] && {
+  echo >&2 "Sorry, this setup requires at least bash 4.  Srsly."
+  exit 1
+}
 
 # We need git
-command -v git >/dev/null 2>&1 || { echo >&2 "git is required to clone vim plugins from github."; exit 1; }
+command -v git >/dev/null 2>&1 || {
+  echo >&2 "git is required to clone vim plugins from github."
+  exit 1
+}
 
 VIM_MAJOR_VERSION=$(vim --version | head -1 | cut -d ' ' -f 5 | cut -d. -f1)
-[[ $VIM_MAJOR_VERSION < 8 ]] && { echo >&2 "Sorry, this setup requires vim 8.  Why your vim so old?"; exit 1; }
+[[ $VIM_MAJOR_VERSION < 8 ]] && {
+  echo >&2 "Sorry, this setup requires vim 8.  Why your vim so old?"
+  exit 1
+}
 
 # OK, let's get to it.
 BASE_CWD=$(pwd)
@@ -49,8 +58,9 @@ plugins['vim-tmux']='git://github.com/tmux-plugins/vim-tmux.git'
 plugins['vim-gitgutter']='git://github.com/airblade/vim-gitgutter.git'
 plugins['vim-terminus']='git://github.com/wincent/terminus.git'
 plugins['vim-markdown']='git://github.com/plasticboy/vim-markdown.git'
+plugins['vim-shfmt']='git://github.com/z0mbix/vim-shfmt.git'
 
-clone_or_update_plugin(){
+clone_or_update_plugin() {
   name=$1
   origin_url=$2
   if [[ -d ~/.vim/pack/plugins/start/${name} ]]; then
