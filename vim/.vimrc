@@ -3,6 +3,13 @@ runtime macros/matchit.vim
 "set shell=/usr/local/bin/zsh
 "au BufNewFile,BufRead /dev/shm/gopass.* setlocal noswapfile nobackup noundofile
 
+" Set up persistent undo across all files.
+set undofile
+if !isdirectory(expand("$HOME/.vim/undodir"))
+  call mkdir(expand("$HOME/.vim/undodir"), "p")
+endif
+set undodir=$HOME/.vim/undodir
+
 set updatetime=100
 " Turn on syntax highlighting
 syntax on
@@ -48,6 +55,10 @@ set ffs=unix,dos,mac
 set modeline modelines=5    " use settings from file being edited
 set writebackup
 set swapfile
+if !isdirectory(expand("$HOME/.vim/swap"))
+  call mkdir(expand("$HOME/.vim/swap"), "p")
+endif
+set directory=$HOME/.vim/swap//
 " yes, I hate highlight search
 set nohlsearch
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -178,3 +189,6 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+
+packloadall
+silent! helptags ALL
