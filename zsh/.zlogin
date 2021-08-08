@@ -48,8 +48,6 @@ if [[ -d /usr/libexec/java_home ]]; then
 fi
 # completion system
 autoload -Uz compinit; compinit
-
-alias lsd='ls -pl | grep /'
 ##
 
 #SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
@@ -83,6 +81,7 @@ export PAGER=less
 export MANPAGER=less
 whence batman &>/dev/null && alias man=batman
 whence batgrep &>/dev/null && alias rg=batgrep
+whence lsd &>/dev/null && alias ls=lsd
 alias chompeof="perl -pi -e 'chomp if eof && /^$/'"
 
 alias perldoc="PAGER=less perldoc"

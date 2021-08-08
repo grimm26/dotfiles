@@ -39,7 +39,7 @@ case $(uname) in
     fi
     SCRIPT_HOME=$(readlink -f ${0%/*})
     # Versions
-    GOLANG_VERSION="1.16.6"
+    GOLANG_VERSION="1.16.7"
     NODEJS_VERSION="14.17.4"
     cd /tmp
     # Latest git
@@ -115,13 +115,15 @@ case $(uname) in
         [[ -L $home_bin/ug ]] || cp /bin/ug $home_bin
       fi
       cd /tmp
-      # git-delta
-      echo "git-delta"
       if [[ $VERSION_ID -ge 19.10 ]]; then
         gdelta_pkg="git-delta"
+        lsd_pkg="lsd"
       else
         gdelta_pkg="git-delta-musl"
+        lsd_pkg="lsd-musl"
       fi
+      # git-delta
+      echo "git-delta"
       curl -sLS $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest | jq -r '.assets[].browser_download_url' | grep -E "${gdelta_pkg}_.*_amd64\.deb") -o /tmp/git-delta-latest_amd64.deb \
         && sudo dpkg --install --skip-same-version /tmp/git-delta-latest_amd64.deb
       # bat
@@ -129,8 +131,12 @@ case $(uname) in
       curl -sLS $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest | jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb') -o /tmp/bat-latest.amd64.deb \
         && sudo dpkg --install --skip-same-version /tmp/bat-latest.amd64.deb
       echo "dive"
-      curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | jq -r '.assets[].browser_download_url' | grep -E '*_amd64.deb') -o /tmp/dive-latest.amd64.deb \
+      curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | jq -r '.assets[].browser_download_url' | grep '_amd64.deb') -o /tmp/dive-latest.amd64.deb \
         && sudo dpkg --install --skip-same-version /tmp/dive-latest.amd64.deb
+      # lsd
+      echo "lsd"
+      curl -sLS $(curl -s https://api.github.com/repos/Peltoche/lsd/releases/latest | jq -r '.assets[].browser_download_url' | grep -E "${lsd_pkg}_.*_amd64\.deb") -o /tmp/lsd-latest.amd64.deb \
+        && sudo dpkg --install --skip-same-version /tmp/lsd-latest.amd64.deb
       # chruby
       echo "chruby"
       eval $(grep '^CHRUBY_VERSION' /usr/local/share/chruby/chruby.sh)
@@ -227,6 +233,7 @@ case $(uname) in
       jq
       jsonlint
       gh
+      lsd
     )
     for pkg in ${NEEDED_PACKAGES[*]}; do
       brew list $pkg &>/dev/null \
