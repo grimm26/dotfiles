@@ -82,6 +82,8 @@ export MANPAGER=less
 whence batman &>/dev/null && alias man=batman
 whence batgrep &>/dev/null && alias rg=batgrep
 whence lsd &>/dev/null && alias ls=lsd
+whence fdfind &>/dev/null && ! whence fd &>/dev/null && alias fd=fdfind
+
 alias chompeof="perl -pi -e 'chomp if eof && /^$/'"
 
 alias perldoc="PAGER=less perldoc"
