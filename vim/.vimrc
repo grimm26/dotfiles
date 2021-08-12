@@ -24,11 +24,8 @@ set wildmenu
 set wildmode=list:longest
 
 " With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
-let g:mapleader = ","
-" Fast saving
-nmap <leader>w :w!<cr>
+let mapleader = "\\"
+let g:mapleader = "\\"
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command! W w !sudo tee % > /dev/null
@@ -142,14 +139,12 @@ endfunction
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>
-" Start NERDTree and leave the cursor in it.
-" autocmd VimEnter * NERDTree | wincmd p
-" Start NERDTree when Vim is started without file arguments.
 autocmd StdinReadPre * let s:std_in=1
+" Start NERDTree when Vim is started without file arguments.
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 " Start NERDTree when Vim starts with a directory argument.
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
-    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
+    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | wincmd p | endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-airline config (force color)
@@ -189,6 +184,10 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+
+" spelling
+autocmd FileType Markdown set spell spelllang=en_us
+map <leader>sp :set spell spelllang=en_us<cr>
 
 packloadall
 silent! helptags ALL
