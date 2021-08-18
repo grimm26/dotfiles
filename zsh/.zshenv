@@ -36,10 +36,29 @@ export LC_COLLATE=C
 export EDITOR=vim
 alias kit=kitchen
 alias tf=terraform
-alias tg=terragrunt
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
 export TFSWITCH_BIN=${HOME}/.local/bin/terraform
 alias tfsw="tfswitch --bin $TFSWITCH_BIN"
+autoswitch_tf () {
+  if [[ -s ./atlantis.yaml ]]; then
+    autoload is-at-least
+    tf_version=$(grep terraform_version ./atlantis.yaml | awk '{print $2}' | tr -d 'v')
+    tfsw $tf_version
+    if is-at-least 0.13.0 $tf_version; then
+      ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
+    elif is-at-least 0.12.0 $tf_version; then
+      ln -fs ~/bin/terragrunt_24.4 $MY_BIN/terragrunt
+    elif is-at-least 0.11.0 $tf_version; then
+      ln -fs ~/bin/terragrunt_18 $MY_BIN/terragrunt
+    fi
+  fi
+}
+
+tg () {
+  autoswitch_tf
+  terragrunt "$@"
+}
+
 tf11 () {
   ln -fs ~/bin/terragrunt_18 $MY_BIN/terragrunt
   tfsw --latest-stable 0.11
@@ -82,9 +101,9 @@ go15 () {
   atlantis_yaml_mod.rb --tfver $(terraform version | awk '{print $2}')
   tf fmt
 }
-alias tgi="terragrunt init -upgrade -reconfigure"
-alias tgu="terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
-alias tfu="terraform 0.12upgrade -yes;chompeof *.tf"
+alias tgi="tg init -upgrade -reconfigure"
+alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
+alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 export AWS_DEFAULT_REGION=us-east-2
 # Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
 if whence antibody &>/dev/null; then
