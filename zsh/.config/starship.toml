@@ -6,6 +6,8 @@ format = """\
     $git_branch\
     $git_state\
     $git_status\
+    $git_commit\
+    $git_metrics\
     $package\
     $dotnet\
     $golang\
@@ -33,26 +35,30 @@ command_timeout = 750
 disabled = true
 
 [directory]
-truncation_length=10
-truncate_to_repo=false
+truncation_length = 10
+truncate_to_repo = false
 
 [dotnet]
 disabled = true
 
-[git_status]
-disabled=false
+[git_metrics]
+disabled = false
+
+[git_commit]
+disabled = false
+tag_disabled = false
 
 [nodejs]
 disabled = true
 
 [terraform]
 format = "[$symbol$version]($style) "
-disabled=false
+disabled = false
 
 [time]
 disabled = false
 format = "[$time]($style) "
 
 [hostname]
-disabled=false
-ssh_only=false
+disabled = false
+ssh_only = false
