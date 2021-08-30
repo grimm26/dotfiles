@@ -291,7 +291,7 @@ echo "antibody"
 curl -sfLS git.io/antibody | bash -s - -b ${home_bin}
 # starship (prompt)
 starship --version
-curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin}
+curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
 starship --version
 
 cd $SCRIPT_HOME
