@@ -206,6 +206,10 @@ case $(uname) in
           && chmod 755 ${home_bin}/kubectl
       fi
     fi
+    # starship (prompt)
+    starship --version
+    curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
+    starship --version
     ;;
   Darwin)
     if command -v brew &>/dev/null; then
@@ -248,6 +252,10 @@ case $(uname) in
       && cp /tmp/dive.$$/dive ${home_bin} \
       && chmod 755 ${home_bin}/dive
     cd /tmp
+    # starship (prompt)
+    starship --version
+    curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin}
+    starship --version
     ;;
   *)
     echo "Unknown OS type"
@@ -289,10 +297,6 @@ fi
 # antibody
 echo "antibody"
 curl -sfLS git.io/antibody | bash -s - -b ${home_bin}
-# starship (prompt)
-starship --version
-curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
-starship --version
 
 cd $SCRIPT_HOME
 for z in .z* .config/*; do
