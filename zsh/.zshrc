@@ -126,3 +126,27 @@ export DISABLE_AUTO_TITLE=true
 #fi
 [ -d /usr/local/opt/openjdk/bin ] && export PATH="/usr/local/opt/openjdk/bin:$PATH"
 [ -f ~/.git_functions ] && source ~/.git_functions
+
+load-tfswitch() {
+  local tfswitchrc_path=".tfswitchrc"
+
+  if [ -f "$tfswitchrc_path" ]; then
+    tfsw
+  fi
+  if [[ -f ./atlantis.yaml ]]; then
+    autoload is-at-least
+    tf_version=$(grep terraform_version ./atlantis.yaml | awk '{print $2}' | tr -d 'v')
+    if [[ ! -z "$tf_version" ]]; then
+      tfsw $tf_version
+      if is-at-least 0.13.0 $tf_version; then
+        ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
+      elif is-at-least 0.12.0 $tf_version; then
+        ln -fs ~/bin/terragrunt_24.4 $MY_BIN/terragrunt
+      elif is-at-least 0.11.0 $tf_version; then
+        ln -fs ~/bin/terragrunt_18 $MY_BIN/terragrunt
+      fi
+    fi
+  fi
+}
+add-zsh-hook chpwd load-tfswitch
+load-tfswitch
