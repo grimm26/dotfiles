@@ -39,33 +39,50 @@ alias tf=terraform
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
 export TFSWITCH_BIN=${HOME}/.local/bin/terraform
 alias tfsw="tfswitch --bin $TFSWITCH_BIN"
+export TGSWITCH_BIN=${HOME}/.local/bin/terragrunt
+alias tgsw="tgswitch --bin $TGSWITCH_BIN"
 
 tg () {
   terragrunt "$@"
 }
 
+# create a cache file for what the latest version of terragrunt is.
+# If the file is older than 24 hours, refresh it.
+get_tg_latest_version () {
+  if [[ -s ~/.terragrunt_latest_version ]]; then
+    if [[ -n ~/.terragrunt_latest_version(#qN.mh+24) ]]; then
+      curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v' > ~/.terragrunt_latest_version
+    fi
+  else
+    curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v' > ~/.terragrunt_latest_version
+  fi
+  export TG_LATEST_VERSION=$(cat ~/.terragrunt_latest_version)
+}
+get_tg_latest_version
+
 tf11 () {
-  ln -fs ~/bin/terragrunt_18 $MY_BIN/terragrunt
+  tgsw 0.18.7
   tfsw --latest-stable 0.11
 }
 tf12 () {
-  ln -fs ~/bin/terragrunt_24.4 $MY_BIN/terragrunt
+  tgsw 0.24.4
   tfsw --latest-stable 0.12
 }
+# terraform 0.13 and up should work with the latest terragrunt version - 2021-09-10
 tf13 () {
-  ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
+  tgsw $TG_LATEST_VERSION
   tfsw --latest-stable 0.13
 }
 tf14 () {
-  ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
+  tgsw $TG_LATEST_VERSION
   tfsw --latest-stable 0.14
 }
 tf15 () {
-  ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
+  tgsw $TG_LATEST_VERSION
   tfsw --latest-stable 0.15
 }
 tf1.0 () {
-  ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
+  tgsw $TG_LATEST_VERSION
   tfsw --latest-stable 1.0
 }
 alias tfver=terraform version | awk '{print $2}'
