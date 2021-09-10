@@ -56,13 +56,18 @@ tg () {
 get_tg_latest_version () {
   if [[ -s ~/.terragrunt_latest_version ]]; then
     if [[ -n ~/.terragrunt_latest_version(#qN.mh+24) ]]; then
-      curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v' > ~/.terragrunt_latest_version
+      retrieved_latest=$(curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v')
     fi
   else
-    curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v' > ~/.terragrunt_latest_version
+    retrieved_latest=$(curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v')
+  fi
+
+  if [[ -v retrieved_latest && ${retrieved_latest} != "null" ]]; then
+    echo ${retrieved_latest} > ~/.terragrunt_latest_version
   fi
   export TG_LATEST_VERSION=$(cat ~/.terragrunt_latest_version)
 }
+
 get_tg_latest_version
 
 tf11 () {
