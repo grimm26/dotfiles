@@ -48,6 +48,11 @@ tg () {
 
 # create a cache file for what the latest version of terragrunt is.
 # If the file is older than 24 hours, refresh it.
+# The globbing is a little complicated here:
+# - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
+# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
+# - '.' matches "regular files"
+# - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
 get_tg_latest_version () {
   if [[ -s ~/.terragrunt_latest_version ]]; then
     if [[ -n ~/.terragrunt_latest_version(#qN.mh+24) ]]; then
