@@ -139,11 +139,11 @@ load-tfswitch() {
     if [[ ! -z "$tf_version" ]]; then
       tfsw $tf_version
       if is-at-least 0.13.0 $tf_version; then
-        ln -fs ~/bin/terragrunt_latest $MY_BIN/terragrunt
+        tgsw $TG_LATEST_VERSION
       elif is-at-least 0.12.0 $tf_version; then
-        ln -fs ~/bin/terragrunt_24.4 $MY_BIN/terragrunt
+        tgsw 0.24.4
       elif is-at-least 0.11.0 $tf_version; then
-        ln -fs ~/bin/terragrunt_18 $MY_BIN/terragrunt
+        tgsw 0.18.7
       fi
     fi
   fi

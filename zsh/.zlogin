@@ -24,13 +24,13 @@ tgl () {
   if [ -x =landscape ]; then
     case "$1" in
       plan)
-        terragrunt_18 "$@"| landscape
+        terragrunt "$@"| landscape
         ;;
       *)
-        terragrunt_18 "$@"
+        terragrunt "$@"
     esac
   else
-    terragrunt_18 "$@"
+    terragrunt "$@"
   fi
 }
 # Homebrew
