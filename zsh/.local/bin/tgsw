@@ -22,8 +22,10 @@ link_version() {
 }
 
 download_version() {
-  go version | awk '{print $4}' | IFS="/" read goos goarch
-  curl https://github.com/gruntwork-io/terragrunt/releases/download/v${VERSION_TO_USE}/terragrunt_${goos}_${goarch} -sLS -o ${VERSIONS_DIR}/terragrunt_${VERSION_TO_USE}
+  while IFS="/" read goos goarch; do
+    curl https://github.com/gruntwork-io/terragrunt/releases/download/v${VERSION_TO_USE}/terragrunt_${goos}_${goarch} -sLS -o ${VERSIONS_DIR}/terragrunt_${VERSION_TO_USE} \
+      && chmod 755 ${VERSIONS_DIR}/terragrunt_${VERSION_TO_USE}
+  done < <(go version | awk '{print $4}')
 }
 
 switch_version() {
