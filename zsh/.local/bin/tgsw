@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Simple shell terragrunt switcher cuz I didn't find one that worked.
+# bins needed: curl, go, ln
+
+VERSIONS_DIR=${HOME}/.terragrunt.versions
+# Make this smarter to make sure ~/.local/bin exists
+MY_BIN=${HOME}/.local/bin
+
+VERSION_TO_USE=$1
+
+list_versions() {
+  command -p ls $VERSIONS_DIR
+}
+
+show_current_version() {
+  command readlink ${MY_BIN}/terragrunt | cut -d_ -f2
+}
+
+link_version() {
+  command -p ln -sf $VERSIONS_DIR/terragrunt_${VERSION_TO_USE} ${MY_BIN}/terragrunt
+}
+
+download_version() {
+  go version | awk '{print $4}' | IFS="/" read goos goarch
+  curl https://github.com/gruntwork-io/terragrunt/releases/download/v${VERSION_TO_USE}/terragrunt_${goos}_${goarch} -sLS -o ${VERSIONS_DIR}/terragrunt_${VERSION_TO_USE}
+}
+
+switch_version() {
+  # Check if we already have it
+  if [[ -x $VERSIONS_DIR/terragrunt_${VERSION_TO_USE} ]]; then
+    # We all good
+    link_version
+  else
+    # We need to download it
+    download_version && link_version
+  fi
+}
+
+if [[ "${1}xx" == "xx" ]]; then
+  show_current_version
+else
+  switch_version
+fi

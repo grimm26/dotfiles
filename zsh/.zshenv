@@ -39,8 +39,6 @@ alias tf=terraform
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
 export TFSWITCH_BIN=${HOME}/.local/bin/terraform
 alias tfsw="tfswitch --bin $TFSWITCH_BIN"
-export TGSWITCH_BIN=${HOME}/.local/bin/terragrunt
-alias tgsw="tgswitch --bin $TGSWITCH_BIN"
 
 tg () {
   terragrunt "$@"

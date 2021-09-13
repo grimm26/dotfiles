@@ -268,9 +268,6 @@ if [[ ! -v setup_MINIMAL ]]; then
   echo "tfswitch"
   curl -sLS https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
 
-  echo "tgswitch"
-  curl -L https://raw.githubusercontent.com/warrensbox/tgswitch/release/install.sh | bash -s - -b ${home_bin}
-
   # k9s
   echo "k9s"
   curl -sLS $(curl -sLS https://api.github.com/repos/derailed/k9s/releases/latest | jq -r '.assets[].browser_download_url' | grep -i ${kernel}_$(uname -m)) -o /tmp/k9s-latest.tgz \
@@ -302,7 +299,7 @@ echo "antibody"
 curl -sfLS git.io/antibody | bash -s - -b ${home_bin}
 
 cd $SCRIPT_HOME
-for z in .z* .config/*; do
+for z in .z* .config/* .local/bin/* ; do
   if ! diff -q $z ~/${z} &>/dev/null; then
     cp ~/${z} ~/${z}.prev
   fi

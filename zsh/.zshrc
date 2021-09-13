@@ -138,12 +138,14 @@ load-tfswitch() {
     tf_version=$(grep terraform_version ./atlantis.yaml | awk '{print $2}' | tr -d 'v')
     if [[ ! -z "$tf_version" ]]; then
       tfsw $tf_version
-      if is-at-least 0.13.0 $tf_version; then
-        tgsw $TG_LATEST_VERSION
-      elif is-at-least 0.12.0 $tf_version; then
-        tgsw 0.24.4
-      elif is-at-least 0.11.0 $tf_version; then
-        tgsw 0.18.7
+      if whence -p tgsw &>/dev/null; then
+        if is-at-least 0.13.0 $tf_version; then
+          tgsw $TG_LATEST_VERSION
+        elif is-at-least 0.12.0 $tf_version; then
+          tgsw 0.24.4
+        elif is-at-least 0.11.0 $tf_version; then
+          tgsw 0.18.7
+        fi
       fi
     fi
   fi
