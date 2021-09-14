@@ -1,30 +1,41 @@
 #!/bin/bash
 
+set -x
 # Simple shell terragrunt switcher cuz I didn't find one that worked.
+
 # bins needed: curl, go, ln
-
-VERSIONS_DIR=${HOME}/.terragrunt.versions
-# Make this smarter to make sure ~/.local/bin exists
-MY_BIN=${HOME}/.local/bin
-
-VERSION_TO_USE=$1
+for need in curl go ln; do
+  command -v $need &>/dev/null || {
+    echo >&2 "$need is required."
+    exit 1
+  }
+done
 
 list_versions() {
   command -p ls $VERSIONS_DIR
 }
 
 show_current_version() {
-  command readlink ${MY_BIN}/terragrunt | cut -d_ -f2
+  if [[ -L ${MY_BIN}/terragrunt ]]; then
+    command readlink ${MY_BIN}/terragrunt | cut -d_ -f2
+  fi
 }
 
 link_version() {
-  command -p ln -sf $VERSIONS_DIR/terragrunt_${VERSION_TO_USE} ${MY_BIN}/terragrunt
+  if ! command -p ln -sf $VERSIONS_DIR/terragrunt_${VERSION_TO_USE} ${MY_BIN}/terragrunt; then
+    echo >&2 "Cannot link ${MY_BIN}/terragrunt to $VERSIONS_DIR/terragrunt_${VERSION_TO_USE}"
+    exit 1
+  fi
 }
 
 download_version() {
   while IFS="/" read goos goarch; do
-    curl https://github.com/gruntwork-io/terragrunt/releases/download/v${VERSION_TO_USE}/terragrunt_${goos}_${goarch} -sLS -o ${VERSIONS_DIR}/terragrunt_${VERSION_TO_USE} \
-      && chmod 755 ${VERSIONS_DIR}/terragrunt_${VERSION_TO_USE}
+    if curl https://github.com/gruntwork-io/terragrunt/releases/download/v${VERSION_TO_USE}/terragrunt_${goos}_${goarch} -fsLS -o ${VERSIONS_DIR}/terragrunt_${VERSION_TO_USE}; then
+      chmod 755 ${VERSIONS_DIR}/terragrunt_${VERSION_TO_USE}
+    else
+      echo "Unable to download version ->${VERSION_TO_USE}<-"
+      exit 1
+    fi
   done < <(go version | awk '{print $4}')
 }
 
@@ -39,8 +50,41 @@ switch_version() {
   fi
 }
 
-if [[ "${1}xx" == "xx" ]]; then
+while getopts v OPT; do
+  case $OPT in
+    v)
+      SW_VERBOSE=true
+      ;;
+    *)
+      printf "Usage: %s: [-v] <terragrunt_version>\n" $0
+      exit 2
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+VERSION_TO_USE=$1
+VERSIONS_DIR=${HOME}/.terragrunt.versions
+case :$PATH: in
+  *:${HOME}/.local/bin:*)
+    MY_BIN=${HOME}/.local/bin
+    ;;
+  *:${HOME}/bin:*)
+    MY_BIN=${HOME}/bin
+    ;;
+  *:/usr/local/bin:*)
+    MY_BIN=/usr/local/bin
+    ;;
+  *)
+    echo >&2 "Cannot determine a path to put terragrunt into."
+    exit 1
+    ;;
+esac
+
+mkdir -pv $VERSIONS_DIR
+if [[ "${VERSION_TO_USE}xx" == "xx" ]]; then
   show_current_version
 else
   switch_version
+  [[ ${SW_VERBOSE:-false} == "true" ]] && show_current_version
 fi
