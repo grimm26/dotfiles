@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -x
 # Simple shell terragrunt switcher cuz I didn't find one that worked.
 
 # bins needed: curl, go, ln
