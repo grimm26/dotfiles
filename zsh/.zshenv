@@ -52,6 +52,7 @@ tg () {
 # - '.' matches "regular files"
 # - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
 get_tg_latest_version () {
+  local retrieved_latest="null"
   if [[ -s ~/.terragrunt_latest_version ]]; then
     if [[ -n ~/.terragrunt_latest_version(#qN.mh+24) ]]; then
       retrieved_latest=$(curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v')
