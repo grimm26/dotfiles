@@ -1,7 +1,5 @@
 #!/usr/bin/env zsh
 
-# TODO: Add getopt to select which packages to link instead of all.
-
 # Requirements
 command -v stow &>/dev/null || {
   print -u 2 "GNU stow is required to link dotfiles into place. https://www.gnu.org/software/stow/"
@@ -20,22 +18,26 @@ if command getopt -T &>/dev/null; then
 fi
 
 usage () {
-  print "Usage $0:t [ -v | --verbose ] [ --dry-run | --simulate ]"
+  print "Usage $0:t [ -v | --verbose ] [ --dry-run | --simulate ] [ --restow ]"
   exit 2
 }
 
-if PARSED_ARGUMENTS=$(getopt -n $0:t -o v --longoptions dry-run,verbose,simulate -- "$@"); then
+if PARSED_ARGUMENTS=$(getopt -n $0:t -o p:,R,v --longoptions dry-run,package:,restow,simulate,verbose -- "$@"); then
   :
 else
   usage
 fi
 
 eval set -- "$PARSED_ARGUMENTS"
+STOW_TYPE="stow"
+STOW_PKGS=(git tmux vim zsh)
 while :
 do
   case "$1" in
-    -v | --verbose)  VERBOSE=1   ; shift ;;
+    -v | --verbose)  VERBOSE=1 ; shift ;;
     --dry-run | --simulate) SIMULATE=1  ; shift ;;
+    -R | --restow) STOW_TYPE="restow" ; shift;;
+    -p | --package) STOW_PKGS="$2" ; shift 2 ;;
     --) shift; break ;;
     *) print "Unexpected option: $1 - this should not happen."
        usage ;;
@@ -44,7 +46,6 @@ done
 
 mydir=$0:h:P
 
-stow_pkgs=(git tmux vim zsh)
 stow_command="stow --dir $mydir --target $HOME"
 if [ ${+VERBOSE} = 1 ]; then
   stow_command+=" --verbose"
@@ -52,8 +53,9 @@ fi
 if [ ${+SIMULATE} = 1 ]; then
   stow_command+=" --simulate"
 fi
-for pkg in $stow_pkgs; do
-  stow_command+=" --stow $pkg"
+for pkg in $STOW_PKGS; do
+  stow_command+=" --${STOW_TYPE} $pkg"
 done
 
+[  ${+VERBOSE} = 1 ] && print $stow_command
 eval $stow_command
