@@ -18,7 +18,7 @@ if command getopt -T &>/dev/null; then
 fi
 
 usage () {
-  print "Usage $0:t [ -v | --verbose ] [ --dry-run | --simulate ] [ --restow ]"
+  print "Usage $0:t [ --package <pkg> ] [ -v | --verbose ] [ --dry-run | --simulate ] [ --restow ]"
   exit 2
 }
 

@@ -16,7 +16,7 @@ if [[ -d /usr/local/nodejs/bin ]]; then
   path+=('/usr/local/nodejs/bin')
 fi
 if [[ -d /usr/local/opt/gnu-getopt/bin ]]; then
-  path+=('/usr/local/opt/gnu-getopt/bin')
+  path=('/usr/local/opt/gnu-getopt/bin' $path)
 fi
 export MY_BIN="$HOME/.local/bin"
 path=("$MY_BIN" $path)
