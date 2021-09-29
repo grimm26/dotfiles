@@ -150,5 +150,6 @@ load-tfswitch() {
     fi
   fi
 }
+autoload -Uz add-zsh-hook
 add-zsh-hook chpwd load-tfswitch
 load-tfswitch

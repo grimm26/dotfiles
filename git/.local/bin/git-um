@@ -3,13 +3,24 @@
 set -e
 # um = update master/main
 # update remotes and merge upstream default branch into your fork's (origin) default branch.
+function git_main_branch() {
+  command git rev-parse --git-dir &>/dev/null || return
+  local ref
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk}; do
+    if command git show-ref -q --verify $ref; then
+      echo ${ref:t}
+      return
+    fi
+  done
+  echo master
+}
 CURRENT_BRANCH=$(git branch --show-current)
 whence git_main_branch &>/dev/null || { echo "This script needs ohmyzsh git plugin's git_main_branch() function to work. Get it." && exit 1 }
 DEFAULT_BRANCH=$(git_main_branch)
 git remote update --prune
 # Try to figure out whether we are using remote upstream or remote origin
 if git show-ref --verify --quiet refs/remotes/upstream/$DEFAULT_BRANCH && git show-ref --verify --quiet refs/remotes/origin/$DEFAULT_BRANCH; then
-  git checkout master && git merge --ff-only upstream/$DEFAULT_BRANCH
+  git checkout $DEFAULT_BRANCH && git merge --ff-only upstream/$DEFAULT_BRANCH
 else
   echo "Did not find origin and upstream remotes, so not sure what to do."
 fi
