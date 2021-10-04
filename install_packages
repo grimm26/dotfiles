@@ -190,7 +190,7 @@ case $(uname) in
         fi
       /usr/local/bin/aws --version
       # shfmt
-      GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
+      GO111MODULE=on go install mvdan.cc/sh/v3/cmd/shfmt@latest
       # bat-extras
       rm -rf bat-extras
       git clone https://github.com/eth-p/bat-extras.git \
