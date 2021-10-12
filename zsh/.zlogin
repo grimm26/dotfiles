@@ -306,8 +306,11 @@ elif [[ -d ~/.fzf ]]; then
   # git install linux
    export FZF_BASE=${HOME}/.fzf
 fi
-if whence fd &>/dev/null; then
-  export FZF_DEFAULT_COMMAND=fd
+if whence -p fdfind &>/dev/null; then
+  export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --exclude .git'
+fi
+if whence -p fd &>/dev/null; then
+  export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
 fi
 # Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
 if whence antibody &>/dev/null; then
