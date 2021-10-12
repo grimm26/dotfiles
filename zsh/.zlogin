@@ -65,7 +65,7 @@ else
   fi
 fi
 # Just load the top keys. ~/.ssh/config should have AddKeysToAgent set to yes.
-whence keychain &>/dev/null && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval ~/.ssh/id_*sa)
+whence -p keychain &>/dev/null && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval ~/.ssh/id_*sa)
 
 setopt HIST_IGNORE_SPACE
 export LC_COLLATE=C
@@ -79,10 +79,10 @@ export SYSTEMD_EDITOR=vim
 #export MANPAGER=vimmanpager
 export PAGER=less
 export MANPAGER=less
-whence batman &>/dev/null && alias man=batman
-whence batgrep &>/dev/null && alias rg=batgrep
-whence lsd &>/dev/null && alias ls=lsd
-whence fdfind &>/dev/null && ! whence fd &>/dev/null && alias fd=fdfind
+whence -p batman &>/dev/null && alias man=batman
+whence -p batgrep &>/dev/null && alias rg=batgrep
+whence -p lsd &>/dev/null && alias ls=lsd
+whence -p fdfind &>/dev/null && ! whence fd &>/dev/null && alias fd=fdfind
 
 alias chompeof="perl -pi -e 'chomp if eof && /^$/'"
 
@@ -298,6 +298,17 @@ alias tgi="tg init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 export AWS_DEFAULT_REGION=us-east-2
+# Prep fzf
+if [[ -d /usr/local/opt/fzf ]]; then
+  # homebrew OSX
+  export FZF_BASE=/usr/local/opt/fzf
+elif [[ -d ~/.fzf ]]; then
+  # git install linux
+   export FZF_BASE=${HOME}/.fzf
+fi
+if whence fd &>/dev/null; then
+  export FZF_DEFAULT_COMMAND=fd
+fi
 # Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
 if whence antibody &>/dev/null; then
   ANTIBODY_PLUGIN_FILES=(~/.zsh_plugins.txt)
@@ -334,11 +345,11 @@ alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
 [[ $#RUBIES > 0 ]] && chruby ruby
 
 echo "Loading kubectl completions."
-whence kubectl &>/dev/null && \
+whence -p kubectl &>/dev/null && \
   source <(kubectl completion zsh)
 echo "Loading starship prompt."
-whence starship &>/dev/null && \
+whence -p starship &>/dev/null && \
   eval "$(starship init zsh)"
 echo "Loading direnv."
-whence direnv &>/dev/null && \
+whence -p direnv &>/dev/null && \
   eval "$(direnv hook zsh)"

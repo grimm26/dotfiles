@@ -21,7 +21,7 @@
     excludesfile = ~/.gitignore_global
     autocrlf = input
 [delta]
-    features = line-numbers side-by-side
+    features = line-numbers #side-by-side
     syntax-theme =  Solarized (dark)
 [help]
 	autocorrect = 1

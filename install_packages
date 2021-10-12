@@ -115,6 +115,27 @@ case $(uname) in
         [[ -L $home_bin/ug ]] || cp /bin/ug $home_bin
       fi
       cd /tmp
+      # install fzf
+      echo "fzf"
+      FZF_NEED_INSTALL=0
+      if [[ -d ~/.fzf ]]; then
+        cd ~/.fzf
+        git remote update
+        local_fzf_ref=$(git rev-parse @)
+        remote_fzf_ref=$(git rev-parse @{u})
+        if [[ $local_fzf_ref != $remote_fzf_ref ]]; then
+          git pull
+          FZF_NEED_INSTALL=1
+        fi
+      else
+        git clone --depth 1 https://github.com/junegunn/fzf ~/.fzf
+        FZF_NEED_INSTALL=1
+        cd ~/.fzf
+      fi
+      if [[ $FZF_NEED_INSTALL != 0 ]]; then
+        ./install --bin
+      fi
+      cd /tmp
       if [[ $VERSION_ID -ge 19.10 ]]; then
         gdelta_pkg="git-delta"
         lsd_pkg="lsd"
@@ -241,6 +262,8 @@ case $(uname) in
       stow
       gnu-getopt
       autojump
+      fd
+      fzf
     )
     for pkg in ${NEEDED_PACKAGES[*]}; do
       brew list $pkg &>/dev/null \

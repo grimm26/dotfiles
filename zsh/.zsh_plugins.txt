@@ -1,7 +1,6 @@
 ohmyzsh/ohmyzsh path:plugins/aws
 ohmyzsh/ohmyzsh path:plugins/git
 ohmyzsh/ohmyzsh path:plugins/gh
-ohmyzsh/ohmyzsh path:plugins/dircycle
 ohmyzsh/ohmyzsh path:plugins/knife
 ohmyzsh/ohmyzsh path:plugins/kitchen
 ohmyzsh/ohmyzsh path:plugins/tmux
@@ -19,7 +18,7 @@ ohmyzsh/ohmyzsh path:plugins/copydir
 ohmyzsh/ohmyzsh path:plugins/genpass
 ohmyzsh/ohmyzsh path:plugins/isodate
 ohmyzsh/ohmyzsh path:plugins/jsontools
-ohmyzsh/ohmyzsh path:plugins/autojump
+ohmyzsh/ohmyzsh path:plugins/fzf
 
 MichaelAquilina/zsh-you-should-use
 greymd/tmux-xpanes
