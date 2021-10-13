@@ -1,5 +1,10 @@
 " https://catonmat.net/vim-plugins-matchit-vim
 runtime macros/matchit.vim
+if isdirectory(expand("$HOME/.fzf"))
+  set rtp+=~/.fzf
+elseif isdirectory("/usr/local/opt/fzf")
+  set rtp+=/usr/local/opt/fzf
+endif
 "set shell=/usr/local/bin/zsh
 "au BufNewFile,BufRead /dev/shm/gopass.* setlocal noswapfile nobackup noundofile
 
