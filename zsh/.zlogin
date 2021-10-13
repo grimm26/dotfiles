@@ -298,7 +298,7 @@ alias tgi="tg init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 export AWS_DEFAULT_REGION=us-east-2
-# Prep fzf
+## START fzf
 if [[ -d /usr/local/opt/fzf ]]; then
   # homebrew OSX
   export FZF_BASE=/usr/local/opt/fzf
@@ -307,11 +307,25 @@ elif [[ -d ~/.fzf ]]; then
    export FZF_BASE=${HOME}/.fzf
 fi
 if whence -p fdfind &>/dev/null; then
-  export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --exclude .git'
+  export FD_BIN=fdfind
 fi
 if whence -p fd &>/dev/null; then
-  export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+  export FD_BIN=fd
 fi
+export FZF_DEFAULT_COMMAND="$FD_BIN --type f --hidden --exclude .git --exclude .terraform"
+# Use fd (https://github.com/sharkdp/fd) instead of the default find
+# command for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+# Override _fzf_compgen_{path,dir} to use fd and ignore .terraform
+_fzf_compgen_path() {
+  echo "$1"
+  command $FD_BIN --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
+}
+_fzf_compgen_dir() {
+  command $FD_BIN --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
+}
+## END fzf
 # Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
 if whence antibody &>/dev/null; then
   ANTIBODY_PLUGIN_FILES=(~/.zsh_plugins.txt)
