@@ -410,7 +410,7 @@ cdf() {
 # find-in-file - usage: fif <searchTerm>
 fif() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-  ug --hidden --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
+  ug --hidden  --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
 }
 
 echo "Loading kubectl completions."
