@@ -371,7 +371,7 @@ export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 awsp ()
 {
     local valid_profiles=$(grep  '^\[profile' ~/.aws/config | tr -d "[]" |awk '{print $2}' | sort);
-    local valid_commands=$(echo "**CLEAR**" | xargs -n 1);
+    local valid_commands=$(print "**CLEAR**");
     local current_profile;
     local clear_preview_text='********************\n\nThis will unset AWS_PROFILE environment variable\nfrom your working environment.\n\n********************';
     if [[ -z $AWS_PROFILE ]]; then
@@ -379,7 +379,7 @@ awsp ()
     else
         current_profile="AWS_PROFILE == ${AWS_PROFILE}";
     fi;
-    local SELECTED=$(print "${valid_profiles} ${valid_commands}" | xargs -n 1 | fzf -1 --tac -q "${1:-""}" --prompt "${current_profile}> " --preview "([[ {} == '**CLEAR**' ]] && print \"${clear_preview_text}\") || AWS_PROFILE={} aws configure list --profile={}");
+    local SELECTED=$(print "${valid_profiles} ${valid_commands}" | fzf -1 --tac -q "${1:-""}" --prompt "${current_profile}> " --preview "([[ {} == '**CLEAR**' ]] && print \"${clear_preview_text}\") || AWS_PROFILE={} aws configure list --profile={}");
     if [[ "${SELECTED}" == "**CLEAR**" ]]; then
       asp
     else
@@ -388,7 +388,7 @@ awsp ()
         asp ${SELECTED}
       else
         print "Profile doesn't exist."
-        print "Valid choices are:\n\n$(echo ${valid_profiles} | xargs -n 1)"
+        print "Valid choices are:\n\n$(echo ${valid_profiles})"
       fi
     fi
 }
