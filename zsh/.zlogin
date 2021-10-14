@@ -367,10 +367,10 @@ alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-# From Ty.  Needs work.
+# fzf interactive select awscli profile
 awsp ()
 {
-    local valid_profiles=$(cat ~/.aws/credentials | grep "^\[.*\]$" | tr -d "[]" | sort);
+    local valid_profiles=$(grep  '^\[profile' ~/.aws/config | tr -d "[]" |awk '{print $2}' | sort);
     local valid_commands=$(echo "**CLEAR**" | xargs -n 1);
     local current_profile;
     local clear_preview_text='********************\n\nThis will unset AWS_PROFILE environment variable\nfrom your working environment.\n\n********************';
@@ -379,18 +379,17 @@ awsp ()
     else
         current_profile="AWS_PROFILE == ${AWS_PROFILE}";
     fi;
-    local SELECTED=$(echo "${valid_profiles} ${valid_commands}" | xargs -n 1 | fzf -1 --tac -q "${1:-""}" --prompt "${current_profile}> " --preview "test {} == '**CLEAR**' && echo -e \"${clear_preview_text}\" || AWS_PROFILE={} aws configure list --profile={}");
+    local SELECTED=$(print "${valid_profiles} ${valid_commands}" | xargs -n 1 | fzf -1 --tac -q "${1:-""}" --prompt "${current_profile}> " --preview "([[ {} == '**CLEAR**' ]] && print \"${clear_preview_text}\") || AWS_PROFILE={} aws configure list --profile={}");
     if [[ "${SELECTED}" == "**CLEAR**" ]]; then
-        unset AWS_PROFILE;
-        echo "unset AWS_PROFILE";
+      asp
     else
-        if ( echo ${valid_profiles} | xargs -n 1 | grep -q "^${SELECTED}$" ); then
-            export AWS_PROFILE=${SELECTED};
-            echo "AWS_PROFILE = ${SELECTED}";
-        else
-            echo "Profile doesn't exist.";
-            echo -e "Valid choices are:\n\n$(echo ${valid_profiles} | xargs -n 1)";
-        fi;
+      if ( print ${valid_profiles} | grep -q "^${SELECTED}$" ); then
+        print "Setting awscli profile to ${SELECTED}"
+        asp ${SELECTED}
+      else
+        print "Profile doesn't exist."
+        print "Valid choices are:\n\n$(echo ${valid_profiles} | xargs -n 1)"
+      fi
     fi
 }
 
@@ -400,6 +399,18 @@ fcd() {
   dir=$(find ${1:-.} -path '*/\.*' -prune \
                   -o -type d -print 2> /dev/null | fzf +m) &&
   cd "$dir"
+}
+# cdf - cd into the directory of the selected file
+cdf() {
+   local file
+   local dir
+   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+}
+# using ugrep combined with preview
+# find-in-file - usage: fif <searchTerm>
+fif() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+  ug --hidden --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
 }
 
 echo "Loading kubectl completions."
