@@ -314,6 +314,7 @@ if whence -p fd &>/dev/null; then
 fi
 export FZF_DEFAULT_COMMAND="$FD_BIN --type f --hidden --exclude .git --exclude .terraform"
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+export FZF_TMUX=1
 export FZF_TMUX_OPTS='-p'
 # Use ~~ as the trigger sequence instead of the default **
 export FZF_COMPLETION_TRIGGER='~~'
@@ -407,10 +408,11 @@ cdf() {
    file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
 }
 # using ugrep combined with preview
+# select file to open in vim
 # find-in-file - usage: fif <searchTerm>
 fif() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-  ug --hidden  --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
+  ug --hidden --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --bind "enter:execute(vim {})" --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
 }
 
 echo "Loading kubectl completions."
