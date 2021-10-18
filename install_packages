@@ -201,6 +201,7 @@ case $(uname) in
       curl -sLS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
         && rm -rf aws && unzip -q awscliv2.zip \
         && if [[ -d /usr/local/aws-cli/v2 ]]; then
+          /usr/local/bin/aws --version
           sudo ./aws/install --update
           # Prune old installs
           for version in /usr/local/aws-cli/v2/?*.?*.?*; do
@@ -265,8 +266,9 @@ case $(uname) in
       fd
       fzf
     )
+    brew list > /tmp/brews.$$
     for pkg in ${NEEDED_PACKAGES[*]}; do
-      brew list $pkg &>/dev/null \
+      grep -w $pkg /tmp/brews.$$ &>/dev/null \
         || brew install $pkg
     done
     SCRIPT_HOME=$(greadlink -f ${0%/*})

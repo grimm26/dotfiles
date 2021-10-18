@@ -1,5 +1,7 @@
 # GIT_AUTHOR_NAME, GIT_COMMITTER_NAME, GIT_AUTHOR_EMAIL and
 # GIT_COMMITTER_EMAIL via your shell environment will also set user name and email.
+[include]
+    path = ~/.gitconfig-enova
 [init]
 	defaultBranch = main
 [trim]
@@ -34,7 +36,6 @@
     diff   = auto
     pager  = yes
     status = auto
-
 [svn]
     rmdir = true
 [alias]

@@ -80,7 +80,6 @@ export SYSTEMD_EDITOR=vim
 export PAGER=less
 export MANPAGER=less
 whence -p batman &>/dev/null && alias man=batman
-whence -p batgrep &>/dev/null && alias rg=batgrep
 whence -p lsd &>/dev/null && alias ls=lsd
 whence -p fdfind &>/dev/null && ! whence fd &>/dev/null && alias fd=fdfind
 
