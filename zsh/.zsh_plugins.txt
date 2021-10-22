@@ -19,6 +19,7 @@ ohmyzsh/ohmyzsh path:plugins/genpass
 ohmyzsh/ohmyzsh path:plugins/isodate
 ohmyzsh/ohmyzsh path:plugins/jsontools
 ohmyzsh/ohmyzsh path:plugins/fzf
+ohmyzsh/ohmyzsh path:plugins/autojump
 
 MichaelAquilina/zsh-you-should-use
 greymd/tmux-xpanes
