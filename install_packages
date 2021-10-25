@@ -40,7 +40,7 @@ case $(uname) in
     SCRIPT_HOME=$(readlink -f ${0%/*})
     # Versions
     GOLANG_VERSION="1.17.1"
-    NODEJS_VERSION="14.17.6"
+    NODEJS_VERSION="14.18.1"
     cd /tmp
     # Latest git
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
