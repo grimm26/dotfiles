@@ -66,6 +66,7 @@ clone_or_update_plugin() {
   if [[ -d ~/.vim/pack/plugins/start/${name} ]]; then
     echo "Updating $name plugin via git pull"
     cd ~/.vim/pack/plugins/start/${name}
+    pwd
     current_origin_url=$(git config --get remote.origin.url)
     if [[ $current_origin_url != $origin_url ]]; then
       # github repo URL must have changed along the way.
