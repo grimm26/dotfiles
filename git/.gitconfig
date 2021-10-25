@@ -25,6 +25,8 @@
 [delta]
     features = line-numbers #side-by-side
     syntax-theme =  Solarized (dark)
+[interactive]
+	diffFilter = delta --color-only --features=interactive
 [help]
 	autocorrect = 1
 [format]

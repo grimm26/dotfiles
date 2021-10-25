@@ -59,6 +59,7 @@ plugins['vim-gitgutter']='git://github.com/airblade/vim-gitgutter.git'
 plugins['vim-terminus']='git://github.com/wincent/terminus.git'
 plugins['vim-markdown']='git://github.com/plasticboy/vim-markdown.git'
 plugins['vim-shfmt']='git://github.com/z0mbix/vim-shfmt.git'
+plugins['fzf.vim']='git://github.com/junegunn/fzf.vim.git'
 
 clone_or_update_plugin() {
   name=$1
