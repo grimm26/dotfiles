@@ -323,9 +323,9 @@ if [[ ! -v setup_MINIMAL ]]; then
   cd /tmp
   echo "boto3"
   if command pip3 show boto3 --quiet >/dev/null 2>&1; then
-    pip3 install --upgrade --user boto3
+    pip3 install --upgrade --user 'boto3[crt]'
   else
-    pip3 install --user boto3
+    pip3 install --user 'boto3[crt]'
   fi
   cd /tmp
 fi
