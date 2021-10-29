@@ -327,6 +327,18 @@ if [[ ! -v setup_MINIMAL ]]; then
   else
     pip3 install --user 'boto3[crt]'
   fi
+  echo "flake8"
+  if command pip3 show flake8 --quiet >/dev/null 2>&1; then
+    pip3 install --upgrade --user 'flake8'
+  else
+    pip3 install --user 'flake8'
+  fi
+  echo "pylint"
+  if command pip3 show pylint --quiet >/dev/null 2>&1; then
+    pip3 install --upgrade --user 'pylint'
+  else
+    pip3 install --user 'pylint'
+  fi
   cd /tmp
 fi
 
