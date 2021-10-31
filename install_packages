@@ -51,6 +51,10 @@ case $(uname) in
         || sudo apt-get install -y $pkg
     done
     if [[ ! -v setup_MINIMAL ]]; then
+      for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev; do
+        dpkg -s $pkg &>/dev/null \
+          || sudo apt-get install -y $pkg
+      done
       # Latest github cli
       if ! grep -q cli.github /etc/apt/sources.list; then
         sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
@@ -213,12 +217,28 @@ case $(uname) in
       /usr/local/bin/aws --version
       # shfmt
       GO111MODULE=on go install mvdan.cc/sh/v3/cmd/shfmt@latest
-      # bat-extras
-      rm -rf bat-extras
-      git clone https://github.com/eth-p/bat-extras.git \
-        && cd bat-extras \
-        && ./build.sh --no-verify \
+      # Build batextras
+      echo "batextras"
+      BATEXTRAS_NEED_BUILD=0
+      cd ~/git
+      if [[ -d ./bat-extras ]]; then
+        cd bat-extras
+        git remote update
+        local_bats_ref=$(git rev-parse @)
+        remote_bats_ref=$(git rev-parse @{u})
+        if [[ $local_bats_ref != $remote_bats_ref ]]; then
+          git pull
+          BATEXTRAS_NEED_BUILD=1
+        fi
+      else
+        git clone https://github.com/eth-p/bat-extras.git
+        BATEXTRAS_NEED_BUILD=1
+        cd bat-extras
+      fi
+      if [[ $BATEXTRAS_NEED_BUILD != 0 ]]; then
+        ./build.sh --no-verify \
         && cp bin/* $home_bin
+      fi
       cd /tmp
       echo "kubectl"
       KUBECTL_STABLE=$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
@@ -244,6 +264,11 @@ case $(uname) in
     brew list font-fira-code --cask &>/dev/null || brew install font-fira-code --cask
     # Base stuff we need.
     NEEDED_PACKAGES=(
+      openssl
+      readline
+      sqlite3
+      xz
+      zlib
       keychain
       kubernetes-cli
       coreutils
@@ -338,6 +363,25 @@ if [[ ! -v setup_MINIMAL ]]; then
     pip3 install --upgrade --user 'pylint'
   else
     pip3 install --user 'pylint'
+  fi
+  echo "pyenv"
+  PYENV_NEED_INSTALL=0
+  if [[ -d ~/.pyenv ]]; then
+    cd ~/.pyenv
+    git remote update
+    local_pyenv_ref=$(git rev-parse @)
+    remote_pyenv_ref=$(git rev-parse @{u})
+    if [[ $local_pyenv_ref != $remote_pyenv_ref ]]; then
+      git pull
+      PYENV_NEED_INSTALL=1
+    fi
+  else
+    git clone  https://github.com/pyenv/pyenv.git ~/.pyenv
+    PYENV_NEED_INSTALL=1
+    cd ~/.pyenv
+  fi
+  if [[ $PYENV_NEED_INSTALL != 0 ]]; then
+    src/configure && make -C src
   fi
   cd /tmp
 fi
