@@ -383,6 +383,11 @@ if [[ ! -v setup_MINIMAL ]]; then
   if [[ $PYENV_NEED_INSTALL != 0 ]]; then
     src/configure && make -C src
   fi
+  if [[ -d ~/.pyenv/plugins/pyenv-virtualenv ]]; then
+    git pull
+  else
+    git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
+  fi
   cd /tmp
 fi
 

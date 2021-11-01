@@ -6,9 +6,6 @@ fi
 export GOPATH=~/go
 path+=(${GOPATH}/bin)
 path=('/usr/local/bin' '/usr/local/sbin' $path)
-if [[ $OSTYPE == darwin* && -d ${HOME}/Library/Python/3.9/bin ]]; then
-  path+=("${HOME}/Library/Python/3.9/bin")
-fi
 if [[ -d /usr/local/go/bin ]]; then
   path+=('/usr/local/go/bin')
 fi
