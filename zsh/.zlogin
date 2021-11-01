@@ -330,11 +330,6 @@ _fzf_compgen_dir() {
   command $FD_BIN --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
 }
 ## END fzf
-## START pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-## END pyenv
 # Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
 if whence antibody &>/dev/null; then
   ANTIBODY_PLUGIN_FILES=(~/.zsh_plugins.txt)
