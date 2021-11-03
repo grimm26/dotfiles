@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 #
+#
 
 while getopts 'M' OPT; do
   case $OPT in
@@ -28,6 +29,33 @@ if [[ -d ${HOME}/bin && ! -L ${HOME}/bin ]]; then
   ln -s $home_bin ${HOME}/bin
 fi
 
+## Like an "UPSERT," clone or update the git project and return if a config/install is warranetd because of initial clone or chanegs were pulled.
+upinst_from_git() {
+  readonly git_url=${1:?"Supply the project git url as first parameter to install_from_git()"}
+  readonly repo_name=${${git_url##*/}%.git}
+  readonly passed_clone_target=${2}
+  if [[ -z ${passed_clone_target// } ]]; then
+    local clone_target="${HOME}/git/${repo_name}"
+  else
+    local clone_target=${passed_clone_target}
+  fi
+  local EXIT_CODE=1 # this is an exit code, so "1" means false/fail
+  if [[ -d ${clone_target} ]]; then
+    cd $clone_target
+    git remote update
+    readonly local_ref=$(git rev-parse @)
+    readonly remote_ref=$(git rev-parse @{u})
+    if [[ $local_ref != $remote_ref ]]; then
+      git pull
+      EXIT_CODE=0
+    fi
+  else
+    git clone $git_url $clone_target
+    EXIT_CODE=0
+  fi
+  return $EXIT_CODE
+}
+
 INITIAL_PWD=$PWD
 # OS Type specific stuff first
 case $(uname) in
@@ -46,7 +74,7 @@ case $(uname) in
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
       sudo add-apt-repository -y -u ppa:git-core/ppa
     fi
-    for pkg in fonts-firacode curl git libcurl4-openssl-dev keychain jq tmux python3 python3-pip source-highlight fd-find stow autojump ripgrep; do
+    for pkg in fonts-firacode curl git libcurl4-openssl-dev keychain jq tmux source-highlight fd-find stow autojump ripgrep; do
       dpkg -s $pkg &>/dev/null \
         || sudo apt-get install -y $pkg
     done
@@ -93,27 +121,12 @@ case $(uname) in
       npm install jsonlint -g
       # Build ugrep
       echo "ugrep"
-      UGREP_NEED_BUILD=0
-      cd ~/git
-      if [[ -d ./ugrep ]]; then
-        cd ugrep
-        git remote update
-        local_ugrep_ref=$(git rev-parse @)
-        remote_ugrep_ref=$(git rev-parse @{u})
-        if [[ $local_ugrep_ref != $remote_ugrep_ref ]]; then
-          git pull
-          UGREP_NEED_BUILD=1
-        fi
-      else
-        git clone git://github.com/Genivia/ugrep
-        UGREP_NEED_BUILD=1
+      if upinst_from_git https://github.com/Genivia/ugrep ~/git/ugrep; then
         for pkg in libpcre2-dev zlib1g-dev libbz2-dev liblzma-dev liblz4-dev; do
           dpkg -s $pkg &>/dev/null \
             || sudo apt-get install -y $pkg
         done
-        cd ugrep
-      fi
-      if [[ $UGREP_NEED_BUILD != 0 ]]; then
+        cd ~/git/ugrep
         ./build.sh --quiet
         cp bin/ugrep $home_bin
         [[ -L $home_bin/ug ]] || cp /bin/ug $home_bin
@@ -121,23 +134,8 @@ case $(uname) in
       cd /tmp
       # install fzf
       echo "fzf"
-      FZF_NEED_INSTALL=0
-      if [[ -d ~/.fzf ]]; then
-        cd ~/.fzf
-        git remote update
-        local_fzf_ref=$(git rev-parse @)
-        remote_fzf_ref=$(git rev-parse @{u})
-        if [[ $local_fzf_ref != $remote_fzf_ref ]]; then
-          git pull
-          FZF_NEED_INSTALL=1
-        fi
-      else
-        git clone --depth 1 https://github.com/junegunn/fzf ~/.fzf
-        FZF_NEED_INSTALL=1
-        cd ~/.fzf
-      fi
-      if [[ $FZF_NEED_INSTALL != 0 ]]; then
-        ./install --bin
+      if upinst_from_git https://github.com/junegunn/fzf ~/.fzf; then
+        (cd ~/.fzf && ./install --bin)
       fi
       cd /tmp
       if [[ $VERSION_ID -ge 19.10 ]]; then
@@ -219,27 +217,12 @@ case $(uname) in
       GO111MODULE=on go install mvdan.cc/sh/v3/cmd/shfmt@latest
       # Build batextras
       echo "batextras"
-      BATEXTRAS_NEED_BUILD=0
-      cd ~/git
-      if [[ -d ./bat-extras ]]; then
-        cd bat-extras
-        git remote update
-        local_bats_ref=$(git rev-parse @)
-        remote_bats_ref=$(git rev-parse @{u})
-        if [[ $local_bats_ref != $remote_bats_ref ]]; then
-          git pull
-          BATEXTRAS_NEED_BUILD=1
-        fi
-      else
-        git clone https://github.com/eth-p/bat-extras.git
-        BATEXTRAS_NEED_BUILD=1
-        cd bat-extras
-      fi
-      if [[ $BATEXTRAS_NEED_BUILD != 0 ]]; then
+      if upinst_from_git https://github.com/eth-p/bat-extras; then
+        cd ~/git/bat-extars
         ./build.sh --no-verify \
         && cp bin/* $home_bin
+        cd /tmp
       fi
-      cd /tmp
       echo "kubectl"
       KUBECTL_STABLE=$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
       MY_KUBECTL_VERSION=$(kubectl version --client --short 2>/dev/null | awk '{print $3}')
@@ -266,7 +249,7 @@ case $(uname) in
     NEEDED_PACKAGES=(
       openssl
       readline
-      sqlite3
+      sqlite
       xz
       zlib
       keychain
@@ -276,7 +259,7 @@ case $(uname) in
       shfmt
       bat
       ugrep
-      eth-p/software/bat-extras
+      bat-extras
       git
       chruby
       ruby-install
@@ -339,49 +322,12 @@ if [[ ! -v setup_MINIMAL ]]; then
     && gunzip -c /tmp/cheat-${kernel}-${machine}.gz >${home_bin}/cheat
   chmod 755 ${home_bin}/cheat
   ##
-  echo "pre-commit"
-  if command -v pre-commit >/dev/null 2>&1; then
-    pip3 install --upgrade --user pre-commit
-  else
-    pip3 install --user pre-commit
-  fi
-  cd /tmp
-  echo "boto3"
-  if command pip3 show boto3 --quiet >/dev/null 2>&1; then
-    pip3 install --upgrade --user 'boto3[crt]'
-  else
-    pip3 install --user 'boto3[crt]'
-  fi
-  echo "flake8"
-  if command pip3 show flake8 --quiet >/dev/null 2>&1; then
-    pip3 install --upgrade --user 'flake8'
-  else
-    pip3 install --user 'flake8'
-  fi
-  echo "pylint"
-  if command pip3 show pylint --quiet >/dev/null 2>&1; then
-    pip3 install --upgrade --user 'pylint'
-  else
-    pip3 install --user 'pylint'
-  fi
   echo "pyenv"
-  PYENV_NEED_INSTALL=0
-  if [[ -d ~/.pyenv ]]; then
-    cd ~/.pyenv
-    git remote update
-    local_pyenv_ref=$(git rev-parse @)
-    remote_pyenv_ref=$(git rev-parse @{u})
-    if [[ $local_pyenv_ref != $remote_pyenv_ref ]]; then
-      git pull
-      PYENV_NEED_INSTALL=1
-    fi
-  else
-    git clone  https://github.com/pyenv/pyenv.git ~/.pyenv
-    PYENV_NEED_INSTALL=1
-    cd ~/.pyenv
-  fi
-  if [[ $PYENV_NEED_INSTALL != 0 ]]; then
-    src/configure && make -C src
+  if upinst_from_git https://github.com/pyenv/pyenv.git ~/.pyenv; then
+    (cd ~/.pyenv && src/configure && make -C src)
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init --path)"
   fi
   if [[ -d ~/.pyenv/plugins/pyenv-virtualenv ]]; then
     git pull
@@ -389,6 +335,31 @@ if [[ ! -v setup_MINIMAL ]]; then
     git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
   fi
   cd /tmp
+  echo "pre-commit"
+  if command -v pre-commit >/dev/null 2>&1; then
+    python -m pip install --quiet --upgrade --user pre-commit
+  else
+    python -m pip install --quiet --user pre-commit
+  fi
+  cd /tmp
+  echo "boto3"
+  if command python -m pip show boto3 --quiet >/dev/null 2>&1; then
+    python -m pip install --quiet --upgrade --user 'boto3[crt]'
+  else
+    python -m pip install --quiet --user 'boto3[crt]'
+  fi
+  echo "flake8"
+  if command python -m pip show flake8 --quiet >/dev/null 2>&1; then
+    python -m pip install --quiet --upgrade --user 'flake8'
+  else
+    python -m pip install --quiet --user 'flake8'
+  fi
+  echo "pylint"
+  if command python -m pip show pylint --quiet >/dev/null 2>&1; then
+    python -m pip install --quiet --upgrade --user 'pylint'
+  else
+    python -m pip install --quiet --user 'pylint'
+  fi
 fi
 
 # antibody
