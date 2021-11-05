@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# wrapper for https://github.com/TomWright/dasel
+# Just run it as a container
+
+docker run -i --rm ghcr.io/tomwright/dasel:latest "$@"

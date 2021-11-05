@@ -30,7 +30,7 @@ fi
 
 eval set -- "$PARSED_ARGUMENTS"
 STOW_TYPE="stow"
-STOW_PKGS=(git tmux vim zsh)
+STOW_PKGS=(git tmux vim zsh tools_and_wrappers)
 while :
 do
   case "$1" in

@@ -118,7 +118,9 @@ case $(uname) in
       # Make sure we set an npm prefix for our user.
       npm config set prefix '~/.local/'
       # Install jsonlint
-      npm install jsonlint -g
+      npm install --global jsonlint
+      # Install prettier
+      npm install --global prettier
       # Build ugrep
       echo "ugrep"
       if upinst_from_git https://github.com/Genivia/ugrep ~/git/ugrep; then
