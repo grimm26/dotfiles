@@ -338,6 +338,8 @@ if whence antibody &>/dev/null; then
     if [[ $(uname -v) =~ "Ubuntu" ]]; then
       ANTIBODY_PLUGIN_FILES+=(~/.zsh_plugins_ubuntu.txt)
     fi
+  elif [[ $OSTYPE =~ "darwin" ]]; then
+    ANTIBODY_PLUGIN_FILES+=(~/.zsh_plugins_macos.txt)
   fi
   # Alias to save a static antibody file
   alias antistatic="cat $ANTIBODY_PLUGIN_FILES | $(whence -p antibody) bundle > ~/.zsh_plugins.sh"

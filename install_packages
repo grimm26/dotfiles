@@ -257,6 +257,7 @@ case $(uname) in
       keychain
       kubernetes-cli
       coreutils
+      findutils
       go
       shfmt
       bat

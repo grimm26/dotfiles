@@ -1,0 +1,2 @@
+ohmyzsh/ohmyzsh path:plugins/macos
+ohmyzsh/ohmyzsh path:plugins/gnu-utils
