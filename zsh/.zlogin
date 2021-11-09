@@ -361,10 +361,14 @@ if whence antibody &>/dev/null; then
 elif [[ -r ~/.zplugrc ]]; then
   source ~/.zplugrc
 fi
+## START post antibody/zplug overrides
 alias gum='gcm && grup --prune && gmum'
 alias gom='gcm && grup --prune && gmom'
 # The ohmyzsh alias for this locks up
 alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
+unalias gcl
+## END post antibody/zplug overrides
+
 [[ $#RUBIES > 0 ]] && chruby ruby
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
