@@ -367,6 +367,21 @@ alias gom='gcm && grup --prune && gmom'
 # The ohmyzsh alias for this locks up
 alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
 unalias gcl
+gcl() {
+  readonly repo=${1}
+  local repo_only=${repo##*.com?}
+
+  if [[ $repo =~ (github.com|git.enova.com) ]]; then
+    gh repo clone $repo
+  elif [[ ${#repo//[^\/]} < 2 ]]; then
+    if [[ $repo =~ : ]]; then
+      git clone $repo
+    else
+      gh repo clone $repo
+    fi
+  fi
+  cd "$(basename ${repo%%.git})"
+}
 ## END post antibody/zplug overrides
 
 [[ $#RUBIES > 0 ]] && chruby ruby
