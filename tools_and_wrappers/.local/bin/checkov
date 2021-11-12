@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# https://github.com/bridgecrewio/checkov
+
+docker run --rm --tty --volume $(pwd):/tf bridgecrew/checkov --directory /tf "$@"
