@@ -61,6 +61,7 @@ plugins['vim-markdown']='https://github.com/plasticboy/vim-markdown.git'
 plugins['vim-shfmt']='https://github.com/z0mbix/vim-shfmt.git'
 plugins['fzf.vim']='https://github.com/junegunn/fzf.vim.git'
 plugins['vim-prettier']='https://github.com/prettier/vim-prettier.git'
+plugins['black']='https://github.com/psf/black.git'
 
 clone_or_update_plugin() {
   name=$1

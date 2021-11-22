@@ -364,6 +364,12 @@ if [[ ! -v setup_MINIMAL ]]; then
   else
     python -m pip install --quiet --user 'pylint'
   fi
+  echo "black"
+  if command python -m pip show black --quiet >/dev/null 2>&1; then
+    python -m pip install --quiet --upgrade --user 'black'
+  else
+    python -m pip install --quiet --user 'black'
+  fi
 fi
 
 # antibody

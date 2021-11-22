@@ -168,11 +168,6 @@ set statusline+=%*
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 2
 let g:syntastic_check_on_open = 1
-let g:syntastic_python_checkers=['flake8', 'pylint']
-" I don't care about long lines
-let g:syntastic_python_flake8_args = "--ignore E501"
-" I don't care about long lines and duplicates of what flake8 does
-let g:syntastic_python_pylint_args = "--disable=C0301,undefined-variable,unused-import,unused-variable"
 "let g:syntastic_debug = 3
 "let g:syntastic_debug_file = "~/syntastic.log"
 " Don't check it on write because that gets annoying
@@ -196,6 +191,13 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+"
+" python stuff
+let g:syntastic_python_checkers=['flake8'] ", 'pylint']
+" I don't care about long lines
+let g:syntastic_python_flake8_args = "--ignore E501"
+" I don't care about long lines and duplicates of what flake8 does
+let g:syntastic_python_pylint_args = "--disable=C0301,undefined-variable,unused-import,unused-variable"
 
 " spelling
 autocmd FileType Markdown set spell spelllang=en_us
