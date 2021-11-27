@@ -1,2 +1,5 @@
+# This is mainly for reference, as flake8 will not read this by default
 [flake8]
-ignore = E501
+max-line-length = 88
+extend-ignore = E203, E501
+select = C,E,F,W,B,B950

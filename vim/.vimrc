@@ -193,11 +193,13 @@ autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 "
 " python stuff
-let g:syntastic_python_checkers=['flake8'] ", 'pylint']
+let g:syntastic_python_checkers=['flake8']
+"" Commented out the pylint/flake8 options below in order to allow them to be
+"" set per project.
 " I don't care about long lines
-let g:syntastic_python_flake8_args = "--ignore E501"
+" let g:syntastic_python_flake8_args = "--extend-ignore E501"
 " I don't care about long lines and duplicates of what flake8 does
-let g:syntastic_python_pylint_args = "--disable=C0301,undefined-variable,unused-import,unused-variable"
+"let g:syntastic_python_pylint_args = "--disable=C0301,undefined-variable,unused-import,unused-variable"
 
 " spelling
 autocmd FileType Markdown set spell spelllang=en_us
