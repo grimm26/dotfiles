@@ -358,6 +358,12 @@ if [[ ! -v setup_MINIMAL ]]; then
   else
     python -m pip install --quiet --user 'flake8'
   fi
+  echo "flake8-bugbear"
+  if command python -m pip show flake8-bugbear --quiet >/dev/null 2>&1; then
+    python -m pip install --quiet --upgrade --user 'flake8-bugbear'
+  else
+    python -m pip install --quiet --user 'flake8-bugbear'
+  fi
   echo "pylint"
   if command python -m pip show pylint --quiet >/dev/null 2>&1; then
     python -m pip install --quiet --upgrade --user 'pylint'
