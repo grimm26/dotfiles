@@ -5,4 +5,5 @@ setlocal shiftwidth=4
 setlocal textwidth=88
 setlocal smarttab
 setlocal expandtab
+autocmd BufWritePre *.py execute ':Isort'
 autocmd BufWritePre *.py execute ':Black'
