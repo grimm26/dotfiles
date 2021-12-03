@@ -339,6 +339,7 @@ if [[ ! -v setup_MINIMAL ]]; then
     git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
   fi
   cd /tmp
+  echo "Python packages:"
   echo "pre-commit"
   if command -v pre-commit >/dev/null 2>&1; then
     python -m pip install --quiet --upgrade --user pre-commit
@@ -375,6 +376,18 @@ if [[ ! -v setup_MINIMAL ]]; then
     python -m pip install --quiet --upgrade --user 'black'
   else
     python -m pip install --quiet --user 'black'
+  fi
+  echo "rope"
+  if command python -m pip show rope --quiet >/dev/null 2>&1; then
+    python -m pip install --quiet --upgrade --user 'rope'
+  else
+    python -m pip install --quiet --user 'rope'
+  fi
+  echo "ropevim"
+  if command python -m pip show ropevim --quiet >/dev/null 2>&1; then
+    python -m pip install --quiet --upgrade --user 'ropevim'
+  else
+    python -m pip install --quiet --user 'ropevim'
   fi
 fi
 

@@ -63,6 +63,7 @@ plugins['fzf.vim']='https://github.com/junegunn/fzf.vim.git'
 plugins['vim-prettier']='https://github.com/prettier/vim-prettier.git'
 plugins['black']='https://github.com/psf/black.git'
 plugins['isort']='https://github.com/fisadev/vim-isort.git'
+plugins['ropevim']='https://github.com/python-rope/ropevim.git'
 
 clone_or_update_plugin() {
   name=$1
