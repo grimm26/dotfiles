@@ -347,52 +347,52 @@ if [[ ! -v setup_MINIMAL ]]; then
   echo "Python packages:"
   echo "pre-commit"
   if command -v pre-commit >/dev/null 2>&1; then
-    python -m pip install --quiet --upgrade --user pre-commit
+    python -m pip install --upgrade --user pre-commit
   else
-    python -m pip install --quiet --user pre-commit
+    python -m pip install --user pre-commit
   fi
   cd /tmp
   echo "boto3"
-  if command python -m pip show boto3 --quiet >/dev/null 2>&1; then
-    python -m pip install --quiet --upgrade --user 'boto3[crt]'
+  if command python -m pip show boto3 >/dev/null 2>&1; then
+    python -m pip install --upgrade --user 'boto3[crt]'
   else
-    python -m pip install --quiet --user 'boto3[crt]'
+    python -m pip install --user 'boto3[crt]'
   fi
   echo "flake8"
-  if command python -m pip show flake8 --quiet >/dev/null 2>&1; then
-    python -m pip install --quiet --upgrade --user 'flake8'
+  if command python -m pip show flake8 >/dev/null 2>&1; then
+    python -m pip install --upgrade --user 'flake8'
   else
-    python -m pip install --quiet --user 'flake8'
+    python -m pip install --user 'flake8'
   fi
   echo "flake8-bugbear"
-  if command python -m pip show flake8-bugbear --quiet >/dev/null 2>&1; then
-    python -m pip install --quiet --upgrade --user 'flake8-bugbear'
+  if command python -m pip show flake8-bugbear >/dev/null 2>&1; then
+    python -m pip install --upgrade --user 'flake8-bugbear'
   else
-    python -m pip install --quiet --user 'flake8-bugbear'
+    python -m pip install --user 'flake8-bugbear'
   fi
   echo "pylint"
-  if command python -m pip show pylint --quiet >/dev/null 2>&1; then
-    python -m pip install --quiet --upgrade --user 'pylint'
+  if command python -m pip show pylint >/dev/null 2>&1; then
+    python -m pip install --upgrade --user 'pylint'
   else
-    python -m pip install --quiet --user 'pylint'
+    python -m pip install --user 'pylint'
   fi
   echo "black"
-  if command python -m pip show black --quiet >/dev/null 2>&1; then
-    python -m pip install --quiet --upgrade --user 'black'
+  if command python -m pip show black >/dev/null 2>&1; then
+    python -m pip install --upgrade --user 'black'
   else
-    python -m pip install --quiet --user 'black'
+    python -m pip install --user 'black'
   fi
   echo "rope"
-  if command python -m pip show rope --quiet >/dev/null 2>&1; then
-    python -m pip install --quiet --upgrade --user 'rope'
+  if command python -m pip show rope >/dev/null 2>&1; then
+    python -m pip install --upgrade --user 'rope'
   else
-    python -m pip install --quiet --user 'rope'
+    python -m pip install --user 'rope'
   fi
   echo "ropevim"
-  if command python -m pip show ropevim --quiet >/dev/null 2>&1; then
-    python -m pip install --quiet --upgrade --user 'ropevim'
+  if command python -m pip show ropevim >/dev/null 2>&1; then
+    python -m pip install --upgrade --user 'ropevim'
   else
-    python -m pip install --quiet --user 'ropevim'
+    python -m pip install --user 'ropevim'
   fi
 fi
 
