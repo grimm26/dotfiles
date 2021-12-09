@@ -338,6 +338,11 @@ if [[ ! -v setup_MINIMAL ]]; then
   else
     git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
   fi
+  if ! pyenv global 3.10.0 &>/dev/null; then
+    print "Using pyenv to install python 3.10.0"
+    pyenv install 3.10.0
+    pyenv global 3.10.0
+  fi
   cd /tmp
   echo "Python packages:"
   echo "pre-commit"
