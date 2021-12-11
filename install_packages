@@ -18,6 +18,7 @@ case "$(uname -m)" in
     ;;
 esac
 
+GITHUB_CLONE_DIR="${HOME}/git"
 # Make ~/.local/bin our official user bin dir
 home_bin=~/.local/bin
 if [[ ! -d $home_bin ]]; then
@@ -35,7 +36,7 @@ upinst_from_git() {
   readonly repo_name=${${git_url##*/}%.git}
   readonly passed_clone_target=${2}
   if [[ -z ${passed_clone_target// } ]]; then
-    local clone_target="${HOME}/git/${repo_name}"
+    local clone_target="${GITHUB_CLONE_DIR}/${repo_name}"
   else
     local clone_target=${passed_clone_target}
   fi
@@ -233,10 +234,6 @@ case $(uname) in
           && chmod 755 ${home_bin}/kubectl
       fi
     fi
-    # starship (prompt)
-    starship --version
-    curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
-    starship --version
     ;;
   Darwin)
     if command -v brew &>/dev/null; then
@@ -293,16 +290,30 @@ case $(uname) in
       && cp /tmp/dive.$$/dive ${home_bin} \
       && chmod 755 ${home_bin}/dive
     cd /tmp
-    # starship (prompt)
-    starship --version
-    curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin}
-    starship --version
     ;;
   *)
     echo "Unknown OS type"
     exit
     ;;
 esac
+
+# starship (prompt)
+print -n "starship: "
+if whence starship &> /dev/null; then
+  installed_starship_version=$(starship --version |grep tag |cut -d: -f2)
+  latest_starship_version=$(cd $GITHUB_CLONE_DIR && gh release list --limit 1 --repo starship/starship |awk '{print $1}')
+  if [[ $installed_starship_version != $latest_starship_version ]]; then
+    print "updating."
+    curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
+    starship --version
+  else
+    print "up to date."
+  fi
+else
+  print "installing."
+  curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
+  starship --version
+fi
 
 if [[ ! -v setup_MINIMAL ]]; then
   # tfswitch
@@ -347,50 +358,50 @@ if [[ ! -v setup_MINIMAL ]]; then
   echo "Python packages:"
   echo "pre-commit"
   if command -v pre-commit >/dev/null 2>&1; then
-    python -m pip install --upgrade --user pre-commit
+    python -m pip install --upgrade --user pre-commit | grep -v "Requirement already satisfied"
   else
     python -m pip install --user pre-commit
   fi
   cd /tmp
   echo "boto3"
   if command python -m pip show boto3 >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'boto3[crt]'
+    python -m pip install --upgrade --user 'boto3[crt]' | grep -v "Requirement already satisfied"
   else
     python -m pip install --user 'boto3[crt]'
   fi
   echo "flake8"
   if command python -m pip show flake8 >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'flake8'
+    python -m pip install --upgrade --user 'flake8' | grep -v "Requirement already satisfied"
   else
     python -m pip install --user 'flake8'
   fi
   echo "flake8-bugbear"
   if command python -m pip show flake8-bugbear >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'flake8-bugbear'
+    python -m pip install --upgrade --user 'flake8-bugbear' | grep -v "Requirement already satisfied"
   else
     python -m pip install --user 'flake8-bugbear'
   fi
   echo "pylint"
   if command python -m pip show pylint >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'pylint'
+    python -m pip install --upgrade --user 'pylint' | grep -v "Requirement already satisfied"
   else
     python -m pip install --user 'pylint'
   fi
   echo "black"
   if command python -m pip show black >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'black'
+    python -m pip install --upgrade --user 'black' | grep -v "Requirement already satisfied"
   else
     python -m pip install --user 'black'
   fi
   echo "rope"
   if command python -m pip show rope >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'rope'
+    python -m pip install --upgrade --user 'rope' | grep -v "Requirement already satisfied"
   else
     python -m pip install --user 'rope'
   fi
   echo "ropevim"
   if command python -m pip show ropevim >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'ropevim'
+    python -m pip install --upgrade --user 'ropevim' | grep -v "Requirement already satisfied"
   else
     python -m pip install --user 'ropevim'
   fi
