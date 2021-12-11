@@ -51,6 +51,8 @@ tag_disabled = false
 [nodejs]
 disabled = true
 
+[ruby]
+detect_variables = []
 [terraform]
 format = "[$symbol$version]($style) "
 disabled = false
