@@ -18,7 +18,6 @@ case "$(uname -m)" in
     ;;
 esac
 
-GITHUB_CLONE_DIR="${HOME}/git"
 # Make ~/.local/bin our official user bin dir
 home_bin=~/.local/bin
 if [[ ! -d $home_bin ]]; then
@@ -36,6 +35,11 @@ upinst_from_git() {
   readonly repo_name=${${git_url##*/}%.git}
   readonly passed_clone_target=${2}
   if [[ -z ${passed_clone_target// } ]]; then
+    if [[ -d ${HOME}/git/github ]]; then
+      local GITHUB_CLONE_DIR="${HOME}/git/github"
+    else
+      local GITHUB_CLONE_DIR="${HOME}/git"
+    fi
     local clone_target="${GITHUB_CLONE_DIR}/${repo_name}"
   else
     local clone_target=${passed_clone_target}
@@ -299,19 +303,29 @@ esac
 
 # starship (prompt)
 print -n "starship: "
+set -x
 if whence starship &> /dev/null; then
   installed_starship_version=$(starship --version |grep tag |cut -d: -f2)
-  latest_starship_version=$(cd $GITHUB_CLONE_DIR && gh release list --limit 1 --repo starship/starship |awk '{print $1}')
+  # This isn't working on work machine with direnv for ~/git/github, somehow it is not picking up the GH_TOKEN or something
+  latest_starship_version=$(gh release list --limit 1 --repo starship/starship |awk '{print $1}')
   if [[ $installed_starship_version != $latest_starship_version ]]; then
     print "updating."
-    curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
+    if [[ $(uname) == "Linux" ]]; then
+      curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
+    else
+      curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin}
+    fi
     starship --version
   else
     print "up to date."
   fi
 else
   print "installing."
-  curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
+  if [[ $(uname) == "Linux" ]]; then
+    curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
+  else
+    curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin}
+  fi
   starship --version
 fi
 
