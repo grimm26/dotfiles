@@ -275,6 +275,10 @@ tf1.0 () {
   tgsw $TG_LATEST_VERSION
   tfsw --latest-stable 1.0
 }
+tf1.1 () {
+  tgsw $TG_LATEST_VERSION
+  tfsw --latest-stable 1.1
+}
 alias tfver=terraform version | awk '{print $2}'
 go13 () {
   tf13
