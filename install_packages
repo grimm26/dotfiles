@@ -303,7 +303,6 @@ esac
 
 # starship (prompt)
 print -n "starship: "
-set -x
 if whence starship &> /dev/null; then
   installed_starship_version=$(starship --version |grep tag |cut -d: -f2)
   # This isn't working on work machine with direnv for ~/git/github, somehow it is not picking up the GH_TOKEN or something
