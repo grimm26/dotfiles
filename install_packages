@@ -74,7 +74,6 @@ case $(uname) in
     # Versions
     GOLANG_VERSION="1.17.3"
     NODEJS_VERSION="16.13.0"
-    cd /tmp
     # Latest git
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
       sudo add-apt-repository -y -u ppa:git-core/ppa
@@ -138,13 +137,11 @@ case $(uname) in
         cp bin/ugrep $home_bin
         [[ -L $home_bin/ug ]] || cp /bin/ug $home_bin
       fi
-      cd /tmp
       # install fzf
       echo "fzf"
       if upinst_from_git https://github.com/junegunn/fzf ~/.fzf; then
         (cd ~/.fzf && ./install --bin)
       fi
-      cd /tmp
       if [[ $VERSION_ID -ge 19.10 ]]; then
         gdelta_pkg="git-delta"
         lsd_pkg="lsd"
@@ -177,7 +174,6 @@ case $(uname) in
           && tar -xzf chruby-0.3.9.tar.gz \
           && cd chruby-0.3.9/ \
           && sudo make install
-        cd /tmp
       fi
       # ruby-install
       echo "ruby-install"
@@ -188,7 +184,6 @@ case $(uname) in
           && tar -xzf ruby-install-0.8.3.tar.gz \
           && cd ruby-install-0.8.3/ \
           && sudo make install
-        cd /tmp
       fi
       # direnv
       echo "direnv"
@@ -198,15 +193,12 @@ case $(uname) in
         direnv_installed_version=$(direnv --version)
         if [[ "$direnv_latest_version" != "v${direnv_installed_version}" ]]; then
           curl -sL $direnv_download_url -o $home_bin/direnv && chmod 755 $home_bin/direnv
-          cd /tmp
         fi
       else
         curl -sL $direnv_download_url -o $home_bin/direnv && chmod 755 $home_bin/direnv
-        cd /tmp
       fi
       # awscli
       echo "awscli"
-      cd /tmp
       curl -sLS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
         && rm -rf aws && unzip -q awscliv2.zip \
         && if [[ -d /usr/local/aws-cli/v2 ]]; then
@@ -228,7 +220,6 @@ case $(uname) in
         cd ~/git/bat-extars
         ./build.sh --no-verify \
         && cp bin/* $home_bin
-        cd /tmp
       fi
       echo "kubectl"
       KUBECTL_STABLE=$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
@@ -293,7 +284,6 @@ case $(uname) in
       && rm /tmp/dive-latest.tgz \
       && cp /tmp/dive.$$/dive ${home_bin} \
       && chmod 755 ${home_bin}/dive
-    cd /tmp
     ;;
   *)
     echo "Unknown OS type"
@@ -341,11 +331,9 @@ if [[ ! -v setup_MINIMAL ]]; then
     && rm /tmp/k9s-latest.tgz \
     && cp /tmp/k9s.$$/k9s ${home_bin} \
     && chmod 755 ${home_bin}/k9s
-  cd /tmp
 
   # cheat
   echo "cheat"
-  cd /tmp
   curl -sLS https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -O \
     && gunzip -c /tmp/cheat-${kernel}-${machine}.gz >${home_bin}/cheat
   chmod 755 ${home_bin}/cheat
@@ -367,7 +355,6 @@ if [[ ! -v setup_MINIMAL ]]; then
     pyenv install 3.10.0
     pyenv global 3.10.0
   fi
-  cd /tmp
   echo "Python packages:"
   echo "pre-commit"
   if command -v pre-commit >/dev/null 2>&1; then
@@ -375,7 +362,6 @@ if [[ ! -v setup_MINIMAL ]]; then
   else
     python -m pip install --user pre-commit
   fi
-  cd /tmp
   echo "boto3"
   if command python -m pip show boto3 >/dev/null 2>&1; then
     python -m pip install --upgrade --user 'boto3[crt]' | grep -v "Requirement already satisfied"
