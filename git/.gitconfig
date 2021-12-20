@@ -18,15 +18,22 @@
     enabled = true
 [core]
     #pager = less -EFRX
-	pager = delta
+    pager = delta
     editor = vim
     excludesfile = ~/.gitignore_global
     autocrlf = input
 [delta]
-    features = line-numbers #side-by-side
+    features = line-numbers side-by-side
     syntax-theme =  Solarized (dark)
+	navigate = true
+[delta "intractive"]
+    keep-plus-minus-markers = false
+[diff]
+    colorMoved = default
 [interactive]
 	diffFilter = delta --color-only --features=interactive
+[merge]
+	conflictstyle = diff3
 [help]
 	autocorrect = 1
 [format]

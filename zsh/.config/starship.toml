@@ -26,6 +26,7 @@ format = """\
     $jobs\
     $battery\
     $time\
+    $status\
     $character\
 """
 
@@ -53,6 +54,10 @@ disabled = true
 
 [ruby]
 detect_variables = []
+
+[status]
+disabled = false
+
 [terraform]
 format = "[$symbol$version]($style) "
 disabled = false
