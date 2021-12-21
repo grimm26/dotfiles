@@ -392,18 +392,6 @@ if [[ ! -v setup_MINIMAL ]]; then
   else
     python -m pip install --user 'black'
   fi
-  echo "rope"
-  if command python -m pip show rope >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'rope' | grep -v "Requirement already satisfied"
-  else
-    python -m pip install --user 'rope'
-  fi
-  echo "ropevim"
-  if command python -m pip show ropevim >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'ropevim' | grep -v "Requirement already satisfied"
-  else
-    python -m pip install --user 'ropevim'
-  fi
 fi
 
 # antibody
