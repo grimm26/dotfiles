@@ -72,8 +72,8 @@ case $(uname) in
     fi
     SCRIPT_HOME=$(readlink -f ${0%/*})
     # Versions
-    GOLANG_VERSION="1.17.3"
-    NODEJS_VERSION="16.13.0"
+    GOLANG_VERSION="1.17.5"
+    NODEJS_VERSION="16.13.1"
     # Latest git
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
       sudo add-apt-repository -y -u ppa:git-core/ppa
