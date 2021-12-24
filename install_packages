@@ -108,8 +108,8 @@ case $(uname) in
         if [[ -L /usr/local/nodejs ]]; then
           OLD_NODEJS=$(readlink /usr/local/nodejs)
         fi
-        curl -sLSO https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz \
-          && sudo tar -xJf node-v${NODEJS_VERSION}-linux-x64.tar.xz -C /usr/local/
+        curl -sLS  -o /tmp/node-v${NODEJS_VERSION}-linux-x64.tar.xz https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz \
+          && sudo tar -xJf /tmp/node-v${NODEJS_VERSION}-linux-x64.tar.xz -C /usr/local/
         if [[ -d /usr/local/node-v${NODEJS_VERSION}-linux-x64 ]]; then
           sudo rm /usr/local/nodejs
           sudo ln -s /usr/local/node-v${NODEJS_VERSION}-linux-x64 /usr/local/nodejs
