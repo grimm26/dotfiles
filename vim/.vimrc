@@ -46,6 +46,7 @@ vnoremap <leader>v' <esc>`>a'<esc>`<i'<esc>lel
 iabbrev adn and
 iabbrev taht that
 iabbrev endopint endpoint
+iabbrev chanegs changes
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command! W w !sudo tee % > /dev/null
