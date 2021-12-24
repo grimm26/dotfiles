@@ -31,6 +31,21 @@ set wildmode=list:longest
 " With a map leader it's possible to do extra key combinations
 let mapleader = "\\"
 let g:mapleader = "\\"
+" Base utility mappings
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+" surround word cursor is on in double quotes
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+" surround word cursor is on in single quotes
+nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+" surround visually selected block in double quotes
+vnoremap <leader>v" <esc>`>a"<esc>`<i"<esc>lel
+" surround visually selected block in single quotes
+vnoremap <leader>v' <esc>`>a'<esc>`<i'<esc>lel
+" help my common typos
+iabbrev adn and
+iabbrev taht that
+iabbrev endopint endpoint
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command! W w !sudo tee % > /dev/null
@@ -146,11 +161,15 @@ map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>
 autocmd StdinReadPre * let s:std_in=1
 " Start NERDTree when Vim is started without file arguments.
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+" autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 " Start NERDTree when Vim starts with a directory argument.
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
     \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | wincmd p | endif
 
+""
+" fzf
+""
+nnoremap <leader>ff :Files<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-airline config (force color)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
