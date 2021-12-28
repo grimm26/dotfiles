@@ -18,6 +18,10 @@ case "$(uname -m)" in
     ;;
 esac
 
+# Check if we set up a file for public github settings. On my work machine, out local github settings are in my default environment and I use direnv to set the public ones where needed.  direnv doesn't help in a script :)
+if [[ -s ~/.github_public ]]; then
+  source ~/.github_public
+fi
 # Make ~/.local/bin our official user bin dir
 home_bin=~/.local/bin
 if [[ ! -d $home_bin ]]; then
