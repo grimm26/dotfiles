@@ -2,6 +2,10 @@
 #
 #
 
+# Versions
+GOLANG_VERSION="1.17.5"
+NODEJS_VERSION="16.13.1"
+PYTHON_VERSION="3.10.1"
 while getopts 'M' OPT; do
   case $OPT in
     M) setup_MINIMAL=1 ;;
@@ -75,9 +79,6 @@ case $(uname) in
       exit 1
     fi
     SCRIPT_HOME=$(readlink -f ${0%/*})
-    # Versions
-    GOLANG_VERSION="1.17.5"
-    NODEJS_VERSION="16.13.1"
     # Latest git
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
       sudo add-apt-repository -y -u ppa:git-core/ppa
@@ -354,12 +355,14 @@ if [[ ! -v setup_MINIMAL ]]; then
   else
     git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
   fi
-  if ! pyenv global 3.10.0 &>/dev/null; then
-    print "Using pyenv to install python 3.10.0"
-    pyenv install 3.10.0
-    pyenv global 3.10.0
+  if ! pyenv global $PYTHON_VERSION &>/dev/null; then
+    print "Using pyenv to install python $PYTHON_VERSION"
+    pyenv install $PYTHON_VERSION
+    pyenv global $PYTHON_VERSION
   fi
   echo "Python packages:"
+  echo "pip"
+  python -m pip install --upgrade pip | grep -v "Requirement already satisfied"
   echo "pre-commit"
   if command -v pre-commit >/dev/null 2>&1; then
     python -m pip install --upgrade --user pre-commit | grep -v "Requirement already satisfied"
