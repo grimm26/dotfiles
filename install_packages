@@ -364,41 +364,17 @@ if [[ ! -v setup_MINIMAL ]]; then
   echo "pip"
   python -m pip install --upgrade pip | grep -v "Requirement already satisfied"
   echo "pre-commit"
-  if command -v pre-commit >/dev/null 2>&1; then
-    python -m pip install --upgrade --user pre-commit | grep -v "Requirement already satisfied"
-  else
-    python -m pip install --user pre-commit
-  fi
+  python -m pip install --upgrade --user pre-commit | grep -v "Requirement already satisfied"
   echo "boto3"
-  if command python -m pip show boto3 >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'boto3[crt]' | grep -v "Requirement already satisfied"
-  else
-    python -m pip install --user 'boto3[crt]'
-  fi
+  python -m pip install --upgrade --user 'boto3[crt]' | grep -v "Requirement already satisfied"
   echo "flake8"
-  if command python -m pip show flake8 >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'flake8' | grep -v "Requirement already satisfied"
-  else
-    python -m pip install --user 'flake8'
-  fi
+  python -m pip install --upgrade --user 'flake8' | grep -v "Requirement already satisfied"
   echo "flake8-bugbear"
-  if command python -m pip show flake8-bugbear >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'flake8-bugbear' | grep -v "Requirement already satisfied"
-  else
-    python -m pip install --user 'flake8-bugbear'
-  fi
+  python -m pip install --upgrade --user 'flake8-bugbear' | grep -v "Requirement already satisfied"
   echo "pylint"
-  if command python -m pip show pylint >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'pylint' | grep -v "Requirement already satisfied"
-  else
-    python -m pip install --user 'pylint'
-  fi
+  python -m pip install --upgrade --user 'pylint' | grep -v "Requirement already satisfied"
   echo "black"
-  if command python -m pip show black >/dev/null 2>&1; then
-    python -m pip install --upgrade --user 'black' | grep -v "Requirement already satisfied"
-  else
-    python -m pip install --user 'black'
-  fi
+  python -m pip install --upgrade --user 'black' | grep -v "Requirement already satisfied"
 fi
 
 # antibody

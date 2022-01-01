@@ -3,6 +3,23 @@
 # This seems to screw up the colors, so leave it out for now
 #export BAT_THEME="Solarized (dark)"
 
+# The output will show you if this terminal is truecolor or not. If it is, the color transitions will be smooth.
+colorcheck() {
+  awk 'BEGIN{
+    s="/\\/\\/\\/\\/\\"; s=s s s s s s s s;
+    for (colnum = 0; colnum<77; colnum++) {
+        r = 255-(colnum*255/76);
+        g = (colnum*510/76);
+        b = (colnum*255/76);
+        if (g>255) g = 510-g;
+        printf "\033[48;2;%d;%d;%dm", r,g,b;
+        printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
+        printf "%s\033[0m", substr(s,colnum+1,1);
+    }
+    printf "\n";
+  }'
+}
+
 mkcd () {
   if [ -d "$1" ]; then
     cd $1
@@ -334,6 +351,11 @@ _fzf_compgen_dir() {
   command $FD_BIN --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
 }
 ## END fzf
+
+# TMUX
+export ZSH_TMUX_FIXTERM=false
+export ZSH_TMUX_AUTOQUIT=false
+
 # Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
 if whence antibody &>/dev/null; then
   ANTIBODY_PLUGIN_FILES=(~/.zsh_plugins.txt)
