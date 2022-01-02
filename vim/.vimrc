@@ -95,9 +95,11 @@ set foldcolumn=0
 set nofoldenable
 
 set guifont=Monaco:h14
-set termguicolors
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+if exists('+termguicolors')
+  set termguicolors
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
 set background=dark
 " set t_Co=256
 "option name default optional
@@ -173,7 +175,7 @@ nnoremap <leader>ff :Files<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-airline config (force color)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline_theme="solarized"
+let g:airline_theme="base16_solarized"
 let g:airline_solarized_bg='dark'
 let g:airline_powerline_fonts = 1
 "let g:airline_theme="luna"
