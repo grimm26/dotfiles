@@ -28,14 +28,6 @@ mkcd () {
   fi
 }
 
-wttr()
-{
-    # change Paris to your default location
-    local request="wttr.in/${1-Chicago}?use_imperial=true"
-    [ "$(tput cols)" -lt 125 ] && request+='&n'
-    curl -H "Accept-Language: ${LANG%_*}" --compressed "$request"
-}
-
 tgp () { terragrunt plan -no-color|awk 'BEGIN{f="/tmp/plan.txt"}/^---/{o=!o};{print};{if(o&&!/^---/){print>f}}'; }
 tgl () {
   if [ -x =landscape ]; then

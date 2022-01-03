@@ -41,9 +41,11 @@ vnoremap <leader>v" <esc>`>a"<esc>`<i"<esc>lel
 vnoremap <leader>v' <esc>`>a'<esc>`<i'<esc>lel
 " help my common typos
 iabbrev adn and
+iabbrev teh the
 iabbrev taht that
 iabbrev endopint endpoint
 iabbrev chanegs changes
+iabbrev updaet update
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command! W w !sudo tee % > /dev/null
@@ -114,7 +116,7 @@ set background=dark
 "g:solarized_visibility= "normal"| "high" or "low"
 "------------------------------------------------
 "g:solarized_termcolors= 16 | 256
-colorscheme solarized8
+colorscheme solarized8_high
 "colorscheme solarized
 
 " show me where my cursor is
