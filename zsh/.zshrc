@@ -94,8 +94,6 @@ setopt correct
 
 ## global aliases (for those who like them) ##
 
-#alias -g '...'='../..'
-#alias -g '....'='../../..'
 #alias -g BG='& exit'
 alias -g C='|wc -l'
 alias -g G='|grep'
@@ -110,7 +108,7 @@ alias -g N='&>/dev/null'
 alias -g SL='| sort | less'
 alias -g S='| sort'
 alias -g T='|tail'
-#alias -g V='| vim -'
+alias -g V='| vim -'
 alias nout='netstat -nputw'
 alias nin='netstat -ntl'
 

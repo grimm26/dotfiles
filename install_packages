@@ -375,6 +375,8 @@ if [[ ! -v setup_MINIMAL ]]; then
   python -m pip install --upgrade --user 'pylint' | grep -v "Requirement already satisfied"
   echo "black"
   python -m pip install --upgrade --user 'black' | grep -v "Requirement already satisfied"
+  echo "isort"
+  python -m pip install --upgrade --user 'isort' | grep -v "Requirement already satisfied"
 fi
 
 # antibody

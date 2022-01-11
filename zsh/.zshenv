@@ -2,6 +2,7 @@ if [[ -r ~/.zshenv.local ]]; then
   source ~/.zshenv.local
 fi
 
+#export PYTHONPATH=$(python -m site --user-site):$PYTHONPATH
 [ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 export GOPATH=~/go
 path+=(${GOPATH}/bin)
