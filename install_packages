@@ -3,9 +3,9 @@
 #
 
 # Versions
-GOLANG_VERSION="1.17.5"
-NODEJS_VERSION="16.13.1"
-PYTHON_VERSION="3.10.1"
+GOLANG_VERSION="1.17.6"
+NODEJS_VERSION="16.13.2"
+PYTHON_VERSION="3.10.2"
 while getopts 'M' OPT; do
   case $OPT in
     M) setup_MINIMAL=1 ;;
