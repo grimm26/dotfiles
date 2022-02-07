@@ -300,14 +300,13 @@ esac
 print -n "starship: "
 if whence starship &> /dev/null; then
   installed_starship_version=$(starship --version |grep tag |cut -d: -f2)
-  # This isn't working on work machine with direnv for ~/git/github, somehow it is not picking up the GH_TOKEN or something
   latest_starship_version=$(gh release list --limit 1 --repo starship/starship |awk '{print $1}')
   if [[ $installed_starship_version != $latest_starship_version ]]; then
     print "updating."
     if [[ $(uname) == "Linux" ]]; then
-      curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
+      curl -fsSL https://starship.rs/install.sh | bash --posix -s - -y -b ${home_bin} -p unknown-linux-gnu
     else
-      curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin}
+      curl -fsSL https://starship.rs/install.sh | bash --posix -s - -y -b ${home_bin}
     fi
     starship --version
   else
@@ -316,9 +315,9 @@ if whence starship &> /dev/null; then
 else
   print "installing."
   if [[ $(uname) == "Linux" ]]; then
-    curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin} -p unknown-linux-gnu
+    curl -fsSL https://starship.rs/install.sh | bash --posix -s - -y -b ${home_bin} -p unknown-linux-gnu
   else
-    curl -fsSL https://starship.rs/install.sh | bash -s - -y -b ${home_bin}
+    curl -fsSL https://starship.rs/install.sh | bash --posix -s - -y -b ${home_bin}
   fi
   starship --version
 fi
