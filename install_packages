@@ -360,22 +360,14 @@ if [[ ! -v setup_MINIMAL ]]; then
     pyenv global $PYTHON_VERSION
   fi
   echo "Python packages:"
-  echo "pip"
-  python -m pip install --upgrade pip | grep -v "Requirement already satisfied"
-  echo "pre-commit"
-  python -m pip install --upgrade --user pre-commit | grep -v "Requirement already satisfied"
-  echo "boto3"
-  python -m pip install --upgrade --user 'boto3[crt]' | grep -v "Requirement already satisfied"
-  echo "flake8"
-  python -m pip install --upgrade --user 'flake8' | grep -v "Requirement already satisfied"
-  echo "flake8-bugbear"
-  python -m pip install --upgrade --user 'flake8-bugbear' | grep -v "Requirement already satisfied"
-  echo "pylint"
-  python -m pip install --upgrade --user 'pylint' | grep -v "Requirement already satisfied"
-  echo "black"
-  python -m pip install --upgrade --user 'black' | grep -v "Requirement already satisfied"
-  echo "isort"
-  python -m pip install --upgrade --user 'isort' | grep -v "Requirement already satisfied"
+  for pkg in pip pre-commit 'boto3[crt]' flake8 flake8-bugbear pylint black isort;do
+    python -m pip install --upgrade --user $pkg | grep -v "Requirement already satisfied"
+  done
+
+  print "Ruby Gems"
+  for pkg in aws-sdk-ec2 bundler fileutils octokit tmuxinator;do
+    gem install $pkg
+  done
 fi
 
 # antibody
