@@ -14,7 +14,7 @@ ohmyzsh/ohmyzsh path:plugins/history
 ohmyzsh/ohmyzsh path:plugins/extract
 ohmyzsh/ohmyzsh path:plugins/alias-finder
 ohmyzsh/ohmyzsh path:plugins/copyfile
-ohmyzsh/ohmyzsh path:plugins/copydir
+ohmyzsh/ohmyzsh path:plugins/copypath
 ohmyzsh/ohmyzsh path:plugins/genpass
 ohmyzsh/ohmyzsh path:plugins/isodate
 ohmyzsh/ohmyzsh path:plugins/jsontools
