@@ -1,4 +1,5 @@
 ohmyzsh/ohmyzsh path:plugins/aws
+ohmyzsh/ohmyzsh path:plugins/asdf
 ohmyzsh/ohmyzsh path:plugins/git
 ohmyzsh/ohmyzsh path:plugins/gh
 ohmyzsh/ohmyzsh path:plugins/knife
