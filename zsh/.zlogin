@@ -74,7 +74,7 @@ else
   fi
 fi
 # Just load the top keys. ~/.ssh/config should have AddKeysToAgent set to yes.
-whence -p keychain &>/dev/null && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval ~/.ssh/id_*sa)
+whence -p keychain &>/dev/null &&  [[ -n  ~/.ssh/id_*sa(#qN) ]] && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval ~/.ssh/id_*sa)
 
 setopt HIST_IGNORE_SPACE
 export LC_COLLATE=C
