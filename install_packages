@@ -192,15 +192,8 @@ case $(uname) in
       fi
       # direnv
       echo "direnv"
-      direnv_download_url=$(curl -sLS https://api.github.com/repos/direnv/direnv/releases/latest | jq -r '.assets[].browser_download_url' | grep "direnv.$kernel.$machine")
-      if whence direnv &>/dev/null; then
-        direnv_latest_version=$(cut -d/ -f8 <<<$direnv_download_url)
-        direnv_installed_version=$(direnv --version)
-        if [[ "$direnv_latest_version" != "v${direnv_installed_version}" ]]; then
-          curl -sL $direnv_download_url -o $home_bin/direnv && chmod 755 $home_bin/direnv
-        fi
-      else
-        curl -sL $direnv_download_url -o $home_bin/direnv && chmod 755 $home_bin/direnv
+      if upinst_from_git https://github.com/direnv/direnv; then
+        (cd ~/git/direnv && make clean && make && make install PREFIX=~/.local)
       fi
       # awscli
       echo "awscli"
