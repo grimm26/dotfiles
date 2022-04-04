@@ -30,7 +30,21 @@ format = """\
     $character\
 """
 
+# A continuation prompt that displays two filled in arrows
+continuation_prompt = "▶▶(inverted) "
+
 command_timeout = 750
+
+[aws]
+format = 'on [$symbol($profile )(\($region\) )]($style)'
+style = "bold blue"
+symbol = "🅰 "
+[aws.region_aliases]
+ap-southeast-2 = "au"
+sa-east-1 = "br"
+us-east-1 = "va"
+us-east-2 = "oh"
+us-west-2 = "or"
 
 [conda]
 disabled = true
@@ -60,6 +74,7 @@ disabled = false
 
 [terraform]
 format = "[$symbol$version]($style) "
+detect_files = ["atlantis.yaml"]
 disabled = false
 
 [time]

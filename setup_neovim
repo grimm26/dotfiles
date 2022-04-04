@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+# This basically installs shims for ruby and python for neovim
+python3 -m pip install --user --upgrade pynvim
+gem install neovim

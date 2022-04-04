@@ -81,9 +81,6 @@ export LC_COLLATE=C
 if [[ $OSTYPE == darwin* ]]; then
   alias ldd="otool -L"
 fi
-alias cim=vim
-export EDITOR=vim
-export SYSTEMD_EDITOR=vim
 #export PAGER=vimpager
 #export MANPAGER=vimmanpager
 export PAGER=less

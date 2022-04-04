@@ -119,9 +119,17 @@ bindkey -M menuselect 'l' vi-forward-char         # right
 bindkey -M menuselect 'j' vi-down-line-or-history # bottom
 
 export DISABLE_AUTO_TITLE=true
-#if [ -x =nvim ]; then
-  #alias vim=nvim
-#fi
+if command -v nvim &>/dev/null; then
+  alias vim=nvim
+  alias vimdiff='nvim -d'
+  alias cim=nvim
+  export EDITOR=nvim
+  export SYSTEMD_EDITOR=nvim
+else
+  alias cim=vim
+  export EDITOR=vim
+  export SYSTEMD_EDITOR=vim
+fi
 [ -d /usr/local/opt/openjdk/bin ] && export PATH="/usr/local/opt/openjdk/bin:$PATH"
 [ -f ~/.git_functions ] && source ~/.git_functions
 

@@ -9,7 +9,8 @@ My dotfiles for various things. This is only tested working on OSX and Ubuntu Fo
 - tmux
     - tmux.conf with tpm plugins
 - vim
-    - vimrc and plugins
+    - neovim is the primary editor, but should work for vim8, too
+    - vimrc and neovim init with vim-plug setup.
     - My vimrc is fairly commented and hopefully understandable.  There is commented out stuff from old settings that I don't use anymore or that are covered by plugins that I now use.
     - script to install/update plugins
 
@@ -22,6 +23,8 @@ Run these scripts:
 - `install_packages`
     - Installs packages that are required by the dotfiles here and/or are just packages that I want to have.
 - `setup_vim_plugins`
-    - This installs the vim plugins that I use. No plugin manager, just straight vim8.
+    - Moves old vim pack dirs out of the way.
+- `setup_neovim`
+    - install ruby and python shim packages.
 - `link_dotfiles`
     - This uses stow to link the dotfiles into place.

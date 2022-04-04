@@ -6,6 +6,7 @@
 GOLANG_VERSION="1.17.8"
 NODEJS_VERSION="16.14.2"
 PYTHON_VERSION="3.10.3"
+NEOVIM_VERSION="0.6.1"
 while getopts 'M' OPT; do
   case $OPT in
     M) setup_MINIMAL=1 ;;
@@ -79,6 +80,13 @@ case $(uname) in
       exit 1
     fi
     SCRIPT_HOME=$(readlink -f ${0%/*})
+    if [[ "NVIM v${NEOVIM_VERSION}" != $(nvim --version |head -1) ]]; then
+    # Install neovim
+      curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ${home_bin}/nvim.appimage
+      chmod u+x ${home_bin}/nvim.appimage
+      ln -s  ${home_bin}/nvim.appimage  ${home_bin}/nvim
+    fi
+
     # Latest git
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
       sudo add-apt-repository -y -u ppa:git-core/ppa
@@ -268,6 +276,7 @@ case $(uname) in
       fd
       ripgrep
       fzf
+      neovim
     )
     brew list > /tmp/brews.$$
     for pkg in ${NEEDED_PACKAGES[*]}; do

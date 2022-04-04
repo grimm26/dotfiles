@@ -6,4 +6,8 @@ setlocal textwidth=88
 setlocal smarttab
 setlocal expandtab
 autocmd BufWritePre *.py execute ':Isort'
-autocmd BufWritePre *.py execute ':Black'
+if has('nvim')
+  autocmd BufWritePre *.py call BlackSync()
+else
+  autocmd BufWritePre *.py execute ':Black'
+endif
