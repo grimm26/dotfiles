@@ -25,6 +25,8 @@ if has('nvim')
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
   Plug 'kamykn/popup-menu.nvim'
+  Plug 'kyazdani42/nvim-web-devicons' " for file icons
+  Plug 'kyazdani42/nvim-tree.lua'
 else
   " vim plugins instead of the nvim specific ones
   Plug 'psf/black'
@@ -240,6 +242,15 @@ if !has('nvim')
   " fzf
   ""
   nnoremap <leader>ff :Files<cr>
+else
+  map <leader>nn :NvimTreeToggle<cr>
+  autocmd StdinReadPre * let s:std_in=1
+  " Start NvimTree when Vim is started without file arguments.
+  " autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NvimTree | endif
+  " Start NvimTree when Vim starts with a directory argument.
+  autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+      \ execute 'NvimTreeOpen' argv()[0] | endif
+
 endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-airline config (force color)
