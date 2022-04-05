@@ -19,17 +19,20 @@ if has('nvim')
   Plug 'stsewd/isort.nvim',     {'do': ':UpdateRemotePlugins'}
   Plug 'ellisonleao/glow.nvim', {'do': ':UpdateRemotePlugins'}
   Plug 'echasnovski/mini.nvim', {'do': ':UpdateRemotePlugins', 'branch': 'stable'}
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'lewis6991/gitsigns.nvim', {'do': ':UpdateRemotePlugins'}
 else
   " vim plugins instead of the nvim specific ones
   Plug 'psf/black'
   Plug 'plasticboy/vim-markdown'
   Plug 'fisadev/vim-isort'
   Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-surround'
+  Plug 'vim-syntastic/syntastic'
+  Plug 'airblade/vim-gitgutter'
 endif
 Plug 'lifepillar/vim-solarized8'
 Plug 'preservim/nerdtree'
-Plug 'tpope/vim-surround'
-Plug 'vim-syntastic/syntastic'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'will133/vim-dirdiff'
@@ -40,7 +43,6 @@ Plug 'elzr/vim-json'
 Plug 'dietsche/vim-lastplace'
 Plug 'hashivim/vim-terraform'
 Plug 'tmux-plugins/vim-tmux'
-Plug 'airblade/vim-gitgutter'
 Plug 'wincent/terminus'
 Plug 'z0mbix/vim-shfmt'
 Plug 'junegunn/fzf.vim'
@@ -245,14 +247,16 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 " Check my syntax
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 2
-let g:syntastic_check_on_open = 1
-"let g:syntastic_debug = 3
-"let g:syntastic_debug_file = "~/syntastic.log"
-" Don't check it on write because that gets annoying
-let g:syntastic_check_on_wq = 0
-" end syntastic
+if !has('nvim')
+  let g:syntastic_always_populate_loc_list = 1
+  let g:syntastic_auto_loc_list = 2
+  let g:syntastic_check_on_open = 1
+  "let g:syntastic_debug = 3
+  "let g:syntastic_debug_file = "~/syntastic.log"
+  " Don't check it on write because that gets annoying
+  let g:syntastic_check_on_wq = 0
+  " end syntastic
+endif
 "autocmd BufNewFile,BufRead *.template set ft=json
 let g:vim_json_syntax_conceal = 0
 " do good terraform stuff
@@ -263,8 +267,10 @@ let g:terraform_align = 1
 let g:shfmt_extra_args = '-i 2 -bn -ci'
 let g:shfmt_fmt_on_save = 1
 
-" gitgutter
-let g:gitgutter_preview_win_floating = 1
+if !has('nvim')
+  " gitgutter
+  let g:gitgutter_preview_win_floating = 1
+endif
 
 let g:TerminusMouse=0
 " highlight trailing spaces
