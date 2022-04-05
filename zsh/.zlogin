@@ -1,5 +1,3 @@
-#export LSCOLORS="ehfxcxdxbxegedabagacad"
-#eval "$(hub alias -s)"
 # This seems to screw up the colors, so leave it out for now
 #export BAT_THEME="Solarized (dark)"
 

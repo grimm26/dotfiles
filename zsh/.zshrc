@@ -122,11 +122,10 @@ export DISABLE_AUTO_TITLE=true
 if command -v nvim &>/dev/null; then
   alias vim=nvim
   alias vimdiff='nvim -d'
-  alias cim=nvim
   export EDITOR=nvim
   export SYSTEMD_EDITOR=nvim
 else
-  alias cim=vim
+  alias vim="PYTHONPATH=$(python -m site --user-site) vim"
   export EDITOR=vim
   export SYSTEMD_EDITOR=vim
 fi

@@ -15,15 +15,18 @@ endif
 call plug#begin()
 if has('nvim')
   " nvim specific plugins
-  Plug 'averms/black-nvim', {'do': ':UpdateRemotePlugins'}
-  Plug 'stsewd/isort.nvim', {'do': ':UpdateRemotePlugins'}
+  Plug 'averms/black-nvim',     {'do': ':UpdateRemotePlugins'}
+  Plug 'stsewd/isort.nvim',     {'do': ':UpdateRemotePlugins'}
+  Plug 'ellisonleao/glow.nvim', {'do': ':UpdateRemotePlugins'}
+  Plug 'echasnovski/mini.nvim', {'do': ':UpdateRemotePlugins', 'branch': 'stable'}
 else
   " vim plugins instead of the nvim specific ones
   Plug 'psf/black'
+  Plug 'plasticboy/vim-markdown'
   Plug 'fisadev/vim-isort'
+  Plug 'tpope/vim-commentary'
 endif
 Plug 'lifepillar/vim-solarized8'
-Plug 'tpope/vim-commentary'
 Plug 'preservim/nerdtree'
 Plug 'tpope/vim-surround'
 Plug 'vim-syntastic/syntastic'
@@ -39,7 +42,6 @@ Plug 'hashivim/vim-terraform'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'airblade/vim-gitgutter'
 Plug 'wincent/terminus'
-Plug 'plasticboy/vim-markdown'
 Plug 'z0mbix/vim-shfmt'
 Plug 'junegunn/fzf.vim'
 Plug 'prettier/vim-prettier'
