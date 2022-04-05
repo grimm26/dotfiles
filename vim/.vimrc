@@ -27,6 +27,7 @@ if has('nvim')
   Plug 'kamykn/popup-menu.nvim'
   Plug 'kyazdani42/nvim-web-devicons' " for file icons
   Plug 'kyazdani42/nvim-tree.lua'
+  Plug 'ishan9299/nvim-solarized-lua'
 else
   " vim plugins instead of the nvim specific ones
   Plug 'psf/black'
@@ -38,8 +39,8 @@ else
   Plug 'airblade/vim-gitgutter'
   Plug 'preservim/nerdtree'
   Plug 'junegunn/fzf.vim'
+  Plug 'lifepillar/vim-solarized8'
 endif
-Plug 'lifepillar/vim-solarized8'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'will133/vim-dirdiff'
@@ -182,9 +183,11 @@ set background=dark
 "g:solarized_visibility= "normal"| "high" or "low"
 "------------------------------------------------
 "g:solarized_termcolors= 16 | 256
-colorscheme solarized8_high
-"colorscheme solarized
-
+if has('nvim')
+  colorscheme solarized-high
+else
+  colorscheme solarized8_high
+endif
 " show me where my cursor is
 set cursorline cursorcolumn
 
@@ -274,6 +277,14 @@ if !has('nvim')
   "let g:syntastic_debug_file = "~/syntastic.log"
   " Don't check it on write because that gets annoying
   let g:syntastic_check_on_wq = 0
+  " python stuff
+  let g:syntastic_python_checkers=['flake8']
+  "" Commented out the pylint/flake8 options below in order to allow them to be
+  "" set per project.
+  " I don't care about long lines
+  " let g:syntastic_python_flake8_args = "--extend-ignore E501"
+  " I don't care about long lines and duplicates of what flake8 does
+  "let g:syntastic_python_pylint_args = "--disable=C0301,undefined-variable,unused-import,unused-variable"
   " end syntastic
 endif
 "autocmd BufNewFile,BufRead *.template set ft=json
@@ -300,14 +311,6 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 "
-" python stuff
-let g:syntastic_python_checkers=['flake8']
-"" Commented out the pylint/flake8 options below in order to allow them to be
-"" set per project.
-" I don't care about long lines
-" let g:syntastic_python_flake8_args = "--extend-ignore E501"
-" I don't care about long lines and duplicates of what flake8 does
-"let g:syntastic_python_pylint_args = "--disable=C0301,undefined-variable,unused-import,unused-variable"
 
 " spelling
 " turn off vim builtin spelling, cuz we using spelunker

@@ -6,6 +6,9 @@ require('mini.comment').setup({})
 require('gitsigns').setup()
 require('telescope').load_extension('fzf')
 require'nvim-tree'.setup()
+vim.opt.list = true
+vim.opt.listchars:append("eol:↴")
+vim.opt.termguicolors = true
 EOF
 " Telescope remaps
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
