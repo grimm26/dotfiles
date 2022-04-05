@@ -21,6 +21,10 @@ if has('nvim')
   Plug 'echasnovski/mini.nvim', {'do': ':UpdateRemotePlugins', 'branch': 'stable'}
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'lewis6991/gitsigns.nvim', {'do': ':UpdateRemotePlugins'}
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+  Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
+  Plug 'kamykn/popup-menu.nvim'
 else
   " vim plugins instead of the nvim specific ones
   Plug 'psf/black'
@@ -30,9 +34,10 @@ else
   Plug 'tpope/vim-surround'
   Plug 'vim-syntastic/syntastic'
   Plug 'airblade/vim-gitgutter'
+  Plug 'preservim/nerdtree'
+  Plug 'junegunn/fzf.vim'
 endif
 Plug 'lifepillar/vim-solarized8'
-Plug 'preservim/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'will133/vim-dirdiff'
@@ -45,8 +50,8 @@ Plug 'hashivim/vim-terraform'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'wincent/terminus'
 Plug 'z0mbix/vim-shfmt'
-Plug 'junegunn/fzf.vim'
 Plug 'prettier/vim-prettier'
+Plug 'kamykn/spelunker.vim'
 call plug#end()
 silent! helptags ALL
 " Run PlugInstall if there are missing plugins
@@ -216,23 +221,26 @@ function! HasPaste()
     en
     return ''
 endfunction
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Nerd Tree
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>nn :NERDTreeToggle<cr>
-map <leader>nb :NERDTreeFromBookmark
-map <leader>nf :NERDTreeFind<cr>
-autocmd StdinReadPre * let s:std_in=1
-" Start NERDTree when Vim is started without file arguments.
-" autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
-" Start NERDTree when Vim starts with a directory argument.
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
-    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | wincmd p | endif
 
-""
-" fzf
-""
-nnoremap <leader>ff :Files<cr>
+if !has('nvim')
+  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " => Nerd Tree
+  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  map <leader>nn :NERDTreeToggle<cr>
+  map <leader>nb :NERDTreeFromBookmark
+  map <leader>nf :NERDTreeFind<cr>
+  autocmd StdinReadPre * let s:std_in=1
+  " Start NERDTree when Vim is started without file arguments.
+  " autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+  " Start NERDTree when Vim starts with a directory argument.
+  autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+      \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | wincmd p | endif
+
+  ""
+  " fzf
+  ""
+  nnoremap <leader>ff :Files<cr>
+endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-airline config (force color)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -291,5 +299,54 @@ let g:syntastic_python_checkers=['flake8']
 "let g:syntastic_python_pylint_args = "--disable=C0301,undefined-variable,unused-import,unused-variable"
 
 " spelling
-autocmd FileType Markdown set spell spelllang=en_us
-map <leader>sp :set spell spelllang=en_us<cr>
+" turn off vim builtin spelling, cuz we using spelunker
+set nospell
+" Enable spelunker.vim. (default: 1)
+" 1: enable
+" 0: disable
+let g:enable_spelunker_vim = 0
+
+" Enable spelunker.vim on readonly files or buffer. (default: 0)
+" 1: enable
+" 0: disable
+let g:enable_spelunker_vim_on_readonly = 0
+
+" Check spelling for words longer than set characters. (default: 4)
+let g:spelunker_target_min_char_len = 4
+
+" Max amount of word suggestions. (default: 15)
+let g:spelunker_max_suggest_words = 15
+
+" Max amount of highlighted words in buffer. (default: 100)
+let g:spelunker_max_hi_words_each_buf = 100
+
+" Spellcheck type: (default: 1)
+" 1: File is checked for spelling mistakes when opening and saving. This
+" may take a bit of time on large files.
+" 2: Spellcheck displayed words in buffer. Fast and dynamic. The waiting time
+" depends on the setting of CursorHold `set updatetime=1000`.
+let g:spelunker_check_type = 2
+
+" Option to disable word checking.
+" Disable URI checking. (default: 0)
+let g:spelunker_disable_uri_checking = 1
+
+" Disable email-like words checking. (default: 0)
+let g:spelunker_disable_email_checking = 1
+
+" Disable account name checking, e.g. @foobar, foobar@. (default: 0)
+" NOTE: Spell checking is also disabled for JAVA annotations.
+let g:spelunker_disable_account_name_checking = 1
+
+" Disable acronym checking. (default: 0)
+let g:spelunker_disable_acronym_checking = 1
+
+" Disable checking words in backtick/backquote. (default: 0)
+let g:spelunker_disable_backquoted_checking = 1
+
+" Disable default autogroup. (default: 0)
+let g:spelunker_disable_auto_group = 0
+" Override highlight setting.
+" highlight SpelunkerSpellBad cterm=underline ctermfg=247 gui=underline guifg=#9e9e9e
+" highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
+let g:spelunker_white_list_for_user = ['kamykn', 'vimrc', 'keisler', 'syntastic', 'solarized', 'powerline', 'shfmt']
