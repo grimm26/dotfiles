@@ -5,7 +5,7 @@
 # Versions
 GOLANG_VERSION="1.17.8"
 NODEJS_VERSION="16.14.2"
-PYTHON_VERSION="3.10.3"
+PYTHON_VERSION="3.10.4"
 NEOVIM_VERSION="0.6.1"
 while getopts 'M' OPT; do
   case $OPT in
@@ -63,6 +63,7 @@ upinst_from_git() {
       git pull
       EXIT_CODE=0
     fi
+    cd -
   else
     git clone $git_url $clone_target
     EXIT_CODE=0
@@ -79,6 +80,7 @@ case $(uname) in
       echo "I only wrote this for ubuntu."
       exit 1
     fi
+    cd /tmp
     SCRIPT_HOME=$(readlink -f ${0%/*})
     if [[ "NVIM v${NEOVIM_VERSION}" != $(nvim --version |head -1) ]]; then
     # Install neovim
@@ -149,6 +151,7 @@ case $(uname) in
         ./build.sh --quiet
         cp bin/ugrep $home_bin
         [[ -L $home_bin/ug ]] || cp /bin/ug $home_bin
+        cd /tmp
       fi
       # install fzf
       echo "fzf"
@@ -187,6 +190,7 @@ case $(uname) in
           && tar -xzf chruby-0.3.9.tar.gz \
           && cd chruby-0.3.9/ \
           && sudo make install
+        cd /tmp
       fi
       # ruby-install
       echo "ruby-install"
@@ -197,6 +201,7 @@ case $(uname) in
           && tar -xzf ruby-install-0.8.3.tar.gz \
           && cd ruby-install-0.8.3/ \
           && sudo make install
+        cd /tmp
       fi
       # direnv
       echo "direnv"
@@ -226,6 +231,7 @@ case $(uname) in
         cd ~/git/bat-extars
         ./build.sh --no-verify \
         && cp bin/* $home_bin
+        cd /tmp
       fi
       echo "kubectl"
       KUBECTL_STABLE=$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
@@ -352,7 +358,7 @@ if [[ ! -v setup_MINIMAL ]]; then
     eval "$(pyenv init --path)"
   fi
   if [[ -d ~/.pyenv/plugins/pyenv-virtualenv ]]; then
-    git pull
+    (cd ~/.pyenv/plugins/pyenv-virtualenv && git pull)
   else
     git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
   fi

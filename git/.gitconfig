@@ -19,7 +19,7 @@
 [core]
     #pager = less -EFRX
     pager = delta
-    editor = vim
+    editor = nvim
     excludesfile = ~/.gitignore_global
     autocrlf = input
 [delta]

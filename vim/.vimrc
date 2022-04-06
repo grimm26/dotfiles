@@ -1,8 +1,10 @@
 " Things needed pre-plugin load
-if isdirectory(expand("$HOME/.fzf"))
-  set rtp+=~/.fzf
-elseif isdirectory("/usr/local/opt/fzf")
-  set rtp+=/usr/local/opt/fzf
+if !has('nvim')
+  if isdirectory(expand("$HOME/.fzf"))
+    set rtp+=~/.fzf
+  elseif isdirectory("/usr/local/opt/fzf")
+    set rtp+=/usr/local/opt/fzf
+  endif
 endif
 "" Plugin stuff
 " Install vim-plug if it isn't here.
