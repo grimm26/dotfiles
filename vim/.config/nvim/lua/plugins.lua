@@ -11,13 +11,16 @@ return require('packer').startup(function(use)
   use 'averms/black-nvim'
   use 'stsewd/isort.nvim'
   use 'ellisonleao/glow.nvim'
-  use 'echasnovski/mini.nvim'
   use 'lewis6991/gitsigns.nvim'
-  use 'nvim-lua/plenary.nvim'
-  use 'nvim-telescope/telescope.nvim'
+  use {
+  'nvim-telescope/telescope.nvim',
+  requires = { {'nvim-lua/plenary.nvim'} }
+  }
   use 'kamykn/popup-menu.nvim'
-  use 'kyazdani42/nvim-web-devicons' -- for file icons
-  use 'kyazdani42/nvim-tree.lua'
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = { {'kyazdani42/nvim-web-devicons'} }  -- for file icons
+  }
   use 'ishan9299/nvim-solarized-lua'
   use 'vim-airline/vim-airline'
   use 'vim-airline/vim-airline-themes'
