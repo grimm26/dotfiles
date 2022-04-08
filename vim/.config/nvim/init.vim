@@ -5,7 +5,7 @@ augroup end
 lua require('plugins')
 lua require('config_plugins')
 silent! helptags ALL
-command! PU PackerSync | source $MYVIMRC
+command! PU PackerSync
 if executable('ugrep')
     set grepprg=ugrep\ -RInk\ -j\ -u\ --tabs=1\ --ignore-files
     set grepformat=%f:%l:%c:%m,%f+%l+%c+%m,%-G%f\\\|%l\\\|%c\\\|%m
