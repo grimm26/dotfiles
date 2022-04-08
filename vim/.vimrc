@@ -67,6 +67,10 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 "" General config
 command! PU PlugUpdate | PlugUpgrade
 command! PI PlugInstall --sync | source $MYVIMRC
+if executable('ugrep')
+    set grepprg=ugrep\ -RInk\ -j\ -u\ --tabs=1\ --ignore-files
+    set grepformat=%f:%l:%c:%m,%f+%l+%c+%m,%-G%f\\\|%l\\\|%c\\\|%m
+endif
 " Set up persistent undo across all files.
 set undofile
 if has('nvim')

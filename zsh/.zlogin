@@ -304,6 +304,17 @@ go15 () {
 alias tgi="tg init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
+tfup () {
+  local tf_version=${1:-"1.1.8"}
+  atlantis_yaml_mod.rb --tfver $tf_version
+  audit-terraform-modules -r
+  [[ -s locals.tf ]] && crush_tf_tags.pl
+  if [[ -s  versions.tf ]]; then
+    sed -i 's!terraform-providers/infoblox!infobloxopen/infoblox!g' versions.tf
+    sed -i 's!required_version = \"~> 1.0.0\"!required_version = \"~> 1.1\"!' versions.tf
+  fi
+  tfsw $tf_version
+}
 export AWS_DEFAULT_REGION=us-east-2
 ## START fzf
 if [[ -d /usr/local/opt/fzf ]]; then
