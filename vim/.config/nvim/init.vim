@@ -2,6 +2,9 @@ augroup packer_user_config
   autocmd!
   autocmd BufWritePost plugins.lua source <afile> | PackerCompile
 augroup end
+let mapleader = ' '
+let g:mapleader = ' '
+lua require('helpers')
 lua require('plugins')
 lua require('config_plugins')
 silent! helptags ALL
@@ -20,12 +23,6 @@ set autoread
 set wildmenu
 set wildmode=list:longest
 
-" mapleader is backslash \\
-" maps for telescope
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 " Base utility mappings
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>

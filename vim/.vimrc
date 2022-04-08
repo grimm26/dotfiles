@@ -99,8 +99,8 @@ set wildmenu
 set wildmode=list:longest
 
 " With a map leader it's possible to do extra key combinations
-let mapleader = "\\"
-let g:mapleader = "\\"
+let mapleader = " "
+let g:mapleader = " "
 " Base utility mappings
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
