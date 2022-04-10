@@ -7,6 +7,9 @@ require('mini.comment').setup({})
 require('gitsigns').setup()
 require('telescope').load_extension('fzf')
 require('nvim-tree').setup()
+local ts = require 'nvim-treesitter.configs'
+ts.setup {ensure_installed = 'maintained', highlight = {enable = true}}
+
 -- maps for telescope
 nmap('<leader>ff',"<cmd>lua require('telescope.builtin').find_files()<cr>")
 nmap('<leader>fg',"<cmd>lua require('telescope.builtin').live_grep()<cr>")
