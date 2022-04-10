@@ -21,21 +21,23 @@ return require('packer').startup(function(use)
     'kyazdani42/nvim-tree.lua',
     requires = { {'kyazdani42/nvim-web-devicons'} }  -- for file icons
   }
-  use 'ishan9299/nvim-solarized-lua'
-  use 'vim-airline/vim-airline'
-  use 'vim-airline/vim-airline-themes'
-  use 'will133/vim-dirdiff'
-  use 'tpope/vim-endwise'
-  use 'tpope/vim-fugitive'
-  use 'fatih/vim-go'
-  use 'elzr/vim-json'
-  use 'dietsche/vim-lastplace'
-  use 'hashivim/vim-terraform'
-  use 'tmux-plugins/vim-tmux'
-  use 'wincent/terminus'
-  use 'z0mbix/vim-shfmt'
-  use 'prettier/vim-prettier'
-  use 'kamykn/spelunker.vim'
+  use {
+  'ishan9299/nvim-solarized-lua',
+  'vim-airline/vim-airline',
+  'vim-airline/vim-airline-themes',
+  'will133/vim-dirdiff',
+  'tpope/vim-endwise',
+  'tpope/vim-fugitive',
+  'fatih/vim-go',
+  'elzr/vim-json',
+  'dietsche/vim-lastplace',
+  'hashivim/vim-terraform',
+  'tmux-plugins/vim-tmux',
+  'wincent/terminus',
+  'z0mbix/vim-shfmt',
+  'prettier/vim-prettier',
+  'kamykn/spelunker.vim',
+}
 
   -- Post-install/update hook with neovim command
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }

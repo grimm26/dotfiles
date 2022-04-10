@@ -222,7 +222,6 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
   "vmap <D-j> <M-j>
   "vmap <D-k> <M-k>
 "endif
-" Toggle paste mode on and off
 map <leader>pp :setlocal paste!<cr>
 "
 " Returns true if paste mode is enabled
