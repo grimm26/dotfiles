@@ -8,7 +8,35 @@ require('gitsigns').setup()
 require('telescope').load_extension('fzf')
 require('nvim-tree').setup()
 local ts = require 'nvim-treesitter.configs'
-ts.setup {ensure_installed = 'maintained', highlight = {enable = true}}
+ts.setup {ensure_installed = {
+  'bash',
+  'c',
+  'comment',
+  'dockerfile',
+  'go',
+  'gomod',
+  'hcl',
+  'html',
+  'java',
+  'javascript',
+  'json',
+  'json5',
+  'lua',
+  'make',
+  'nix',
+  'perl',
+  'php',
+  'regex',
+  'python',
+  'ruby',
+  'rust',
+  'toml',
+  'typescript',
+  'vim',
+  'vue',
+  'yaml'
+ },
+ highlight = {enable = true}}
 
 -- maps for telescope
 nmap('<leader>ff',"<cmd>lua require('telescope.builtin').find_files()<cr>")
