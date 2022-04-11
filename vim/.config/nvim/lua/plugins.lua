@@ -7,22 +7,33 @@ return require('packer').startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
-  -- Simple plugins can be specified as strings
-  use 'averms/black-nvim'
-  use 'stsewd/isort.nvim'
-  use 'ellisonleao/glow.nvim'
-  use 'lewis6991/gitsigns.nvim'
   use {
   'nvim-telescope/telescope.nvim',
   requires = { {'nvim-lua/plenary.nvim'} }
   }
-  use 'kamykn/popup-menu.nvim'
   use {
     'kyazdani42/nvim-tree.lua',
     requires = { {'kyazdani42/nvim-web-devicons'} }  -- for file icons
   }
   use {
-  'ishan9299/nvim-solarized-lua',
+  'pwntester/octo.nvim',
+  requires = {
+    'nvim-lua/plenary.nvim',
+    'nvim-telescope/telescope.nvim',
+    'kyazdani42/nvim-web-devicons',
+  },
+  config = function ()
+    require"octo".setup()
+  end
+}
+  --
+  -- Simple plugins can be specified as strings in a list
+  use {
+  'kamykn/popup-menu.nvim',
+  'averms/black-nvim',
+  'stsewd/isort.nvim',
+  'ellisonleao/glow.nvim',
+  'lewis6991/gitsigns.nvim',
   'vim-airline/vim-airline',
   'vim-airline/vim-airline-themes',
   'will133/vim-dirdiff',
@@ -37,6 +48,12 @@ return require('packer').startup(function(use)
   'z0mbix/vim-shfmt',
   'prettier/vim-prettier',
   'kamykn/spelunker.vim',
+}
+
+-- colorschemes
+use {
+  'marko-cerovac/material.nvim',
+  'ishan9299/nvim-solarized-lua',
 }
 
   -- Post-install/update hook with neovim command
