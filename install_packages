@@ -283,6 +283,7 @@ case $(uname) in
       ripgrep
       fzf
       neovim
+      tflint
     )
     brew list > /tmp/brews.$$
     for pkg in ${NEEDED_PACKAGES[*]}; do
@@ -331,6 +332,14 @@ else
 fi
 
 if [[ ! -v setup_MINIMAL ]]; then
+  # terraform-ls
+  echo "terraform-ls"
+  curl -sLS $(curl -s https://api.github.com/repos/hashicorp/terraform-ls/releases/latest  | jq -r '.assets[].browser_download_url' | grep -E "${kernel}_${machine}\.zip") -o /tmp/terraform-ls.zip \
+    && unzip /tmp/terraform-ls.zip && mv terraform-ls $home_bin && chmod 755  ${home_bin}/terraform-ls
+  # tflint
+  echo "tflint"
+  export TFLINT_INSTALL_PATH=${home_bin}
+  curl -sL https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
   # tfswitch
   echo "tfswitch"
   curl -sLS https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
@@ -368,7 +377,7 @@ if [[ ! -v setup_MINIMAL ]]; then
     pyenv global $PYTHON_VERSION
   fi
   echo "Python packages:"
-  for pkg in pip pre-commit 'boto3[crt]' flake8 flake8-bugbear pylint black isort;do
+  for pkg in pip pre-commit 'boto3[crt]' flake8 flake8-bugbear pylint black isort pyright;do
     python -m pip install --upgrade --user $pkg | grep -v "Requirement already satisfied"
   done
 
