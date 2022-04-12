@@ -108,7 +108,6 @@ alias -g N='&>/dev/null'
 alias -g SL='| sort | less'
 alias -g S='| sort'
 alias -g T='|tail'
-alias -g V='| vim -'
 alias nout='netstat -nputw'
 alias nin='netstat -ntl'
 
@@ -124,7 +123,9 @@ if command -v nvim &>/dev/null; then
   alias vimdiff='nvim -d'
   export EDITOR=nvim
   export SYSTEMD_EDITOR=nvim
+  alias -g V='| nvim -'
 else
+  alias -g V='| vim -'
   alias vim="PYTHONPATH=$(python -m site --user-site) vim"
   export EDITOR=vim
   export SYSTEMD_EDITOR=vim

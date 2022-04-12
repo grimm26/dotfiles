@@ -30,7 +30,11 @@ typeset -U fpath
 export LESS="-EFRX"
 export CHEF_ENV_PATH="$HOME/git/chef/environments"
 export LC_COLLATE=C
-export EDITOR=vim
+if [[ command -v nvim &>/dev/null ]]; then
+  export EDITOR=nvim
+else
+  export EDITOR=vim
+fi
 alias kit=kitchen
 alias tf=terraform
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"

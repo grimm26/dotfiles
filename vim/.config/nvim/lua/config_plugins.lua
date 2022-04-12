@@ -4,44 +4,67 @@ local g = vim.g      -- a table to access global variables (let g:something = fo
 local set = vim.opt  -- to set options
 
 require('mini.comment').setup({})
+require('mini.completion').setup({})
+require('mini.indentscope').setup({})
+require('mini.surround').setup({})
+require('mini.trailspace').setup({})
+require('mini.pairs').setup({})
 require('gitsigns').setup()
 require('telescope').load_extension('fzf')
 require('nvim-tree').setup()
 
+-- trim EOL whitespace
+nmap('<leader>ts', "<cmd>lua MiniTrailspace.trim()<cr>")
+
+local lsp_servers = {
+  'pyright',
+  'terraformls',
+  'tflint',
+}
+for _, lsp in ipairs(lsp_servers) do
+  require('lspconfig')[lsp].setup {
+    --on_attach = on_attach,
+    --handlers = handlers,
+  }
+end
+--[[
 require'lspconfig'.pyright.setup{}
 require'lspconfig'.terraformls.setup{}
 require'lspconfig'.tflint.setup{}
+]]--
 
 local ts = require 'nvim-treesitter.configs'
-ts.setup {ensure_installed = {
-  'bash',
-  'c',
-  'comment',
-  'dockerfile',
-  'go',
-  'gomod',
-  'hcl',
-  'html',
-  'java',
-  'javascript',
-  'json',
-  'json5',
-  'lua',
-  'make',
-  'nix',
-  'perl',
-  'php',
-  'regex',
-  'python',
-  'ruby',
-  'rust',
-  'toml',
-  'typescript',
-  'vim',
-  'vue',
-  'yaml'
- },
- highlight = {enable = true}}
+ts.setup {
+  ensure_installed = {
+    'bash',
+    'c',
+    'comment',
+    'dockerfile',
+    'go',
+    'gomod',
+    'hcl',
+    'html',
+    'java',
+    'javascript',
+    'json',
+    'json5',
+    'lua',
+    'make',
+    'nix',
+    'perl',
+    'php',
+    'regex',
+    'python',
+    'ruby',
+    'rust',
+    'toml',
+    'typescript',
+    'vim',
+    'vue',
+    'yaml'
+  },
+  highlight = {enable = true}
+}
 
 -- maps for telescope
 nmap('<leader>ff',"<cmd>lua require('telescope.builtin').find_files()<cr>")
