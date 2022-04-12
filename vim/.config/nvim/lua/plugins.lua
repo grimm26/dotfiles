@@ -15,46 +15,35 @@ return require('packer').startup(function(use)
     'kyazdani42/nvim-tree.lua',
     requires = { {'kyazdani42/nvim-web-devicons'} }  -- for file icons
   }
-  use {
-  'pwntester/octo.nvim',
-  requires = {
-    'nvim-lua/plenary.nvim',
-    'nvim-telescope/telescope.nvim',
-    'kyazdani42/nvim-web-devicons',
-  },
-  config = function ()
-    require"octo".setup()
-  end
-}
-  --
+
   -- Simple plugins can be specified as strings in a list
   use {
-  'kamykn/popup-menu.nvim',
-  'averms/black-nvim',
-  'stsewd/isort.nvim',
-  'ellisonleao/glow.nvim',
-  'lewis6991/gitsigns.nvim',
-  'vim-airline/vim-airline',
-  'vim-airline/vim-airline-themes',
-  'will133/vim-dirdiff',
-  'tpope/vim-endwise',
-  'tpope/vim-fugitive',
-  'fatih/vim-go',
-  'elzr/vim-json',
-  'dietsche/vim-lastplace',
-  'hashivim/vim-terraform',
-  'tmux-plugins/vim-tmux',
-  'wincent/terminus',
-  'z0mbix/vim-shfmt',
-  'prettier/vim-prettier',
-  'kamykn/spelunker.vim',
-}
+    'kamykn/popup-menu.nvim',
+    'averms/black-nvim',
+    'stsewd/isort.nvim',
+    'ellisonleao/glow.nvim',
+    'lewis6991/gitsigns.nvim',
+    'vim-airline/vim-airline',
+    'vim-airline/vim-airline-themes',
+    'will133/vim-dirdiff',
+    'tpope/vim-endwise',
+    'tpope/vim-fugitive',
+    'fatih/vim-go',
+    'elzr/vim-json',
+    'dietsche/vim-lastplace',
+    'hashivim/vim-terraform',
+    'tmux-plugins/vim-tmux',
+    'wincent/terminus',
+    'z0mbix/vim-shfmt',
+    'prettier/vim-prettier',
+    'kamykn/spelunker.vim',
+  }
 
--- colorschemes
-use {
-  'marko-cerovac/material.nvim',
-  'ishan9299/nvim-solarized-lua',
-}
+  -- colorschemes
+  use {
+    'marko-cerovac/material.nvim',
+    'ishan9299/nvim-solarized-lua',
+  }
 
   -- Post-install/update hook with neovim command
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
