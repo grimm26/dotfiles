@@ -30,7 +30,7 @@ typeset -U fpath
 export LESS="-EFRX"
 export CHEF_ENV_PATH="$HOME/git/chef/environments"
 export LC_COLLATE=C
-if [[ command -v nvim &>/dev/null ]]; then
+if command -v nvim &>/dev/null; then
   export EDITOR=nvim
 else
   export EDITOR=vim
