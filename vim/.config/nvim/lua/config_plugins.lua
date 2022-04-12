@@ -8,6 +8,10 @@ require('gitsigns').setup()
 require('telescope').load_extension('fzf')
 require('nvim-tree').setup()
 
+require'lspconfig'.pyright.setup{}
+require'lspconfig'.terraformls.setup{}
+require'lspconfig'.tflint.setup{}
+
 local ts = require 'nvim-treesitter.configs'
 ts.setup {ensure_installed = {
   'bash',
