@@ -12,6 +12,9 @@ fi
 if [[ -d /usr/local/opt/gnu-getopt/bin ]]; then
   path=('/usr/local/opt/gnu-getopt/bin' $path)
 fi
+if [[ -d /usr/local/opt/curl/bin ]]; then
+  path=('/usr/local/opt/curl/bin' $path)
+fi
 export MY_BIN="$HOME/.local/bin"
 path=("$MY_BIN" $path)
 typeset -U path

@@ -5,6 +5,7 @@ local set = vim.opt  -- to set options
 
 g.mapleader = ' '
 require('helpers')
+require('lastplace')
 cmd([[
 augroup packer_user_config
   autocmd!
@@ -55,22 +56,8 @@ set.cursorcolumn=true
 set.ignorecase=false
 set.smartcase=false
 set.laststatus=2
--- airline theme
-g['airline#extensions#tabline#formatter'] = 'unique_tail'
-g.airline_theme="base16_solarized"
-g.airline_solarized_bg='dark'
-g.airline_powerline_fonts = 1
 --
 g.vim_json_syntax_conceal = 0
--- highlight trailing spaces
-cmd([[
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
-]])
 -- Base utility mappings
 nmap('<leader>ev','<cmd>vsplit $MYVIMRC<cr>')
 nmap('<leader>sv','<cmd>source $MYVIMRC<cr>')

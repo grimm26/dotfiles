@@ -35,14 +35,11 @@ return require('packer').startup(function(use)
     'stsewd/isort.nvim',
     'ellisonleao/glow.nvim',
     'lewis6991/gitsigns.nvim',
-    'vim-airline/vim-airline',
-    'vim-airline/vim-airline-themes',
     'will133/vim-dirdiff',
     'tpope/vim-endwise',
     'tpope/vim-fugitive',
     'fatih/vim-go',
     'elzr/vim-json',
-    'dietsche/vim-lastplace',
     'hashivim/vim-terraform',
     'tmux-plugins/vim-tmux',
     'wincent/terminus',
@@ -51,6 +48,10 @@ return require('packer').startup(function(use)
     'kamykn/spelunker.vim',
   }
 
+  use {
+   'nvim-lualine/lualine.nvim',
+   requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+  }
   -- colorschemes
   use {
     'marko-cerovac/material.nvim',
