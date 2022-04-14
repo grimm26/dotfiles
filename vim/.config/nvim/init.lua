@@ -3,15 +3,15 @@ local fn = vim.fn    -- to call Vim functions e.g. fn.bufnr()
 local g = vim.g      -- a table to access global variables (let g:something = foo)
 local set = vim.opt  -- to set options
 
+-- Install packer
+local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
+
+if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+  vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+end
 g.mapleader = ' '
 require('helpers')
 require('lastplace')
-cmd([[
-augroup packer_user_config
-  autocmd!
-  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-augroup end
-]])
 require('plugins')
 require('config_plugins')
 cmd 'silent! helptags ALL'
@@ -33,12 +33,17 @@ set.tm=500
 set.modeline=true
 set.modelines=5
 set.hlsearch=false
+--Make line numbers default
+vim.wo.number = false
+nmap('<leader>num','<cmd>:set number!<cr>')
+--Enable break indent
+set.breakindent = true
 set.expandtab=true
 set.shiftwidth=2
 set.tabstop=2
 set.softtabstop=2
-set.ai=true --Auto indent
-set.si=true --Smart indent
+vim.bo.autoindent=true --Auto indent
+set.smartindent=true --Smart indent
 -- I'm not a fan of folding in general so I disable it.
 set.foldenable=false
 set.guifont='Monaco:h14'

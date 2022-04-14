@@ -2,6 +2,12 @@
 
 -- Only required if you have packer configured as `opt`
 --vim.cmd [[packadd packer.nvim]]
+vim.cmd [[
+  augroup Packer
+    autocmd!
+    autocmd BufWritePost plugins.lua PackerCompile
+  augroup end
+]]
 
 return require('packer').startup(function(use)
   -- Packer can manage itself
@@ -42,7 +48,7 @@ return require('packer').startup(function(use)
     'elzr/vim-json',
     'hashivim/vim-terraform',
     'tmux-plugins/vim-tmux',
-    'wincent/terminus',
+  --  'wincent/terminus',
     'z0mbix/vim-shfmt',
     'prettier/vim-prettier',
     'kamykn/spelunker.vim',
@@ -61,6 +67,7 @@ return require('packer').startup(function(use)
   -- Post-install/update hook with neovim command
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
 
   use { 'echasnovski/mini.nvim', branch = 'stable' }
 end)
