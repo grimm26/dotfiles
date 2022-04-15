@@ -36,6 +36,10 @@ return require('packer').startup(function(use)
   -- Simple plugins can be specified as strings in a list
   use {
     'neovim/nvim-lspconfig',
+    'hrsh7th/nvim-cmp',
+    'hrsh7th/cmp-nvim-lsp',
+    'saadparwaiz1/cmp_luasnip',
+    'L3MON4D3/LuaSnip',
     'kamykn/popup-menu.nvim',
     'averms/black-nvim',
     'stsewd/isort.nvim',
@@ -48,7 +52,6 @@ return require('packer').startup(function(use)
     'elzr/vim-json',
     'hashivim/vim-terraform',
     'tmux-plugins/vim-tmux',
-  --  'wincent/terminus',
     'z0mbix/vim-shfmt',
     'prettier/vim-prettier',
     'kamykn/spelunker.vim',
