@@ -86,7 +86,7 @@ case $(uname) in
     # Install neovim
       curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ${home_bin}/nvim.appimage
       chmod u+x ${home_bin}/nvim.appimage
-      ln -s  ${home_bin}/nvim.appimage  ${home_bin}/nvim
+      [[ -L ${home_bin}/nvim ]] || ln -s  ${home_bin}/nvim.appimage  ${home_bin}/nvim
     fi
 
     # Latest git

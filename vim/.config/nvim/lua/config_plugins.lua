@@ -200,71 +200,73 @@ require("lspconfig").terraformls.setup({
 })
 vim.cmd([[autocmd BufWritePre *.tf lua vim.lsp.buf.formatting_sync()]])
 
+-- commenting out snip and cmp setup for now cuz I don't know how to make it work :)
+-- It was just copied from https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
 -- luasnip setup
-local luasnip = require("luasnip")
-
--- nvim-cmp setup
-local cmp = require("cmp")
-cmp.setup({
-	snippet = {
-		expand = function(args)
-			require("luasnip").lsp_expand(args.body)
-		end,
-	},
-	mapping = {
-		["<C-p>"] = cmp.mapping.select_prev_item(),
-		["<C-n>"] = cmp.mapping.select_next_item(),
-		["<C-d>"] = cmp.mapping.scroll_docs(-4),
-		["<C-f>"] = cmp.mapping.scroll_docs(4),
-		["<C-Space>"] = cmp.mapping.complete(),
-		["<C-e>"] = cmp.mapping.close(),
-		["<CR>"] = cmp.mapping.confirm({
-			behavior = cmp.ConfirmBehavior.Replace,
-			select = true,
-		}),
-		["<Tab>"] = function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			elseif luasnip.expand_or_jumpable() then
-				luasnip.expand_or_jump()
-			else
-				fallback()
-			end
-		end,
-		["<S-Tab>"] = function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif luasnip.jumpable(-1) then
-				luasnip.jump(-1)
-			else
-				fallback()
-			end
-		end,
-	},
-	sources = {
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
-	},
-})
-
-require("null-ls").setup({
-	sources = {
-		require("null-ls").builtins.formatting.stylua,
-		require("null-ls").builtins.formatting.terrafmt,
-		require("null-ls").builtins.formatting.terraform_fmt,
-		require("null-ls").builtins.formatting.isort,
-		require("null-ls").builtins.diagnostics.flake8,
-	},
-	on_attach = function(client)
-		if client.resolved_capabilities.document_formatting then
-			vim.cmd([[
-            augroup LspFormatting
-                autocmd! * <buffer>
-                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-            augroup END
-            ]])
-		end
-	end,
-})
+-- local luasnip = require("luasnip")
+--
+-- -- nvim-cmp setup
+-- local cmp = require("cmp")
+-- cmp.setup({
+-- 	snippet = {
+-- 		expand = function(args)
+-- 			require("luasnip").lsp_expand(args.body)
+-- 		end,
+-- 	},
+-- 	mapping = {
+-- 		["<C-p>"] = cmp.mapping.select_prev_item(),
+-- 		["<C-n>"] = cmp.mapping.select_next_item(),
+-- 		["<C-d>"] = cmp.mapping.scroll_docs(-4),
+-- 		["<C-f>"] = cmp.mapping.scroll_docs(4),
+-- 		["<C-Space>"] = cmp.mapping.complete(),
+-- 		["<C-e>"] = cmp.mapping.close(),
+-- 		["<CR>"] = cmp.mapping.confirm({
+-- 			behavior = cmp.ConfirmBehavior.Replace,
+-- 			select = true,
+-- 		}),
+-- 		["<Tab>"] = function(fallback)
+-- 			if cmp.visible() then
+-- 				cmp.select_next_item()
+-- 			elseif luasnip.expand_or_jumpable() then
+-- 				luasnip.expand_or_jump()
+-- 			else
+-- 				fallback()
+-- 			end
+-- 		end,
+-- 		["<S-Tab>"] = function(fallback)
+-- 			if cmp.visible() then
+-- 				cmp.select_prev_item()
+-- 			elseif luasnip.jumpable(-1) then
+-- 				luasnip.jump(-1)
+-- 			else
+-- 				fallback()
+-- 			end
+-- 		end,
+-- 	},
+-- 	sources = {
+-- 		{ name = "nvim_lsp" },
+-- 		{ name = "luasnip" },
+-- 	},
+-- })
+--
+-- require("null-ls").setup({
+-- 	sources = {
+-- 		require("null-ls").builtins.formatting.stylua,
+-- 		require("null-ls").builtins.formatting.terrafmt,
+-- 		require("null-ls").builtins.formatting.terraform_fmt,
+-- 		require("null-ls").builtins.formatting.isort,
+-- 		require("null-ls").builtins.diagnostics.flake8,
+-- 	},
+-- 	on_attach = function(client)
+-- 		if client.resolved_capabilities.document_formatting then
+-- 			vim.cmd([[
+--             augroup LspFormatting
+--                 autocmd! * <buffer>
+--                 autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+--             augroup END
+--             ]])
+-- 		end
+-- 	end,
+-- })
 
 -- vim: ts=2 sts=2 sw=2 et

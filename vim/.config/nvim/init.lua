@@ -15,6 +15,8 @@ require("lastplace")
 require("plugins")
 require("config_plugins")
 cmd("command! PU PackerSync")
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = 'menuone,noselect'
 -- :W sudo saves the file
 -- (useful for handling the permission-denied error)
 cmd("command! W w !sudo tee % > /dev/null")
