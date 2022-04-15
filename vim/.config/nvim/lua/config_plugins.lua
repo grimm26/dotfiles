@@ -244,6 +244,7 @@ require("null-ls").setup({
 	sources = {
 		require("null-ls").builtins.formatting.stylua,
 		require("null-ls").builtins.formatting.terrafmt,
+		require("null-ls").builtins.formatting.isort,
 		require("null-ls").builtins.diagnostics.flake8,
 	},
 	on_attach = function(client)

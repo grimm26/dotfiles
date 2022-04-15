@@ -6,7 +6,7 @@
 GOLANG_VERSION="1.17.8"
 NODEJS_VERSION="16.14.2"
 PYTHON_VERSION="3.10.4"
-NEOVIM_VERSION="0.6.1"
+NEOVIM_VERSION="0.7.0"
 while getopts 'M' OPT; do
   case $OPT in
     M) setup_MINIMAL=1 ;;
