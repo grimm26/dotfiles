@@ -191,6 +191,13 @@ for _, lsp in ipairs(servers) do
 		capabilities = capabilities,
 	})
 end
+-- disable formatting for terraformls, null-ls + terraform_fmt will do it
+require("lspconfig").terraformls.setup({
+	on_attach = function(client)
+		client.resolved_capabilities.document_formatting = false
+		client.resolved_capabilities.document_range_formatting = false
+	end,
+})
 vim.cmd([[autocmd BufWritePre *.tf lua vim.lsp.buf.formatting_sync()]])
 
 -- luasnip setup
@@ -244,6 +251,7 @@ require("null-ls").setup({
 	sources = {
 		require("null-ls").builtins.formatting.stylua,
 		require("null-ls").builtins.formatting.terrafmt,
+		require("null-ls").builtins.formatting.terraform_fmt,
 		require("null-ls").builtins.formatting.isort,
 		require("null-ls").builtins.diagnostics.flake8,
 	},

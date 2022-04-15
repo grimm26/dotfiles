@@ -140,6 +140,7 @@ case $(uname) in
       npm install --global jsonlint
       # Install prettier
       npm install --global prettier
+      npm install --global neovim
       # Build ugrep
       echo "ugrep"
       if upinst_from_git https://github.com/Genivia/ugrep ~/git/ugrep; then
@@ -282,7 +283,6 @@ case $(uname) in
       fd
       ripgrep
       fzf
-      neovim
       tflint
     )
     brew list > /tmp/brews.$$
@@ -298,6 +298,13 @@ case $(uname) in
       && rm /tmp/dive-latest.tgz \
       && cp /tmp/dive.$$/dive ${home_bin} \
       && chmod 755 ${home_bin}/dive
+    # neovim
+    if [[ "NVIM v${NEOVIM_VERSION}" != $(nvim --version |head -1) ]]; then
+      echo neovim
+      curl -sLSo /tmp/nvim-macos.tar.gz https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/nvim-macos.tar.gz \
+        && gtar -C ~/.local/ -xzf /tmp/nvim-macos.tar.gz \
+        && ln -sf ~/local/nvim-osx64/bin/nvim ${home_bin}/nvim
+    fi
     ;;
   *)
     echo "Unknown OS type"
@@ -343,6 +350,8 @@ if [[ ! -v setup_MINIMAL ]]; then
   # tfswitch
   echo "tfswitch"
   curl -sLS https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
+  echo "terrafmt"
+  go install github.com/katbyte/terrafmt@latest
 
   # k9s
   echo "k9s"
