@@ -6,20 +6,19 @@ local set = vim.opt -- to set options
 -- Install packer
 local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-	vim.fn.execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
+if fn.empty(vim.fn.glob(install_path)) > 0 then
+  fn.execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
 end
-g.mapleader = " "
-require("helpers")
+--Remap space as leader key
+vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+g.mapleader = ' '
+g.maplocalleader = ' '
 require("lastplace")
 require("plugins")
 require("config_plugins")
-cmd("command! PU PackerSync")
+vim.api.nvim_create_user_command("PU", "PackerSync", {})
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
--- :W sudo saves the file
--- (useful for handling the permission-denied error)
-cmd("command! W w !sudo tee % > /dev/null")
 set.updatetime = 100
 set.undofile = true
 --Show matching brackets when text indicator is over them
@@ -34,7 +33,7 @@ set.modelines = 5
 set.hlsearch = false
 --Make line numbers default
 vim.wo.number = false
-nmap("<leader>num", "<cmd>:set number!<cr>")
+vim.keymap.set("n", "<leader>num", "<cmd>:set number!<cr>")
 --Enable break indent
 set.breakindent = true
 set.expandtab = true
@@ -48,7 +47,7 @@ set.foldenable = false
 set.guifont = "Monaco:h14"
 -- Use Unix as the standard file type
 set.ffs = { "unix", "dos", "mac" }
-if vim.fn.has("termguicolors") == 1 then
+if fn.has("termguicolors") == 1 then
 	set.termguicolors = true
 end
 set.background = "dark"
@@ -63,12 +62,12 @@ set.laststatus = 2
 --
 g.vim_json_syntax_conceal = 0
 -- Base utility mappings
-nmap("<leader>ev", "<cmd>vsplit $MYVIMRC<cr>")
-nmap("<leader>sv", "<cmd>source $MYVIMRC<cr>")
+vim.keymap.set("n", "<leader>ev", "<cmd>vsplit $MYVIMRC<cr>")
+vim.keymap.set("n", "<leader>sv", "<cmd>source $MYVIMRC<cr>")
 -- surround word cursor is on in double quotes
-nmap('<leader>"', 'viw<esc>a"<esc>bi"<esc>lel')
+vim.keymap.set("n", '<leader>"', 'viw<esc>a"<esc>bi"<esc>lel')
 -- surround word cursor is on in single quotes
-nmap("<leader>'", "viw<esc>a'<esc>bi'<esc>lel")
+vim.keymap.set("n", "<leader>'", "viw<esc>a'<esc>bi'<esc>lel")
 -- help my common typos
 cmd([[
 iabbrev adn and

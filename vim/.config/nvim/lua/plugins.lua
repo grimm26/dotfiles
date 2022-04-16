@@ -2,12 +2,8 @@
 
 -- Only required if you have packer configured as `opt`
 --vim.cmd [[packadd packer.nvim]]
-vim.cmd([[
-  augroup Packer
-    autocmd!
-    autocmd BufWritePost plugins.lua PackerCompile
-  augroup end
-]])
+local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
+vim.api.nvim_create_autocmd('BufWritePost', { command = 'source <afile> | PackerCompile', group = packer_group, pattern = 'plugins.lua' })
 
 return require("packer").startup(function(use)
 	-- Packer can manage itself

@@ -1,5 +1,4 @@
 local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')
-local fn = vim.fn -- to call Vim functions e.g. fn.bufnr()
 local g = vim.g -- a table to access global variables (let g:something = foo)
 local set = vim.opt -- to set options
 
@@ -44,7 +43,7 @@ require("lualine").setup({
 })
 
 -- trim EOL whitespace
-nmap("<leader>ts", "<cmd>lua MiniTrailspace.trim()<cr>")
+vim.keymap.set("n", "<leader>ts", MiniTrailspace.trim)
 
 local ts = require("nvim-treesitter.configs")
 ts.setup({
@@ -80,13 +79,13 @@ ts.setup({
 })
 
 -- maps for telescope
-nmap("<leader>ff", "<cmd>lua require('telescope.builtin').find_files()<cr>")
-nmap("<leader>fg", "<cmd>lua require('telescope.builtin').live_grep()<cr>")
-nmap("<leader>fb", "<cmd>lua require('telescope.builtin').buffers()<cr>")
-nmap("<leader>fh", "<cmd>lua require('telescope.builtin').help_tags()<cr>")
-nmap("<leader>fgf", "<cmd>lua require('telescope.builtin').git_files()<cr>")
-nmap("<leader>fgc", "<cmd>lua require('telescope.builtin').git_commits()<cr>")
-map("", "<C-n>", ":NvimTreeToggle<cr>")
+vim.keymap.set("n", "<leader>ff", require('telescope.builtin').find_files)
+vim.keymap.set("n", "<leader>fg", require('telescope.builtin').live_grep)
+vim.keymap.set("n", "<leader>fb", require('telescope.builtin').buffers)
+vim.keymap.set("n", "<leader>fh", require('telescope.builtin').help_tags)
+vim.keymap.set("n", "<leader>fgf", require('telescope.builtin').git_files)
+vim.keymap.set("n", "<leader>fgc", require('telescope.builtin').git_commits)
+vim.keymap.set("", "<C-n>", ":NvimTreeToggle<cr>")
 -- shfmt options
 g.shfmt_extra_args = "-i 2 -bn -ci"
 g.shfmt_fmt_on_save = 1
@@ -172,7 +171,7 @@ local on_attach = function(_, bufnr)
 		[[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]],
 		opts
 	)
-	vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
+  vim.api.nvim_create_user_command("Format", vim.lsp.buf.formatting, {})
 end
 
 -- nvim-cmp supports additional completion capabilities
@@ -198,7 +197,7 @@ require("lspconfig").terraformls.setup({
 		client.resolved_capabilities.document_range_formatting = false
 	end,
 })
-vim.cmd([[autocmd BufWritePre *.tf lua vim.lsp.buf.formatting_sync()]])
+vim.api.nvim_create_autocmd("BufWritePre", { callback = vim.lsp.buf.formatting_sync, pattern = {"*.tf", "*.tfvars"} })
 
 -- commenting out snip and cmp setup for now cuz I don't know how to make it work :)
 -- It was just copied from https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
@@ -248,25 +247,25 @@ vim.cmd([[autocmd BufWritePre *.tf lua vim.lsp.buf.formatting_sync()]])
 -- 		{ name = "luasnip" },
 -- 	},
 -- })
---
--- require("null-ls").setup({
--- 	sources = {
--- 		require("null-ls").builtins.formatting.stylua,
--- 		require("null-ls").builtins.formatting.terrafmt,
--- 		require("null-ls").builtins.formatting.terraform_fmt,
--- 		require("null-ls").builtins.formatting.isort,
--- 		require("null-ls").builtins.diagnostics.flake8,
--- 	},
--- 	on_attach = function(client)
--- 		if client.resolved_capabilities.document_formatting then
--- 			vim.cmd([[
---             augroup LspFormatting
---                 autocmd! * <buffer>
---                 autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
---             augroup END
---             ]])
--- 		end
--- 	end,
--- })
+
+require("null-ls").setup({
+	sources = {
+		require("null-ls").builtins.formatting.terrafmt,
+		require("null-ls").builtins.formatting.terraform_fmt,
+		require("null-ls").builtins.formatting.isort,
+		require("null-ls").builtins.diagnostics.flake8,
+		require("null-ls").builtins.diagnostics.selene,
+	},
+	on_attach = function(client)
+		if client.resolved_capabilities.document_formatting then
+			cmd([[
+		    augroup LspFormatting
+		      autocmd! * <buffer>
+		      autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+		    augroup END
+		  ]])
+	 	end
+	end,
+})
 
 -- vim: ts=2 sts=2 sw=2 et

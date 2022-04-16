@@ -15,6 +15,9 @@ fi
 if [[ -d /usr/local/opt/curl/bin ]]; then
   path=('/usr/local/opt/curl/bin' $path)
 fi
+if [[ -d ${HOME}/.cargo/bin ]]; then
+  path=("${HOME}/.cargo/bin" $path)
+fi
 export MY_BIN="$HOME/.local/bin"
 path=("$MY_BIN" $path)
 typeset -U path
