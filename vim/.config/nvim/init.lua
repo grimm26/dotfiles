@@ -64,10 +64,6 @@ g.vim_json_syntax_conceal = 0
 -- Base utility mappings
 vim.keymap.set("n", "<leader>ev", "<cmd>vsplit $MYVIMRC<cr>")
 vim.keymap.set("n", "<leader>sv", "<cmd>source $MYVIMRC<cr>")
--- surround word cursor is on in double quotes
-vim.keymap.set("n", '<leader>"', 'viw<esc>a"<esc>bi"<esc>lel')
--- surround word cursor is on in single quotes
-vim.keymap.set("n", "<leader>'", "viw<esc>a'<esc>bi'<esc>lel")
 -- help my common typos
 cmd([[
 iabbrev adn and
