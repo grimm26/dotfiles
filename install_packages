@@ -93,7 +93,7 @@ case $(uname) in
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
       sudo add-apt-repository -y -u ppa:git-core/ppa
     fi
-    for pkg in fonts-firacode curl git libcurl4-openssl-dev keychain jq tmux source-highlight fd-find stow autojump ripgrep; do
+    for pkg in fonts-firacode curl git libcurl4-openssl-dev keychain jq tmux source-highlight fd-find stow autojump ripgrep liblua5.3-dev lua5.3 cmake; do
       dpkg -s $pkg &>/dev/null \
         || sudo apt-get install -y $pkg
     done
@@ -141,6 +141,16 @@ case $(uname) in
       # Install prettier
       npm install --global prettier
       npm install --global neovim
+      # luarocks Not gonna require this now
+      # if !command -v luarocks &>/dev/null && [[ $(luarocks --version |head -1 |awk '{print $2}') != "3.9.0" ]]; then
+      #   curl -L -o /tmp/luarocks_3-9-0.tar.gz https://github.com/luarocks/luarocks/archive/refs/tags/v3.9.0.tar.gz \
+      #     && tar -C /tmp/ -zxpf /tmp/luarocks_3-9-0.tar.gz \
+      #     && (cd /tmp/luarocks-3.9.0  && ./configure --prefix=${HOME}/.local && make && make install)
+      # else
+      #   if !command -v lua-format &> /dev/null; then
+      #     luarocks install --server=https://luarocks.org/dev luaformatter
+      #   fi
+      # fi
       # Build ugrep
       echo "ugrep"
       if upinst_from_git https://github.com/Genivia/ugrep ~/git/ugrep; then
@@ -316,9 +326,9 @@ esac
 # starship (prompt)
 print -n "starship: "
 if whence starship &> /dev/null; then
-  installed_starship_version=$(starship --version |grep tag |cut -d: -f2)
+  installed_starship_version=$(starship --version |head -1 |awk '{print $2}')
   latest_starship_version=$(gh release list --limit 1 --repo starship/starship |awk '{print $1}')
-  if [[ $installed_starship_version != $latest_starship_version ]]; then
+  if [[ "v"${installed_starship_version} != $latest_starship_version ]]; then
     print "updating."
     if [[ $(uname) == "Linux" ]]; then
       curl -fsSL https://starship.rs/install.sh | bash --posix -s - -y -b ${home_bin} -p unknown-linux-gnu
