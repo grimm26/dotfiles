@@ -4,7 +4,7 @@ local g = vim.g -- a table to access global variables (let g:something = foo)
 local set = vim.opt -- to set options
 
 -- Install packer
-local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 
 if fn.empty(vim.fn.glob(install_path)) > 0 then
   fn.execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)

@@ -284,6 +284,7 @@ case $(uname) in
       ripgrep
       fzf
       tflint
+      selene
     )
     brew list > /tmp/brews.$$
     for pkg in ${NEEDED_PACKAGES[*]}; do

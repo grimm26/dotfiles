@@ -12,6 +12,16 @@ require("gitsigns").setup()
 require("telescope").load_extension("fzf")
 require("nvim-tree").setup()
 -- Most of the lualine config is default, just had it here to show what can be tweaked.
+local function diff_source()
+  local gitsigns = vim.b.gitsigns_status_dict
+  if gitsigns then
+    return {
+      added = gitsigns.added,
+      modified = gitsigns.changed,
+      removed = gitsigns.removed
+    }
+  end
+end
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
@@ -23,8 +33,8 @@ require("lualine").setup({
 		globalstatus = false,
 	},
 	sections = {
-		lualine_a = { "mode" },
-		lualine_b = { "branch", "diff", "diagnostics" },
+		lualine_a = { "mode", },
+    lualine_b = { {"b:gitsigns_head", icon = ''}, {"diff", source = diff_source}, "diagnostics" },
 		lualine_c = { "filename" },
 		lualine_x = { "encoding", "fileformat", "filetype" },
 		lualine_y = { "progress" },
@@ -39,7 +49,7 @@ require("lualine").setup({
 		lualine_z = {},
 	},
 	tabline = {},
-	extensions = {},
+	extensions = {"nvim-tree"},
 })
 
 -- trim EOL whitespace
