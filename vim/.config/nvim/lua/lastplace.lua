@@ -8,7 +8,7 @@
 -- For a copy, see <https://opensource.org/licenses/MIT>.
 --
 
-local g = vim.g
+-- local g = vim.g
 local bo = vim.bo
 local fn = vim.fn
 local api = vim.api
@@ -35,7 +35,7 @@ function M.setup(options)
 	end
 end
 
-function set_cursor_position()
+function SetCursorPosition()
 	-- Return if we have a buffer or filetype we want to ignore
 	for _, k in pairs(config["ignore_buftype"]) do
 		if bo.buftype == k then
@@ -56,7 +56,7 @@ function set_cursor_position()
 
 	local cursor_position = api.nvim_buf_get_mark(0, '"')
 	local row = cursor_position[1]
-	local col = cursor_position[2]
+	-- local col = cursor_position[2]
 
 	-- If the saved row is less than the number of rows in the buffer,
 	-- then continue
@@ -90,7 +90,7 @@ end
 api.nvim_exec(
 	[[
   augroup remember_plugin
-    autocmd BufWinEnter * lua set_cursor_position()
+    autocmd BufWinEnter * lua SetCursorPosition()
   augroup END
 ]],
 	false

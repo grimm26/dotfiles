@@ -136,91 +136,64 @@ g.spelunker_white_list_for_user = {
 }
 
 -- LSP settings
-local lspconfig = require("lspconfig")
-local on_attach = function(_, bufnr)
-    local opts = {noremap = true, silent = true}
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "gD",
-                                "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "gd",
-                                "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "K",
-                                "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "gi",
-                                "<cmd>lua vim.lsp.buf.implementation()<CR>",
-                                opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>",
-                                "<cmd>lua vim.lsp.buf.signature_help()<CR>",
-                                opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wa",
-                                "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>",
-                                opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wr",
-                                "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>",
-                                opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wl",
-                                "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
-                                opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>D",
-                                "<cmd>lua vim.lsp.buf.type_definition()<CR>",
-                                opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn",
-                                "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "gr",
-                                "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca",
-                                "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>so",
-                                [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]],
-                                opts)
-    vim.api.nvim_create_user_command("Format", vim.lsp.buf.formatting, {})
-end
-
--- nvim-cmp supports additional completion capabilities
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
-
--- Enable the following language servers
-local servers = {
-    "terraformls", -- 'tflint', Leaves server laying around
-    "pyright"
-}
-for _, lsp in ipairs(servers) do
-    lspconfig[lsp].setup({on_attach = on_attach, capabilities = capabilities})
-end
--- disable formatting for terraformls, null-ls + terraform_fmt will do it
-require("lspconfig").terraformls.setup({
-    on_attach = function(client)
-        client.resolved_capabilities.document_formatting = false
-        client.resolved_capabilities.document_range_formatting = false
-    end
+-- lsop installer
+local lsp_installer = require("nvim-lsp-installer")
+lsp_installer.settings({
+    pip = {
+        install_args = {"--user", "--upgrade"}
+    }
 })
--- Make null-ls terraform_fmt format terraform files on write
+
+local enhance_server_opts = {
+  -- Provide settings that should only apply to the "sumneko_lua" server
+  ["sumneko_lua"] = function(opts)
+    opts.settings = {
+      Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Setup your lua path
+        -- path = runtime_path,
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    }
+  }
+  end,
+}
+-- Register a handler that will be called for each installed server when it's ready (i.e. when installation is finished
+-- or if the server is already installed).
+lsp_installer.on_server_ready(function(server)
+    local opts = {}
+
+    -- (optional) Customize the options passed to the server
+    -- if server.name == "tsserver" then
+    --     opts.root_dir = function() ... end
+    -- end
+
+    if enhance_server_opts[server.name] then
+      -- Enhance the default opts with the server-specific ones
+      enhance_server_opts[server.name](opts)
+    end
+    -- This setup() function will take the provided server configuration and decorate it with the necessary properties
+    -- before passing it onwards to lspconfig.
+    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+    server:setup(opts)
+end)
+
 vim.api.nvim_create_autocmd("BufWritePre", {
     callback = vim.lsp.buf.formatting_sync,
     pattern = {"*.tf", "*.tfvars"}
-})
-
-require("null-ls").setup({
-    sources = {
-        require("null-ls").builtins.formatting.terrafmt,
-        require("null-ls").builtins.formatting.terraform_fmt,
-        require("null-ls").builtins.formatting.isort,
-        -- require("null-ls").builtins.formatting.lua_format,
-        require("null-ls").builtins.diagnostics.flake8,
-        require("null-ls").builtins.diagnostics.selene,
-        require("null-ls").builtins.diagnostics.zsh,
-        require("null-ls").builtins.completion.spell
-    },
-    on_attach = function(client)
-        if client.resolved_capabilities.document_formatting then
-            cmd([[
-		    augroup LspFormatting
-		      autocmd! * <buffer>
-		      autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-		    augroup END
-		  ]])
-        end
-    end
 })
 
 -- The below cmp/snip was just copied from https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua

@@ -34,12 +34,24 @@ return require("packer").startup(function(use)
 
     -- Simple plugins can be specified as strings in a list
     use({
-        "neovim/nvim-lspconfig", "hrsh7th/nvim-cmp", "hrsh7th/cmp-nvim-lsp",
-        "saadparwaiz1/cmp_luasnip", "L3MON4D3/LuaSnip",
-        "kamykn/popup-menu.nvim", "averms/black-nvim", "ellisonleao/glow.nvim",
-        "lewis6991/gitsigns.nvim", "will133/vim-dirdiff", "tpope/vim-endwise",
-        "tpope/vim-fugitive", "fatih/vim-go", "elzr/vim-json",
-        "tmux-plugins/vim-tmux", "z0mbix/vim-shfmt", "prettier/vim-prettier",
+        "neovim/nvim-lspconfig",
+        'williamboman/nvim-lsp-installer',
+        "hrsh7th/nvim-cmp",
+        "hrsh7th/cmp-nvim-lsp",
+        "saadparwaiz1/cmp_luasnip",
+        "L3MON4D3/LuaSnip",
+        "kamykn/popup-menu.nvim",
+        "averms/black-nvim",
+        "ellisonleao/glow.nvim",
+        "lewis6991/gitsigns.nvim",
+        "will133/vim-dirdiff",
+        "tpope/vim-endwise",
+        "tpope/vim-fugitive",
+        "fatih/vim-go",
+        "elzr/vim-json",
+        "tmux-plugins/vim-tmux",
+        "z0mbix/vim-shfmt",
+        "prettier/vim-prettier",
         "kamykn/spelunker.vim"
     })
 
@@ -56,9 +68,4 @@ return require("packer").startup(function(use)
     use("nvim-treesitter/nvim-treesitter-textobjects")
 
     use({"echasnovski/mini.nvim", branch = "stable"})
-
-    use({
-        "jose-elias-alvarez/null-ls.nvim",
-        requires = {"nvim-lua/plenary.nvim"}
-    })
 end)
