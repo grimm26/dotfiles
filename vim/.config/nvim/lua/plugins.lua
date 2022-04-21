@@ -52,9 +52,21 @@ return require("packer").startup(function(use)
         "tmux-plugins/vim-tmux",
         "z0mbix/vim-shfmt",
         "prettier/vim-prettier",
-        "kamykn/spelunker.vim"
+        "kamykn/spelunker.vim",
     })
 
+    use {
+        "folke/which-key.nvim",
+        config = function()
+          require("which-key").setup {
+            plugins = {
+              spelling = {
+                enabled = true
+              }
+            }
+          }
+      end
+    }
     use({
         "nvim-lualine/lualine.nvim",
         requires = {"kyazdani42/nvim-web-devicons", opt = true}

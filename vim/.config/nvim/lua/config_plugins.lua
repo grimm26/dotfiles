@@ -70,12 +70,12 @@ ts.setup({
 })
 
 -- maps for telescope
-vim.keymap.set("n", "<leader>ff", require('telescope.builtin').find_files)
-vim.keymap.set("n", "<leader>fg", require('telescope.builtin').live_grep)
-vim.keymap.set("n", "<leader>fb", require('telescope.builtin').buffers)
-vim.keymap.set("n", "<leader>fh", require('telescope.builtin').help_tags)
-vim.keymap.set("n", "<leader>fgf", require('telescope.builtin').git_files)
-vim.keymap.set("n", "<leader>fgc", require('telescope.builtin').git_commits)
+vim.keymap.set("n", "<leader>find", require('telescope.builtin').find_files)
+vim.keymap.set("n", "<leader>grep", require('telescope.builtin').live_grep)
+vim.keymap.set("n", "<leader>fbuf", require('telescope.builtin').buffers)
+vim.keymap.set("n", "<leader>help", require('telescope.builtin').help_tags)
+vim.keymap.set("n", "<leader>gitfiles", require('telescope.builtin').git_files)
+vim.keymap.set("n", "<leader>commits", require('telescope.builtin').git_commits)
 vim.keymap.set("", "<C-n>", ":NvimTreeToggle<cr>")
 -- shfmt options
 g.shfmt_extra_args = "-i 2 -bn -ci"
