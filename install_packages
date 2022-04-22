@@ -350,10 +350,6 @@ else
 fi
 
 if [[ ! -v setup_MINIMAL ]]; then
-  # terraform-ls
-  echo "terraform-ls"
-  curl -sLS $(curl -s https://api.github.com/repos/hashicorp/terraform-ls/releases/latest  | jq -r '.assets[].browser_download_url' | grep -E "${kernel}_${machine}\.zip") -o /tmp/terraform-ls.zip \
-    && unzip /tmp/terraform-ls.zip && mv terraform-ls $home_bin && chmod 755  ${home_bin}/terraform-ls
   # tflint
   echo "tflint"
   export TFLINT_INSTALL_PATH=${home_bin}
