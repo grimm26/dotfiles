@@ -195,6 +195,30 @@ g.spelunker_white_list_for_user = {
 -- LSP settings
 -- lsop installer
 local lsp_installer = require("nvim-lsp-installer")
+local lsp_servers = {
+  'ansiblels',
+  'bashls',
+  'dockerls',
+  'gopls',
+  'jsonls',
+  'pyright',
+  'solargraph',
+  'sumneko_lua',
+  'vimls',
+  'yamlls',
+}
+for _, name in pairs(lsp_servers) do
+  local ok, server = lsp_installer.get_server(name)
+  if ok then
+    if not server:is_installed() then
+      print('Intalling ' .. name)
+      server:install()
+    end
+  else
+    print('Unknown LSP : ' .. name)
+  end
+end
+
 lsp_installer.settings({
     pip = {
         install_args = {"--user", "--upgrade"}
