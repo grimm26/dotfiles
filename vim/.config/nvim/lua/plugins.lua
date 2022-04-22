@@ -53,20 +53,10 @@ return require("packer").startup(function(use)
         "z0mbix/vim-shfmt",
         "prettier/vim-prettier",
         "kamykn/spelunker.vim",
+        "mrjones2014/legendary.nvim",-- keymappings, commands, autocmds
+        'stevearc/dressing.nvim', -- fancy ui menu with legendary
     })
 
-    use {
-        "folke/which-key.nvim",
-        config = function()
-          require("which-key").setup {
-            plugins = {
-              spelling = {
-                enabled = true
-              }
-            }
-          }
-      end
-    }
     use({
         "nvim-lualine/lualine.nvim",
         requires = {"kyazdani42/nvim-web-devicons", opt = true}

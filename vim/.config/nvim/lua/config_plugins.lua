@@ -8,7 +8,11 @@ require("mini.indentscope").setup({})
 require("mini.surround").setup({})
 require("mini.trailspace").setup({})
 require("mini.pairs").setup({})
-require("gitsigns").setup()
+require("gitsigns").setup({
+    diff_opts = {
+        internal = true
+    }
+})
 require("telescope").load_extension("fzf")
 require("nvim-tree").setup()
 -- Most of the lualine config is default, just had it here to show what can be tweaked.
@@ -55,8 +59,61 @@ require("lualine").setup({
     extensions = {"nvim-tree"}
 })
 
--- trim EOL whitespace
-vim.keymap.set("n", "<leader>ts", MiniTrailspace.trim)
+require('legendary').setup({
+  -- Include builtins by default, set to false to disable
+  include_builtin = true,
+  -- Include the commands that legendary.nvim creates itself
+  -- in the legend by default, set to false to disable
+  include_legendary_cmds = true,
+  -- Customize the prompt that appears on your vim.ui.select() handler
+  -- Can be a string or a function that takes the `kind` and returns
+  -- a string. See "Item Kinds" below for details. By default,
+  -- prompt is 'Legendary' when searching all items,
+  -- 'Legendary Keymaps' when searching keymaps,
+  -- 'Legendary Commands' when searching commands,
+  -- and 'Legendary Autocmds' when searching autocmds.
+  select_prompt = nil,
+  -- Optionally pass a custom formatter function. This function
+  -- receives the item as a parameter and must return a table of
+  -- non-nil string values for display. It must return the same
+  -- number of values for each item to work correctly.
+  -- The values will be used as column values when formatted.
+  -- See function `get_default_format_values(item)` in
+  -- `lua/legendary/formatter.lua` to see default implementation.
+  formatter = nil,
+  -- When you trigger an item via legendary.nvim,
+  -- show it at the top next time you use legendary.nvim
+  most_recent_item_at_top = true,
+  -- Initial keymaps to bind
+  keymaps = {
+    {"<leader>ts", MiniTrailspace.trim, description = "Trim trailing whitespace."},
+    {"<leader>find", require('telescope.builtin').find_files, description = "Find Files"},
+    {"<leader>grep", require('telescope.builtin').live_grep, description = "Grep files"},
+    {"<leader>fbuf", require('telescope.builtin').buffers, description = "List buffers"},
+    {"<leader>help", require('telescope.builtin').help_tags, description = "List help tags"},
+    {"<leader>gitfiles", require('telescope.builtin').git_files, description = "List files under Git control"},
+    {"<leader>commits", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
+    {"<C-n>", ":NvimTreeToggle<cr>", mode = {""}, description = "Toggle nvim-tree"},
+  },
+  -- Initial commands to bind
+  commands = {
+    -- your command tables here
+  },
+  -- Initial augroups and autocmds to bind
+  autocmds = {
+    -- your autocmd tables here
+  },
+  -- Automatically add which-key tables to legendary
+  -- see "which-key.nvim Integration" below for more details
+  auto_register_which_key = true,
+  -- settings for the :LegendaryScratch command
+  scratchpad = {
+    -- configure how to show results of evaluated Lua code,
+    -- either 'print' or 'float'
+    -- Pressing q or <ESC> will close the float
+    display_results = 'float',
+  },
+})
 
 local ts = require("nvim-treesitter.configs")
 ts.setup({
@@ -69,14 +126,14 @@ ts.setup({
     highlight = {enable = true}
 })
 
--- maps for telescope
-vim.keymap.set("n", "<leader>find", require('telescope.builtin').find_files)
-vim.keymap.set("n", "<leader>grep", require('telescope.builtin').live_grep)
-vim.keymap.set("n", "<leader>fbuf", require('telescope.builtin').buffers)
-vim.keymap.set("n", "<leader>help", require('telescope.builtin').help_tags)
-vim.keymap.set("n", "<leader>gitfiles", require('telescope.builtin').git_files)
-vim.keymap.set("n", "<leader>commits", require('telescope.builtin').git_commits)
-vim.keymap.set("", "<C-n>", ":NvimTreeToggle<cr>")
+-- -- maps for telescope
+-- vim.keymap.set("n", "<leader>find", require('telescope.builtin').find_files)
+-- vim.keymap.set("n", "<leader>grep", require('telescope.builtin').live_grep)
+-- vim.keymap.set("n", "<leader>fbuf", require('telescope.builtin').buffers)
+-- vim.keymap.set("n", "<leader>help", require('telescope.builtin').help_tags)
+-- vim.keymap.set("n", "<leader>gitfiles", require('telescope.builtin').git_files)
+-- vim.keymap.set("n", "<leader>commits", require('telescope.builtin').git_commits)
+-- vim.keymap.set("", "<C-n>", ":NvimTreeToggle<cr>")
 -- shfmt options
 g.shfmt_extra_args = "-i 2 -bn -ci"
 g.shfmt_fmt_on_save = 1
