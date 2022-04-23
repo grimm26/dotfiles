@@ -94,10 +94,16 @@ require('legendary').setup({
     {"<leader>gitfiles", require('telescope.builtin').git_files, description = "List files under Git control"},
     {"<leader>commits", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
     {"<C-n>", ":NvimTreeToggle<cr>", mode = {""}, description = "Toggle nvim-tree"},
+    {"<leader>F", vim.lsp.buf.formatting_sync, description = 'Format buffer with LSP', opts = {buffer = true, silent = true, noremap = true }},
+    {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
+    -- Base utility mappings
+    {"<leader>ev", ":vsplit $MYVIMRC<cr>", description = "Edit vim init"},
+    {"<leader>ep", ":vsplit " .. vim.fn.stdpath('config') .. "/lua/plugins.lua<cr>:vsplit " .. vim.fn.stdpath('config') .. "/lua/config_plugins.lua<cr>", description = "Edit vim plugins config"},
+    {"<leader>sv", ":source $MYVIMRC<cr>", description = "Read in vim init"},
   },
   -- Initial commands to bind
   commands = {
-    -- your command tables here
+    {":PU", ":PackerSync", description = "Packer Sync"}
   },
   -- Initial augroups and autocmds to bind
   autocmds = {
@@ -193,8 +199,9 @@ g.spelunker_white_list_for_user = {
 }
 
 -- LSP settings
--- lsop installer
+-- lsp installer
 local lsp_installer = require("nvim-lsp-installer")
+
 local lsp_servers = {
   'ansiblels',
   'bashls',

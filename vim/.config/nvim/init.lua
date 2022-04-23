@@ -17,7 +17,6 @@ g.maplocalleader = ' '
 require("lastplace")
 require("plugins")
 require("config_plugins")
-vim.api.nvim_create_user_command("PU", "PackerSync", {})
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 set.updatetime = 100
@@ -32,9 +31,7 @@ set.timeoutlen = 500
 set.modeline = true
 set.modelines = 5
 set.hlsearch = false
--- Make line numbers default
 vim.wo.number = false
-vim.keymap.set("n", "<leader>num", "<cmd>:set number!<cr>")
 -- Enable break indent
 set.breakindent = true
 set.expandtab = true
@@ -60,9 +57,6 @@ set.smartcase = false
 set.laststatus = 2
 --
 g.vim_json_syntax_conceal = 0
--- Base utility mappings
-vim.keymap.set("n", "<leader>ev", "<cmd>vsplit $MYVIMRC<cr>")
-vim.keymap.set("n", "<leader>sv", "<cmd>source $MYVIMRC<cr>")
 -- help my common typos
 cmd([[
 iabbrev adn and
