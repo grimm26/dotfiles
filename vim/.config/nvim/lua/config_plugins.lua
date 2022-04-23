@@ -226,6 +226,17 @@ lsp_installer.settings({
 })
 
 local enhance_server_opts = {
+  ["efm"] = function(opts)
+    opts.init_options = { documentFormatting = true}
+    opts.filetypes = {"python"}
+    opts.settings = {
+        languages = {
+          python = {
+            {formatCommand = "black -", formatStdin = true}
+          }
+        }
+    }
+  end,
   -- Provide settings that should only apply to the "sumneko_lua" server
   ["sumneko_lua"] = function(opts)
     opts.settings = {
