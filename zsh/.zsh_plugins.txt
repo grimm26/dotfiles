@@ -23,6 +23,8 @@ ohmyzsh/ohmyzsh path:plugins/fzf
 ohmyzsh/ohmyzsh path:plugins/autojump
 ohmyzsh/ohmyzsh path:plugins/pyenv
 ohmyzsh/ohmyzsh path:plugins/systemadmin
+ohmyzsh/ohmyzsh path:plugins/urltools
+ohmyzsh/ohmyzsh path:plugins/zoxide
 
 MichaelAquilina/zsh-you-should-use
 greymd/tmux-xpanes

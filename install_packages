@@ -252,6 +252,8 @@ case $(uname) in
         curl -sLS https://storage.googleapis.com/kubernetes-release/release/$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o ${home_bin}/kubectl \
           && chmod 755 ${home_bin}/kubectl
       fi
+      # zoxide
+      curl -sS https://webinstall.dev/zoxide | bash
     fi
     ;;
   Darwin)
@@ -296,6 +298,7 @@ case $(uname) in
       fzf
       tflint
       selene
+      zoxide
     )
     brew list > /tmp/brews.$$
     for pkg in ${NEEDED_PACKAGES[*]}; do
