@@ -9,54 +9,55 @@ require("mini.surround").setup({})
 require("mini.trailspace").setup({})
 require("mini.pairs").setup({})
 require("gitsigns").setup({
-    diff_opts = {
-        internal = true
-    }
+  diff_opts = {
+    internal = true
+  }
 })
 require("telescope").load_extension("fzf")
 require("nvim-tree").setup()
 -- Most of the lualine config is default, just had it here to show what can be tweaked.
 local function diff_source()
-    local gitsigns = vim.b.gitsigns_status_dict
-    if gitsigns then
-        return {
-            added = gitsigns.added,
-            modified = gitsigns.changed,
-            removed = gitsigns.removed
-        }
-    end
+  local gitsigns = vim.b.gitsigns_status_dict
+  if gitsigns then
+    return {
+      added = gitsigns.added,
+      modified = gitsigns.changed,
+      removed = gitsigns.removed
+    }
+  end
 end
+
 require("lualine").setup({
-    options = {
-        icons_enabled = true,
-        theme = "powerline_dark",
-        component_separators = {left = "", right = ""},
-        section_separators = {left = "", right = ""},
-        disabled_filetypes = {},
-        always_divide_middle = true,
-        globalstatus = true
+  options = {
+    icons_enabled = true,
+    theme = "powerline_dark",
+    component_separators = {left = "", right = ""},
+    section_separators = {left = "", right = ""},
+    disabled_filetypes = {},
+    always_divide_middle = true,
+    globalstatus = true
+  },
+  sections = {
+    lualine_a = {"mode"},
+    lualine_b = {
+      {"b:gitsigns_head", icon = ''}, {"diff", source = diff_source},
+      "diagnostics"
     },
-    sections = {
-        lualine_a = {"mode"},
-        lualine_b = {
-            {"b:gitsigns_head", icon = ''}, {"diff", source = diff_source},
-            "diagnostics"
-        },
-        lualine_c = {{"filename", path = 1}},
-        lualine_x = {"encoding", "fileformat", "filetype"},
-        lualine_y = {"progress"},
-        lualine_z = {"location"}
-    },
-    inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = {{"filename", path = 1}},
-        lualine_x = {"location"},
-        lualine_y = {},
-        lualine_z = {}
-    },
-    tabline = {},
-    extensions = {"nvim-tree"}
+    lualine_c = {{"filename", path = 1}},
+    lualine_x = {"encoding", "fileformat", "filetype"},
+    lualine_y = {"progress"},
+    lualine_z = {"location"}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {{"filename", path = 1}},
+    lualine_x = {"location"},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  extensions = {"nvim-tree"}
 })
 
 require('legendary').setup({
@@ -94,7 +95,7 @@ require('legendary').setup({
     {"<leader>gitfiles", require('telescope.builtin').git_files, description = "List files under Git control"},
     {"<leader>commits", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
     {"<C-n>", ":NvimTreeToggle<cr>", mode = {""}, description = "Toggle nvim-tree"},
-    {"<leader>F", vim.lsp.buf.formatting_sync, description = 'Format buffer with LSP', opts = {buffer = true, silent = true, noremap = true }},
+    {"<leader>F", vim.lsp.buf.formatting_sync, description = 'Format buffer with LSP', opts = {buffer = true, silent = true, noremap = true}},
     {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
     -- Base utility mappings
     {"<leader>ev", ":vsplit $MYVIMRC<cr>", description = "Edit vim init"},
@@ -107,8 +108,18 @@ require('legendary').setup({
   },
   -- Initial augroups and autocmds to bind
   autocmds = {
-    -- your autocmd tables here
+    {
+      name = 'Terraform',
+      {
+        "BufWritePre",
+        vim.lsp.buf.formatting_sync,
+        opts = {
+          pattern = {"*.tf", "*.tfvars"},
+        }
+      }
+    }
   },
+
   -- Automatically add which-key tables to legendary
   -- see "which-key.nvim Integration" below for more details
   auto_register_which_key = true,
@@ -123,13 +134,13 @@ require('legendary').setup({
 
 local ts = require("nvim-treesitter.configs")
 ts.setup({
-    ensure_installed = {
-        "bash", "c", "comment", "dockerfile", "go", "gomod", "hcl", "html",
-        "java", "javascript", "json", "json5", "lua", "make", "nix", "perl",
-        "php", "regex", "python", "ruby", "rust", "toml", "typescript", "vim",
-        "vue", "yaml"
-    },
-    highlight = {enable = true}
+  ensure_installed = {
+    "bash", "c", "comment", "dockerfile", "go", "gomod", "hcl", "html",
+    "java", "javascript", "json", "json5", "lua", "make", "nix", "perl",
+    "php", "regex", "python", "ruby", "rust", "toml", "typescript", "vim",
+    "vue", "yaml"
+  },
+  highlight = {enable = true}
 })
 
 -- -- maps for telescope
@@ -195,13 +206,14 @@ g.spelunker_disable_auto_group = 0
 -- highlight SpelunkerSpellBad cterm=underline ctermfg=247 gui=underline guifg=#9e9e9e
 -- highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
 g.spelunker_white_list_for_user = {
-    "kamykn", "vimrc", "keisler", "syntastic", "solarized", "powerline", "shfmt"
+  "kamykn", "vimrc", "keisler", "syntastic", "solarized", "powerline", "shfmt"
 }
 
 -- LSP settings
 -- lsp installer
 local lsp_installer = require("nvim-lsp-installer")
 
+-- Make sure the LSP servers that we want are installed
 local lsp_servers = {
   'ansiblels',
   'bashls',
@@ -211,6 +223,7 @@ local lsp_servers = {
   'pyright',
   'solargraph',
   'sumneko_lua',
+  'terraformls',
   'vimls',
   'yamlls',
 }
@@ -227,73 +240,80 @@ for _, name in pairs(lsp_servers) do
 end
 
 lsp_installer.settings({
-    pip = {
-        install_args = {"--user", "--upgrade"}
-    }
+  pip = {
+    install_args = {"--user", "--upgrade"}
+  }
 })
+
+local lua_runtime_path = vim.split(package.path, ';')
+table.insert(lua_runtime_path, "lua/?.lua")
+table.insert(lua_runtime_path, "lua/?/init.lua")
+table.insert(lua_runtime_path, vim.fn.stdpath('config') .. "lua/?.lua")
 
 local enhance_server_opts = {
   ["efm"] = function(opts)
-    opts.init_options = { documentFormatting = true}
+    opts.init_options = {documentFormatting = true}
     opts.filetypes = {"python"}
     opts.settings = {
-        languages = {
-          python = {
-            {formatCommand = "black -", formatStdin = true}
-          }
+      languages = {
+        python = {
+          {formatCommand = "black -", formatStdin = true}
         }
+      }
     }
   end,
   -- Provide settings that should only apply to the "sumneko_lua" server
   ["sumneko_lua"] = function(opts)
     opts.settings = {
       Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        -- path = runtime_path,
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
+        runtime = {
+          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+          version = 'LuaJIT',
+          -- Setup your lua path
+          path = lua_runtime_path,
+        },
+        format = {
+          enable = true,
+          defaultConfig = {
+            keep_one_space_between_table_and_bracket = "false",
+          }
+        },
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = {'vim'},
+          ["codestyle-check"] = "Any",
+        },
+        workspace = {
+          -- Make the server aware of Neovim runtime files
+          library = vim.api.nvim_get_runtime_file("", true),
+        },
+        -- Do not send telemetry data containing a randomized but unique identifier
+        telemetry = {
+          enable = false,
+        },
       },
     }
-  }
   end,
 }
 -- Register a handler that will be called for each installed server when it's ready (i.e. when installation is finished
 -- or if the server is already installed).
 lsp_installer.on_server_ready(function(server)
-    local opts = {}
+  local opts = {}
 
-    -- (optional) Customize the options passed to the server
-    -- if server.name == "tsserver" then
-    --     opts.root_dir = function() ... end
-    -- end
+  -- (optional) Customize the options passed to the server
+  -- if server.name == "tsserver" then
+  --     opts.root_dir = function() ... end
+  -- end
 
-    if enhance_server_opts[server.name] then
-      -- Enhance the default opts with the server-specific ones
-      enhance_server_opts[server.name](opts)
-    end
-    -- This setup() function will take the provided server configuration and decorate it with the necessary properties
-    -- before passing it onwards to lspconfig.
-    -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-    server:setup(opts)
+  if enhance_server_opts[server.name] then
+    -- Enhance the default opts with the server-specific ones
+    enhance_server_opts[server.name](opts)
+  end
+  -- This setup() function will take the provided server configuration and decorate it with the necessary properties
+  -- before passing it onwards to lspconfig.
+  -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+  server:setup(opts)
 end)
-
-vim.api.nvim_create_autocmd("BufWritePre", {
-    callback = vim.lsp.buf.formatting_sync,
-    pattern = {"*.tf", "*.tfvars"}
-})
 
 -- The below cmp/snip was just copied from https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
 -- luasnip setup
@@ -302,40 +322,40 @@ local luasnip = require("luasnip")
 -- nvim-cmp setup
 local cmp = require("cmp")
 cmp.setup({
-    snippet = {
-        expand = function(args) require("luasnip").lsp_expand(args.body) end
-    },
-    mapping = {
-        ["<C-p>"] = cmp.mapping.select_prev_item(),
-        ["<C-n>"] = cmp.mapping.select_next_item(),
-        ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-        ["<C-f>"] = cmp.mapping.scroll_docs(4),
-        ["<C-Space>"] = cmp.mapping.complete(),
-        ["<C-e>"] = cmp.mapping.close(),
-        ["<CR>"] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true
-        }),
-        ["<Tab>"] = function(fallback)
-            if cmp.visible() then
-                cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-                luasnip.expand_or_jump()
-            else
-                fallback()
-            end
-        end,
-        ["<S-Tab>"] = function(fallback)
-            if cmp.visible() then
-                cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-                luasnip.jump(-1)
-            else
-                fallback()
-            end
-        end
-    },
-    sources = {{name = "nvim_lsp"}, {name = "luasnip"}}
+  snippet = {
+    expand = function(args) require("luasnip").lsp_expand(args.body) end
+  },
+  mapping = {
+    ["<C-p>"] = cmp.mapping.select_prev_item(),
+    ["<C-n>"] = cmp.mapping.select_next_item(),
+    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-e>"] = cmp.mapping.close(),
+    ["<CR>"] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true
+    }),
+    ["<Tab>"] = function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end,
+    ["<S-Tab>"] = function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end
+  },
+  sources = {{name = "nvim_lsp"}, {name = "luasnip"}}
 })
 
 -- vim: ts=2 sts=2 sw=2 et
