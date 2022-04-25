@@ -98,7 +98,7 @@ case $(uname) in
         || sudo apt-get install -y $pkg
     done
     if [[ ! -v setup_MINIMAL ]]; then
-      for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev; do
+      for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck; do
         dpkg -s $pkg &>/dev/null \
           || sudo apt-get install -y $pkg
       done
@@ -299,6 +299,7 @@ case $(uname) in
       tflint
       selene
       zoxide
+      shellcheck
     )
     brew list > /tmp/brews.$$
     for pkg in ${NEEDED_PACKAGES[*]}; do
@@ -395,10 +396,11 @@ if [[ ! -v setup_MINIMAL ]]; then
     print "Using pyenv to install python $PYTHON_VERSION"
     pyenv install $PYTHON_VERSION
     pyenv global $PYTHON_VERSION
+    PIP_OPTIONS="--force-reinstall"
   fi
   echo "Python packages:"
-  for pkg in pip pre-commit 'boto3[crt]' flake8 flake8-bugbear pylint black isort pyright;do
-    python -m pip install --upgrade --user $pkg | grep -v "Requirement already satisfied"
+  for pkg in pip pre-commit 'boto3[crt]' flake8 flake8-bugbear flake8-efm pylint black isort pyright;do
+    python -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
   done
 
   print "Ruby Gems"

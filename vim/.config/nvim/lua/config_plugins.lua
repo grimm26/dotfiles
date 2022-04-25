@@ -273,6 +273,15 @@ local enhance_server_opts = {
         },
         sh = {
           {formatCommand = "shfmt -i 2 -bn -ci -s", formatStdin = true},
+          {
+            lintCommand = "shellcheck -f gcc -x",
+            lintSource = "shellcheck",
+            lintFormats = {
+              '%f:%l:%c: %trror: %m',
+              '%f:%l:%c: %tarning: %m',
+              '%f:%l:%c: %tote: %m',
+            }
+          }
         },
         -- This may not always work because shfmt may puke on some zsh syntax
         zsh = {
