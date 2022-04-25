@@ -50,7 +50,6 @@ return require("packer").startup(function(use)
     "fatih/vim-go",
     "elzr/vim-json",
     "tmux-plugins/vim-tmux",
-    "z0mbix/vim-shfmt",
     "prettier/vim-prettier",
     "kamykn/spelunker.vim",
     "mrjones2014/legendary.nvim", -- keymappings, commands, autocmds

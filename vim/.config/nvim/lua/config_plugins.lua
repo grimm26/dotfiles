@@ -218,6 +218,7 @@ local lsp_servers = {
   'ansiblels',
   'bashls',
   'dockerls',
+  'efm',
   'gopls',
   'jsonls',
   'pyright',
@@ -253,12 +254,30 @@ table.insert(lua_runtime_path, vim.fn.stdpath('config') .. "lua/?.lua")
 local enhance_server_opts = {
   ["efm"] = function(opts)
     opts.init_options = {documentFormatting = true}
-    opts.filetypes = {"python"}
+    opts.filetypes = {"python","sh","zsh"}
     opts.settings = {
+      rootMarkers = {".git/"},
       languages = {
         python = {
-          {formatCommand = "black -", formatStdin = true}
-        }
+          {formatCommand = "black --quiet -", formatStdin = true},
+          {formatCommand = "isort --quiet -", formatStdin = true},
+          -- {
+          --   lintCommand = "flake8 --format efm --stdin-display-name ${INPUT} -",
+          --   lintSource = "flake8",
+          --   lintStdin = true,
+          --   lintIgnoreExitCode = true,
+          --   lintFormats = {
+          --     "%f:%l:%c:%t: %m",
+          --   }
+          -- },
+        },
+        sh = {
+          {formatCommand = "shfmt -i 2 -bn -ci -s", formatStdin = true},
+        },
+        -- This may not always work because shfmt may puke on some zsh syntax
+        zsh = {
+          {formatCommand = "shfmt -i 2 -bn -ci -s", formatStdin = true},
+        },
       }
     }
   end,
