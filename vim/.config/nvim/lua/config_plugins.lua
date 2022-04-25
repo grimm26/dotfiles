@@ -14,6 +14,13 @@ require("gitsigns").setup({
   }
 })
 require("telescope").load_extension("fzf")
+require("telescope").setup{
+  pickers = {
+    find_files = {
+      find_command = { "fd", "--type", "f", "--hidden", "--exclude", ".git"}
+    }
+  }
+}
 require("nvim-tree").setup()
 -- Most of the lualine config is default, just had it here to show what can be tweaked.
 local function diff_source()
@@ -99,8 +106,9 @@ require('legendary').setup({
     {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
     -- Base utility mappings
     {"<leader>ev", ":vsplit $MYVIMRC<cr>", description = "Edit vim init"},
-    {"<leader>ep", ":vsplit " .. vim.fn.stdpath('config') .. "/lua/plugins.lua<cr>:vsplit " .. vim.fn.stdpath('config') .. "/lua/config_plugins.lua<cr>", description = "Edit vim plugins config"},
     {"<leader>sv", ":source $MYVIMRC<cr>", description = "Read in vim init"},
+    -- look into making these open in a new tab
+    {"<leader>ep", ":vsplit " .. vim.fn.stdpath('config') .. "/lua/plugins.lua<cr>:vsplit " .. vim.fn.stdpath('config') .. "/lua/config_plugins.lua<cr>", description = "Edit vim plugins config"},
   },
   -- Initial commands to bind
   commands = {
@@ -254,7 +262,7 @@ table.insert(lua_runtime_path, vim.fn.stdpath('config') .. "lua/?.lua")
 local enhance_server_opts = {
   ["efm"] = function(opts)
     opts.init_options = {documentFormatting = true}
-    opts.filetypes = {"python","sh","zsh"}
+    opts.filetypes = {"python", "sh", "zsh"}
     opts.settings = {
       rootMarkers = {".git/"},
       languages = {
