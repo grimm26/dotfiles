@@ -2,6 +2,13 @@ local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')
 local g = vim.g -- a table to access global variables (let g:something = foo)
 local set = vim.opt -- to set options
 
+ local fd = 'fdfind'
+ if vim.fn.executable('fdfind') == 1 then
+   fd = 'fdfind'
+ elseif vim.fn.executable('fd') == 1 then
+   fd = 'fd'
+ end
+
 require("mini.comment").setup({})
 require("mini.completion").setup({})
 require("mini.indentscope").setup({})
@@ -17,7 +24,18 @@ require("telescope").load_extension("fzf")
 require("telescope").setup{
   pickers = {
     find_files = {
-      find_command = { "fd", "--type", "f", "--hidden", "--exclude", ".git"}
+      find_command = { fd, "--type", "f", "--hidden", "--exclude", ".git"},
+       mappings = {
+         n = {
+           ["cd"] = function(prompt_bufnr)
+             local selection = require("telescope.actions.state").get_selected_entry()
+             local dir = vim.fn.fnamemodify(selection.path, ":p:h")
+             require("telescope.actions").close(prompt_bufnr)
+             -- Depending on what you want put `cd`, `lcd`, `tcd`
+             cmd(string.format("silent lcd %s", dir))
+           end
+         }
+       }
     }
   }
 }
@@ -95,8 +113,8 @@ require('legendary').setup({
   -- Initial keymaps to bind
   keymaps = {
     {"<leader>ts", MiniTrailspace.trim, description = "Trim trailing whitespace."},
-    {"<leader>find", require('telescope.builtin').find_files, description = "Find Files"},
-    {"<leader>grep", require('telescope.builtin').live_grep, description = "Grep files"},
+    {"<leader>fd", require('telescope.builtin').find_files, description = "Find Files"},
+    {"<leader>fg", require('telescope.builtin').live_grep, description = "Grep files"},
     {"<leader>fbuf", require('telescope.builtin').buffers, description = "List buffers"},
     {"<leader>help", require('telescope.builtin').help_tags, description = "List help tags"},
     {"<leader>gitfiles", require('telescope.builtin').git_files, description = "List files under Git control"},
@@ -357,22 +375,21 @@ local luasnip = require("luasnip")
 --
 -- nvim-cmp setup
 local cmp = require("cmp")
-cmp.setup({
+cmp.setup {
   snippet = {
-    expand = function(args) require("luasnip").lsp_expand(args.body) end
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
   },
-  mapping = {
-    ["<C-p>"] = cmp.mapping.select_prev_item(),
-    ["<C-n>"] = cmp.mapping.select_next_item(),
-    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-    ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    ["<C-Space>"] = cmp.mapping.complete(),
-    ["<C-e>"] = cmp.mapping.close(),
-    ["<CR>"] = cmp.mapping.confirm({
+  mapping = cmp.mapping.preset.insert({
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
-      select = true
-    }),
-    ["<Tab>"] = function(fallback)
+      select = true,
+    },
+    ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       elseif luasnip.expand_or_jumpable() then
@@ -380,8 +397,8 @@ cmp.setup({
       else
         fallback()
       end
-    end,
-    ["<S-Tab>"] = function(fallback)
+    end, { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
       elseif luasnip.jumpable(-1) then
@@ -389,9 +406,12 @@ cmp.setup({
       else
         fallback()
       end
-    end
+    end, { 'i', 's' }),
+  }),
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
   },
-  sources = {{name = "nvim_lsp"}, {name = "luasnip"}}
-})
+}
 
 -- vim: ts=2 sts=2 sw=2 et
