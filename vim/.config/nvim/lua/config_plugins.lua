@@ -2,12 +2,12 @@ local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')
 local g = vim.g -- a table to access global variables (let g:something = foo)
 local set = vim.opt -- to set options
 
- local fd = 'fdfind'
- if vim.fn.executable('fdfind') == 1 then
-   fd = 'fdfind'
- elseif vim.fn.executable('fd') == 1 then
-   fd = 'fd'
- end
+local fd = 'fdfind'
+if vim.fn.executable('fdfind') == 1 then
+  fd = 'fdfind'
+elseif vim.fn.executable('fd') == 1 then
+  fd = 'fd'
+end
 
 require("mini.comment").setup({})
 require("mini.completion").setup({})
@@ -21,21 +21,21 @@ require("gitsigns").setup({
   }
 })
 require("telescope").load_extension("fzf")
-require("telescope").setup{
+require("telescope").setup {
   pickers = {
     find_files = {
-      find_command = { fd, "--type", "f", "--hidden", "--exclude", ".git"},
-       mappings = {
-         n = {
-           ["cd"] = function(prompt_bufnr)
-             local selection = require("telescope.actions.state").get_selected_entry()
-             local dir = vim.fn.fnamemodify(selection.path, ":p:h")
-             require("telescope.actions").close(prompt_bufnr)
-             -- Depending on what you want put `cd`, `lcd`, `tcd`
-             cmd(string.format("silent lcd %s", dir))
-           end
-         }
-       }
+      find_command = {fd, "--type", "f", "--hidden", "--exclude", ".git"},
+      mappings = {
+        n = {
+          ["cd"] = function(prompt_bufnr)
+            local selection = require("telescope.actions.state").get_selected_entry()
+            local dir = vim.fn.fnamemodify(selection.path, ":p:h")
+            require("telescope.actions").close(prompt_bufnr)
+            -- Depending on what you want put `cd`, `lcd`, `tcd`
+            cmd(string.format("silent lcd %s", dir))
+          end
+        }
+      }
     }
   }
 }
@@ -236,37 +236,25 @@ g.spelunker_white_list_for_user = {
 }
 
 -- LSP settings
--- lsp installer
+-- Make sure the LSP servers that we want are installed
 local lsp_installer = require("nvim-lsp-installer")
 
--- Make sure the LSP servers that we want are installed
-local lsp_servers = {
-  'ansiblels',
-  'bashls',
-  'dockerls',
-  'efm',
-  'gopls',
-  'jsonls',
-  'pyright',
-  'solargraph',
-  'sumneko_lua',
-  'terraformls',
-  'vimls',
-  'yamlls',
-}
-for _, name in pairs(lsp_servers) do
-  local ok, server = lsp_installer.get_server(name)
-  if ok then
-    if not server:is_installed() then
-      print('Intalling ' .. name)
-      server:install()
-    end
-  else
-    print('Unknown LSP : ' .. name)
-  end
-end
-
-lsp_installer.settings({
+lsp_installer.setup({
+  ensure_installed = {
+    'ansiblels',
+    'bashls',
+    'dockerls',
+    'efm',
+    'gopls',
+    'jsonls',
+    'pyright',
+    'remark_ls',
+    'solargraph',
+    'sumneko_lua',
+    'terraformls',
+    'vimls',
+    'yamlls',
+  },
   pip = {
     install_args = {"--user", "--upgrade"}
   }
@@ -277,98 +265,79 @@ table.insert(lua_runtime_path, "lua/?.lua")
 table.insert(lua_runtime_path, "lua/?/init.lua")
 table.insert(lua_runtime_path, vim.fn.stdpath('config') .. "lua/?.lua")
 
-local enhance_server_opts = {
-  ["efm"] = function(opts)
-    opts.init_options = {documentFormatting = true}
-    opts.filetypes = {"python", "sh", "zsh"}
-    opts.settings = {
-      rootMarkers = {".git/"},
-      languages = {
-        python = {
-          {formatCommand = "black --quiet -", formatStdin = true},
-          {formatCommand = "isort --quiet -", formatStdin = true},
-          -- {
-          --   lintCommand = "flake8 --format efm --stdin-display-name ${INPUT} -",
-          --   lintSource = "flake8",
-          --   lintStdin = true,
-          --   lintIgnoreExitCode = true,
-          --   lintFormats = {
-          --     "%f:%l:%c:%t: %m",
-          --   }
-          -- },
-        },
-        sh = {
-          {formatCommand = "shfmt -i 2 -bn -ci -s", formatStdin = true},
-          {
-            lintCommand = "shellcheck -f gcc -x",
-            lintSource = "shellcheck",
-            lintFormats = {
-              '%f:%l:%c: %trror: %m',
-              '%f:%l:%c: %tarning: %m',
-              '%f:%l:%c: %tote: %m',
-            }
+local lspconfig = require('lspconfig')
+
+lspconfig.efm.setup({
+  init_options = {documentFormatting = true},
+  filetypes = {"python", "sh", "zsh"},
+  settings = {
+    rootMarkers = {".git/"},
+    languages = {
+      python = {
+        {formatCommand = "black --quiet -", formatStdin = true},
+        {formatCommand = "isort --quiet -", formatStdin = true},
+        -- {
+        --   lintCommand = "flake8 --format efm --stdin-display-name ${INPUT} -",
+        --   lintSource = "flake8",
+        --   lintStdin = true,
+        --   lintIgnoreExitCode = true,
+        --   lintFormats = {
+        --     "%f:%l:%c:%t: %m",
+        --   }
+        -- },
+      },
+      sh = {
+        {formatCommand = "shfmt -i 2 -bn -ci -s", formatStdin = true},
+        {
+          lintCommand = "shellcheck -f gcc -x",
+          lintSource = "shellcheck",
+          lintFormats = {
+            '%f:%l:%c: %trror: %m',
+            '%f:%l:%c: %tarning: %m',
+            '%f:%l:%c: %tote: %m',
           }
-        },
-        -- This may not always work because shfmt may puke on some zsh syntax
-        zsh = {
-          {formatCommand = "shfmt -i 2 -bn -ci -s", formatStdin = true},
-        },
-      }
-    }
-  end,
-  -- Provide settings that should only apply to the "sumneko_lua" server
-  ["sumneko_lua"] = function(opts)
-    opts.settings = {
-      Lua = {
-        runtime = {
-          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-          version = 'LuaJIT',
-          -- Setup your lua path
-          path = lua_runtime_path,
-        },
-        format = {
-          enable = true,
-          defaultConfig = {
-            keep_one_space_between_table_and_bracket = "false",
-          }
-        },
-        diagnostics = {
-          -- Get the language server to recognize the `vim` global
-          globals = {'vim'},
-          ["codestyle-check"] = "Any",
-        },
-        workspace = {
-          -- Make the server aware of Neovim runtime files
-          library = vim.api.nvim_get_runtime_file("", true),
-        },
-        -- Do not send telemetry data containing a randomized but unique identifier
-        telemetry = {
-          enable = false,
-        },
+        }
+      },
+      -- This may not always work because shfmt may puke on some zsh syntax
+      zsh = {
+        {formatCommand = "shfmt -i 2 -bn -ci -s", formatStdin = true},
       },
     }
-  end,
-}
--- Register a handler that will be called for each installed server when it's ready (i.e. when installation is finished
--- or if the server is already installed).
-lsp_installer.on_server_ready(function(server)
-  local opts = {}
-
-  -- (optional) Customize the options passed to the server
-  -- if server.name == "tsserver" then
-  --     opts.root_dir = function() ... end
-  -- end
-
-  if enhance_server_opts[server.name] then
-    -- Enhance the default opts with the server-specific ones
-    enhance_server_opts[server.name](opts)
-  end
-  -- This setup() function will take the provided server configuration and decorate it with the necessary properties
-  -- before passing it onwards to lspconfig.
-  -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-  server:setup(opts)
-end)
-
+  }
+})
+-- Provide settings that should only apply to the "sumneko_lua" server
+lspconfig.sumneko_lua.setup({
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Setup your lua path
+        path = lua_runtime_path,
+      },
+      format = {
+        enable = true,
+        defaultConfig = {
+          keep_one_space_between_table_and_bracket = "false",
+        }
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+        ["codestyle-check"] = "Any",
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  }
+})
+--
 -- The below cmp/snip was just copied from https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
 -- luasnip setup
 local luasnip = require("luasnip")
@@ -397,7 +366,7 @@ cmp.setup {
       else
         fallback()
       end
-    end, { 'i', 's' }),
+    end, {'i', 's'}),
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -406,11 +375,11 @@ cmp.setup {
       else
         fallback()
       end
-    end, { 'i', 's' }),
+    end, {'i', 's'}),
   }),
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
+    {name = 'nvim_lsp'},
+    {name = 'luasnip'},
   },
 }
 
