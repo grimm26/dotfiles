@@ -162,24 +162,29 @@ local ts = require("nvim-treesitter.configs")
 ts.setup({
   ensure_installed = {
     "bash", "c", "comment", "dockerfile", "go", "gomod", "hcl", "html",
-    "java", "javascript", "json", "json5", "lua", "make", "nix", "perl",
+    "java", "javascript", "json", "json5", "lua", "make", "markdown", "nix", "perl",
     "php", "regex", "python", "ruby", "rust", "toml", "typescript", "vim",
     "vue", "yaml"
+  },
+  ignore_install = {
+    "c_sharp",
+    "clojure",
+    "cooklang",
+    "elvish",
+    "gleam",
+    "glimmer",
+    "kotlin",
+    "ocaml",
+    "ocaml_interface",
+    "pascal",
+    "pioasm",
+    "pug",
+    "scala",
+    "supercollider",
   },
   highlight = {enable = true}
 })
 
--- -- maps for telescope
--- vim.keymap.set("n", "<leader>find", require('telescope.builtin').find_files)
--- vim.keymap.set("n", "<leader>grep", require('telescope.builtin').live_grep)
--- vim.keymap.set("n", "<leader>fbuf", require('telescope.builtin').buffers)
--- vim.keymap.set("n", "<leader>help", require('telescope.builtin').help_tags)
--- vim.keymap.set("n", "<leader>gitfiles", require('telescope.builtin').git_files)
--- vim.keymap.set("n", "<leader>commits", require('telescope.builtin').git_commits)
--- vim.keymap.set("", "<C-n>", ":NvimTreeToggle<cr>")
--- shfmt options
-g.shfmt_extra_args = "-i 2 -bn -ci"
-g.shfmt_fmt_on_save = 1
 -- spelling
 -- turn off vim builtin spelling, cuz we using spelunker
 set.spell = false
