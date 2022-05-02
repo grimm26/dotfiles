@@ -77,13 +77,13 @@ setopt noshwordsplit
 # don't error out when unset parameters are used
 setopt unset
 
-for mod in parameter complist deltochar mathfunc ; do
-    zmodload -i zsh/${mod} 2>/dev/null || print "Notice: no ${mod} available :("
+for mod in parameter complist deltochar mathfunc; do
+  zmodload -i zsh/${mod} 2>/dev/null || print "Notice: no ${mod} available :("
 done && builtin unset -v mod
 
 # autoload zsh modules when they are referenced
-zmodload -a  zsh/stat    zstat
-zmodload -a  zsh/zpty    zpty
+zmodload -a zsh/stat zstat
+zmodload -a zsh/zpty zpty
 zmodload -ap zsh/mapfile mapfile
 
 autoload -Uz zmv
@@ -136,6 +136,7 @@ else
   export SYSTEMD_EDITOR=vim
 fi
 [ -d /usr/local/opt/openjdk/bin ] && export PATH="/usr/local/opt/openjdk/bin:$PATH"
+[ -d /usr/local/opt/curl/bin ] && export PATH="/usr/local/opt/curl/bin:$PATH"
 [ -f ~/.git_functions ] && source ~/.git_functions
 
 load-tfswitch() {
@@ -147,7 +148,7 @@ load-tfswitch() {
   if [[ -f ./atlantis.yaml ]]; then
     autoload is-at-least
     tf_version=$(grep terraform_version ./atlantis.yaml | awk '{print $2}' | tr -d 'v')
-    if [[ ! -z "$tf_version" ]]; then
+    if [[ -n $tf_version ]]; then
       tfsw $tf_version
       if whence -p tgsw &>/dev/null; then
         if is-at-least 0.13.0 $tf_version; then
@@ -164,3 +165,6 @@ load-tfswitch() {
 autoload -Uz add-zsh-hook
 add-zsh-hook chpwd load-tfswitch
 load-tfswitch
+path=("$MY_BIN" $path)
+typeset -U path
+export PATH

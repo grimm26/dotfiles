@@ -459,6 +459,9 @@ fif() {
   ug --hidden --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --bind "enter:execute(nvim {})+abort" --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
 }
 
+path=("$MY_BIN" $path)
+typeset -U path
+export PATH
 echo "Loading kubectl completions."
 whence -p kubectl &>/dev/null && \
   source <(kubectl completion zsh)
