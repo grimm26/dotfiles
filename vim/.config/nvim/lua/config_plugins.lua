@@ -245,21 +245,7 @@ g.spelunker_white_list_for_user = {
 local lsp_installer = require("nvim-lsp-installer")
 
 lsp_installer.setup({
-  ensure_installed = {
-    'ansiblels',
-    'bashls',
-    'dockerls',
-    'efm',
-    'gopls',
-    'jsonls',
-    'pyright',
-    'remark_ls',
-    'solargraph',
-    'sumneko_lua',
-    'terraformls',
-    'vimls',
-    'yamlls',
-  },
+  automatic_installation = true,
   pip = {
     install_args = {"--user", "--upgrade"}
   }
@@ -271,6 +257,17 @@ table.insert(lua_runtime_path, "lua/?/init.lua")
 table.insert(lua_runtime_path, vim.fn.stdpath('config') .. "lua/?.lua")
 
 local lspconfig = require('lspconfig')
+lspconfig.ansiblels.setup{}
+lspconfig.bashls.setup{}
+lspconfig.dockerls.setup{}
+lspconfig.gopls.setup{}
+lspconfig.jsonls.setup{}
+lspconfig.pyright.setup{}
+lspconfig.remark_ls.setup{}
+lspconfig.solargraph.setup{}
+lspconfig.terraformls.setup{}
+lspconfig.vimls.setup{}
+lspconfig.yamlls.setup{}
 
 lspconfig.efm.setup({
   init_options = {documentFormatting = true},
