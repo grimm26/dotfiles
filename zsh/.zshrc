@@ -115,6 +115,8 @@ alias nin='netstat -ntl'
 ks() {
   kitty --session ~/.config/kitty/sessions/${1} --start-as=${2:-fullscreen} &
 }
+alias icat="kitty +kitten icat"
+alias kssh="kitty +kitten ssh"
 
 ## use the vi navigation keys (hjkl) besides cursor keys in menu completion
 bindkey -M menuselect 'h' vi-backward-char        # left

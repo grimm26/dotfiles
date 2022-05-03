@@ -41,7 +41,7 @@ return require("packer").startup(function(use)
     "saadparwaiz1/cmp_luasnip",
     "L3MON4D3/LuaSnip",
     "kamykn/popup-menu.nvim",
-    "averms/black-nvim",
+    -- "averms/black-nvim",
     "ellisonleao/glow.nvim",
     "lewis6991/gitsigns.nvim",
     "will133/vim-dirdiff",
