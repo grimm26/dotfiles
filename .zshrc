@@ -167,6 +167,9 @@ load-tfswitch() {
 autoload -Uz add-zsh-hook
 add-zsh-hook chpwd load-tfswitch
 load-tfswitch
+if [[ -d ${HOME}/.cargo/bin ]]; then
+  path=("${HOME}/.cargo/bin" $path)
+fi
 path=("$MY_BIN" $path)
 typeset -U path
 export PATH

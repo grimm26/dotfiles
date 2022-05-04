@@ -54,3 +54,5 @@ tg () {
 if [[ -r ~/.zshenv.local ]]; then
   source ~/.zshenv.local
 fi
+echo "end zshenv"
+echo $PATH |sed 's/:/\n/g'
