@@ -355,17 +355,8 @@ export ZSH_TMUX_AUTOQUIT=false
 
 # Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
 if whence antibody &>/dev/null; then
-  ANTIBODY_PLUGIN_FILES=(~/.zsh_plugins.txt)
-  # Ubuntu plugins
-  if [[ $OSTYPE == linux-gnu ]]; then
-    if [[ $(uname -v) =~ "Ubuntu" ]]; then
-      ANTIBODY_PLUGIN_FILES+=(~/.zsh_plugins_ubuntu.txt)
-    fi
-  elif [[ $OSTYPE =~ "darwin" ]]; then
-    ANTIBODY_PLUGIN_FILES+=(~/.zsh_plugins_macos.txt)
-  fi
   # Alias to save a static antibody file
-  alias antistatic="cat $ANTIBODY_PLUGIN_FILES | $(whence -p antibody) bundle > ~/.zsh_plugins.sh"
+  alias antistatic="$(whence -p antibody) bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh"
   if [[ -r ~/.zsh_plugins.sh ]]; then
     export DISABLE_AUTO_UPDATE="true"
     source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
@@ -376,9 +367,7 @@ if whence antibody &>/dev/null; then
     export DISABLE_AUTO_UPDATE="true"
     source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
     unset DISABLE_AUTO_UPDATE
-    for bundle in $ANTIBODY_PLUGIN_FILES; do
-      antibody bundle < $bundle
-    done
+    antibody bundle < ~/.zsh_plugins.txt
   fi
   alias af=alias-finder
 elif [[ -r ~/.zplugrc ]]; then

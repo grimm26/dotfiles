@@ -423,3 +423,4 @@ fi
 echo "antibody"
 curl -sfLS git.io/antibody | bash -s - -b ${home_bin}
 
+$(whence -p antibody) bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh
