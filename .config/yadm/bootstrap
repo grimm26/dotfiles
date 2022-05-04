@@ -386,12 +386,12 @@ if [[ ! -v setup_MINIMAL ]]; then
     PIP_OPTIONS="--force-reinstall"
   fi
   echo "Python packages:"
-  for pkg in pip pre-commit 'boto3[crt]' flake8 flake8-bugbear flake8-efm pylint black isort pyright;do
+  for pkg in pip pre-commit 'boto3[crt]' flake8 flake8-bugbear flake8-efm pylint black isort pyright pynvim;do
     python -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
   done
 
   print "Ruby Gems"
-  for pkg in aws-sdk-ec2 bundler fileutils octokit tmuxinator;do
+  for pkg in aws-sdk-ec2 bundler fileutils octokit tmuxinator neovim;do
     gem install $pkg
   done
 fi
