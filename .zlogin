@@ -84,7 +84,6 @@ fi
 export PAGER=less
 export MANPAGER=less
 whence -p batman &>/dev/null && alias man=batman
-whence -p lsd &>/dev/null && alias ls=lsd
 whence -p fdfind &>/dev/null && ! whence fd &>/dev/null && alias fd=fdfind
 
 alias chompeof="perl -pi -e 'chomp if eof && /^$/'"
@@ -406,6 +405,7 @@ gcl() {
   fi
   cd "$(basename ${repo%%.git})"
 }
+whence -p lsd &>/dev/null && alias ls=lsd
 ## END post antibody/zplug overrides
 
 [[ $#RUBIES > 0 ]] && chruby ruby
