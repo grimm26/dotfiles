@@ -25,6 +25,15 @@ ohmyzsh/ohmyzsh path:plugins/systemadmin
 ohmyzsh/ohmyzsh path:plugins/urltools
 ohmyzsh/ohmyzsh path:plugins/zoxide
 
+{% if yadm.os == "Darwin" %}
+ohmyzsh/ohmyzsh path:plugins/macos
+ohmyzsh/ohmyzsh path:plugins/gnu-utils
+{% endif %}
+{% if yadm.distro == "Ubuntu" %}
+ohmyzsh/ohmyzsh path:plugins/ubuntu
+ohmyzsh/ohmyzsh path:plugins/systemd
+{% endif %}
+
 MichaelAquilina/zsh-you-should-use
 greymd/tmux-xpanes
 zsh-users/zsh-completions
