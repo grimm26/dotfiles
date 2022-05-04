@@ -273,7 +273,6 @@ case $(uname) in
       /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     fi
     brew tap homebrew/cask-fonts
-    brew list font-fira-code --cask &>/dev/null || brew install font-fira-code --cask
     # Base stuff we need.
     NEEDED_PACKAGES=(
       openssl
@@ -307,6 +306,8 @@ case $(uname) in
       selene
       zoxide
       shellcheck
+      font-hack-nerd-font
+      font-fira-code
     )
     brew list > /tmp/brews.$$
     for pkg in ${NEEDED_PACKAGES[*]}; do
