@@ -51,7 +51,7 @@
     ass   = add
     b     = branch
     bm    = branch --merged main
-    ca    = commit -a
+    ca    = commit -a -v
     chgd  = diff HEAD
     ci    = commit
     co    = checkout
