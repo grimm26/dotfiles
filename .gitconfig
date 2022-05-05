@@ -53,7 +53,7 @@
     bm    = branch --merged main
     ca    = commit -a -v
     chgd  = diff HEAD
-    ci    = commit
+    ci    = commit -v
     co    = checkout
     fpu   = format-patch -s -p origin/main
     graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f]\\+/\"&\"/g' ; echo '}'; }; f"

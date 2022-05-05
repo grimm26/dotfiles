@@ -113,7 +113,13 @@ alias nin='netstat -ntl'
 
 # kick off a kitty session file
 ks() {
-  kitty --session ~/.config/kitty/sessions/${1} --start-as=${2:-fullscreen} &
+  readonly session_name=${1}
+  readonly session_window=${2:-fullscreen}
+  if [[ -f ~/.config/kitty/sessions/${session_name}.conf ]]; then
+    kitty --session ~/.config/kitty/sessions/${session_name} --start-as=${session_window} --title ${session_name} --config ~/.config/kitty/kitty.conf --config ~/.config/kitty/sessions/${session_name}.conf &
+  else
+    kitty --session ~/.config/kitty/sessions/${session_name} --start-as=${session_window} --title ${session_name} &
+  fi
 }
 alias icat="kitty +kitten icat"
 alias kssh="kitty +kitten ssh"

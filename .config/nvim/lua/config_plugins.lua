@@ -172,6 +172,8 @@ require('legendary').setup({
     {"<leader>sv", ":source $MYVIMRC<cr>", description = "Read in vim init"},
     -- look into making these open in a new tab
     {"<leader>ep", ":vsplit " .. vim.fn.stdpath('config') .. "/lua/plugins.lua<cr>:vsplit " .. vim.fn.stdpath('config') .. "/lua/config_plugins.lua<cr>", description = "Edit vim plugins config"},
+    -- Disable mini.indentscope
+    {"<leader>mindent", ":lua vim.b.miniindentscope_disable = not vim.b.miniindentscope_disable<cr>", description = "Toggle mini.indentscope for this buffer", opts = {buffer = true, silent =true, noremap = true}},
   },
   -- Initial commands to bind
   commands = {

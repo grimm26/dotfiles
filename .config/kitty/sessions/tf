@@ -1,5 +1,0 @@
-layout fat
-cd ~/git/terraforms
-launch --cwd ~/git/terraforms/production_643927032162 --logo logos/terraform_logo.png
-launch --cwd ~/git/terraforms --dont-take-focus --logo logos/terraform_logo.png
-launch --cwd ~/git/tf-modules --dont-take-focus --logo logos/terraform_logo.png
