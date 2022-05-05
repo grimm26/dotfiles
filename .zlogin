@@ -333,8 +333,8 @@ export FZF_DEFAULT_COMMAND="$FD_BIN --type f --hidden --exclude .git --exclude .
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 export FZF_TMUX=1
 export FZF_TMUX_OPTS='-p'
-# Use ~~ as the trigger sequence instead of the default **
-export FZF_COMPLETION_TRIGGER='~~'
+# Use ,, as the trigger sequence instead of the default **
+export FZF_COMPLETION_TRIGGER=',,'
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
 # - The first argument to the function ($1) is the base path to start traversal
