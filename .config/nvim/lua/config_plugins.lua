@@ -40,13 +40,13 @@ require("gitsigns").setup({
       if vim.wo.diff then return ']c' end
       vim.schedule(function() gs.next_hunk() end)
       return '<Ignore>'
-    end, {expr=true})
+    end, {expr = true})
 
     map('n', '[c', function()
       if vim.wo.diff then return '[c' end
       vim.schedule(function() gs.prev_hunk() end)
       return '<Ignore>'
-    end, {expr=true})
+    end, {expr = true})
 
     -- Actions
     map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
@@ -55,7 +55,7 @@ require("gitsigns").setup({
     map('n', '<leader>hu', gs.undo_stage_hunk)
     map('n', '<leader>hR', gs.reset_buffer)
     map('n', '<leader>hp', gs.preview_hunk)
-    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
+    map('n', '<leader>hb', function() gs.blame_line {full = true} end)
     map('n', '<leader>tb', gs.toggle_current_line_blame)
     map('n', '<leader>hd', gs.diffthis)
     map('n', '<leader>hD', function() gs.diffthis('~') end)
@@ -173,7 +173,7 @@ require('legendary').setup({
     -- look into making these open in a new tab
     {"<leader>ep", ":vsplit " .. vim.fn.stdpath('config') .. "/lua/plugins.lua<cr>:vsplit " .. vim.fn.stdpath('config') .. "/lua/config_plugins.lua<cr>", description = "Edit vim plugins config"},
     -- Disable mini.indentscope
-    {"<leader>mindent", ":lua vim.b.miniindentscope_disable = not vim.b.miniindentscope_disable<cr>", description = "Toggle mini.indentscope for this buffer", opts = {buffer = true, silent =true, noremap = true}},
+    {"<leader>mindent", ":lua vim.b.miniindentscope_disable = not vim.b.miniindentscope_disable<cr>", description = "Toggle mini.indentscope for this buffer", opts = {buffer = true, silent = true, noremap = true}},
   },
   -- Initial commands to bind
   commands = {
@@ -304,17 +304,43 @@ table.insert(lua_runtime_path, "lua/?/init.lua")
 table.insert(lua_runtime_path, vim.fn.stdpath('config') .. "lua/?.lua")
 
 local lspconfig = require('lspconfig')
-lspconfig.ansiblels.setup{}
-lspconfig.bashls.setup{}
-lspconfig.dockerls.setup{}
-lspconfig.gopls.setup{}
-lspconfig.jsonls.setup{}
-lspconfig.pyright.setup{}
-lspconfig.remark_ls.setup{}
-lspconfig.solargraph.setup{}
-lspconfig.terraformls.setup{}
-lspconfig.vimls.setup{}
-lspconfig.yamlls.setup{}
+lspconfig.ansiblels.setup {}
+lspconfig.bashls.setup {}
+lspconfig.dockerls.setup {}
+lspconfig.gopls.setup {}
+lspconfig.jsonls.setup {}
+lspconfig.pyright.setup {}
+lspconfig.remark_ls.setup {}
+lspconfig.solargraph.setup {}
+lspconfig.terraformls.setup {}
+lspconfig.vimls.setup {}
+lspconfig.yamlls.setup {
+  settings = {
+    ["yaml"] = {
+      -- don't freak out on Cloudformation
+      customTags = {
+        "!Base64",
+        "!Cidr",
+        "!FindInMap sequence",
+        "!GetAtt",
+        "!GetAZs",
+        "!ImportValue",
+        "!Join sequence",
+        "!Ref",
+        "!Select sequence",
+        "!Split sequence",
+        "!Sub sequence",
+        "!Sub",
+        "!And sequence",
+        "!Condition",
+        "!Equals sequence",
+        "!If sequence",
+        "!Not sequence",
+        "!Or sequence",
+      },
+    },
+  },
+}
 
 lspconfig.efm.setup({
   init_options = {documentFormatting = true},
