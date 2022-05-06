@@ -1,0 +1,4 @@
+layout fat:bias=70
+cd ~/git
+
+launch --cwd ~/git
