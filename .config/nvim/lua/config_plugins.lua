@@ -323,6 +323,7 @@ lspconfig.yamlls.setup {
         "!Cidr",
         "!FindInMap sequence",
         "!GetAtt",
+        "!GetAtt sequence",
         "!GetAZs",
         "!ImportValue",
         "!Join sequence",
