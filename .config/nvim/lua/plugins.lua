@@ -61,7 +61,7 @@ return require("packer").startup(function(use)
     requires = {"kyazdani42/nvim-web-devicons", opt = true}
   })
   -- colorschemes
-  use({"marko-cerovac/material.nvim", "ishan9299/nvim-solarized-lua"})
+  use({"marko-cerovac/material.nvim", "ishan9299/nvim-solarized-lua", "Domeee/mosel.nvim"})
 
   -- Post-install/update hook with neovim command
   use({"nvim-telescope/telescope-fzf-native.nvim", run = "make"})
