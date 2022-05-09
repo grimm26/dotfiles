@@ -108,8 +108,12 @@ alias -g N='&>/dev/null'
 alias -g SL='| sort | less'
 alias -g S='| sort'
 alias -g T='|tail'
+
 alias nout='netstat -nputw'
 alias nin='netstat -ntl'
+
+# Alias for yadm do it works more like git g alias
+alias y=yadm
 
 # kick off a kitty session file
 ks() {
