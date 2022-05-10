@@ -51,6 +51,8 @@ tg () {
   terragrunt "$@"
 }
 
+export lan_proxy="https://192.168.15.1:3128"
+export wlan_proxy="https://192.168.16.1:3128"
 if [[ -r ~/.zshenv.local ]]; then
   source ~/.zshenv.local
 fi
