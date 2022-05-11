@@ -1,20 +1,31 @@
+# # Profiling setup
+# # https://esham.io/2018/02/zsh-profiling
+# zmodload zsh/datetime
+# setopt PROMPT_SUBST
+# PS4='+$EPOCHREALTIME %N:%i> '
+#
+# logfile=$(mktemp zshrc_profile.XXXXXXXX)
+# echo "Logging to $logfile"
+# exec 3>&2 2>$logfile
+#
+# setopt XTRACE
+
 #zmodload zsh/zprof
 
-# if [ -s $(brew --prefix)/opt/chruby/share/chruby/chruby.sh ]; then
-#   source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh
-#   source $(brew --prefix)/opt/chruby/share/chruby/auto.sh
-#   chruby ruby
-# elif [ -s /usr/local/share/chruby/chruby.sh ]; then
-#   . /usr/local/share/chruby/chruby.sh
-#   . /usr/local/share/chruby/auto.sh
-#   chruby ruby
-# elif [ -s /usr/share/chruby/chruby.sh ]; then
-#   . /usr/share/chruby/chruby.sh
-#   . /usr/share/chruby/auto.sh
-#   chruby ruby
-# elif [ -s "$HOME/.rvm/scripts/rvm" ]; then
-#   . "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-# fi
+BREW_PREFIX=/usr/local
+if [ -s ${NREW_PREFIX}/opt/chruby/share/chruby/chruby.sh ]; then
+  source ${BREW_PREFIX}/opt/chruby/share/chruby/chruby.sh
+  #source ${BREW_PREFIX}/opt/chruby/share/chruby/auto.sh
+  chruby ruby
+elif [ -s /usr/local/share/chruby/chruby.sh ]; then
+  . /usr/local/share/chruby/chruby.sh
+  #. /usr/local/share/chruby/auto.sh
+  chruby ruby
+elif [ -s /usr/share/chruby/chruby.sh ]; then
+  . /usr/share/chruby/chruby.sh
+  #. /usr/share/chruby/auto.sh
+  chruby ruby
+fi
 
 # append history list to the history file; this is the default but we make sure
 # because it's required for share_history.
@@ -183,3 +194,7 @@ fi
 path=("$MY_BIN" $path)
 typeset -U path
 export PATH
+
+## End profiling
+# unsetopt XTRACE
+# exec 2>&3 3>&-

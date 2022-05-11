@@ -1,3 +1,17 @@
+# # Profiling setup
+# # https://esham.io/2018/02/zsh-profiling
+# zmodload zsh/datetime
+# setopt PROMPT_SUBST
+# PS4='+$EPOCHREALTIME %N:%i> '
+#
+# logfile=$(mktemp zlogin_profile.XXXXXXXX)
+# echo "Logging to $logfile"
+# exec 3>&2 2>$logfile
+#
+# setopt XTRACE
+
+#zmodload zsh/zprof
+
 # This seems to screw up the colors, so leave it out for now
 #export BAT_THEME="Solarized (dark)"
 
@@ -219,7 +233,6 @@ plap() {
         ls -l ${^path}/*$1*(*N)
     fi
 }
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
 alias viaws="vim -O ~/.aws/config ~/.aws/credentials"
 #source ~/.spaceshiprc
@@ -397,7 +410,6 @@ gcl() {
 whence -p lsd &>/dev/null && alias ls=lsd
 ## END post antibody/zplug overrides
 
-[[ $#RUBIES > 0 ]] && chruby ruby
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
@@ -448,12 +460,19 @@ fif() {
   ug --hidden --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --bind "enter:execute(nvim {})+abort" --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
 }
 
-echo "Loading kubectl completions."
-whence -p kubectl &>/dev/null && \
-  source <(kubectl completion zsh)
+# load kubectl completions if/when I need them cuz this take a long time to load and I hardly run kubectl.
+kubetl_comp() {
+  echo "Loading kubectl completions."
+  whence -p kubectl &>/dev/null && \
+    source <(kubectl completion zsh)
+}
 echo "Loading starship prompt."
 whence -p starship &>/dev/null && \
   eval "$(starship init zsh)"
 echo "Loading direnv."
 whence -p direnv &>/dev/null && \
   eval "$(direnv hook zsh)"
+
+# ## End profiling
+# unsetopt XTRACE
+# exec 2>&3 3>&-
