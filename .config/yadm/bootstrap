@@ -93,7 +93,7 @@ case $(uname) in
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
       sudo add-apt-repository -y -u ppa:git-core/ppa
     fi
-    for pkg in fonts-firacode fonts-hack curl git libcurl4-openssl-dev keychain jq tmux source-highlight fd-find ripgrep liblua5.3-dev lua5.3 cmake ugrep; do
+    for pkg in fonts-firacode fonts-hack curl git libcurl4-openssl-dev keychain jq source-highlight fd-find ripgrep liblua5.3-dev lua5.3 cmake ugrep; do
       dpkg -s $pkg &>/dev/null \
         || sudo apt-get install -y $pkg
     done
@@ -329,6 +329,9 @@ case $(uname) in
         && gtar -C ~/.local/ -xzf /tmp/nvim-macos.tar.gz \
         && ln -sf ~/local/nvim-osx64/bin/nvim ${home_bin}/nvim
     fi
+
+    # kitty
+    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
     ;;
   *)
     echo "Unknown OS type"
@@ -412,12 +415,9 @@ if [[ ! -v setup_MINIMAL ]]; then
   done
 
   print "Ruby Gems"
-  for pkg in aws-sdk-ec2 bundler fileutils octokit tmuxinator neovim;do
+  for pkg in aws-sdk-ec2 bundler fileutils octokit neovim;do
     gem install $pkg
   done
-
-  # kitty
-  curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
 fi
 
 # antibody
