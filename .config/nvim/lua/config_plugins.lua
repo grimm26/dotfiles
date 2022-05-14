@@ -459,4 +459,8 @@ cmp.setup {
   },
 }
 
+require"octo".setup({
+  github_hostname = vim.env.GH_HOST;  -- GitHub Enterprise host (if set)
+})
+
 -- vim: ts=2 sts=2 sw=2 et
