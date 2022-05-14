@@ -103,7 +103,8 @@ whence -p fdfind &>/dev/null && ! whence fd &>/dev/null && alias fd=fdfind
 alias chompeof="perl -pi -e 'chomp if eof && /^$/'"
 
 alias perldoc="PAGER=less perldoc"
-whence when &>/dev/null && when
+# commenting when out cuz it is perl and it takes too long.
+# whence when &>/dev/null && when
 setopt vi
 setopt inc_append_history
 #rg () { =rg --pretty $* |less }
