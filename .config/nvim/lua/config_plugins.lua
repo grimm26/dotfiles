@@ -165,7 +165,7 @@ require('legendary').setup({
     {"<leader>gitfiles", require('telescope.builtin').git_files, description = "List files under Git control"},
     {"<leader>commits", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
     {"<C-n>", ":NvimTreeToggle<cr>", mode = {""}, description = "Toggle nvim-tree"},
-    {"<leader>F", vim.lsp.buf.formatting_sync, description = 'Format buffer with LSP', opts = {buffer = true, silent = true, noremap = true}},
+    {"<leader>F", vim.lsp.buf.formatting_seq_sync, description = 'Format buffer with LSP', opts = {buffer = true, silent = true, noremap = true}},
     {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
     -- Base utility mappings
     {"<leader>ev", ":vsplit $MYVIMRC<cr>", description = "Edit vim init"},
