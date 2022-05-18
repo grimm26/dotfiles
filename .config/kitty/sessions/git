@@ -1,4 +1,4 @@
-layout fat:bias=70
+layout grid
 cd ~/git
 
 launch --cwd ~/git

@@ -136,6 +136,21 @@ ks() {
     kitty --session ~/.config/kitty/sessions/${session_name} --start-as=${session_window} --title ${session_name} &
   fi
 }
+
+# Use this to start up multiple windows in kitty and broadcast to them.
+kpanes() {
+  local now=$(date +'%s')
+  local session_file="/tmp/kpanes-session.${now}"
+
+  # generate session
+  echo "layout grid" > $session_file
+  for host in $@; do
+    echo "launch --title $host kitty +kitten ssh $host" >> $session_file
+  done
+  echo "launch --allow-remote-control kitty +kitten broadcast" >> $session_file
+  kitty --session $session_file
+  rm $session_file
+}
 alias icat="kitty +kitten icat"
 alias kssh="kitty +kitten ssh"
 
