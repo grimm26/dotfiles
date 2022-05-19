@@ -315,6 +315,10 @@ case $(uname) in
         || brew install $pkg
     done
     SCRIPT_HOME=$(greadlink -f ${0%/*})
+    # Make sure we set an npm prefix for our user.
+    npm config set prefix '~/.local/'
+    npm install --global neovim
+    npm install --global remark
     # dive
     curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | jq -r '.assets[].browser_download_url' | grep -i ${kernel}_${machine}) -o /tmp/dive-latest.tgz \
       && mkdir -p /tmp/dive.$$ \
