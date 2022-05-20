@@ -32,7 +32,6 @@ ohmyzsh/ohmyzsh path:plugins/systemd
 {% endif %}
 
 MichaelAquilina/zsh-you-should-use
-greymd/tmux-xpanes
 zsh-users/zsh-completions
 zsh-users/zsh-autosuggestions
 
