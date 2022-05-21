@@ -20,7 +20,7 @@ The main tools that I use this to manage:
 I was previously using some scripts and [GNU stow](https://www.gnu.org/software/stow/) to install the dotfiles from this repo. The old setup using stow is in the [legacy branch](https://github.com/grimm26/dotfiles/tree/legacy). It was kinda janky, so I decided to move to using yadm.
 
 # How to install
-**You must first install yadm**. I do this by cloning [the repo](https://github.com/TheLocehiliosan/yadm) to `~/git/yadm` and then `ln -s ~/git/yadm/yadm ~/.local/bin/yadm`. This is what my setup assumes, but you can install yadm however you like.
+**You must first install yadm**. I do this by cloning [the repo](https://github.com/TheLocehiliosan/yadm) to `~/.yadm-project` and then `ln -s ../../.yadm-project/yadm ~/.local/bin/yadm`. This is what my setup assumes, but you can install yadm however you like.
 
 There is a [bootstrap script](https://github.com/grimm26/dotfiles/blob/main/.config/yadm/bootstrap) that installs packages that I use.
 
