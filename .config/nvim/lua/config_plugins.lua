@@ -22,9 +22,12 @@ require("gitsigns").setup({
   current_line_blame = false,
   current_line_blame_opts = {
     virt_text = true,
-    virt_text_pos = 'right_align', -- 'eol' | 'overlay' | 'right_align'
+    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
     delay = 1000,
     ignore_whitespace = false,
+  },
+  yadm = {
+    enable = true
   },
   on_attach = function(bufnr)
     local gs = package.loaded.gitsigns
@@ -413,6 +416,8 @@ lspconfig.sumneko_lua.setup({
     },
   }
 })
+
+require "fidget".setup {}
 --
 -- The below cmp/snip was just copied from https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
 -- luasnip setup
@@ -459,8 +464,8 @@ cmp.setup {
   },
 }
 
-require"octo".setup({
-  github_hostname = vim.env.GH_HOST;  -- GitHub Enterprise host (if set)
+require("octo").setup({
+  github_hostname = vim.env.GH_HOST; -- GitHub Enterprise host (if set)
 })
 
 -- vim: ts=2 sts=2 sw=2 et

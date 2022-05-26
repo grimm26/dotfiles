@@ -13,7 +13,7 @@ if fn.empty(vim.fn.glob(install_path)) > 0 then
   install_path)
 end
 -- Remap space as leader key
--- vim.keymap.set({'n', 'v'}, '<Space>', '<Nop>', {silent = true})
+vim.keymap.set({'n', 'v'}, '<Space>', '<Nop>', {silent = true})
 g.mapleader = ' '
 g.maplocalleader = ' '
 require("lastplace")

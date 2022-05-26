@@ -54,6 +54,7 @@ return require("packer").startup(function(use)
     "kamykn/spelunker.vim",
     "mrjones2014/legendary.nvim", -- keymappings, commands, autocmds
     'stevearc/dressing.nvim', -- fancy ui menu with legendary
+    'j-hui/fidget.nvim',
   })
 
   use({
