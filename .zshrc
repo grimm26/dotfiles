@@ -128,6 +128,12 @@ whence gcal &>/dev/null && alias cal=gcal
 
 # Alias for yadm do it works more like git g alias
 alias y=yadm
+alias yp='yadm push'
+alias yl='yadm pull'
+alias yst='yadm status'
+alias yca='yadm commit -a -v'
+alias ya='yadm add'
+alias yd='yadm diff'
 
 # kick off a kitty session file
 ks() {
