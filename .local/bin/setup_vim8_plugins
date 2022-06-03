@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-# We're going to install vim-plug and get the old plugin dirs out of the way
-for dir in ~/.vim/pack/*; do
-  mv $dir ${dir}-
-done
-
-#vim-plug should install automagically via the .vimrc we have here.
