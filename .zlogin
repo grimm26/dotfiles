@@ -462,7 +462,7 @@ fif() {
 }
 
 # load kubectl completions if/when I need them cuz this take a long time to load and I hardly run kubectl.
-kubetl_comp() {
+kubectl_comp() {
   echo "Loading kubectl completions."
   whence -p kubectl &>/dev/null && \
     source <(kubectl completion zsh)
