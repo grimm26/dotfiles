@@ -5,7 +5,7 @@
 # Versions
 GOLANG_VERSION="1.18.3"
 NODEJS_VERSION="16.15.1"
-PYTHON_VERSION="3.10.4"
+PYTHON_VERSION="3.10.5"
 NEOVIM_VERSION="0.7.0"
 while getopts 'M' OPT; do
   case $OPT in
