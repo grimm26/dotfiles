@@ -414,7 +414,7 @@ if [[ ! -v setup_MINIMAL ]]; then
     PIP_OPTIONS="--force-reinstall"
   fi
   echo "Python packages:"
-  for pkg in pip pre-commit 'boto3[crt]' flake8 flake8-bugbear flake8-efm pylint black isort pyright pynvim;do
+  for pkg in pip pre-commit 'boto3[crt]' flake8 flake8-bugbear flake8-efm pylint black isort pynvim;do
     python -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
   done
 
