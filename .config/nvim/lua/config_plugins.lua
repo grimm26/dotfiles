@@ -168,15 +168,21 @@ require('legendary').setup({
     {"<leader>gitfiles", require('telescope.builtin').git_files, description = "List files under Git control"},
     {"<leader>commits", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
     {"<C-n>", ":NvimTreeToggle<cr>", mode = {""}, description = "Toggle nvim-tree"},
-    {"<leader>F", vim.lsp.buf.formatting_seq_sync, description = 'Format buffer with LSP', opts = {buffer = true, silent = true, noremap = true}},
+    {"<leader>F", vim.lsp.buf.formatting_seq_sync, description = 'Format buffer with LSP',
+      opts = {buffer = true, silent = true, noremap = true}},
     {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
     -- Base utility mappings
     {"<leader>ev", ":vsplit $MYVIMRC<cr>", description = "Edit vim init"},
     {"<leader>sv", ":source $MYVIMRC<cr>", description = "Read in vim init"},
     -- look into making these open in a new tab
-    {"<leader>ep", ":vsplit " .. vim.fn.stdpath('config') .. "/lua/plugins.lua<cr>:vsplit " .. vim.fn.stdpath('config') .. "/lua/config_plugins.lua<cr>", description = "Edit vim plugins config"},
+    {"<leader>ep",
+      ":vsplit " ..
+          vim.fn.stdpath('config') ..
+          "/lua/plugins.lua<cr>:vsplit " .. vim.fn.stdpath('config') .. "/lua/config_plugins.lua<cr>",
+      description = "Edit vim plugins config"},
     -- Disable mini.indentscope
-    {"<leader>mindent", ":lua vim.b.miniindentscope_disable = not vim.b.miniindentscope_disable<cr>", description = "Toggle mini.indentscope for this buffer", opts = {buffer = true, silent = true, noremap = true}},
+    {"<leader>mindent", ":lua vim.b.miniindentscope_disable = not vim.b.miniindentscope_disable<cr>",
+      description = "Toggle mini.indentscope for this buffer", opts = {buffer = true, silent = true, noremap = true}},
   },
   -- Initial commands to bind
   commands = {
@@ -297,7 +303,7 @@ local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.setup({
   automatic_installation = true,
   pip = {
-    install_args = {"--user", "--upgrade"}
+    install_args = {"--upgrade"}
   }
 })
 
@@ -312,11 +318,37 @@ lspconfig.bashls.setup {}
 lspconfig.dockerls.setup {}
 lspconfig.gopls.setup {}
 lspconfig.jsonls.setup {}
-lspconfig.pyright.setup {}
 lspconfig.remark_ls.setup {}
 lspconfig.solargraph.setup {}
 lspconfig.terraformls.setup {}
 lspconfig.vimls.setup {}
+lspconfig.pylsp.setup {
+  -- https://github.com/williamboman/nvim-lsp-installer/blob/main/lua/nvim-lsp-installer/servers/pylsp/README.md
+  -- Install pylsp plugins with :PylspInstall pyls-flake8 pyls-isort python-lsp-black
+  settings = {
+    pylsp = {
+      configurationSources = {"flake8"},
+      plugins = {
+        black = {
+          enabled = true
+        },
+        -- Use flake8 instead of pycodestyle,pyflakes,mccabe
+        flake8 = {
+          enabled = true
+        },
+        pycodestyle = {
+          enabled = false
+        },
+        pyflakes = {
+          enabled = false
+        },
+        mccabe = {
+          enabled = false
+        },
+      }
+    }
+  }
+}
 lspconfig.yamlls.setup {
   settings = {
     ["yaml"] = {
@@ -348,23 +380,10 @@ lspconfig.yamlls.setup {
 
 lspconfig.efm.setup({
   init_options = {documentFormatting = true},
-  filetypes = {"python", "sh", "zsh"},
+  filetypes = {"sh", "zsh"},
   settings = {
     rootMarkers = {".git/"},
     languages = {
-      python = {
-        {formatCommand = "black --quiet -", formatStdin = true},
-        {formatCommand = "isort --quiet -", formatStdin = true},
-        -- {
-        --   lintCommand = "flake8 --format efm --stdin-display-name ${INPUT} -",
-        --   lintSource = "flake8",
-        --   lintStdin = true,
-        --   lintIgnoreExitCode = true,
-        --   lintFormats = {
-        --     "%f:%l:%c:%t: %m",
-        --   }
-        -- },
-      },
       sh = {
         {formatCommand = "shfmt -i 2 -bn -ci -s", formatStdin = true},
         {
