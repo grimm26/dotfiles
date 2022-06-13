@@ -64,6 +64,21 @@ disabled = false
 disabled = false
 tag_disabled = false
 
+[hostname]
+disabled = false
+ssh_only = false
+
+[kubernetes]
+disabled = false
+[kubernetes.context_aliases]
+"aws-br-wharf-production" = "br-prod"
+"aws-br-wharf-staging" = "br-staging"
+"aws-oh-wharf-production" = "oh-prod"
+"aws-oh-wharf-staging" = "oh-staging"
+"onprem-elk-wharf-monkeybusiness" = "monkeybusiness"
+"onprem-elk-wharf-staging" = "elk-staging"
+"onprem-oak-wharf-production" = "oak-prod"
+
 [nodejs]
 disabled = true
 
@@ -81,7 +96,3 @@ disabled = false
 [time]
 disabled = false
 format = "[$time]($style) "
-
-[hostname]
-disabled = false
-ssh_only = false
