@@ -140,9 +140,9 @@ ks() {
   readonly session_name=${1}
   readonly session_window=${2:-fullscreen}
   if [[ -f ~/.config/kitty/sessions/${session_name}.conf ]]; then
-    kitty --session ~/.config/kitty/sessions/${session_name} --start-as=${session_window} --title ${session_name} --config ~/.config/kitty/kitty.conf --config ~/.config/kitty/sessions/${session_name}.conf &
+    kitty --session ~/.config/kitty/sessions/${session_name} --start-as=${session_window} --title ${session_name} --config ~/.config/kitty/kitty.conf --config ~/.config/kitty/sessions/${session_name}.conf &>/dev/null &
   else
-    kitty --session ~/.config/kitty/sessions/${session_name} --start-as=${session_window} --title ${session_name} &
+    kitty --session ~/.config/kitty/sessions/${session_name} --start-as=${session_window} --title ${session_name} &>/dev/null &
   fi
 }
 
