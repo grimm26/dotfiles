@@ -241,6 +241,7 @@ ts.setup({
     "elvish",
     "gleam",
     "glimmer",
+    "heex",
     "kotlin",
     "ocaml",
     "ocaml_interface",
