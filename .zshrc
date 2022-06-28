@@ -178,7 +178,6 @@ if command -v nvim &>/dev/null; then
   alias -g V='| nvim -'
 else
   alias -g V='| vim -'
-  alias vim="PYTHONPATH=$(python -m site --user-site) vim"
   export EDITOR=vim
   export SYSTEMD_EDITOR=vim
 fi

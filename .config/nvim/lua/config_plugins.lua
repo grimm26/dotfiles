@@ -230,7 +230,7 @@ local ts = require("nvim-treesitter.configs")
 ts.setup({
   ensure_installed = {
     "bash", "c", "comment", "dockerfile", "go", "gomod", "hcl", "html",
-    "java", "javascript", "json", "json5", "lua", "make", "markdown", "nix", "perl",
+    "java", "javascript", "json", "json5", "lua", "make", "markdown", "markdown_inline", "perl",
     "php", "regex", "python", "ruby", "rust", "toml", "typescript", "vim",
     "vue", "yaml"
   },

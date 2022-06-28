@@ -341,7 +341,7 @@ case $(uname) in
       echo neovim
       curl -sLSo /tmp/nvim-macos.tar.gz https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/nvim-macos.tar.gz \
         && gtar -C ~/.local/ -xzf /tmp/nvim-macos.tar.gz \
-        && ln -sf ~/local/nvim-osx64/bin/nvim ${home_bin}/nvim
+        && ln -sf ~/local/nvim-macos/bin/nvim ${home_bin}/nvim
     fi
 
     # kitty

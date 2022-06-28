@@ -32,7 +32,6 @@ if has('nvim')
   Plug 'ishan9299/nvim-solarized-lua'
 else
   " vim plugins instead of the nvim specific ones
-  Plug 'psf/black'
   Plug 'plasticboy/vim-markdown'
   Plug 'fisadev/vim-isort'
   Plug 'tpope/vim-commentary'
