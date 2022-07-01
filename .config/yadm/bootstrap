@@ -93,7 +93,7 @@ case $(uname) in
     if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
       sudo add-apt-repository -y -u ppa:git-core/ppa
     fi
-    for pkg in fonts-firacode fonts-hack curl git libcurl4-openssl-dev keychain jq source-highlight fd-find ripgrep liblua5.3-dev lua5.3 cmake ugrep; do
+    for pkg in libfuse2 fonts-firacode fonts-hack curl git libcurl4-openssl-dev keychain jq source-highlight fd-find ripgrep liblua5.3-dev lua5.3 cmake ugrep; do
       dpkg -s $pkg &>/dev/null \
         || sudo apt-get install -y $pkg
     done
@@ -245,16 +245,21 @@ case $(uname) in
 
       # Hack Nerd font
       echo "Install Hack Nerd font"
+      need_nerd_font=0
       if [[ -f "${HOME}/.local/share/fonts/Hack Regular Nerd Font Complete Mono.ttf" ]]; then
         if [[ $(strings "${HOME}/.local/share/fonts/Hack Regular Nerd Font Complete Mono.ttf" |grep -w Version |head -1 |awk '{print $3}') != "2.1.0" ]]; then
-          curl -sLS https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip -o /tmp/Hack.zip \
-            && unzip -u /tmp/Hack.zip -d ~/.local/share/fonts \
-            && fc-cache -f -v ~/.local/share/fonts
+          need_nerd_font=1
         fi
+      else
+        need_nerd_font=1
+      fi
+      if [[ $need_nerd_font -eq 1 ]]; then
+        curl -sLS https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip -o /tmp/Hack.zip \
+          && unzip -u /tmp/Hack.zip -d ~/.local/share/fonts \
+          && fc-cache -f -v ~/.local/share/fonts
       fi
 
       # kitty
-      set -x
       local KITTY_VERSION="1"
       local LATEST_KITTY="2"
       if whence kitty  &>/dev/null; then
@@ -272,7 +277,6 @@ case $(uname) in
         sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
         sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
       fi
-      set +x
     fi
     ;;
   Darwin)
@@ -365,7 +369,7 @@ esac
 print -n "starship: "
 if whence starship &> /dev/null; then
   installed_starship_version=$(starship --version |head -1 |awk '{print $2}')
-  latest_starship_version=$(gh release list --limit 1 --repo starship/starship |awk '{print $1}')
+  latest_starship_version=$(GH_HOST=github.com gh release list --limit 1 --repo starship/starship |awk '{print $1}')
   if [[ "v"${installed_starship_version} != $latest_starship_version ]]; then
     print "updating."
     if [[ $(uname) == "Linux" ]]; then
