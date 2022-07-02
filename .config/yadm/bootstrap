@@ -23,7 +23,10 @@ case "$(uname -m)" in
     ;;
 esac
 
-# Check if we set up a file for public github settings. On my work machine, out local github settings are in my default environment and I use direnv to set the public ones where needed.  direnv doesn't help in a script :)
+MY_TMP=/tmp/ybootstrap
+mkdir -p $MY_TMP
+
+# Check if we set up a file for public github settings. On my work machine, our local github settings are in my default environment and I use direnv to set the public ones where needed.  direnv doesn't help in a script :)
 if [[ -s ~/.github_public ]]; then
   source ~/.github_public
 fi
@@ -80,7 +83,7 @@ case $(uname) in
       echo "I only wrote this for ubuntu."
       exit 1
     fi
-    cd /tmp
+    cd $MY_TMP
     for pkg in libfuse2 fonts-firacode fonts-hack curl git libcurl4-openssl-dev keychain jq source-highlight fd-find ripgrep liblua5.3-dev lua5.3 cmake ugrep; do
       dpkg -s $pkg &>/dev/null \
         || sudo apt-get install -y $pkg
@@ -121,8 +124,8 @@ case $(uname) in
       # firefox. Ubuntu only pkgs firefox as a snap now, which sucks. Install it from mozilla.
       if [[ ! -d ~/.local/firefox ]]; then
         print "Installing firefox"
-        curl -sLSo /tmp/firefox.tar.bz2 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US' \
-          && tar -C ~/.local -xjf /tmp/firefox.tar.bz2 \
+        curl -sLSo ${MY_TMP}/firefox.tar.bz2 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US' \
+          && tar -C ~/.local -xjf ${MY_TMP}/firefox.tar.bz2 \
           && ln -s ~/.local/firefox/firefox-bin ${home_bin}/firefox
       fi
 
@@ -132,8 +135,8 @@ case $(uname) in
         if [[ -L /usr/local/nodejs ]]; then
           OLD_NODEJS=$(readlink /usr/local/nodejs)
         fi
-        curl -sLS  -o /tmp/node-v${NODEJS_VERSION}-linux-x64.tar.xz https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz \
-          && sudo tar -xJf /tmp/node-v${NODEJS_VERSION}-linux-x64.tar.xz -C /usr/local/
+        curl -sLS -o ${MY_TMP}/node-v${NODEJS_VERSION}-linux-x64.tar.xz https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz \
+          && sudo tar -xJf ${MY_TMP}/node-v${NODEJS_VERSION}-linux-x64.tar.xz -C /usr/local/
         if [[ -d /usr/local/node-v${NODEJS_VERSION}-linux-x64 ]]; then
           sudo rm /usr/local/nodejs
           sudo ln -s /usr/local/node-v${NODEJS_VERSION}-linux-x64 /usr/local/nodejs
@@ -175,19 +178,35 @@ case $(uname) in
       fi
       # git-delta
       echo "git-delta"
-      curl -sLS $(curl -s https://api.github.com/repos/dandavison/delta/releases/latest | jq -r '.assets[].browser_download_url' | grep -E "${gdelta_pkg}_.*_amd64\.deb") -o /tmp/git-delta-latest_amd64.deb \
-        && sudo dpkg --install --skip-same-version /tmp/git-delta-latest_amd64.deb
+      latest_delta_version=$(GH_HOST=github.com gh release list --limit 1 --repo dandavison/delta |awk '{print $1}')
+      installed_delta_version=$(delta --version|awk '{print $2}')
+      if [[ ${installed_delta_version} != $latest_delta_version ]]; then
+        gh release download --pattern "${gdelta_pkg}}_${latest_delta_version}_amd64.deb" --repo dandavison/delta -D $MY_TMP \
+          && sudo dpkg --install --skip-same-version ${MY_TMP}/${gdelta_pkg}_${latest_delta_version}_amd64.deb
+      fi
       # bat
       echo "bat"
-      curl -sLS $(curl -s https://api.github.com/repos/sharkdp/bat/releases/latest | jq -r '.assets[].browser_download_url' | grep -E 'bat_.*_amd64.deb') -o /tmp/bat-latest.amd64.deb \
-        && sudo dpkg --install --skip-same-version /tmp/bat-latest.amd64.deb
+      latest_bat_version=$(GH_HOST=github.com gh release list --limit 1 --repo sharkdp/bat |awk '{print $1}'|sed 's/v//')
+      installed_bat_version=$(bat --version|awk '{print $2}')
+      if [[ ${installed_bat_version} != $latest_bat_version ]]; then
+        gh release download --pattern "_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
+          && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version}_amd64.deb
+      fi
       echo "dive"
-      curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | jq -r '.assets[].browser_download_url' | grep '_amd64.deb') -o /tmp/dive-latest.amd64.deb \
-        && sudo dpkg --install --skip-same-version /tmp/dive-latest.amd64.deb
+      latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}'| sed 's/v//')
+      installed_dive_version=$(dive --version|awk '{print $2}')
+      if [[ ${installed_dive_version} != $latest_dive_version ]]; then
+        gh release download --pattern '*amd64.deb' --repo wagoodman/dive -D ${MY_TMP} \
+          && sudo dpkg --install --skip-same-version ${MY_TMP}/dive_${latest_dive_version}_linux_amd64.deb
+      fi
       # lsd
       echo "lsd"
-      curl -sLS $(curl -s https://api.github.com/repos/Peltoche/lsd/releases/latest | jq -r '.assets[].browser_download_url' | grep -E "${lsd_pkg}_.*_amd64\.deb") -o /tmp/lsd-latest.amd64.deb \
-        && sudo dpkg --install --skip-same-version /tmp/lsd-latest.amd64.deb
+      latest_lsd_version=$(GH_HOST=github.com gh release list --limit 1 --repo Peltoche/lsd |awk '{print $1}')
+      installed_lsd_version=$(lsd --version|awk '{print $2}')
+      if [[ ${installed_lsd_version} != $latest_lsd_version ]]; then
+        gh release download --pattern "${lsd_pkg}_*amd64.deb" --repo Peltoche/lsd -D ${MY_TMP} \
+          && sudo dpkg --install --skip-same-version ${MY_TMP}/lsd_${latest_lsd_version}_amd64.deb
+      fi
       # chruby
       echo "chruby"
       eval $(grep '^CHRUBY_VERSION' /usr/local/share/chruby/chruby.sh)
@@ -198,7 +217,7 @@ case $(uname) in
           && tar -xzf chruby-0.3.9.tar.gz \
           && cd chruby-0.3.9/ \
           && sudo make install
-        cd /tmp
+        cd $MY_TMP
       fi
       # ruby-install
       echo "ruby-install"
@@ -209,12 +228,16 @@ case $(uname) in
           && tar -xzf ruby-install-0.8.3.tar.gz \
           && cd ruby-install-0.8.3/ \
           && sudo make install
-        cd /tmp
+        cd $MY_TMP
       fi
       # direnv
       echo "direnv"
-      if upinst_from_git https://github.com/direnv/direnv; then
-        (cd ~/git/direnv && make clean && make && make install PREFIX=~/.local)
+      latest_direnv_version=$(GH_HOST=github.com gh release list --limit 1 --repo direnv/direnv |awk '{print $2}'|sed 's/v//')
+      installed_direnv_version=$(direnv --version)
+      if [[ ${installed_direnv_version} != $latest_direnv_version ]]; then
+        gh release download --pattern 'direnv.linux-amd64' --repo direnv/direnv -D $MY_TMP \
+          && mv ${MY_TMP}/direnv.linux-amd64 ${home_bin}/direnv \
+          && chmod 755 ${home_bin}/direnv
       fi
       # awscli
       echo "awscli"
@@ -236,10 +259,10 @@ case $(uname) in
       # Build batextras
       echo "batextras"
       if upinst_from_git https://github.com/eth-p/bat-extras; then
-        cd ~/git/bat-extars
+        cd ~/git/bat-extras
         ./build.sh --no-verify \
         && cp bin/* $home_bin
-        cd /tmp
+        cd $MY_TMP
       fi
       echo "kubectl"
       KUBECTL_STABLE=$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
@@ -262,8 +285,8 @@ case $(uname) in
         need_nerd_font=1
       fi
       if [[ $need_nerd_font -eq 1 ]]; then
-        curl -sLS https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip -o /tmp/Hack.zip \
-          && unzip -u /tmp/Hack.zip -d ~/.local/share/fonts \
+        curl -sLS https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip -o ${MY_TMP}/Hack.zip \
+          && unzip -u ${MY_TMP}/Hack.zip -d ~/.local/share/fonts \
           && fc-cache -f -v ~/.local/share/fonts
       fi
 
@@ -331,9 +354,9 @@ case $(uname) in
       font-hack-nerd-font
       font-fira-code
     )
-    brew list > /tmp/brews.$$
+    brew list > ${MY_TMP}/brews.$$
     for pkg in ${NEEDED_PACKAGES[*]}; do
-      grep -w $pkg /tmp/brews.$$ &>/dev/null \
+      grep -w $pkg ${MY_TMP}/brews.$$ &>/dev/null \
         || brew install $pkg
     done
     SCRIPT_HOME=$(greadlink -f ${0%/*})
@@ -342,17 +365,17 @@ case $(uname) in
     npm install --location=global neovim
     npm install --location=global remark
     # dive
-    curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | jq -r '.assets[].browser_download_url' | grep -i ${kernel}_${machine}) -o /tmp/dive-latest.tgz \
-      && mkdir -p /tmp/dive.$$ \
-      && tar -C /tmp/dive.$$ -xzf /tmp/dive-latest.tgz \
-      && rm /tmp/dive-latest.tgz \
-      && cp /tmp/dive.$$/dive ${home_bin} \
+    curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | jq -r '.assets[].browser_download_url' | grep -i ${kernel}_${machine}) -o ${MY_TMP}/dive-latest.tgz \
+      && mkdir -p ${MY_TMP}/dive.$$ \
+      && tar -C ${MY_TMP}/dive.$$ -xzf ${MY_TMP}/dive-latest.tgz \
+      && rm ${MY_TMP}/dive-latest.tgz \
+      && cp ${MY_TMP}/dive.$$/dive ${home_bin} \
       && chmod 755 ${home_bin}/dive
     # neovim
     if [[ "NVIM v${NEOVIM_VERSION}" != $(nvim --version |head -1) ]]; then
       echo neovim
-      curl -sLSo /tmp/nvim-macos.tar.gz https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/nvim-macos.tar.gz \
-        && gtar -C ~/.local/ -xzf /tmp/nvim-macos.tar.gz \
+      curl -sLSo ${MY_TMP}/nvim-macos.tar.gz https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/nvim-macos.tar.gz \
+        && gtar -C ~/.local/ -xzf ${MY_TMP}/nvim-macos.tar.gz \
         && ln -sf ~/local/nvim-macos/bin/nvim ${home_bin}/nvim
     fi
 
@@ -412,17 +435,17 @@ if [[ ! -v setup_MINIMAL ]]; then
 
   # k9s
   echo "k9s"
-  curl -sLS $(curl -sLS https://api.github.com/repos/derailed/k9s/releases/latest | jq -r '.assets[].browser_download_url' | grep -i ${kernel}_$(uname -m)) -o /tmp/k9s-latest.tgz \
-    && mkdir -p /tmp/k9s.$$ \
-    && tar -C /tmp/k9s.$$ -xzf /tmp/k9s-latest.tgz \
-    && rm /tmp/k9s-latest.tgz \
-    && cp /tmp/k9s.$$/k9s ${home_bin} \
+  curl -sLS $(curl -sLS https://api.github.com/repos/derailed/k9s/releases/latest | jq -r '.assets[].browser_download_url' | grep -i ${kernel}_$(uname -m)) -o ${MY_TMP}/k9s-latest.tgz \
+    && mkdir -p ${MY_TMP}/k9s.$$ \
+    && tar -C ${MY_TMP}/k9s.$$ -xzf ${MY_TMP}/k9s-latest.tgz \
+    && rm ${MY_TMP}/k9s-latest.tgz \
+    && cp ${MY_TMP}/k9s.$$/k9s ${home_bin} \
     && chmod 755 ${home_bin}/k9s
 
   # cheat
   echo "cheat"
-  curl -sLS https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -o /tmp/cheat.tgz \
-    && gunzip -c /tmp/cheat.tgz >${home_bin}/cheat
+  curl -sLS https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -o ${MY_TMP}/cheat.tgz \
+    && gunzip -c ${MY_TMP}/cheat.tgz >${home_bin}/cheat
   chmod 755 ${home_bin}/cheat
   ##
   echo "pyenv"
@@ -459,3 +482,5 @@ echo "antibody"
 curl -sfLS git.io/antibody | bash -s - -b ${home_bin}
 
 $(whence -p antibody) bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh
+
+rm -rf ${MY_TMP}
