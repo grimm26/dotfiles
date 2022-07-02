@@ -111,10 +111,15 @@ no-symlink: false
 total-size: false
 
 # == Hyperlink ==
-# Whether to display the total size of directories.
+# Attach hyperlink to filenames
 # Possible values: always, auto, never
 hyperlink: auto
 
 # == Symlink arrow ==
 # Specifies how the symlink arrow display, chars in both ascii and utf8
 symlink-arrow: ⇒
+
+# == Header ==
+# Whether to display block headers.
+# Possible values: false, true
+header: false
