@@ -372,12 +372,15 @@ case $(uname) in
     npm install --location=global neovim
     npm install --location=global remark
     # dive
-    curl -sLS $(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | jq -r '.assets[].browser_download_url' | grep -i ${kernel}_${machine}) -o ${MY_TMP}/dive-latest.tgz \
-      && mkdir -p ${MY_TMP}/dive.$$ \
-      && tar -C ${MY_TMP}/dive.$$ -xzf ${MY_TMP}/dive-latest.tgz \
-      && rm ${MY_TMP}/dive-latest.tgz \
-      && cp ${MY_TMP}/dive.$$/dive ${home_bin} \
-      && chmod 755 ${home_bin}/dive
+    echo "dive"
+    latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}'| sed 's/v//')
+    installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
+    if [[ ${installed_dive_version} != $latest_dive_version ]]; then
+      gh release download --pattern '*darwin_amd64.tar.gz' --repo wagoodman/dive -D ${MY_TMP} \
+        && tar -C ${MY_TMP} -xzf ${MY_TMP}/dive-*darwin_amd64.tar.gz \
+        && cp ${MY_TMP}/dive ${home_bin} \
+        && chmod 755 ${home_bin}/dive
+    fi
     # neovim
     if [[ "NVIM v${NEOVIM_VERSION}" != $(nvim --version |head -1) ]]; then
       echo neovim
