@@ -179,7 +179,7 @@ case $(uname) in
       # git-delta
       echo "git-delta"
       latest_delta_version=$(GH_HOST=github.com gh release list --limit 1 --repo dandavison/delta |awk '{print $1}')
-      installed_delta_version=$(delta --version|awk '{print $2}')
+      installed_delta_version=$(delta --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_delta_version} != $latest_delta_version ]]; then
         gh release download --pattern "${gdelta_pkg}}_${latest_delta_version}_amd64.deb" --repo dandavison/delta -D $MY_TMP \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/${gdelta_pkg}_${latest_delta_version}_amd64.deb
@@ -187,14 +187,14 @@ case $(uname) in
       # bat
       echo "bat"
       latest_bat_version=$(GH_HOST=github.com gh release list --limit 1 --repo sharkdp/bat |awk '{print $1}'|sed 's/v//')
-      installed_bat_version=$(bat --version|awk '{print $2}')
+      installed_bat_version=$(bat --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_bat_version} != $latest_bat_version ]]; then
         gh release download --pattern "_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version}_amd64.deb
       fi
       echo "dive"
       latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}'| sed 's/v//')
-      installed_dive_version=$(dive --version|awk '{print $2}')
+      installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_dive_version} != $latest_dive_version ]]; then
         gh release download --pattern '*amd64.deb' --repo wagoodman/dive -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/dive_${latest_dive_version}_linux_amd64.deb
@@ -202,7 +202,7 @@ case $(uname) in
       # lsd
       echo "lsd"
       latest_lsd_version=$(GH_HOST=github.com gh release list --limit 1 --repo Peltoche/lsd |awk '{print $1}')
-      installed_lsd_version=$(lsd --version|awk '{print $2}')
+      installed_lsd_version=$(lsd --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_lsd_version} != $latest_lsd_version ]]; then
         gh release download --pattern "${lsd_pkg}_*amd64.deb" --repo Peltoche/lsd -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/lsd_${latest_lsd_version}_amd64.deb
@@ -233,7 +233,7 @@ case $(uname) in
       # direnv
       echo "direnv"
       latest_direnv_version=$(GH_HOST=github.com gh release list --limit 1 --repo direnv/direnv |awk '{print $2}'|sed 's/v//')
-      installed_direnv_version=$(direnv --version)
+      installed_direnv_version=$(direnv --version 2>/dev/null)
       if [[ ${installed_direnv_version} != $latest_direnv_version ]]; then
         gh release download --pattern 'direnv.linux-amd64' --repo direnv/direnv -D $MY_TMP \
           && mv ${MY_TMP}/direnv.linux-amd64 ${home_bin}/direnv \
@@ -255,7 +255,14 @@ case $(uname) in
         fi
       /usr/local/bin/aws --version
       # shfmt
-      GO111MODULE=on go install mvdan.cc/sh/v3/cmd/shfmt@latest
+      echo "shfmt"
+      latest_shfmt_version=$(GH_HOST=github.com gh release list --limit 1 --repo mvdan/sh |awk '{print $1}')
+      installed_shfmt_version=$(shfmt --version 2>/dev/null)
+      if [[ ${installed_shfmt_version} != $latest_shfmt_version ]]; then
+        gh release download --pattern 'shfmt*linux_amd64' --repo mvdan/sh -D $MY_TMP \
+          && mv ${MY_TMP}/shfmt*linux_amd64 ${home_bin}/shfmt \
+          && chmod 755 ${home_bin}/shfmt
+      fi
       # Build batextras
       echo "batextras"
       if upinst_from_git https://github.com/eth-p/bat-extras; then
@@ -399,7 +406,7 @@ esac
 # starship (prompt)
 print -n "starship: "
 if whence starship &> /dev/null; then
-  installed_starship_version=$(starship --version |head -1 |awk '{print $2}')
+  installed_starship_version=$(starship --version 2>/dev/null|head -1 |awk '{print $2}')
   latest_starship_version=$(GH_HOST=github.com gh release list --limit 1 --repo starship/starship |awk '{print $1}')
   if [[ "v"${installed_starship_version} != $latest_starship_version ]]; then
     print "updating."
