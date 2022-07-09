@@ -7,7 +7,6 @@ ohmyzsh/ohmyzsh path:plugins/kitchen
 ohmyzsh/ohmyzsh path:plugins/vi-mode
 ohmyzsh/ohmyzsh path:plugins/command-not-found
 ohmyzsh/ohmyzsh path:plugins/gem
-ohmyzsh/ohmyzsh path:plugins/brew
 ohmyzsh/ohmyzsh path:plugins/history
 ohmyzsh/ohmyzsh path:plugins/extract
 ohmyzsh/ohmyzsh path:plugins/alias-finder
@@ -25,6 +24,7 @@ ohmyzsh/ohmyzsh path:plugins/zoxide
 {% if yadm.os == "Darwin" %}
 ohmyzsh/ohmyzsh path:plugins/macos
 ohmyzsh/ohmyzsh path:plugins/gnu-utils
+ohmyzsh/ohmyzsh path:plugins/brew
 {% endif %}
 {% if yadm.distro == "Ubuntu" %}
 ohmyzsh/ohmyzsh path:plugins/ubuntu

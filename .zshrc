@@ -138,7 +138,7 @@ alias yd='yadm diff'
 # kick off a kitty session file
 ks() {
   readonly session_name=${1}
-  readonly session_window=${2:-fullscreen}
+  readonly session_window=${2:-maximized}
   if [[ -f ~/.config/kitty/sessions/${session_name}.conf ]]; then
     kitty --session ~/.config/kitty/sessions/${session_name} --start-as=${session_window} --title ${session_name} --config ~/.config/kitty/kitty.conf --config ~/.config/kitty/sessions/${session_name}.conf &>/dev/null &
   else

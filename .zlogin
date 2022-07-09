@@ -54,10 +54,6 @@ tgl () {
     terragrunt "$@"
   fi
 }
-# Homebrew
-alias binfo='brew info'
-alias bs='brew search'
-
 #Git
 alias gnb='git nb'
 alias grtag='git rtag'
@@ -92,6 +88,9 @@ setopt HIST_IGNORE_SPACE
 export LC_COLLATE=C
 if [[ $OSTYPE == darwin* ]]; then
   alias ldd="otool -L"
+  # Homebrew
+  alias binfo='brew info'
+  alias bs='brew search'
 fi
 #export PAGER=vimpager
 #export MANPAGER=vimmanpager
@@ -123,59 +122,6 @@ hex() {
 }
 # Need this to get golang aws-sdk to use assumed role
 export AWS_SDK_LOAD_CONFIG=true
-aws_session() {
-  # Clear out existing AWS_* environment variables
-  for envar in $(env | grep AWS |cut -d= -f1);do
-    unset $envar
-  done
-  export AWS_SDK_LOAD_CONFIG=true
-  BASE_ACCOUNT_PROFILE_NAME=base_account
-  # list of roles we can assume
-  production_admin_role=arn:aws:iam::643927032162:role/admin_role
-  hipaa_admin_role=arn:aws:iam::391155261759:role/admin_role
-  case "$1" in
-    clear)
-      for envar in $(env | grep AWS |cut -d= -f1);do
-        unset $envar
-      done
-      return
-      ;;
-    production)
-      aws --profile $BASE_ACCOUNT_PROFILE_NAME sts assume-role --role-arn $production_admin_role --role-session-name "$USER-admin@production" --duration-seconds 900 --query 'Credentials.[AccessKeyId, SecretAccessKey, SessionToken]' --output text| read AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN ; export AWS_ACCESS_KEY_ID && export AWS_SECRET_ACCESS_KEY && export AWS_SESSION_TOKEN
-      ;;
-    hipaa)
-      aws --profile $BASE_ACCOUNT_PROFILE_NAME sts assume-role --role-arn $hipaa_admin_role --role-session-name "$USER-admin@production" --duration-seconds 900 --query 'Credentials.[AccessKeyId, SecretAccessKey, SessionToken]' --output text| read AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN ; export AWS_ACCESS_KEY_ID && export AWS_SECRET_ACCESS_KEY && export AWS_SESSION_TOKEN
-      ;;
-    *)
-      echo "Unknown role"
-      return
-      ;;
-  esac
-  case "$2" in
-    or)
-      export AWS_DEFAULT_REGION=us-west-2
-      export AWS_REGION=us-west-2
-      ;;
-    oh)
-      export AWS_DEFAULT_REGION=us-east-2
-      export AWS_REGION=us-east-2
-      ;;
-    va)
-      export AWS_DEFAULT_REGION=us-east-1
-      export AWS_REGION=us-east-1
-      ;;
-    cn|bj)
-      export AWS_DEFAULT_REGION=cn-north-1
-      export AWS_REGION=cn-north-1
-      ;;
-    ???*)
-      export AWS_DEFAULT_REGION=${2}
-      export AWS_REGION=${2}
-      ;;
-  esac
-  # Show the env variables that we set
-  env | grep AWS
-}
 
 aws_creds() {
   for envar in $(env | grep AWS |cut -d= -f1);do
@@ -236,9 +182,6 @@ plap() {
 }
 
 alias viaws="vim -O ~/.aws/config ~/.aws/credentials"
-#source ~/.spaceshiprc
-[ -f /Users/mkeisler/Library/Preferences/org.dystroy.broot/launcher/bash/br ] && \
-  source /Users/mkeisler/Library/Preferences/org.dystroy.broot/launcher/bash/br
 setopt prompt_subst
 setopt TRANSIENT_RPROMPT
 #
@@ -318,7 +261,7 @@ alias tgi="tg init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 tfup () {
-  local tf_version=${1:-"1.2.3"}
+  local tf_version=${1:-"1.2.4"}
   atlantis_yaml_mod.rb --tfver $tf_version
   audit-terraform-modules -r
   [[ -s locals.tf ]] && crush_tf_tags.pl
@@ -345,8 +288,6 @@ if whence -p fd &>/dev/null; then
 fi
 export FZF_DEFAULT_COMMAND="$FD_BIN --type f --hidden --exclude .git --exclude .terraform"
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-export FZF_TMUX=1
-export FZF_TMUX_OPTS='-p'
 # Use ,, as the trigger sequence instead of the default **
 export FZF_COMPLETION_TRIGGER=',,'
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
@@ -362,10 +303,6 @@ _fzf_compgen_dir() {
   command $FD_BIN --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
 }
 ## END fzf
-
-# TMUX
-export ZSH_TMUX_FIXTERM=false
-export ZSH_TMUX_AUTOQUIT=false
 
 # Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
 if whence antibody &>/dev/null; then
@@ -384,8 +321,6 @@ if whence antibody &>/dev/null; then
     antibody bundle < ~/.zsh_plugins.txt
   fi
   alias af=alias-finder
-elif [[ -r ~/.zplugrc ]]; then
-  source ~/.zplugrc
 fi
 ## START post antibody/zplug overrides
 alias gum='gcm && grup --prune && gmum'
