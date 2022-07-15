@@ -331,8 +331,8 @@ lspconfig.bashls.setup {}
 lspconfig.dockerls.setup {}
 lspconfig.gopls.setup {}
 lspconfig.jsonls.setup {}
-lspconfig.remark_ls.setup {}
 lspconfig.solargraph.setup {}
+lspconfig.marksman.setup {}
 lspconfig.terraformls.setup {}
 lspconfig.vimls.setup {}
 lspconfig.pylsp.setup {

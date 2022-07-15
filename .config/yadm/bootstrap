@@ -153,7 +153,6 @@ case $(uname) in
       # Install prettier
       npm install --location=global prettier
       npm install --location=global neovim
-      npm install --location=global remark
       # luarocks Not gonna require this now
       # if !command -v luarocks &>/dev/null && [[ $(luarocks --version |head -1 |awk '{print $2}') != "3.9.0" ]]; then
       #   curl -L -o /tmp/luarocks_3-9-0.tar.gz https://github.com/luarocks/luarocks/archive/refs/tags/v3.9.0.tar.gz \
@@ -370,7 +369,6 @@ case $(uname) in
     # Make sure we set an npm prefix for our user.
     npm config set prefix '~/.local/'
     npm install --location=global neovim
-    npm install --location=global remark
     # dive
     echo "dive"
     latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}'| sed 's/v//')
