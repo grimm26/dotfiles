@@ -136,6 +136,9 @@ alias yca='yadm commit -a -v'
 alias ya='yadm add'
 alias yd='yadm diff'
 
+# extra kubectl aliases
+alias kcun='kubectl config unset current-context'
+
 # kick off a kitty session file
 ks() {
   readonly session_name=${1}
