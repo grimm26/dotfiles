@@ -139,17 +139,7 @@ alias yd='yadm diff'
 # extra kubectl aliases
 alias kcun='kubectl config unset current-context'
 
-# kick off a kitty session file
-ks() {
-  readonly session_name=${1}
-  readonly session_window=${2:-maximized}
-  if [[ -f ~/.config/kitty/sessions/${session_name}.conf ]]; then
-    kitty --session ~/.config/kitty/sessions/${session_name} --start-as=${session_window} --title ${session_name} --config ~/.config/kitty/kitty.conf --config ~/.config/kitty/sessions/${session_name}.conf &>/dev/null &
-  else
-    kitty --session ~/.config/kitty/sessions/${session_name} --start-as=${session_window} --title ${session_name} &>/dev/null &
-  fi
-}
-
+alias ks=kitty-session
 # Use this to start up multiple windows in kitty and broadcast to them.
 kpanes() {
   local now=$(date +'%s')

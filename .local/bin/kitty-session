@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# kick off a kitty session file
+session_name=${1}
+session_window=${2:-maximized}
+
+# If we were not provided a session name, prompt for one of the sessions we have available.
+if [[ "${session_name}x" == "x" ]]; then
+  all_sessions=$(for x in ~/.config/kitty/sessions/*.session; do
+    basex=$(basename $x)
+    echo -n "FALSE ${basex%.session} "
+  done)
+  session_name=$(zenity --list --radiolist --column "" --column "Session Name" $all_sessions)
+fi
+if [[ "${session_name}x" == "x" ]]; then
+  exit 1
+fi
+
+# Fire it up
+if [[ -f ~/.config/kitty/sessions/${session_name}.conf ]]; then
+  kitty --session ~/.config/kitty/sessions/${session_name}.session --start-as=${session_window} --title ${session_name} --config ~/.config/kitty/kitty.conf --config ~/.config/kitty/sessions/${session_name}.conf &>/dev/null &
+else
+  kitty --session ~/.config/kitty/sessions/${session_name}.session --start-as=${session_window} --title ${session_name} &>/dev/null &
+fi
