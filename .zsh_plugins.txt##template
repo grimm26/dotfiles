@@ -19,7 +19,6 @@ ohmyzsh/ohmyzsh path:plugins/fzf
 ohmyzsh/ohmyzsh path:plugins/pyenv
 ohmyzsh/ohmyzsh path:plugins/systemadmin
 ohmyzsh/ohmyzsh path:plugins/urltools
-ohmyzsh/ohmyzsh path:plugins/zoxide
 ohmyzsh/ohmyzsh path:plugins/kubectl
 ohmyzsh/ohmyzsh path:plugins/web-search
 

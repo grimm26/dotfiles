@@ -212,6 +212,9 @@ path=("$MY_BIN" $path)
 typeset -U path
 export PATH
 
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init --cmd cd zsh)"
+fi
 ## End profiling
 # unsetopt XTRACE
 # exec 2>&3 3>&-
