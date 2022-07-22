@@ -250,6 +250,7 @@ ts.setup({
     "pug",
     "scala",
     "supercollider",
+    "vala",
   },
   highlight = {enable = true}
 })
