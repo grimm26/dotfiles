@@ -265,7 +265,8 @@ case $(uname) in
       # Build batextras
       echo "batextras"
       if upinst_from_git https://github.com/eth-p/bat-extras; then
-        cd ~/git/bat-extras
+        [[ -d ~/git/bat-extras ]] && cd ~/git/bat-extras
+        [[ -d ~/git/github/bat-extras ]] && cd ~/git/github/bat-extras
         ./build.sh --no-verify \
         && cp bin/* $home_bin
         cd $MY_TMP
