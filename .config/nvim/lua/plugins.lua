@@ -35,7 +35,8 @@ return require("packer").startup(function(use)
   -- Simple plugins can be specified as strings in a list
   use({
     "neovim/nvim-lspconfig",
-    'williamboman/nvim-lsp-installer',
+    "williamboman/mason.nvim",
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
     "hrsh7th/nvim-cmp",
     "hrsh7th/cmp-nvim-lsp",
     "saadparwaiz1/cmp_luasnip",
@@ -55,6 +56,13 @@ return require("packer").startup(function(use)
     "mrjones2014/legendary.nvim", -- keymappings, commands, autocmds
     'stevearc/dressing.nvim', -- fancy ui menu with legendary
     'j-hui/fidget.nvim',
+  })
+
+  use({
+    "williamboman/mason-lspconfig.nvim",
+    requires = {
+      "neovim/nvim-lspconfig",
+    }
   })
 
   use({
