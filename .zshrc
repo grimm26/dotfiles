@@ -213,7 +213,11 @@ typeset -U path
 export PATH
 
 if (( $+commands[zoxide] )); then
-  eval "$(zoxide init --cmd cd zsh)"
+  if [[ -s ~/.zoxide.init ]]; then
+    source ~/.zoxide.init
+  else
+    eval "$(zoxide init --cmd cd zsh)"
+  fi
 fi
 ## End profiling
 # unsetopt XTRACE
