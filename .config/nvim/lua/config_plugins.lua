@@ -323,22 +323,23 @@ require("mason-tool-installer").setup({
   -- a list of all tools you want to ensure are installed upon
   -- start; they should be the names Mason uses for each tool
   ensure_installed = {
-    "solargraph",
-    "marksman",
-    "terraform-ls",
-    "python-lsp-server",
-    "lua-language-server",
-    "vim-language-server",
     "bash-language-server",
     "dockerfile-language-server",
+    "efm",
     "gopls",
     "json-lsp",
+    "lua-language-server",
+    "marksman",
+    "python-lsp-server",
+    "solargraph",
+    "terraform-ls",
+    "vim-language-server",
   },
 
   -- if set to true this will check each tool for updates. If updates
   -- are available the tool will be updated.
   -- Default: false
-  auto_update = false,
+  auto_update = true,
 
   -- automatically install / update on startup. If set to false nothing
   -- will happen on startup. You can use `:MasonToolsUpdate` to install
