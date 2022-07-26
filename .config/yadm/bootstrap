@@ -253,15 +253,6 @@ case $(uname) in
           sudo ./aws/install
         fi
       /usr/local/bin/aws --version
-      # shfmt
-      echo "shfmt"
-      latest_shfmt_version=$(GH_HOST=github.com gh release list --limit 1 --repo mvdan/sh |awk '{print $1}')
-      installed_shfmt_version=$(shfmt --version 2>/dev/null)
-      if [[ ${installed_shfmt_version} != $latest_shfmt_version ]]; then
-        gh release download --pattern 'shfmt*linux_amd64' --repo mvdan/sh -D $MY_TMP \
-          && mv ${MY_TMP}/shfmt*linux_amd64 ${home_bin}/shfmt \
-          && chmod 755 ${home_bin}/shfmt
-      fi
       # Build batextras
       echo "batextras"
       if upinst_from_git https://github.com/eth-p/bat-extras; then
@@ -476,7 +467,7 @@ if [[ ! -v setup_MINIMAL ]]; then
     PIP_OPTIONS="--force-reinstall"
   fi
   echo "Python packages:"
-  for pkg in pip pre-commit 'boto3[crt]' flake8 flake8-bugbear flake8-efm pylint black isort pynvim;do
+  for pkg in pip pre-commit 'boto3[crt]' pynvim;do
     python -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
   done
 

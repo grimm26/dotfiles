@@ -177,10 +177,10 @@ require('legendary').setup({
     {"<leader>fg", require('telescope.builtin').live_grep, description = "Grep files"},
     {"<leader>fbuf", require('telescope.builtin').buffers, description = "List buffers"},
     {"<leader>help", require('telescope.builtin').help_tags, description = "List help tags"},
-    {"<leader>gitfiles", require('telescope.builtin').git_files, description = "List files under Git control"},
-    {"<leader>commits", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
+    {"<leader>gitf", require('telescope.builtin').git_files, description = "List files under Git control"},
+    {"<leader>ci", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
     {"<C-n>", ":NvimTreeToggle<cr>", mode = {""}, description = "Toggle nvim-tree"},
-    {"<leader>F", vim.lsp.buf.formatting_seq_sync, description = 'Format buffer with LSP',
+    {"<leader>f", vim.lsp.buf.formatting_seq_sync, description = 'Format buffer with LSP',
       opts = {buffer = true, silent = true, noremap = true}},
     {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
     -- Base utility mappings
@@ -324,6 +324,7 @@ require("mason-tool-installer").setup({
   -- start; they should be the names Mason uses for each tool
   ensure_installed = {
     "bash-language-server",
+    "black",
     "dockerfile-language-server",
     "efm",
     "gopls",
@@ -331,6 +332,8 @@ require("mason-tool-installer").setup({
     "lua-language-server",
     "marksman",
     "python-lsp-server",
+    "shfmt",
+    "isort",
     "solargraph",
     "terraform-ls",
     "vim-language-server",
