@@ -1,57 +1,11 @@
-#!/usr/bin/env zsh
+#!/bin/bash
 
 # mf = make fork.
 # You should be starting with a clean clone of the repository
 # that you would like to fork.
-# Steps:
-# - change the current origin remote to upstream
-# - rename the default branch of the upstream to upstream-<default_branch>
-# - use gh to create a fork
-# - rename the forked repo to <upstream org>-<repo name>
-# - update all remotes
-# - checkout the default branch of the new fork.
-
-get_repo_owner()
-{
-  local remote=${1-origin}
-  GIT_SSH_REGEX="^git@"
-  GITHUB_API_ENDPOINT=$(sed 's!/$!!' <<< $GITHUB_API_ENDPOINT)
-  FULL_ORIGIN=$(git remote get-url ${remote})
-  if [[ $FULL_ORIGIN =~ $GIT_SSH_REGEX ]]; then # git+ssh URL
-    REPOSITORY=$(echo $FULL_ORIGIN |cut -d: -f2 |sed 's/\.git//')
-  else # git://  or https:// or ssh:// URL
-    REPOSITORY=$(echo $FULL_ORIGIN |cut -d/ -f4,5 |sed 's/\.git//')
-  fi
-  IFS='/' read GH_OWNER GH_REPO <<< "$REPOSITORY"
-}
-
-# Check if main exists and use instead of master
-function git_main_branch() {
-  command git rev-parse --git-dir &>/dev/null || return
-  local ref
-  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk}; do
-    if command git show-ref -q --verify $ref; then
-      echo ${ref:t}
-      return
-    fi
-  done
-  echo master
-}
 
 set -e
-whence git_main_branch &>/dev/null || { echo "This script needs ohmyzsh git plugin's git_main_branch() function to work. Get it." && exit 1 }
-DEFAULT_BRANCH=$(git_main_branch)
 IFS='/' read UPSTREAM_OWNER UPSTREAM_REPO <<< $(gh api repos/:owner/:repo -q '.full_name')
 
-gh repo fork --remote && sleep 5
-# Now get owner/repo for fork
-get_repo_owner
-# Change the name of the repo
-gh api repos/$GH_OWNER/{repo} --raw-field name="${UPSTREAM_OWNER}-${UPSTREAM_REPO}" --method PATCH --silent
-# curl -s -X PATCH \
-#   -d "{\"name\":\"${UPSTREAM_OWNER}-${UPSTREAM_REPO}\"}" \
-#   -H "Authorization: token $GITHUB_TOKEN" \
-#   $GITHUB_API_ENDPOINT/repos/$GH_OWNER/${GH_REPO} >/dev/null
-NEW_REMOTE_URL=$(git remote get-url origin | sed "s/$GH_REPO/${UPSTREAM_OWNER}-${GH_REPO}/")
-git remote set-url origin $NEW_REMOTE_URL && \
+gh repo fork --remote --fork-name "${UPSTREAM_OWNER}-${UPSTREAM_REPO}"
 git remote update --prune
