@@ -396,12 +396,9 @@ fif() {
   ug --hidden --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --bind "enter:execute(nvim {})+abort" --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
 }
 
-# load kubectl completions if/when I need them cuz this take a long time to load and I hardly run kubectl.
-kubectl_comp() {
-  echo "Loading kubectl completions."
-  whence -p kubectl &>/dev/null && \
-    source <(kubectl completion zsh)
-}
+echo "Loading kubectl completions."
+whence -p kubectl &>/dev/null && \
+  source <(kubectl completion zsh)
 echo "Loading starship prompt."
 whence -p starship &>/dev/null && \
   eval "$(starship init zsh)"
