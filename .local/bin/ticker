@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [[ -s ~/.ticker.yaml ]]; then
+  docker run -v ~/.ticker.yaml:/.ticker.yaml -it --rm achannarasappa/ticker
+else
+  docker run -it --rm achannarasappa/ticker -w ENVA
+fi
