@@ -180,8 +180,9 @@ require('legendary').setup({
     {"<leader>gitf", require('telescope.builtin').git_files, description = "List files under Git control"},
     {"<leader>ci", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
     {"<C-n>", ":NvimTreeToggle<cr>", mode = {""}, description = "Toggle nvim-tree"},
-    {"<leader>f", vim.lsp.buf.formatting_seq_sync, description = 'Format buffer with LSP',
+    {"<leader>lf", vim.lsp.buf.formatting_seq_sync, description = 'Format buffer with LSP',
       opts = {buffer = true, silent = true, noremap = true}},
+    {"<leader>f", ":Format<cr>", description = "UseFormatter to format"},
     {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
     -- Base utility mappings
     {"<leader>ev", ":vsplit $MYVIMRC<cr>", description = "Edit vim init"},
@@ -203,12 +204,12 @@ require('legendary').setup({
   -- Initial augroups and autocmds to bind
   autocmds = {
     {
-      name = 'Terraform',
+      name = 'Formatter',
       {
-        "BufWritePre",
-        vim.lsp.buf.formatting_sync,
+        "BufWritePost",
+        ":FormatWrite",
         opts = {
-          pattern = {"*.tf", "*.tfvars"},
+          pattern = {"*.tf", "*.tfvars","*.json","*.go"},
         }
       }
     }
@@ -326,7 +327,6 @@ require("mason-tool-installer").setup({
     "bash-language-server",
     "black",
     "dockerfile-language-server",
-    "efm",
     "gopls",
     "json-lsp",
     "lua-language-server",
@@ -424,31 +424,6 @@ lspconfig.yamlls.setup {
   },
 }
 
-lspconfig.efm.setup({
-  init_options = {documentFormatting = true},
-  filetypes = {"sh", "zsh"},
-  settings = {
-    rootMarkers = {".git/"},
-    languages = {
-      sh = {
-        {formatCommand = "shfmt -i 2 -bn -ci -s", formatStdin = true},
-        {
-          lintCommand = "shellcheck -f gcc -x",
-          lintSource = "shellcheck",
-          lintFormats = {
-            '%f:%l:%c: %trror: %m',
-            '%f:%l:%c: %tarning: %m',
-            '%f:%l:%c: %tote: %m',
-          }
-        }
-      },
-      -- This may not always work because shfmt may puke on some zsh syntax
-      zsh = {
-        {formatCommand = "shfmt -i 2 -bn -ci -s", formatStdin = true},
-      },
-    }
-  }
-})
 -- Provide settings that should only apply to the "sumneko_lua" server
 lspconfig.sumneko_lua.setup({
   settings = {
@@ -481,6 +456,58 @@ lspconfig.sumneko_lua.setup({
     },
   }
 })
+
+-- formatter plugin
+-- Utilities for creating configurations
+local util = require "formatter.util"
+
+-- Provides the Format and FormatWrite commands
+require("formatter").setup {
+  -- Enable or disable logging
+  logging = true,
+  -- Set the log level
+  log_level = vim.log.levels.WARN,
+  -- All formatter configurations are opt-in
+  filetype = {
+    -- Formatter configurations for filetype "go" go here
+    -- and will be executed in order
+    go = {
+      -- "formatter.filetypes.go" defines default configurations for the
+      -- "go" filetype
+      require("formatter.filetypes.go").gofmt,
+    },
+    json = {
+      require("formatter.filetypes.json").jq,
+    },
+    sh = {
+      function()
+        return {
+          exe = "shfmt",
+          args = {"-i","2","-bn","-ci","-s"},
+          stdin = true,
+        }
+      end
+    },
+    terraform = {
+      function ()
+        return {
+          exe = "terraform",
+          args = {
+            "fmt", "-",
+          },
+          stdin = true,
+        }
+      end
+    },
+    -- Use the special "*" filetype for defining formatter configurations on
+    -- any filetype
+    ["*"] = {
+      -- "formatter.filetypes.any" defines default configurations for any
+      -- filetype
+      require("formatter.filetypes.any").remove_trailing_whitespace
+    }
+  }
+}
 
 require "fidget".setup {}
 --

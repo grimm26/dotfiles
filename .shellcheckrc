@@ -1,0 +1,3 @@
+# This is used by shellcheck which is probably being run by nvim through bashls
+# https://github.com/koalaman/shellcheck/wiki/SC2086
+disable=SC2086

@@ -56,6 +56,7 @@ return require("packer").startup(function(use)
     "mrjones2014/legendary.nvim", -- keymappings, commands, autocmds
     'stevearc/dressing.nvim', -- fancy ui menu with legendary
     'j-hui/fidget.nvim',
+    'mhartington/formatter.nvim',
   })
 
   use({
