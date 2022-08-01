@@ -182,7 +182,7 @@ require('legendary').setup({
     {"<C-n>", ":NvimTreeToggle<cr>", mode = {""}, description = "Toggle nvim-tree"},
     {"<leader>lf", vim.lsp.buf.formatting_seq_sync, description = 'Format buffer with LSP',
       opts = {buffer = true, silent = true, noremap = true}},
-    {"<leader>f", ":Format<cr>", description = "UseFormatter to format"},
+    {"<leader>f", ":Format<cr>", description = "Use Formatter to format"},
     {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
     -- Base utility mappings
     {"<leader>ev", ":vsplit $MYVIMRC<cr>", description = "Edit vim init"},
