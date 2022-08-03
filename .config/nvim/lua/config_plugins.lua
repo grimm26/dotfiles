@@ -206,10 +206,20 @@ require('legendary').setup({
     {
       name = 'Formatter',
       {
-        "BufWritePost",
+        "BufWritePre",
         ":FormatWrite",
         opts = {
-          pattern = {"*.tf", "*.tfvars","*.json","*.go"},
+          pattern = {"*.json","*.go"},
+        }
+      }
+    },
+    {
+      name = 'Terraform',
+      {
+        "BufWritePre",
+        vim.lsp.buf.formatting_sync,
+        opts = {
+          pattern = {"*.tf", "*.tfvars"},
         }
       }
     }
@@ -459,7 +469,7 @@ lspconfig.sumneko_lua.setup({
 
 -- formatter plugin
 -- Utilities for creating configurations
-local util = require "formatter.util"
+local formatter_util = require "formatter.util"
 
 -- Provides the Format and FormatWrite commands
 require("formatter").setup {
