@@ -206,8 +206,8 @@ require('legendary').setup({
     {
       name = 'Formatter',
       {
-        "BufWritePre",
-        ":FormatWrite",
+        "BufWritePost",
+        ":FormatWriteLock",
         opts = {
           pattern = {"*.json","*.go"},
         }
