@@ -270,7 +270,8 @@ case $(uname) in
           && chmod 755 ${home_bin}/kubectl
       fi
       # zoxide
-      curl -sS https://webinstall.dev/zoxide | bash
+      print "zoxide"
+      curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
       # Hack Nerd font
       echo "Install Hack Nerd font"
