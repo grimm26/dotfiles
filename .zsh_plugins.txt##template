@@ -9,7 +9,7 @@ ohmyzsh/ohmyzsh path:plugins/command-not-found
 ohmyzsh/ohmyzsh path:plugins/gem
 ohmyzsh/ohmyzsh path:plugins/history
 ohmyzsh/ohmyzsh path:plugins/extract
-ohmyzsh/ohmyzsh path:plugins/alias-finder
+ohmyzsh/ohmyzsh path:plugins/aliases
 ohmyzsh/ohmyzsh path:plugins/copyfile
 ohmyzsh/ohmyzsh path:plugins/copypath
 ohmyzsh/ohmyzsh path:plugins/genpass
