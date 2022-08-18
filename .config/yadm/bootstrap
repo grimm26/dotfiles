@@ -180,7 +180,7 @@ case $(uname) in
       latest_delta_version=$(GH_HOST=github.com gh release list --limit 1 --repo dandavison/delta |awk '{print $1}')
       installed_delta_version=$(delta --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_delta_version} != $latest_delta_version ]]; then
-        gh release download --pattern "${gdelta_pkg}}_${latest_delta_version}_amd64.deb" --repo dandavison/delta -D $MY_TMP \
+        GH_HOST=github.com gh release download --pattern "${gdelta_pkg}}_${latest_delta_version}_amd64.deb" --repo dandavison/delta -D $MY_TMP \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/${gdelta_pkg}_${latest_delta_version}_amd64.deb
       fi
       # bat
@@ -188,14 +188,14 @@ case $(uname) in
       latest_bat_version=$(GH_HOST=github.com gh release list --limit 1 --repo sharkdp/bat |awk '{print $1}'|sed 's/v//')
       installed_bat_version=$(bat --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_bat_version} != $latest_bat_version ]]; then
-        gh release download --pattern "_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
+        GH_HOST=github.com gh release download --pattern "_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version}_amd64.deb
       fi
       echo "dive"
       latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}'| sed 's/v//')
       installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_dive_version} != $latest_dive_version ]]; then
-        gh release download --pattern '*amd64.deb' --repo wagoodman/dive -D ${MY_TMP} \
+        GH_HOST=github.com gh release download --pattern '*amd64.deb' --repo wagoodman/dive -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/dive_${latest_dive_version}_linux_amd64.deb
       fi
       # lsd
@@ -203,7 +203,7 @@ case $(uname) in
       latest_lsd_version=$(GH_HOST=github.com gh release list --limit 1 --repo Peltoche/lsd |awk '{print $1}')
       installed_lsd_version=$(lsd --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_lsd_version} != $latest_lsd_version ]]; then
-        gh release download --pattern "${lsd_pkg}_*amd64.deb" --repo Peltoche/lsd -D ${MY_TMP} \
+        GH_HOST=github.com gh release download --pattern "${lsd_pkg}_*amd64.deb" --repo Peltoche/lsd -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/lsd_${latest_lsd_version}_amd64.deb
       fi
       # chruby
@@ -271,7 +271,16 @@ case $(uname) in
       fi
       # zoxide
       print "zoxide"
-      curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+      latest_zoxide_version=$(GH_HOST=github.com gh release list --limit 1 --repo ajeetdsouza/zoxide |awk '{print $1}')
+      installed_zoxide_version=$(zoxide --version 2>/dev/null|awk '{print $2}')
+      if [[ "${installed_zoxide_version}" != "v${latest_zoxide_version}" ]]; then
+        mkdir -p "${MY_TMP}/zoxide"
+        GH_HOST=github.com gh release download --pattern "*${latest_zoxide_version}-$(uname -m)-unknown-linux-musl*" --repo ajeetdsouza/zoxide -D $MY_TMP \
+          && tar -C "${MY_TMP}/zoxide" -xf $MY_TMP/zoxide*.tar.gz \
+          && cp "${MY_TMP}/zoxide/zoxide" "${home_bin}" \
+          && chmod 755 "${home_bin}/zoxide" \
+          && cp "${MY_TMP}/zoxide/man/man1/"* "$HOME/.local/share/man/man1/"
+      fi
 
       # Hack Nerd font
       echo "Install Hack Nerd font"
@@ -367,7 +376,7 @@ case $(uname) in
     latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}'| sed 's/v//')
     installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
     if [[ ${installed_dive_version} != $latest_dive_version ]]; then
-      gh release download --pattern '*darwin_amd64.tar.gz' --repo wagoodman/dive -D ${MY_TMP} \
+      GH_HOST=github.com gh release download --pattern '*darwin_amd64.tar.gz' --repo wagoodman/dive -D ${MY_TMP} \
         && tar -C ${MY_TMP} -xzf ${MY_TMP}/dive-*darwin_amd64.tar.gz \
         && cp ${MY_TMP}/dive ${home_bin} \
         && chmod 755 ${home_bin}/dive
