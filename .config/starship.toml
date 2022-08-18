@@ -39,6 +39,7 @@ command_timeout = 750
 format = 'on [$symbol($profile )(\($region\) )]($style)'
 symbol = " "
 style = "#ff9900" # aws orange
+force_display=true
 # [aws.region_aliases]
 # ap-southeast-2 = "au"
 # sa-east-1 = "br"
