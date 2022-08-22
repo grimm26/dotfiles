@@ -180,6 +180,7 @@ case $(uname) in
       latest_delta_version=$(GH_HOST=github.com gh release list --limit 1 --repo dandavison/delta |awk '{print $1}')
       installed_delta_version=$(delta --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_delta_version} != $latest_delta_version ]]; then
+        print "Updating from ${installed_delta_version} to $latest_delta_version"
         GH_HOST=github.com gh release download --pattern "${gdelta_pkg}}_${latest_delta_version}_amd64.deb" --repo dandavison/delta -D $MY_TMP \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/${gdelta_pkg}_${latest_delta_version}_amd64.deb
       fi
@@ -188,6 +189,7 @@ case $(uname) in
       latest_bat_version=$(GH_HOST=github.com gh release list --limit 1 --repo sharkdp/bat |awk '{print $1}'|sed 's/v//')
       installed_bat_version=$(bat --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_bat_version} != $latest_bat_version ]]; then
+        print "Updating from ${installed_bat_version} to $latest_bat_version"
         GH_HOST=github.com gh release download --pattern "_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version}_amd64.deb
       fi
@@ -195,6 +197,7 @@ case $(uname) in
       latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}'| sed 's/v//')
       installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_dive_version} != $latest_dive_version ]]; then
+        print "Updating from ${installed_dive_version} to $latest_dive_version"
         GH_HOST=github.com gh release download --pattern '*amd64.deb' --repo wagoodman/dive -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/dive_${latest_dive_version}_linux_amd64.deb
       fi
@@ -445,12 +448,14 @@ if [[ ! -v setup_MINIMAL ]]; then
 
   # k9s
   echo "k9s"
-  curl -sLS $(curl -sLS https://api.github.com/repos/derailed/k9s/releases/latest | jq -r '.assets[].browser_download_url' | grep -i ${kernel}_$(uname -m)) -o ${MY_TMP}/k9s-latest.tgz \
-    && mkdir -p ${MY_TMP}/k9s.$$ \
-    && tar -C ${MY_TMP}/k9s.$$ -xzf ${MY_TMP}/k9s-latest.tgz \
-    && rm ${MY_TMP}/k9s-latest.tgz \
-    && cp ${MY_TMP}/k9s.$$/k9s ${home_bin} \
+  latest_k9s_version=$(GH_HOST=github.com gh release list --limit 1 --repo derailed/k9s|awk '{print $1}')
+  installed_k9s_version=$(k9s version | grep Version | awk '{print $2}')
+  if [[ ${installed_k9s_version} != $latest_k9s_version ]]; then
+    print "Updating from ${installed_k9s_version} to $latest_k9s_version"
+    GH_HOST=github.com gh release download $latest_k9s_version --pattern "k9s_$(uname -s)_$(uname -m).tar.gz" --repo derailed/k9s -D ${MY_TMP} \
+    && tar -C $home_bin -xzf ${MY_TMP}/k9s_$(uname -s)_$(uname -m).tar.gz k9s \
     && chmod 755 ${home_bin}/k9s
+  fi
 
   # cheat
   echo "cheat"
