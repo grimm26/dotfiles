@@ -220,6 +220,11 @@ if (( $+commands[zoxide] )); then
     eval "$(zoxide init --cmd cd zsh)"
   fi
 fi
+
+# Put "local" stuff in here, sensitive for work or specific to this machine
+if [[ -r ~/.zshrc.local ]]; then
+  source ~/.zshrc.local
+fi
 ## End profiling
 # unsetopt XTRACE
 # exec 2>&3 3>&-
