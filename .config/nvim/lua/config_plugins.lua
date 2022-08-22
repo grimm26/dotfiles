@@ -209,7 +209,7 @@ require('legendary').setup({
         "BufWritePost",
         ":FormatWriteLock",
         opts = {
-          pattern = {"*.json","*.go"},
+          pattern = {"*.json", "*.go"},
         }
       }
     },
@@ -493,13 +493,13 @@ require("formatter").setup {
       function()
         return {
           exe = "shfmt",
-          args = {"-i","2","-bn","-ci","-s"},
+          args = {"-i", "2", "-bn", "-ci", "-s"},
           stdin = true,
         }
       end
     },
     terraform = {
-      function ()
+      function()
         return {
           exe = "terraform",
           args = {

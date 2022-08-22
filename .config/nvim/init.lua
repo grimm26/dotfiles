@@ -10,7 +10,7 @@ local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 
 if fn.empty(vim.fn.glob(install_path)) > 0 then
   fn.execute("!git clone https://github.com/wbthomason/packer.nvim " ..
-  install_path)
+    install_path)
 end
 -- Remap space as leader key
 vim.keymap.set({'n', 'v'}, '<Space>', '<Nop>', {silent = true})
