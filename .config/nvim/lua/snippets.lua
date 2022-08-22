@@ -21,26 +21,31 @@ local conds = require("luasnip.extras.expand_conditions")
 
 -- Every unspecified option will be set to the default.
 ls.config.set_config({
-	history = true,
-	-- Update more often, :h events for more info.
-	updateevents = "TextChanged,TextChangedI",
-	ext_opts = {
-		[types.choiceNode] = {
-			active = {
-				virt_text = { { "choiceNode", "Comment" } },
-			},
-		},
-	},
-	-- treesitter-hl has 100, use something higher (default is 200).
-	ext_base_prio = 300,
-	-- minimal increase in priority.
-	ext_prio_increase = 1,
-	enable_autosnippets = true,
+  history = true,
+  -- Update more often, :h events for more info.
+  updateevents = "TextChanged,TextChangedI",
+  ext_opts = {
+    [types.choiceNode] = {
+      active = {
+        virt_text = {{"choiceNode", "Comment"}},
+      },
+    },
+  },
+  -- treesitter-hl has 100, use something higher (default is 200).
+  ext_base_prio = 300,
+  -- minimal increase in priority.
+  ext_prio_increase = 1,
+  enable_autosnippets = true,
+})
+
+ls.add_snippets("terraform", {
+  s("tags", {t("tags = local.common_tags")})
 })
 
 require("luasnip.loaders.from_vscode").lazy_load()
+
 require('legendary').bind_commands({
-    {":LuaSnipEdit", ":lua require('luasnip.loaders').edit_snippet_files()" ,description = "Edit Snippet files"},
+  {":LuaSnipEdit", ":lua require('luasnip.loaders').edit_snippet_files()", description = "Edit Snippet files"},
 })
 -- simple maps to make snippets work before adding nvim-cmp
 vim.cmd("imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' ")
@@ -48,4 +53,4 @@ vim.cmd("inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>")
 vim.cmd("snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>")
 vim.cmd("snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>")
 vim.cmd("imap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'")
-vim.cmd("smap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'")
+vim.cmd("smap <silent><expr> <C-E> luasuip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'")
