@@ -41,6 +41,9 @@ ls.config.set_config({
 ls.add_snippets("terraform", {
   s("tags", {t("tags = local.common_tags")})
 })
+ls.add_snippets("gitcommit", {
+  s("tfup", {t("update terraform and module versions")})
+})
 
 require("luasnip.loaders.from_vscode").lazy_load()
 
