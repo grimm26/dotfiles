@@ -449,8 +449,7 @@ if [[ ! -v setup_MINIMAL ]]; then
   # k9s
   echo "k9s"
   latest_k9s_version=$(GH_HOST=github.com gh release list --limit 1 --repo derailed/k9s|awk '{print $1}')
-  # Gotta strip color from installed version output because people are terrible.
-  installed_k9s_version=$(k9s version | grep Version | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' | awk '{print $2}')
+  installed_k9s_version=$(k9s version -s| grep Version | awk '{print $2}')
   if [[ ${installed_k9s_version} != $latest_k9s_version ]]; then
     print "Updating from ${installed_k9s_version} to $latest_k9s_version"
     GH_HOST=github.com gh release download $latest_k9s_version --pattern "k9s_$(uname -s)_$(uname -m).tar.gz" --repo derailed/k9s -D ${MY_TMP} \
