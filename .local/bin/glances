@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [[ -s ~/.config/glances/glances/conf ]]; then
+  exec docker run -v ~/.config/glances/glances.conf:/etc/glances.conf -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host -e GLANCES_OPT="-C /etc/glances.conf" -it nicolargo/glances:latest-full
+else
+  exec docker run --rm -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host --network host -it nicolargo/glances:latest-full
+fi
