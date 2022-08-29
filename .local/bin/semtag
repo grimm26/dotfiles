@@ -1,0 +1,60 @@
+#!/bin/bash
+
+function usage {
+  echo "Usage: $(basename $0) [-Mmpt]" 2>&1
+  echo '   -M   Bumps a major version'
+  echo '   -m   Bumps a minor version'
+  echo '   -p   Bumps a patch/tiny version'
+  echo '   -t   Bumps a patch/tiny version'
+  exit 1
+}
+
+function check_bump_set {
+  if [[ "${BUMP_TYPE}x" != "x" ]]; then
+    # BUMP_TYPE already set
+    echo "Only one option at a time is supported."
+    usage
+  fi
+}
+command -v gh >/dev/null 2>&1 || {
+  echo >&2 "gh (https://cli.github.com/) needs to be installed."
+  exit 1
+}
+
+if [[ ${#} -eq 0 ]]; then
+   usage
+fi
+
+BUMP_TYPE=""
+# Define list of arguments expected in the input
+optstring=":Mmpt"
+
+while getopts ${optstring} arg; do
+  case "${arg}" in
+    M) check_bump_set; BUMP_TYPE="major" ;;
+    m) check_bump_set; BUMP_TYPE="minor" ;;
+    p|t) check_bump_set; BUMP_TYPE="patch" ;;
+
+    ?)
+      echo "Invalid option: -${OPTARG}."
+      echo
+      usage
+      ;;
+  esac
+done
+
+CURRENT_RELEASE=$(gh release list --exclude-drafts --limit 1 | awk '{print $1}' | sed 's/v//')
+IFS='.' read -r major minor patch <<< $CURRENT_RELEASE
+
+case "${BUMP_TYPE}" in
+  major) major=$((major+1)); minor=0; patch=0 ;;
+  minor) minor=$((minor+1)); patch=0 ;;
+  patch) patch=$((patch+1)) ;;
+  *)
+    echo >&2 "Somehow we got an invalid release type of ${BUMP_TYPE}"
+    exit 1
+    ;;
+esac
+
+NEW_RELEASE="v${major}.${minor}.${patch}"
+gh release create $NEW_RELEASE
