@@ -14,19 +14,6 @@ require("mini.completion").setup({})
 require("mini.indentscope").setup({})
 require("mini.surround").setup({})
 require("mini.trailspace").setup({})
--- require("mini.pairs").setup({
---   mappings = {
---     ['('] = {action = 'open', pair = '()', neigh_pattern = '[^%a\\].'},
---     ['['] = {action = 'open', pair = '[]', neigh_pattern = '[^%a\\].'},
---     ['{'] = {action = 'open', pair = '{}', neigh_pattern = '[^%a\\].'},
---     [')'] = {action = 'close', pair = '()', neigh_pattern = '[^%a\\].'},
---     [']'] = {action = 'close', pair = '[]', neigh_pattern = '[^%a\\].'},
---     ['}'] = {action = 'close', pair = '{}', neigh_pattern = '[^%a\\].'},
---     ['"'] = {action = 'closeopen', pair = '""', neigh_pattern = '[^%a\\].', register = {cr = false}},
---     ["'"] = {action = 'closeopen', pair = "''", neigh_pattern = '[^%a\\].', register = {cr = false}},
---     ['`'] = {action = 'closeopen', pair = '``', neigh_pattern = '[^%a\\].', register = {cr = false}},
---   }
--- })
 require("gitsigns").setup({
   diff_opts = {
     internal = true

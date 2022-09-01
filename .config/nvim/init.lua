@@ -43,8 +43,11 @@ set.tabstop = 2
 set.softtabstop = 2
 vim.bo.autoindent = true -- Auto indent
 set.smartindent = true -- Smart indent
--- I'm not a fan of folding in general so I disable it.
-set.foldenable = false
+set.foldenable = true
+set.foldnestmax = 3
+set.foldminlines = 3
+set.foldmethod = "expr"
+set.foldexpr = "nvim_treesitter#foldexpr()"
 set.guifont = "Monaco:h14"
 -- Use Unix as the standard file type
 set.ffs = {"unix", "dos", "mac"}
