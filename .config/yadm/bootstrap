@@ -106,12 +106,20 @@ case $(uname) in
           || sudo apt-get install -y $pkg
       done
       # Latest github cli
-      if [[ ! -s /etc/apt/sources.list.d/github-cli.list ]]; then
-        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-        sudo apt update
-        sudo apt install gh
+      if whence -p gh &>/dev/null; then
+        curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
+        local CURRENT_GH_VERSION=$(gh version |grep releases |cut -d/ -f8)
+        local LATEST_GH_VERSION=$(jq -r '.tag_name' ${MY_TMP}/gh_latest.json)
+        if [[ "${CURRENT_GH_VERSION}" != "${LATEST_GH_VERSION}" ]]; then
+          local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
+          (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-* && command cp share/man/man1/*.1 ~/.local/share/man/man1)
+        fi
+      else
+        curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
+        local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
+        (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-* && command cp share/man/man1/*.1 ~/.local/share/man/man1)
       fi
+
       # golang
       if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
         echo "Downloading and installing go ${GOLANG_VERSION}"
