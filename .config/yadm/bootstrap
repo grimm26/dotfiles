@@ -367,7 +367,6 @@ case $(uname) in
       fd
       ripgrep
       fzf
-      tflint
       selene
       zoxide
       shellcheck
@@ -445,10 +444,6 @@ else
 fi
 
 if [[ ! -v setup_MINIMAL ]]; then
-  # tflint
-  echo "tflint"
-  export TFLINT_INSTALL_PATH=${home_bin}
-  curl -sL https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
   # tfswitch
   echo "tfswitch"
   curl -sLS https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
