@@ -112,12 +112,12 @@ case $(uname) in
         local LATEST_GH_VERSION=$(jq -r '.tag_name' ${MY_TMP}/gh_latest.json)
         if [[ "${CURRENT_GH_VERSION}" != "${LATEST_GH_VERSION}" ]]; then
           local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
-          (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-* && command cp share/man/man1/*.1 ~/.local/share/man/man1)
+          (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
         fi
       else
         curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
         local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
-        (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-* && command cp share/man/man1/*.1 ~/.local/share/man/man1)
+        (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
       fi
 
       # golang
@@ -194,20 +194,20 @@ case $(uname) in
       fi
       # bat
       echo "bat"
-      latest_bat_version=$(GH_HOST=github.com gh release list --limit 1 --repo sharkdp/bat |awk '{print $1}'|sed 's/v//')
+      latest_bat_version=$(GH_HOST=github.com gh release list --limit 1 --repo sharkdp/bat |awk '{print $1}')
       installed_bat_version=$(bat --version 2>/dev/null|awk '{print $2}')
-      if [[ ${installed_bat_version} != $latest_bat_version ]]; then
-        print "Updating from ${installed_bat_version} to $latest_bat_version"
+      if [[ ${installed_bat_version#v} != ${latest_bat_version#v} ]]; then
+        print "Updating from ${installed_bat_version#v} to ${latest_bat_version#v}"
         GH_HOST=github.com gh release download --pattern "_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
-          && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version}_amd64.deb
+          && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version#v}_amd64.deb
       fi
       echo "dive"
-      latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}'| sed 's/v//')
+      latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}')
       installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
-      if [[ ${installed_dive_version} != $latest_dive_version ]]; then
-        print "Updating from ${installed_dive_version} to $latest_dive_version"
+      if [[ ${installed_dive_version#v} != ${latest_dive_version#v} ]]; then
+        print "Updating from ${installed_dive_version#v} to ${latest_dive_version#v}"
         GH_HOST=github.com gh release download --pattern '*amd64.deb' --repo wagoodman/dive -D ${MY_TMP} \
-          && sudo dpkg --install --skip-same-version ${MY_TMP}/dive_${latest_dive_version}_linux_amd64.deb
+          && sudo dpkg --install --skip-same-version ${MY_TMP}/dive_${latest_dive_version#v}_linux_amd64.deb
       fi
       # lsd
       echo "lsd"
@@ -242,9 +242,9 @@ case $(uname) in
       fi
       # direnv
       echo "direnv"
-      latest_direnv_version=$(GH_HOST=github.com gh release list --limit 1 --repo direnv/direnv |awk '{print $2}'|sed 's/v//')
+      latest_direnv_version=$(GH_HOST=github.com gh release list --limit 1 --repo direnv/direnv |awk '{print $2}')
       installed_direnv_version=$(direnv --version 2>/dev/null)
-      if [[ ${installed_direnv_version} != $latest_direnv_version ]]; then
+      if [[ ${installed_direnv_version#v} != ${latest_direnv_version#v} ]]; then
         gh release download --pattern 'direnv.linux-amd64' --repo direnv/direnv -D $MY_TMP \
           && mv ${MY_TMP}/direnv.linux-amd64 ${home_bin}/direnv \
           && chmod 755 ${home_bin}/direnv
@@ -284,9 +284,9 @@ case $(uname) in
       print "zoxide"
       latest_zoxide_version=$(GH_HOST=github.com gh release list --limit 1 --repo ajeetdsouza/zoxide |awk '{print $1}')
       installed_zoxide_version=$(zoxide --version 2>/dev/null|awk '{print $2}')
-      if [[ "${installed_zoxide_version}" != "v${latest_zoxide_version}" ]]; then
+      if [[ "${installed_zoxide_version}" != "${latest_zoxide_version}" ]]; then
         mkdir -p "${MY_TMP}/zoxide"
-        GH_HOST=github.com gh release download --pattern "*${latest_zoxide_version}-$(uname -m)-unknown-linux-musl*" --repo ajeetdsouza/zoxide -D $MY_TMP \
+        GH_HOST=github.com gh release download --pattern "*${latest_zoxide_version#v}-$(uname -m)-unknown-linux-musl*" --repo ajeetdsouza/zoxide -D $MY_TMP \
           && tar -C "${MY_TMP}/zoxide" -xf $MY_TMP/zoxide*.tar.gz \
           && cp "${MY_TMP}/zoxide/zoxide" "${home_bin}" \
           && chmod 755 "${home_bin}/zoxide" \
@@ -384,9 +384,9 @@ case $(uname) in
     npm install --location=global neovim
     # dive
     echo "dive"
-    latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}'| sed 's/v//')
+    latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}')
     installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
-    if [[ ${installed_dive_version} != $latest_dive_version ]]; then
+    if [[ ${installed_dive_version#v} != ${latest_dive_version#v} ]]; then
       GH_HOST=github.com gh release download --pattern '*darwin_amd64.tar.gz' --repo wagoodman/dive -D ${MY_TMP} \
         && tar -C ${MY_TMP} -xzf ${MY_TMP}/dive-*darwin_amd64.tar.gz \
         && cp ${MY_TMP}/dive ${home_bin} \
