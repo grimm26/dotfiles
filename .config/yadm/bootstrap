@@ -189,7 +189,7 @@ case $(uname) in
       installed_delta_version=$(delta --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_delta_version} != $latest_delta_version ]]; then
         print "Updating from ${installed_delta_version} to $latest_delta_version"
-        GH_HOST=github.com gh release download --pattern "${gdelta_pkg}}_${latest_delta_version}_amd64.deb" --repo dandavison/delta -D $MY_TMP \
+        GH_HOST=github.com gh release download --pattern "${gdelta_pkg}_${latest_delta_version}_amd64.deb" --repo dandavison/delta -D $MY_TMP \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/${gdelta_pkg}_${latest_delta_version}_amd64.deb
       fi
       # bat
@@ -285,6 +285,7 @@ case $(uname) in
       latest_zoxide_version=$(GH_HOST=github.com gh release list --limit 1 --repo ajeetdsouza/zoxide |awk '{print $1}')
       installed_zoxide_version=$(zoxide --version 2>/dev/null|awk '{print $2}')
       if [[ "${installed_zoxide_version}" != "${latest_zoxide_version}" ]]; then
+        print "Updating from ${installed_zoxide_version#v} to ${latest_zoxide_version#v}"
         mkdir -p "${MY_TMP}/zoxide"
         GH_HOST=github.com gh release download --pattern "*${latest_zoxide_version#v}-$(uname -m)-unknown-linux-musl*" --repo ajeetdsouza/zoxide -D $MY_TMP \
           && tar -C "${MY_TMP}/zoxide" -xf $MY_TMP/zoxide*.tar.gz \
