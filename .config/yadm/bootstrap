@@ -198,7 +198,7 @@ case $(uname) in
       installed_bat_version=$(bat --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_bat_version#v} != ${latest_bat_version#v} ]]; then
         print "Updating from ${installed_bat_version#v} to ${latest_bat_version#v}"
-        GH_HOST=github.com gh release download --pattern "_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
+        GH_HOST=github.com gh release download --pattern "bat_${latest_bat_version#v}_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version#v}_amd64.deb
       fi
       echo "dive"
