@@ -3,9 +3,9 @@
 #
 
 # Versions
-GOLANG_VERSION="1.18.5"
-NODEJS_VERSION="16.16.0"
-PYTHON_VERSION="3.10.6"
+GOLANG_VERSION="1.19.1"
+NODEJS_VERSION="16.17.0"
+PYTHON_VERSION="3.10.7"
 NEOVIM_VERSION="0.7.2"
 while getopts 'M' OPT; do
   case $OPT in
@@ -447,8 +447,6 @@ if [[ ! -v setup_MINIMAL ]]; then
   # tfswitch
   echo "tfswitch"
   curl -sLS https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
-  echo "terrafmt"
-  go install github.com/katbyte/terrafmt@latest
 
   # k9s
   echo "k9s"
@@ -491,7 +489,7 @@ if [[ ! -v setup_MINIMAL ]]; then
   done
 
   print "Ruby Gems"
-  for pkg in aws-sdk-ec2 bundler fileutils octokit neovim;do
+  for pkg in aws-sdk-ec2 bundler fileutils octokit;do
     gem install $pkg
   done
 fi
