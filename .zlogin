@@ -271,7 +271,6 @@ tfup () {
   fi
   tfsw $tf_version
 }
-export AWS_DEFAULT_REGION=us-east-2
 ## START fzf
 if [[ -d /usr/local/opt/fzf ]]; then
   # homebrew OSX
