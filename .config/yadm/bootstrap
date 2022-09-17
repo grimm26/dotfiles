@@ -84,24 +84,22 @@ case $(uname) in
       exit 1
     fi
     cd $MY_TMP
-    for pkg in libfuse2 fonts-firacode fonts-hack curl git libcurl4-openssl-dev keychain jq source-highlight fd-find ripgrep liblua5.3-dev lua5.3 cmake ugrep; do
+    # Latest git
+    if ! add-apt-repository -L | grep -q git-core/ppa; then
+      sudo add-apt-repository -y -P ppa:git-core/ppa
+    fi
+    # Latest neovim
+    if ! add-apt-repository -L | grep -q neovim-ppa/stable; then
+      sudo add-apt-repository -y -P ppa:neovim-ppa/stable
+    fi
+    for pkg in libfuse2 fonts-firacode fonts-hack curl git libcurl4-openssl-dev keychain jq source-highlight fd-find ripgrep liblua5.3-dev lua5.3 cmake ugrep neovim; do
       dpkg -s $pkg &>/dev/null \
         || sudo apt-get install -y $pkg
     done
     SCRIPT_HOME=$(readlink -f ${0%/*})
-    if [[ "NVIM v${NEOVIM_VERSION}" != $(nvim --version |head -1) ]]; then
-    # Install neovim
-      curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ${home_bin}/nvim.appimage
-      chmod u+x ${home_bin}/nvim.appimage
-      [[ -L ${home_bin}/nvim ]] || ln -s  ${home_bin}/nvim.appimage  ${home_bin}/nvim
-    fi
 
-    # Latest git
-    if ! grep -q git-core /etc/apt/sources.list.d/*.list; then
-      sudo add-apt-repository -y -u ppa:git-core/ppa
-    fi
     if [[ ! -v setup_MINIMAL ]]; then
-      for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck; do
+      for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck neovim; do
         dpkg -s $pkg &>/dev/null \
           || sudo apt-get install -y $pkg
       done

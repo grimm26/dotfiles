@@ -16,6 +16,7 @@ end
 vim.keymap.set({'n', 'v'}, '<Space>', '<Nop>', {silent = true})
 g.mapleader = ' '
 g.maplocalleader = ' '
+vim.lsp.set_log_level("error")
 require("lastplace")
 require("plugins")
 require("config_plugins")
