@@ -57,4 +57,4 @@ case "${BUMP_TYPE}" in
 esac
 
 NEW_RELEASE="v${major}.${minor}.${patch}"
-gh release create $NEW_RELEASE
+exec gh release create $NEW_RELEASE
