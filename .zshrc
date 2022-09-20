@@ -136,6 +136,8 @@ alias yca='yadm commit -a -v'
 alias yc='yadm commit -v'
 alias ya='yadm add'
 alias yd='yadm diff'
+alias yrs='yadm restore'
+alias yb='yadm bootstrap'
 
 # extra kubectl aliases
 alias kcun='kubectl config unset current-context'
