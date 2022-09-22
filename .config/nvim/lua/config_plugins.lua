@@ -9,6 +9,16 @@ elseif vim.fn.executable('fd') == 1 then
   fd = 'fd'
 end
 
+local starter = require('mini.starter')
+starter.setup({
+  items = {
+    starter.sections.telescope(),
+  },
+  content_hooks = {
+    starter.gen_hook.adding_bullet(),
+    starter.gen_hook.aligning('center', 'center'),
+  },
+})
 require("mini.comment").setup({})
 require("mini.completion").setup({})
 require("mini.indentscope").setup({})
@@ -67,7 +77,6 @@ require("gitsigns").setup({
     map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
   end
 })
-require("telescope").load_extension("fzf")
 require("telescope").setup {
   pickers = {
     find_files = {
@@ -84,8 +93,16 @@ require("telescope").setup {
         }
       }
     }
+  },
+  extensions = {
+    file_browser = {
+      -- disables netrw and use telescope-file-browser in its place
+      hijack_netrw = true,
+    },
   }
 }
+require("telescope").load_extension("fzf")
+require("telescope").load_extension("file_browser")
 require("nvim-tree").setup()
 -- Most of the lualine config is default, just had it here to show what can be tweaked.
 local function diff_source()

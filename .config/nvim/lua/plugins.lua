@@ -17,6 +17,11 @@ return require("packer").startup(function(use)
     requires = {{"nvim-lua/plenary.nvim"}}
   })
   use({
+    "nvim-telescope/telescope-file-browser.nvim", requires = {{"nvim-telescope/telescope.nvim"}}
+  })
+  -- Post-install/update hook with neovim command
+  use({"nvim-telescope/telescope-fzf-native.nvim", run = "make", requires = {{"nvim-telescope/telescope.nvim"}}})
+  use({
     "kyazdani42/nvim-tree.lua",
     requires = {{"kyazdani42/nvim-web-devicons"}} -- for file icons
   })
@@ -81,9 +86,6 @@ return require("packer").startup(function(use)
   })
   -- colorschemes
   use({"marko-cerovac/material.nvim", "ishan9299/nvim-solarized-lua", "Domeee/mosel.nvim"})
-
-  -- Post-install/update hook with neovim command
-  use({"nvim-telescope/telescope-fzf-native.nvim", run = "make"})
   use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
   use("nvim-treesitter/nvim-treesitter-textobjects")
 
