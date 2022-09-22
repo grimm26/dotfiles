@@ -177,6 +177,7 @@ require('legendary').setup({
   -- Initial keymaps to bind
   keymaps = {
     {"<leader>ts", MiniTrailspace.trim, description = "Trim trailing whitespace."},
+    {"<leader>fb", require("telescope").extensions.file_browser.file_browser, description = "Browse Files"},
     {"<leader>fd", require('telescope.builtin').find_files, description = "Find Files"},
     {"<leader>fg", require('telescope.builtin').live_grep, description = "Grep files"},
     {"<leader>fbuf", require('telescope.builtin').buffers, description = "List buffers"},

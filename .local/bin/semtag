@@ -1,7 +1,9 @@
 #!/bin/bash
+# Simple script to cut a github release with semantic versioning.
+# "v" prefix is assumed.
 
 function usage {
-  echo "Usage: $(basename $0) [-Mmpt]" 2>&1
+  echo "Usage: $(basename $0) -M|m|p|t" 2>&1
   echo '   -M   Bumps a major version'
   echo '   -m   Bumps a minor version'
   echo '   -p   Bumps a patch/tiny version'
@@ -16,6 +18,7 @@ function check_bump_set {
     usage
   fi
 }
+
 command -v gh >/dev/null 2>&1 || {
   echo >&2 "gh (https://cli.github.com/) needs to be installed."
   exit 1
