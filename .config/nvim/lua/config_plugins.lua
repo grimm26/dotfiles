@@ -460,10 +460,11 @@ lspconfig.sumneko_lua.setup({
         globals = {'vim'},
         ["codestyle-check"] = "Any",
       },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
+      -- This makes loading the lua lsp much slower. I generally don't need it.
+      -- workspace = {
+      --   -- Make the server aware of Neovim runtime files
+      --   library = vim.api.nvim_get_runtime_file("", true),
+      -- },
       -- Do not send telemetry data containing a randomized but unique identifier
       telemetry = {
         enable = false,
