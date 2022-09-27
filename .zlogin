@@ -233,11 +233,19 @@ tf15 () {
 }
 tf1.0 () {
   tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 1.0
+  tfsw --latest-stable 1.0.0
 }
 tf1.1 () {
   tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 1.1
+  tfsw --latest-stable 1.1.0
+}
+tf1.2 () {
+  tgsw $TG_LATEST_VERSION
+  tfsw --latest-stable 1.2.0
+}
+tf1.3 () {
+  tgsw $TG_LATEST_VERSION
+  tfsw --latest-stable 1.3.0
 }
 alias tfver=terraform version | awk '{print $2}'
 go13 () {
@@ -261,13 +269,13 @@ alias tgi="tg init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 tfup () {
-  local tf_version=${1:-"1.2.6"}
+  local tf_version=${1:-"1.3.0"}
   atlantis_yaml_mod.rb --tfver $tf_version
   audit-terraform-modules -r
   [[ -s locals.tf ]] && crush_tf_tags.pl
   if [[ -s  versions.tf ]]; then
     sed -i 's!terraform-providers/infoblox!infobloxopen/infoblox!g' versions.tf
-    sed -i 's!required_version = \"~> 1.0.0\"!required_version = \"~> 1.2\"!' versions.tf
+    sed -i 's!required_version =.*!required_version = \"~> 1.3\"!' versions.tf
   fi
   tfsw $tf_version
 }
@@ -340,7 +348,7 @@ gcl() {
       gh repo clone $repo
     fi
   fi
-  cd "$(basename ${repo%%.git})"
+  cd ./"$(basename ${repo%%.git})"
 }
 whence -p lsd &>/dev/null && alias ls=lsd
 ## END post antibody/zplug overrides
