@@ -57,6 +57,11 @@ truncate_to_repo = false
 [dotnet]
 disabled = true
 
+[git_branch]
+disabled = false
+format = "on [$symbol$remote_name/$branch]($style) "
+always_show_remote = true
+
 [git_metrics]
 disabled = false
 
