@@ -95,12 +95,14 @@ case $(uname) in
     SCRIPT_HOME=$(readlink -f ${0%/*})
 
     if [[ ! -v setup_MINIMAL ]]; then
-      for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck neovim; do
+      for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck; do
         dpkg -s $pkg &>/dev/null \
           || sudo apt-get install -y $pkg
       done
-      if [[ "NVIM v${NEOVIM_VERSION}" != $(/usr/local/bin/nvim --version |head -1 2>/dev/null) ]]; then
-      # Install neovim
+      print "Neovim"
+      if [[ "v${NEOVIM_VERSION}" != $(/usr/local/bin/nvim --version |head -1 | awk '{print $2}' |cut -d- -f1 2>/dev/null) ]]; then
+        print "Installing neovim v${NEOVIM_VERSION}"
+        # Install neovim
         curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ${MY_TMP}/nvim.appimage \
           && sudo install -m 755 ${MY_TMP}/nvim.appimage /usr/local/bin/nvim.appimage
         [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
@@ -331,6 +333,20 @@ case $(uname) in
         # Update the paths to the kitty and its icon in the kitty.desktop file(s)
         sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
         sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+      fi
+      # Latest doggo
+      print "doggo"
+      local current_doggo_version=$(doggo --version | awk '{print $1}')
+      local latest_doggo_version=$(GH_HOST=github.com gh release list --limit 1 --repo mr-karan/doggo |awk '{print $1}')
+      if [[ "${current_doggo_version}" != "${latest_doggo_version}" ]]; then
+        print "Updating from ${current_doggo_version} to ${latest_doggo_version}"
+        local build_artifact="doggo_${latest_doggo_version#v}_$(dpkg-architecture -q DEB_BUILD_ARCH_OS)_$(dpkg-architecture -q DEB_BUILD_ARCH).tar.gz"
+        mkdir -p "${MY_TMP}/doggo"
+        GH_HOST=github.com gh release download --pattern $build_artifact --repo mr-karan/doggo -D $MY_TMP \
+          && tar -C "${MY_TMP}/doggo" -xf $MY_TMP/doggo*.tar.gz \
+          && cp "${MY_TMP}/doggo/doggo" "${home_bin}" \
+          && chmod 755 "${home_bin}/doggo"
+        mkdir -p ~/.zcompletions && cp "${MY_TMP}/doggo/completions/doggo.zsh" ~/.zcompletions/_doggo
       fi
     fi
     ;;

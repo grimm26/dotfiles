@@ -3,8 +3,6 @@ local fn = vim.fn -- to call Vim functions e.g. fn.bufnr()
 local g = vim.g -- a table to access global variables (let g:something = foo)
 local set = vim.opt -- to set options
 
-g.do_filetype_lua = 1
--- g.did_load_filetypes = 0
 -- Install packer
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 
@@ -21,6 +19,7 @@ require("lastplace")
 require("plugins")
 require("config_plugins")
 require("snippets")
+set.mouse = "n"
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 set.updatetime = 100

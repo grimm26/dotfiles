@@ -31,6 +31,7 @@ if [[ -d /usr/local/opt/curl/share/zsh/site-functions ]]; then
 elif [[ -d /usr/local/share/zsh/site-functions ]]; then
   fpath+=( /usr/local/share/zsh/site-functions )
 fi
+[[ -d ~/.zcompletions ]] && fpath+=~/.zcompletions
 typeset -U fpath
 
 export LESS="-EFRX"
