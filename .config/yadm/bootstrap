@@ -78,6 +78,7 @@ INITIAL_PWD=$PWD
 # OS Type specific stuff first
 case $(uname) in
   Linux)
+    local arch=$(dpkg-architecture -q DEB_BUILD_ARCH)
     source /etc/os-release
     if [[ $ID != "ubuntu" ]]; then
       echo "I only wrote this for ubuntu."
@@ -340,13 +341,24 @@ case $(uname) in
       local latest_doggo_version=$(GH_HOST=github.com gh release list --limit 1 --repo mr-karan/doggo |awk '{print $1}')
       if [[ "${current_doggo_version}" != "${latest_doggo_version}" ]]; then
         print "Updating from ${current_doggo_version} to ${latest_doggo_version}"
-        local build_artifact="doggo_${latest_doggo_version#v}_$(dpkg-architecture -q DEB_BUILD_ARCH_OS)_$(dpkg-architecture -q DEB_BUILD_ARCH).tar.gz"
+        local build_artifact="doggo_${latest_doggo_version#v}_linux_${arch}.tar.gz"
         mkdir -p "${MY_TMP}/doggo"
         GH_HOST=github.com gh release download --pattern $build_artifact --repo mr-karan/doggo -D $MY_TMP \
           && tar -C "${MY_TMP}/doggo" -xf $MY_TMP/doggo*.tar.gz \
           && cp "${MY_TMP}/doggo/doggo" "${home_bin}" \
           && chmod 755 "${home_bin}/doggo"
         mkdir -p ~/.zcompletions && cp "${MY_TMP}/doggo/completions/doggo.zsh" ~/.zcompletions/_doggo
+      fi
+      # helm
+      echo "helm"
+      latest_helm_version=$(GH_HOST=github.com gh release list --limit 1 --repo helm/helm |awk '{print $4}' )
+      installed_helm_version=$(helm version --short 2>/dev/null | cut -d+ -f1)
+      if [[ ${installed_helm_version} != ${latest_helm_version} ]]; then
+        print "Updating from ${installed_helm_version} to ${latest_helm_version}"
+        local helm_tar="helm-${latest_helm_version}-linux-${arch}.tar.gz"
+        (cd ${MY_TMP} && curl -sLOS https://get.helm.sh/${helm_tar} \
+          && tar xzf ${helm_tar} && cp linux-${arch}/helm ${home_bin} \
+          && chmod 755 ${home_bin}/helm)
       fi
     fi
     ;;
@@ -392,6 +404,7 @@ case $(uname) in
       shellcheck
       font-hack-nerd-font
       font-fira-code
+      helm
     )
     brew list > ${MY_TMP}/brews.$$
     for pkg in ${NEEDED_PACKAGES[*]}; do
