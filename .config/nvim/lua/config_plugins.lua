@@ -185,7 +185,7 @@ require('legendary').setup({
     {"<leader>gitf", require('telescope.builtin').git_files, description = "List files under Git control"},
     {"<leader>ci", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
     {"<C-n>", ":NvimTreeToggle<cr>", mode = {""}, description = "Toggle nvim-tree"},
-    {"<leader>lf", vim.lsp.buf.formatting_seq_sync, description = 'Format buffer with LSP',
+    {"<leader>lf", function() vim.lsp.buf.format {async = true} end, description = 'Format buffer with LSP',
       opts = {buffer = true, silent = true, noremap = true}},
     {"<leader>f", ":Format<cr>", description = "Use Formatter to format"},
     {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
@@ -218,16 +218,6 @@ require('legendary').setup({
         }
       }
     },
-    {
-      name = 'Terraform',
-      {
-        "BufWritePre",
-        vim.lsp.buf.formatting_sync,
-        opts = {
-          pattern = {"*.tf", "*.tfvars"},
-        }
-      }
-    }
   },
 
   -- Automatically add which-key tables to legendary
@@ -531,4 +521,6 @@ require("octo").setup({
   github_hostname = vim.env.GH_HOST; -- GitHub Enterprise host (if set)
 })
 
+-- hashivim/terraform
+g.terraform_fmt_on_save = 1
 -- vim: ts=2 sts=2 sw=2 et

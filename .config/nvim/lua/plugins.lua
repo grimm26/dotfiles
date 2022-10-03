@@ -61,6 +61,7 @@ return require("packer").startup(function(use)
     'stevearc/dressing.nvim', -- fancy ui menu with legendary
     'j-hui/fidget.nvim',
     'mhartington/formatter.nvim',
+    "hashivim/vim-terraform",
   })
 
   use({
