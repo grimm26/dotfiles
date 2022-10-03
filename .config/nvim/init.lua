@@ -19,7 +19,7 @@ require("lastplace")
 require("plugins")
 require("config_plugins")
 require("snippets")
-set.mouse = "n"
+set.mouse = ""
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 set.updatetime = 100
