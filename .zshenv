@@ -43,7 +43,6 @@ else
   export EDITOR=vim
 fi
 alias kit=kitchen
-alias tf=terraform
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
 export TFSWITCH_BIN=${HOME}/.local/bin/terraform
 alias tfsw="tfswitch --bin $TFSWITCH_BIN"

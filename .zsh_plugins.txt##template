@@ -21,6 +21,7 @@ ohmyzsh/ohmyzsh path:plugins/systemadmin
 ohmyzsh/ohmyzsh path:plugins/urltools
 ohmyzsh/ohmyzsh path:plugins/kubectl
 ohmyzsh/ohmyzsh path:plugins/web-search
+ohmyzsh/ohmyzsh path:plugins/terraform
 
 {% if yadm.os == "Darwin" %}
 ohmyzsh/ohmyzsh path:plugins/macos
