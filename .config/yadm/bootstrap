@@ -533,4 +533,9 @@ curl -sfLS git.io/antibody | bash -s - -b ${home_bin}
 
 $(whence -p antibody) bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh
 
+# Checking for latest docker images that I use
+print "Syncing latest docker images"
+for docker_image in ghcr.io/tomwright/dasel:latest bridgecrew/checkov nicolargo/glances:latest-full ghcr.io/terraform-linters/tflint-bundle achannarasappa/ticker; do
+  docker pull $docker_image
+done
 rm -rf ${MY_TMP}
