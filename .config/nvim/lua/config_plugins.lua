@@ -222,7 +222,7 @@ require('legendary').setup({
 
   -- Automatically add which-key tables to legendary
   -- see "which-key.nvim Integration" below for more details
-  auto_register_which_key = true,
+  auto_register_which_key = false,
   -- settings for the :LegendaryScratch command
   scratchpad = {
     -- configure how to show results of evaluated Lua code,

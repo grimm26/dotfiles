@@ -54,7 +54,6 @@ set.ffs = {"unix", "dos", "mac"}
 if fn.has("termguicolors") == 1 then set.termguicolors = true end
 set.background = "dark"
 cmd("colorscheme solarized-high")
--- cmd("colorscheme mosel")
 -- show me where my cursor is
 set.cursorline = true
 set.cursorcolumn = true

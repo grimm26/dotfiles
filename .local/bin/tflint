@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker run --rm -e TFLINT_LOG -v "$(pwd)":/data $([[ -s /home/${USER}/.tflint.hcl ]] && echo "-v /home/${USER}/.tflint.hcl:/root/.tflint.hcl") -t ghcr.io/terraform-linters/tflint-bundle:v0.41.0.0
+docker run --rm -e TFLINT_LOG -v "$(pwd)":/data $([[ -s /home/${USER}/.tflint.hcl ]] && echo "-v /home/${USER}/.tflint.hcl:/root/.tflint.hcl") -t ghcr.io/terraform-linters/tflint-bundle
 
