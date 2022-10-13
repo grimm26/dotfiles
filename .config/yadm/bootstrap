@@ -86,8 +86,15 @@ case $(uname) in
     fi
     cd $MY_TMP
     # Latest git
-    if ! add-apt-repository -L | grep -q git-core/ppa; then
-      sudo add-apt-repository -y -P ppa:git-core/ppa
+    if [[ "$NAME" == "Ubuntu" && 21 > $VERSION_ID ]]; then
+      # Earlier than jammy
+      if ! grep -q git-core/ppa /etc/apt/sources.list.d/* 2>/dev/null; then
+        sudo add-apt-repository -y ppa:git-core/ppa
+      fi
+    else
+      if ! add-apt-repository -L | grep -q git-core/ppa; then
+        sudo add-apt-repository -y -P ppa:git-core/ppa
+      fi
     fi
     for pkg in libfuse2 fonts-firacode fonts-hack curl git libcurl4-openssl-dev keychain jq source-highlight fd-find ripgrep liblua5.3-dev lua5.3 cmake ugrep; do
       dpkg -s $pkg &>/dev/null \
@@ -96,7 +103,7 @@ case $(uname) in
     SCRIPT_HOME=$(readlink -f ${0%/*})
 
     if [[ ! -v setup_MINIMAL ]]; then
-      for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck; do
+      for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck docker.io; do
         dpkg -s $pkg &>/dev/null \
           || sudo apt-get install -y $pkg
       done
@@ -337,7 +344,7 @@ case $(uname) in
       fi
       # Latest doggo
       print "doggo"
-      local current_doggo_version=$(doggo --version | awk '{print $1}')
+      local current_doggo_version=$(doggo --version 2>/dev/null| awk '{print $1}')
       local latest_doggo_version=$(GH_HOST=github.com gh release list --limit 1 --repo mr-karan/doggo |awk '{print $1}')
       if [[ "${current_doggo_version}" != "${latest_doggo_version}" ]]; then
         print "Updating from ${current_doggo_version} to ${latest_doggo_version}"
@@ -484,7 +491,7 @@ if [[ ! -v setup_MINIMAL ]]; then
   # k9s
   echo "k9s"
   latest_k9s_version=$(GH_HOST=github.com gh release list --limit 1 --repo derailed/k9s|awk '{print $1}')
-  installed_k9s_version=$(k9s version -s| grep Version | awk '{print $2}')
+  installed_k9s_version=$(k9s version -s 2>/dev/null| grep Version | awk '{print $2}')
   if [[ ${installed_k9s_version} != $latest_k9s_version ]]; then
     print "Updating from ${installed_k9s_version} to $latest_k9s_version"
     GH_HOST=github.com gh release download $latest_k9s_version --pattern "k9s_$(uname -s)_$(uname -m).tar.gz" --repo derailed/k9s -D ${MY_TMP} \
