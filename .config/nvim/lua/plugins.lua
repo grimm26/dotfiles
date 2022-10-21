@@ -62,6 +62,7 @@ return require("packer").startup(function(use)
     'j-hui/fidget.nvim',
     'mhartington/formatter.nvim',
     "hashivim/vim-terraform",
+    "numToStr/FTerm.nvim",
   })
 
   use({
@@ -86,8 +87,25 @@ return require("packer").startup(function(use)
   })
   -- colorschemes
   use({"ishan9299/nvim-solarized-lua"})
+  use({"folke/tokyonight.nvim"})
   use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
   use("nvim-treesitter/nvim-treesitter-textobjects")
 
   use({"echasnovski/mini.nvim", branch = "stable"})
+
+  use({
+    "folke/noice.nvim",
+    event = "VimEnter",
+    config = function()
+      require("noice").setup()
+    end,
+    requires = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+      }
+  })
 end)
