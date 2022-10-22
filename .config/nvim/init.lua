@@ -20,8 +20,10 @@ require("plugins")
 require("config_plugins")
 require("snippets")
 -- See https://github.com/neovim/neovim/pull/20633, https://github.com/folke/noice.nvim/issues/47
--- Uncomment this when we can
--- vim.opt.shortmess:append { "C" }
+if fn.has("nvim-0.9.0") == 1 then
+  set.shortmess:append { C = true }
+  -- cmd("set shortmess+=C")
+end
 set.mouse = ""
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'

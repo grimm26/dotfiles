@@ -6,7 +6,8 @@
 GOLANG_VERSION="1.19.2"
 NODEJS_VERSION="16.18.0"
 PYTHON_VERSION="3.10.8"
-NEOVIM_VERSION="0.8.0"
+# Set NEOVIM_BUILD to nightly or latest. If set to nightly, this will not check nvim as it assumes you installed the nightly yourself.
+NEOVIM_BUILD="nightly"
 while getopts 'M' OPT; do
   case $OPT in
     M) setup_MINIMAL=1 ;;
@@ -108,12 +109,15 @@ case $(uname) in
           || sudo apt-get install -y $pkg
       done
       print "Neovim"
-      if [[ "v${NEOVIM_VERSION}" != $(/usr/local/bin/nvim --version |head -1 | awk '{print $2}' |cut -d- -f1 2>/dev/null) ]]; then
-        print "Installing neovim v${NEOVIM_VERSION}"
-        # Install neovim
-        curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o ${MY_TMP}/nvim.appimage \
+      if [[ ${NEOVIM_BUILD} == "latest" ]]; then
+        local latest_neovim_version=$(GH_HOST=github.com gh release list --limit 5 --repo neovim/neovim | grep 'Latest' | cut -f3)
+        local installed_neovim_version=$(/usr/local/bin/nvim --version 2>/dev/null | head -1 | awk '{print $2}' |cut -d- -f1)
+        if [[ ${installed_neovim_version} != $latest_neovim_version ]]; then
+          print "Updating from ${installed_neovim_version} to $latest_neovim_version"
+          GH_HOST=github.com gh release download ${latest_neovim_version} --pattern "nvim.appimage" --repo neovim/neovim -D $MY_TMP \
           && sudo install -m 755 ${MY_TMP}/nvim.appimage /usr/local/bin/nvim.appimage
-        [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
+          [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
+        fi
       fi
 
       # Latest github cli
@@ -524,7 +528,7 @@ if [[ ! -v setup_MINIMAL ]]; then
     PIP_OPTIONS="--force-reinstall"
   fi
   echo "Python packages:"
-  for pkg in pip pre-commit 'boto3[crt]';do
+  for pkg in pip argcomplete pre-commit 'boto3[crt]';do
     python -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
   done
 
