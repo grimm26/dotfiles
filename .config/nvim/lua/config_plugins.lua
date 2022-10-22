@@ -57,7 +57,7 @@ starter.setup({
   },
 })
 require("mini.comment").setup({})
-require("mini.completion").setup({})
+-- require("mini.completion").setup({})
 require("mini.indentscope").setup({})
 require("mini.surround").setup({})
 require("mini.trailspace").setup({})
@@ -552,12 +552,11 @@ require("formatter").setup {
   }
 }
 
-require "fidget".setup {}
-
 require("octo").setup({
   github_hostname = vim.env.GH_HOST; -- GitHub Enterprise host (if set)
 })
 
 -- hashivim/terraform
 g.terraform_fmt_on_save = 1
+
 -- vim: ts=2 sts=2 sw=2 et

@@ -353,7 +353,8 @@ gcl() {
 whence -p lsd &>/dev/null && alias ls=lsd
 ## END post antibody/zplug overrides
 
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
+# Set background for suggestions from https://github.com/zsh-users/zsh-autosuggestions
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10,bg=#303030"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # fzf interactive select awscli profile

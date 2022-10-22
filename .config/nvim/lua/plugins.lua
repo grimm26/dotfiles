@@ -59,7 +59,6 @@ return require("packer").startup(function(use)
     "kamykn/spelunker.vim",
     "mrjones2014/legendary.nvim", -- keymappings, commands, autocmds
     'stevearc/dressing.nvim', -- fancy ui menu with legendary
-    'j-hui/fidget.nvim',
     'mhartington/formatter.nvim',
     "hashivim/vim-terraform",
     "numToStr/FTerm.nvim",
@@ -88,6 +87,8 @@ return require("packer").startup(function(use)
   -- colorschemes
   use({"ishan9299/nvim-solarized-lua"})
   use({"folke/tokyonight.nvim"})
+  use({"sainnhe/sonokai"})
+
   use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
   use("nvim-treesitter/nvim-treesitter-textobjects")
 
@@ -106,6 +107,6 @@ return require("packer").startup(function(use)
       --   `nvim-notify` is only needed, if you want to use the notification view.
       --   If not available, we use `mini` as the fallback
       "rcarriga/nvim-notify",
-      }
+    }
   })
 end)

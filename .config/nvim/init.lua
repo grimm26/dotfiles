@@ -19,6 +19,9 @@ require("lastplace")
 require("plugins")
 require("config_plugins")
 require("snippets")
+-- See https://github.com/neovim/neovim/pull/20633, https://github.com/folke/noice.nvim/issues/47
+-- Uncomment this when we can
+-- vim.opt.shortmess:append { "C" }
 set.mouse = ""
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
