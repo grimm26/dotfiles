@@ -118,6 +118,19 @@ case $(uname) in
           && sudo install -m 755 ${MY_TMP}/nvim.appimage /usr/local/bin/nvim.appimage
           [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
         fi
+      elif [[ ${NEOVIM_BUILD} == "nightly" ]]; then
+        read -q "yn?Do you wish to refresh neovim nightly?"
+        case $yn in
+          [Yy]*)
+            print "\nInstalling latest nightly build."
+            GH_HOST=github.com gh release download nightly --pattern "nvim.appimage" --repo neovim/neovim -D $MY_TMP \
+            && sudo install -m 755 ${MY_TMP}/nvim.appimage /usr/local/bin/nvim.appimage
+            [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
+            ;;
+          *)
+            print "\nLeaving current version installed."
+            ;;
+        esac
       fi
 
       # Latest github cli
@@ -546,7 +559,7 @@ $(whence -p antibody) bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh
 
 # Checking for latest docker images that I use
 print "Syncing latest docker images"
-for docker_image in ghcr.io/tomwright/dasel:latest bridgecrew/checkov nicolargo/glances:latest-full ghcr.io/terraform-linters/tflint-bundle achannarasappa/ticker; do
+for docker_image in ghcr.io/tomwright/dasel:latest nicolargo/glances:latest-full ghcr.io/terraform-linters/tflint-bundle achannarasappa/ticker; do
   docker pull $docker_image
 done
 rm -rf ${MY_TMP}
