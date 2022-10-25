@@ -14,7 +14,6 @@ function git_main_branch() {
   done
   echo master
 }
-whence git_main_branch &>/dev/null || { echo "This script needs ohmyzsh git plugin's git_main_branch() function to work. Get it." && exit 1 }
 DEFAULT_BRANCH=$(git_main_branch)
 git checkout $DEFAULT_BRANCH && git pull --ff-only && \
 git branch "$1" $DEFAULT_BRANCH && \
