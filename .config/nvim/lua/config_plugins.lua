@@ -242,6 +242,9 @@ require('legendary').setup({
   -- Initial commands to bind
   commands = {
     {":PU", ":PackerSync", description = "Packer Sync"},
+    {":TgPlan", function()
+      require('FTerm').scratch({ cmd = {"terragrunt", "plan"} })
+      end, { bang = true }, description = "Run terragrunt plan"}
   },
   -- Initial augroups and autocmds to bind
   autocmds = {
@@ -558,5 +561,22 @@ require("octo").setup({
 
 -- hashivim/terraform
 g.terraform_fmt_on_save = 1
+
+require("NeoSolarized").setup({
+  style = "dark", -- "dark" or "light"
+  transparent = false, -- true/false
+  terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
+  enable_italics = false, -- Italics for different hightlight groups (eg. Statement, Condition, Comment, Include, etc.)
+  styles = {
+    -- Style for different style groups
+    comments = { italic = false },
+    keywords = { italic = false },
+    functions = { bold = true },
+    variables = {},
+    string = { italic = false },
+    underline = true, -- true/false; for global underline
+    undercurl = true, -- true/false; for global undercurl
+  },
+})
 
 -- vim: ts=2 sts=2 sw=2 et

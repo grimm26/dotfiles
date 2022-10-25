@@ -87,7 +87,7 @@ return require("packer").startup(function(use)
   -- colorschemes
   use({"ishan9299/nvim-solarized-lua"})
   use({"folke/tokyonight.nvim"})
-  use({"sainnhe/sonokai"})
+  use({"Tsuzat/NeoSolarized.nvim"})
 
   use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
   use("nvim-treesitter/nvim-treesitter-textobjects")
