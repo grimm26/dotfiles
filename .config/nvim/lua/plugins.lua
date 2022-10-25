@@ -25,16 +25,6 @@ return require("packer").startup(function(use)
     "kyazdani42/nvim-tree.lua",
     requires = {{"kyazdani42/nvim-web-devicons"}} -- for file icons
   })
-  use({
-    "folke/trouble.nvim",
-    requires = "kyazdani42/nvim-web-devicons",
-    config = function()
-      require("trouble").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-      })
-    end
-  })
 
   -- Simple plugins can be specified as strings in a list
   use({
@@ -86,8 +76,6 @@ return require("packer").startup(function(use)
   })
   -- colorschemes
   use({"ishan9299/nvim-solarized-lua"})
-  use({"folke/tokyonight.nvim"})
-  use({"Tsuzat/NeoSolarized.nvim"})
 
   use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
   use("nvim-treesitter/nvim-treesitter-textobjects")
@@ -108,5 +96,15 @@ return require("packer").startup(function(use)
       --   If not available, we use `mini` as the fallback
       "rcarriga/nvim-notify",
     }
+  })
+  use({
+    "folke/trouble.nvim",
+    requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("trouble").setup({
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+      })
+    end
   })
 end)
