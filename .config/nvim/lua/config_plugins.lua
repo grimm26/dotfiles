@@ -184,7 +184,6 @@ require('legendary').setup({
     {"<leader>help", require('telescope.builtin').help_tags, description = "List help tags"},
     {"<leader>gitf", require('telescope.builtin').git_files, description = "List files under Git control"},
     {"<leader>ci", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
-    {"<C-n>", ":NvimTreeToggle<cr>", mode = {""}, description = "Toggle nvim-tree"},
     {"<leader>lf", function() vim.lsp.buf.format {async = true} end, description = 'Format buffer with LSP',
       opts = {buffer = true, silent = true, noremap = true}},
     {"<leader>f", ":Format<cr>", description = "Use Formatter to format"},
