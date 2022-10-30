@@ -9,6 +9,7 @@ elseif vim.fn.executable('fd') == 1 then
   fd = 'fd'
 end
 
+-- Enable modules out of mini,nvim that we want to use
 local starter = require('mini.starter')
 starter.setup({
   items = {
@@ -19,11 +20,13 @@ starter.setup({
     starter.gen_hook.aligning('center', 'center'),
   },
 })
+require("mini.align").setup()
 require("mini.comment").setup({})
--- require("mini.completion").setup({})
+require("mini.completion").setup({})
 require("mini.indentscope").setup({})
 require("mini.surround").setup({})
 require("mini.trailspace").setup({})
+
 require("gitsigns").setup({
   diff_opts = {
     internal = true
@@ -205,8 +208,8 @@ require('legendary').setup({
   commands = {
     {":PU", ":PackerSync", description = "Packer Sync"},
     {":TgPlan", function()
-      require('FTerm').scratch({ cmd = {"terragrunt", "plan"} })
-      end, { bang = true }, description = "Run terragrunt plan"}
+      require('FTerm').scratch({cmd = {"terragrunt", "plan"}})
+    end, {bang = true}, description = "Run terragrunt plan"}
   },
   -- Initial augroups and autocmds to bind
   autocmds = {
