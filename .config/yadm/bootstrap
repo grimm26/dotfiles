@@ -188,10 +188,10 @@ case $(uname) in
       # Make sure we set an npm prefix for our user.
       npm config set prefix '~/.local/'
       # Install jsonlint
-      npm install --location=global jsonlint
+      # npm install --location=global jsonlint
       # Install prettier
-      npm install --location=global prettier
-      npm install --location=global neovim
+      # npm install --location=global prettier
+      # npm install --location=global neovim
       # luarocks Not gonna require this now
       # if !command -v luarocks &>/dev/null && [[ $(luarocks --version |head -1 |awk '{print $2}') != "3.9.0" ]]; then
       #   curl -L -o /tmp/luarocks_3-9-0.tar.gz https://github.com/luarocks/luarocks/archive/refs/tags/v3.9.0.tar.gz \
