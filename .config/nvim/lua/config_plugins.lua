@@ -187,9 +187,12 @@ require('legendary').setup({
     {"<leader>help", require('telescope.builtin').help_tags, description = "List help tags"},
     {"<leader>gitf", require('telescope.builtin').git_files, description = "List files under Git control"},
     {"<leader>ci", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
-    {"<leader>lf", function() vim.lsp.buf.format {async = true} end, description = 'Format buffer with LSP',
+    {"<leader>lf", function() vim.lsp.buf.format {
+        async = true, filter = function(client) return client.name ~= "terraformls" end
+      }
+    end,
+      description = 'Format buffer with LSP',
       opts = {buffer = true, silent = true, noremap = true}},
-    {"<leader>f", ":Format<cr>", description = "Use Formatter to format"},
     {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
     -- Base utility mappings
     {"<leader>ev", ":vsplit $MYVIMRC<cr>", description = "Edit vim init"},
@@ -212,18 +215,7 @@ require('legendary').setup({
     end, {bang = true}, description = "Run terragrunt plan"}
   },
   -- Initial augroups and autocmds to bind
-  autocmds = {
-    {
-      name = 'Formatter',
-      {
-        "BufWritePost",
-        ":FormatWriteLock",
-        opts = {
-          pattern = {"*.json", "*.go"},
-        }
-      }
-    },
-  },
+  autocmds = {},
 
   -- Automatically add which-key tables to legendary
   -- see "which-key.nvim Integration" below for more details
@@ -342,7 +334,7 @@ require("mason-tool-installer").setup({
     "jsonlint",
     "lua-language-server",
     "marksman",
-    "prettier",
+    "prettierd",
     "python-lsp-server",
     "shfmt",
     "isort",
@@ -470,63 +462,38 @@ lspconfig.sumneko_lua.setup({
   }
 })
 
--- formatter plugin
--- Utilities for creating configurations
-local formatter_util = require "formatter.util"
-
--- Provides the Format and FormatWrite commands
-require("formatter").setup {
-  -- Enable or disable logging
-  logging = true,
-  -- Set the log level
-  log_level = vim.log.levels.WARN,
-  -- All formatter configurations are opt-in
-  filetype = {
-    -- Formatter configurations for filetype "go" go here
-    -- and will be executed in order
-    go = {
-      -- "formatter.filetypes.go" defines default configurations for the
-      -- "go" filetype
-      require("formatter.filetypes.go").gofmt,
-    },
-    json = {
-      require("formatter.filetypes.json").jq,
-    },
-    sh = {
-      function()
-        return {
-          exe = "shfmt",
-          args = {"-i", "2", "-bn", "-ci", "-s"},
-          stdin = true,
-        }
-      end
-    },
-    terraform = {
-      function()
-        return {
-          exe = "terraform",
-          args = {
-            "fmt", "-",
-          },
-          stdin = true,
-        }
-      end
-    },
-    -- Use the special "*" filetype for defining formatter configurations on
-    -- any filetype
-    ["*"] = {
-      -- "formatter.filetypes.any" defines default configurations for any
-      -- filetype
-      require("formatter.filetypes.any").remove_trailing_whitespace
-    }
-  }
-}
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+require("null-ls").setup({
+  sources = {
+    require("null-ls").builtins.formatting.jq,
+    require("null-ls").builtins.formatting.gofmt,
+    require("null-ls").builtins.formatting.prettierd,
+    require("null-ls").builtins.formatting.terraform_fmt,
+    require("null-ls").builtins.diagnostics.jsonlint,
+  },
+  -- you can reuse a shared lspconfig on_attach callback here
+  on_attach = function(client, bufnr)
+    if client.supports_method("textDocument/formatting") then
+      vim.api.nvim_clear_autocmds({group = augroup, buffer = bufnr})
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        group = augroup,
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.buf.format({
+            bufnr = bufnr,
+            async = false,
+            filter = function(client)
+              return client.name == "null-ls"
+            end
+          })
+        end,
+      })
+    end
+  end,
+})
 
 require("octo").setup({
   github_hostname = vim.env.GH_HOST; -- GitHub Enterprise host (if set)
 })
-
--- hashivim/terraform
-g.terraform_fmt_on_save = 1
 
 -- vim: ts=2 sts=2 sw=2 et

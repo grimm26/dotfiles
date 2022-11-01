@@ -49,9 +49,8 @@ return require("packer").startup(function(use)
     "kamykn/spelunker.vim",
     "mrjones2014/legendary.nvim", -- keymappings, commands, autocmds
     'stevearc/dressing.nvim', -- fancy ui menu with legendary
-    'mhartington/formatter.nvim',
-    "hashivim/vim-terraform",
     "numToStr/FTerm.nvim",
+    "jose-elias-alvarez/null-ls.nvim",
   })
 
   use({
