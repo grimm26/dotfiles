@@ -365,11 +365,23 @@ local lspconfig = require('lspconfig')
 lspconfig.ansiblels.setup {}
 lspconfig.bashls.setup {}
 lspconfig.dockerls.setup {}
-lspconfig.gopls.setup {}
-lspconfig.jsonls.setup {}
+lspconfig.gopls.setup {
+  on_attach = function(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = false
+  end
+}
+lspconfig.jsonls.setup {
+  on_attach = function(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = false
+  end
+}
 lspconfig.solargraph.setup {}
 lspconfig.marksman.setup {}
-lspconfig.terraformls.setup {}
+lspconfig.terraformls.setup {
+  on_attach = function(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = false
+  end
+}
 lspconfig.vimls.setup {}
 lspconfig.pylsp.setup {
   -- https://github.com/williamboman/nvim-lsp-installer/blob/main/lua/nvim-lsp-installer/servers/pylsp/README.md
