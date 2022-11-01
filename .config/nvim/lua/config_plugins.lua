@@ -106,7 +106,6 @@ require("telescope").setup {
 }
 require("telescope").load_extension("fzf")
 require("telescope").load_extension("file_browser")
-require("nvim-tree").setup()
 -- Most of the lualine config is default, just had it here to show what can be tweaked.
 local function diff_source()
   local gitsigns = vim.b.gitsigns_status_dict
@@ -149,7 +148,7 @@ require("lualine").setup({
     lualine_z = {}
   },
   tabline = {},
-  extensions = {"nvim-tree"}
+  extensions = {}
 })
 
 require('legendary').setup({

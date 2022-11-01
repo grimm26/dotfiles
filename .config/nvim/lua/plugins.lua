@@ -21,10 +21,6 @@ return require("packer").startup(function(use)
   })
   -- Post-install/update hook with neovim command
   use({"nvim-telescope/telescope-fzf-native.nvim", run = "make", requires = {{"nvim-telescope/telescope.nvim"}}})
-  use({
-    "kyazdani42/nvim-tree.lua",
-    requires = {{"kyazdani42/nvim-web-devicons"}} -- for file icons
-  })
 
   -- Simple plugins can be specified as strings in a list
   use({
