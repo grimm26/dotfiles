@@ -1,9 +1,9 @@
 format = """\
     $username\
     $hostname\
-    $sudo\
     $kubernetes\
     $directory\
+    $sudo\
     $git_branch\
     $git_state\
     $git_status\
