@@ -1,6 +1,7 @@
 format = """\
     $username\
     $hostname\
+    $sudo\
     $kubernetes\
     $directory\
     $git_branch\
@@ -15,7 +16,6 @@ format = """\
     $python\
     $ruby\
     $rust\
-    $nix_shell\
     $conda\
     $memory_usage\
     $aws\
@@ -91,6 +91,9 @@ disabled = true
 detect_variables = []
 
 [status]
+disabled = false
+
+[sudo]
 disabled = false
 
 [terraform]
