@@ -187,7 +187,7 @@ require('legendary').setup({
     {"<leader>gitf", require('telescope.builtin').git_files, description = "List files under Git control"},
     {"<leader>ci", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
     {"<leader>lf", function() vim.lsp.buf.format {
-        async = true, filter = function(client) return client.name ~= "terraformls" end
+        async = true
       }
     end,
       description = 'Format buffer with LSP',
@@ -341,6 +341,7 @@ require("mason-tool-installer").setup({
     "terraform-ls",
     "vim-language-server",
     "yaml-language-server",
+    "yamlfmt",
   },
 
   -- if set to true this will check each tool for updates. If updates
@@ -411,6 +412,9 @@ lspconfig.pylsp.setup {
   }
 }
 lspconfig.yamlls.setup {
+  on_attach = function(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = false
+  end,
   settings = {
     ["yaml"] = {
       -- don't freak out on Cloudformation
@@ -474,13 +478,16 @@ lspconfig.sumneko_lua.setup({
 })
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-require("null-ls").setup({
+local null_ls = require("null-ls")
+null_ls.setup({
   sources = {
-    require("null-ls").builtins.formatting.jq,
-    require("null-ls").builtins.formatting.gofmt,
-    require("null-ls").builtins.formatting.prettierd,
-    require("null-ls").builtins.formatting.terraform_fmt,
-    require("null-ls").builtins.diagnostics.jsonlint,
+    null_ls.builtins.formatting.jq,
+    null_ls.builtins.formatting.gofmt,
+    null_ls.builtins.formatting.prettierd,
+    null_ls.builtins.formatting.terraform_fmt,
+    null_ls.builtins.formatting.yamlfmt,
+    null_ls.builtins.diagnostics.jsonlint,
+    null_ls.builtins.diagnostics.zsh,
   },
   -- you can reuse a shared lspconfig on_attach callback here
   on_attach = function(client, bufnr)
