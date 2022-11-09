@@ -165,17 +165,39 @@ require('legendary').setup({
   -- 'Legendary Commands' when searching commands,
   -- and 'Legendary Autocmds' when searching autocmds.
   select_prompt = nil,
-  -- Optionally pass a custom formatter function. This function
-  -- receives the item as a parameter and must return a table of
-  -- non-nil string values for display. It must return the same
-  -- number of values for each item to work correctly.
-  -- The values will be used as column values when formatted.
-  -- See function `get_default_format_values(item)` in
-  -- `lua/legendary/formatter.lua` to see default implementation.
-  formatter = nil,
   -- When you trigger an item via legendary.nvim,
   -- show it at the top next time you use legendary.nvim
   most_recent_item_at_top = true,
+  which_key = {
+    -- Automatically add which-key tables to legendary
+    -- see ./doc/WHICH_KEY.md for more details
+    auto_register = false,
+    -- you can put which-key.nvim tables here,
+    -- or alternatively have them auto-register,
+    -- see ./doc/WHICH_KEY.md
+    mappings = {},
+    opts = {},
+    -- controls whether legendary.nvim actually binds they keymaps,
+    -- or if you want to let which-key.nvim handle the bindings.
+    -- if not passed, true by default
+    do_binding = false,
+  },
+  -- settings for the :LegendaryScratch command
+  scratchpad = {
+    -- How to open the scratchpad buffer,
+    -- 'current' for current window, 'float'
+    -- for floating window
+    view = 'float',
+    -- How to show the results of evaluated Lua code.
+    -- 'print' for `print(result)`, 'float' for a floating window.
+    results_view = 'float',
+    -- Border style for floating windows related to the scratchpad
+    float_border = 'rounded',
+    -- Whether to restore scratchpad contents from a cache file
+    keep_contents = true,
+  },
+  -- Directory used for caches
+  cache_path = string.format('%s/legendary/', vim.fn.stdpath('cache')),
   -- Initial keymaps to bind
   keymaps = {
     {"<leader>ts", MiniTrailspace.trim, description = "Trim trailing whitespace."},
@@ -215,17 +237,6 @@ require('legendary').setup({
   },
   -- Initial augroups and autocmds to bind
   autocmds = {},
-
-  -- Automatically add which-key tables to legendary
-  -- see "which-key.nvim Integration" below for more details
-  auto_register_which_key = false,
-  -- settings for the :LegendaryScratch command
-  scratchpad = {
-    -- configure how to show results of evaluated Lua code,
-    -- either 'print' or 'float'
-    -- Pressing q or <ESC> will close the float
-    display_results = 'float',
-  },
 })
 
 local ts = require("nvim-treesitter.configs")

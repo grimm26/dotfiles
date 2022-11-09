@@ -47,7 +47,7 @@ ls.add_snippets("gitcommit", {
 
 require("luasnip.loaders.from_vscode").lazy_load()
 
-require('legendary').bind_commands({
+require('legendary').commands({
   {":LuaSnipEdit", ":lua require('luasnip.loaders').edit_snippet_files()", description = "Edit Snippet files"},
 })
 -- simple maps to make snippets work before adding nvim-cmp
