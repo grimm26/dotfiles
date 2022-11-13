@@ -15,6 +15,7 @@ vim.keymap.set({'n', 'v'}, '<Space>', '<Nop>', {silent = true})
 g.mapleader = ' '
 g.maplocalleader = ' '
 vim.lsp.set_log_level("error")
+if fn.has("termguicolors") == 1 then set.termguicolors = true end
 require("lastplace")
 require("plugins")
 require("config_plugins")
@@ -60,7 +61,6 @@ set.foldexpr = "nvim_treesitter#foldexpr()"
 set.guifont = "Monaco:h14"
 -- Use Unix as the standard file type
 set.ffs = {"unix", "dos", "mac"}
-if fn.has("termguicolors") == 1 then set.termguicolors = true end
 set.background = "dark"
 cmd("colorscheme solarized-high")
 -- show me where my cursor is
