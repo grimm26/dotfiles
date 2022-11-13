@@ -24,6 +24,10 @@ if fn.has("nvim-0.9.0") == 1 then
   set.shortmess:append { C = true }
   -- cmd("set shortmess+=C")
 end
+-- don't give "search hit BOTTOM, continuing at TOP" or "search
+-- hit TOP, continuing at BOTTOM" messages; when using the search
+-- count do not show "W" after the count message (see S below)
+set.shortmess:append { s = true }
 set.mouse = ""
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'

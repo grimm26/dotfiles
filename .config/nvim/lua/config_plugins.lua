@@ -525,4 +525,7 @@ require("octo").setup({
   github_hostname = vim.env.GH_HOST; -- GitHub Enterprise host (if set)
 })
 
+require("notify").setup({
+    timeout = 1000,
+})
 -- vim: ts=2 sts=2 sw=2 et
