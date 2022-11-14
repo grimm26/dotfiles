@@ -16,8 +16,8 @@ local api = vim.api
 local M = {}
 
 local config = {
-  ignore_filetype = {"gitcommit", "gitrebase", "svn", "hgcommit"},
-  ignore_buftype = {"quickfix", "nofile", "help"},
+  ignore_filetype = { "gitcommit", "gitrebase", "svn", "hgcommit" },
+  ignore_buftype = { "quickfix", "nofile", "help" },
   open_folds = true,
 }
 

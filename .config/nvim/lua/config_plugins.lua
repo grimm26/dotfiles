@@ -2,22 +2,22 @@ local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')
 local g = vim.g -- a table to access global variables (let g:something = foo)
 local set = vim.opt -- to set options
 
-local fd = 'fdfind'
-if vim.fn.executable('fdfind') == 1 then
-  fd = 'fdfind'
-elseif vim.fn.executable('fd') == 1 then
-  fd = 'fd'
+local fd = "fdfind"
+if vim.fn.executable("fdfind") == 1 then
+  fd = "fdfind"
+elseif vim.fn.executable("fd") == 1 then
+  fd = "fd"
 end
 
 -- Enable modules out of mini,nvim that we want to use
-local starter = require('mini.starter')
+local starter = require("mini.starter")
 starter.setup({
   items = {
     starter.sections.telescope(),
   },
   content_hooks = {
     starter.gen_hook.adding_bullet(),
-    starter.gen_hook.aligning('center', 'center'),
+    starter.gen_hook.aligning("center", "center"),
   },
 })
 require("mini.align").setup()
@@ -29,17 +29,17 @@ require("mini.trailspace").setup({})
 
 require("gitsigns").setup({
   diff_opts = {
-    internal = true
+    internal = true,
   },
   current_line_blame = false,
   current_line_blame_opts = {
     virt_text = true,
-    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+    virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
     delay = 1000,
     ignore_whitespace = false,
   },
   yadm = {
-    enable = true
+    enable = true,
   },
   on_attach = function(bufnr)
     local gs = package.loaded.gitsigns
@@ -51,39 +51,51 @@ require("gitsigns").setup({
     end
 
     -- Navigation
-    map('n', ']c', function()
-      if vim.wo.diff then return ']c' end
-      vim.schedule(function() gs.next_hunk() end)
-      return '<Ignore>'
-    end, {expr = true})
+    map("n", "]c", function()
+      if vim.wo.diff then
+        return "]c"
+      end
+      vim.schedule(function()
+        gs.next_hunk()
+      end)
+      return "<Ignore>"
+    end, { expr = true })
 
-    map('n', '[c', function()
-      if vim.wo.diff then return '[c' end
-      vim.schedule(function() gs.prev_hunk() end)
-      return '<Ignore>'
-    end, {expr = true})
+    map("n", "[c", function()
+      if vim.wo.diff then
+        return "[c"
+      end
+      vim.schedule(function()
+        gs.prev_hunk()
+      end)
+      return "<Ignore>"
+    end, { expr = true })
 
     -- Actions
-    map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
-    map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
-    map('n', '<leader>hS', gs.stage_buffer)
-    map('n', '<leader>hu', gs.undo_stage_hunk)
-    map('n', '<leader>hR', gs.reset_buffer)
-    map('n', '<leader>hp', gs.preview_hunk)
-    map('n', '<leader>hb', function() gs.blame_line {full = true} end)
-    map('n', '<leader>tb', gs.toggle_current_line_blame)
-    map('n', '<leader>hd', gs.diffthis)
-    map('n', '<leader>hD', function() gs.diffthis('~') end)
-    map('n', '<leader>td', gs.toggle_deleted)
+    map({ "n", "v" }, "<leader>hs", ":Gitsigns stage_hunk<CR>")
+    map({ "n", "v" }, "<leader>hr", ":Gitsigns reset_hunk<CR>")
+    map("n", "<leader>hS", gs.stage_buffer)
+    map("n", "<leader>hu", gs.undo_stage_hunk)
+    map("n", "<leader>hR", gs.reset_buffer)
+    map("n", "<leader>hp", gs.preview_hunk)
+    map("n", "<leader>hb", function()
+      gs.blame_line({ full = true })
+    end)
+    map("n", "<leader>tb", gs.toggle_current_line_blame)
+    map("n", "<leader>hd", gs.diffthis)
+    map("n", "<leader>hD", function()
+      gs.diffthis("~")
+    end)
+    map("n", "<leader>td", gs.toggle_deleted)
 
     -- Text object
-    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-  end
+    map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+  end,
 })
-require("telescope").setup {
+require("telescope").setup({
   pickers = {
     find_files = {
-      find_command = {fd, "--type", "f", "--hidden", "--exclude", ".git"},
+      find_command = { fd, "--type", "f", "--hidden", "--exclude", ".git" },
       mappings = {
         n = {
           ["cd"] = function(prompt_bufnr)
@@ -92,18 +104,18 @@ require("telescope").setup {
             require("telescope.actions").close(prompt_bufnr)
             -- Depending on what you want put `cd`, `lcd`, `tcd`
             cmd(string.format("silent lcd %s", dir))
-          end
-        }
-      }
-    }
+          end,
+        },
+      },
+    },
   },
   extensions = {
     file_browser = {
       -- disables netrw and use telescope-file-browser in its place
       hijack_netrw = true,
     },
-  }
-}
+  },
+})
 require("telescope").load_extension("fzf")
 require("telescope").load_extension("file_browser")
 -- Most of the lualine config is default, just had it here to show what can be tweaked.
@@ -113,7 +125,7 @@ local function diff_source()
     return {
       added = gitsigns.added,
       modified = gitsigns.changed,
-      removed = gitsigns.removed
+      removed = gitsigns.removed,
     }
   end
 end
@@ -122,36 +134,37 @@ require("lualine").setup({
   options = {
     icons_enabled = true,
     theme = "powerline_dark",
-    component_separators = {left = "", right = ""},
-    section_separators = {left = "", right = ""},
+    component_separators = { left = "", right = "" },
+    section_separators = { left = "", right = "" },
     disabled_filetypes = {},
     always_divide_middle = true,
-    globalstatus = true
+    globalstatus = true,
   },
   sections = {
-    lualine_a = {"mode"},
+    lualine_a = { "mode" },
     lualine_b = {
-      {"b:gitsigns_head", icon = ''}, {"diff", source = diff_source},
-      "diagnostics"
+      { "b:gitsigns_head", icon = "" },
+      { "diff", source = diff_source },
+      "diagnostics",
     },
-    lualine_c = {{"filename", path = 1}},
-    lualine_x = {"encoding", "fileformat", "filetype"},
-    lualine_y = {"progress"},
-    lualine_z = {"location"}
+    lualine_c = { { "filename", path = 1 } },
+    lualine_x = { "encoding", "fileformat", "filetype" },
+    lualine_y = { "progress" },
+    lualine_z = { "location" },
   },
   inactive_sections = {
     lualine_a = {},
     lualine_b = {},
-    lualine_c = {{"filename", path = 1}},
-    lualine_x = {"location"},
+    lualine_c = { { "filename", path = 1 } },
+    lualine_x = { "location" },
     lualine_y = {},
-    lualine_z = {}
+    lualine_z = {},
   },
   tabline = {},
-  extensions = {}
+  extensions = {},
 })
 
-require('legendary').setup({
+require("legendary").setup({
   -- Include builtins by default, set to false to disable
   include_builtin = true,
   -- Include the commands that legendary.nvim creates itself
@@ -187,53 +200,70 @@ require('legendary').setup({
     -- How to open the scratchpad buffer,
     -- 'current' for current window, 'float'
     -- for floating window
-    view = 'float',
+    view = "float",
     -- How to show the results of evaluated Lua code.
     -- 'print' for `print(result)`, 'float' for a floating window.
-    results_view = 'float',
+    results_view = "float",
     -- Border style for floating windows related to the scratchpad
-    float_border = 'rounded',
+    float_border = "rounded",
     -- Whether to restore scratchpad contents from a cache file
     keep_contents = true,
   },
   -- Directory used for caches
-  cache_path = string.format('%s/legendary/', vim.fn.stdpath('cache')),
+  cache_path = string.format("%s/legendary/", vim.fn.stdpath("cache")),
   -- Initial keymaps to bind
   keymaps = {
-    {"<leader>ts", MiniTrailspace.trim, description = "Trim trailing whitespace."},
-    {"<leader>fb", require("telescope").extensions.file_browser.file_browser, description = "Browse Files"},
-    {"<leader>fd", require('telescope.builtin').find_files, description = "Find Files"},
-    {"<leader>fg", require('telescope.builtin').live_grep, description = "Grep files"},
-    {"<leader>fbuf", require('telescope.builtin').buffers, description = "List buffers"},
-    {"<leader>help", require('telescope.builtin').help_tags, description = "List help tags"},
-    {"<leader>gitf", require('telescope.builtin').git_files, description = "List files under Git control"},
-    {"<leader>ci", require('telescope.builtin').git_commits, description = "List/Search Git commits"},
-    {"<leader>lf", function() vim.lsp.buf.format {
-        async = true
-      }
-    end,
-      description = 'Format buffer with LSP',
-      opts = {buffer = true, silent = true, noremap = true}},
-    {"<leader>num", ":set number!<cr>", description = "Toggle line numbers"},
+    { "<leader>ts", MiniTrailspace.trim, description = "Trim trailing whitespace." },
+    { "<leader>fb", require("telescope").extensions.file_browser.file_browser, description = "Browse Files" },
+    { "<leader>fd", require("telescope.builtin").find_files, description = "Find Files" },
+    { "<leader>fg", require("telescope.builtin").live_grep, description = "Grep files" },
+    { "<leader>fbuf", require("telescope.builtin").buffers, description = "List buffers" },
+    { "<leader>help", require("telescope.builtin").help_tags, description = "List help tags" },
+    { "<leader>gitf", require("telescope.builtin").git_files, description = "List files under Git control" },
+    { "<leader>ci", require("telescope.builtin").git_commits, description = "List/Search Git commits" },
+    {
+      "<leader>lf",
+      function()
+        vim.lsp.buf.format({
+          async = true,
+        })
+      end,
+      description = "Format buffer with LSP",
+      opts = { buffer = true, silent = true, noremap = true },
+    },
+    { "<leader>num", ":set number!<cr>", description = "Toggle line numbers" },
     -- Base utility mappings
-    {"<leader>ev", ":vsplit $MYVIMRC<cr>", description = "Edit vim init"},
-    {"<leader>sv", ":source $MYVIMRC<cr>", description = "Read in vim init"},
+    { "<leader>ev", ":vsplit $MYVIMRC<cr>", description = "Edit vim init" },
+    { "<leader>sv", ":source $MYVIMRC<cr>", description = "Read in vim init" },
     -- look into making these open in a new tab
-    {"<leader>ep",
-      ":vsplit " ..
-          vim.fn.stdpath('config') ..
-          "/lua/plugins.lua<cr>:vsplit " .. vim.fn.stdpath('config') .. "/lua/config_plugins.lua<cr>",
-      description = "Edit vim plugins config"},
+    {
+      "<leader>ep",
+      ":vsplit "
+        .. vim.fn.stdpath("config")
+        .. "/lua/plugins.lua<cr>:vsplit "
+        .. vim.fn.stdpath("config")
+        .. "/lua/config_plugins.lua<cr>",
+      description = "Edit vim plugins config",
+    },
     -- Disable mini.indentscope
-    {"<leader>mindent", ":lua vim.b.miniindentscope_disable = not vim.b.miniindentscope_disable<cr>",
-      description = "Toggle mini.indentscope for this buffer", opts = {buffer = true, silent = true, noremap = true}},
+    {
+      "<leader>mindent",
+      ":lua vim.b.miniindentscope_disable = not vim.b.miniindentscope_disable<cr>",
+      description = "Toggle mini.indentscope for this buffer",
+      opts = { buffer = true, silent = true, noremap = true },
+    },
   },
   -- Initial commands to bind
   commands = {
-    {":PU", ":PackerSync", description = "Packer Sync"},
-    {":TgPlan", function()
-      require('FTerm').scratch({cmd = {"terragrunt", "plan"}})
-    end, {bang = true}, description = "Run terragrunt plan"}
+    { ":PU", ":PackerSync", description = "Packer Sync" },
+    {
+      ":TgPlan",
+      function()
+        require("FTerm").scratch({ cmd = { "terragrunt", "plan" } })
+      end,
+      { bang = true },
+      description = "Run terragrunt plan",
+    },
   },
   -- Initial augroups and autocmds to bind
   autocmds = {},
@@ -242,10 +272,33 @@ require('legendary').setup({
 local ts = require("nvim-treesitter.configs")
 ts.setup({
   ensure_installed = {
-    "bash", "c", "comment", "dockerfile", "go", "gomod", "hcl", "html",
-    "java", "javascript", "json", "json5", "lua", "make", "markdown", "markdown_inline", "perl",
-    "php", "regex", "python", "ruby", "rust", "toml", "typescript", "vim",
-    "vue", "yaml"
+    "bash",
+    "c",
+    "comment",
+    "dockerfile",
+    "go",
+    "gomod",
+    "hcl",
+    "html",
+    "java",
+    "javascript",
+    "json",
+    "json5",
+    "lua",
+    "make",
+    "markdown",
+    "markdown_inline",
+    "perl",
+    "php",
+    "regex",
+    "python",
+    "ruby",
+    "rust",
+    "toml",
+    "typescript",
+    "vim",
+    "vue",
+    "yaml",
   },
   ignore_install = {
     "c_sharp",
@@ -266,7 +319,7 @@ ts.setup({
     "supercollider",
     "vala",
   },
-  highlight = {enable = true}
+  highlight = { enable = true },
 })
 
 -- spelling
@@ -321,15 +374,21 @@ g.spelunker_disable_auto_group = 0
 -- highlight SpelunkerSpellBad cterm=underline ctermfg=247 gui=underline guifg=#9e9e9e
 -- highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
 g.spelunker_white_list_for_user = {
-  "kamykn", "vimrc", "keisler", "syntastic", "solarized", "powerline", "shfmt"
+  "kamykn",
+  "vimrc",
+  "keisler",
+  "syntastic",
+  "solarized",
+  "powerline",
+  "shfmt",
 }
 
 -- LSP settings
 require("mason").setup({
   -- automatic_installation = true,
   pip = {
-    install_args = {"--upgrade"}
-  }
+    install_args = { "--upgrade" },
+  },
 })
 
 require("mason-tool-installer").setup({
@@ -342,11 +401,11 @@ require("mason-tool-installer").setup({
     "gopls",
     "json-lsp",
     "jsonlint",
-    "lua-language-server",
     "marksman",
     "prettierd",
     "python-lsp-server",
     "shfmt",
+    "stylua",
     "isort",
     "solargraph",
     "terraform-ls",
@@ -364,65 +423,65 @@ require("mason-tool-installer").setup({
   -- will happen on startup. You can use `:MasonToolsUpdate` to install
   -- tools and check for updates.
   -- Default: true
-  run_on_start = true
+  run_on_start = true,
 })
 
-local lua_runtime_path = vim.split(package.path, ';')
+local lua_runtime_path = vim.split(package.path, ";")
 table.insert(lua_runtime_path, "lua/?.lua")
 table.insert(lua_runtime_path, "lua/?/init.lua")
-table.insert(lua_runtime_path, vim.fn.stdpath('config') .. "lua/?.lua")
+table.insert(lua_runtime_path, vim.fn.stdpath("config") .. "lua/?.lua")
 
 require("mason-lspconfig").setup()
-local lspconfig = require('lspconfig')
-lspconfig.ansiblels.setup {}
-lspconfig.bashls.setup {}
-lspconfig.dockerls.setup {}
-lspconfig.gopls.setup {
+local lspconfig = require("lspconfig")
+lspconfig.ansiblels.setup({})
+lspconfig.bashls.setup({})
+lspconfig.dockerls.setup({})
+lspconfig.gopls.setup({
   on_attach = function(client, bufnr)
     client.server_capabilities.documentFormattingProvider = false
-  end
-}
-lspconfig.jsonls.setup {
+  end,
+})
+lspconfig.jsonls.setup({
   on_attach = function(client, bufnr)
     client.server_capabilities.documentFormattingProvider = false
-  end
-}
-lspconfig.solargraph.setup {}
-lspconfig.marksman.setup {}
-lspconfig.terraformls.setup {
+  end,
+})
+lspconfig.solargraph.setup({})
+lspconfig.marksman.setup({})
+lspconfig.terraformls.setup({
   on_attach = function(client, bufnr)
     client.server_capabilities.documentFormattingProvider = false
-  end
-}
-lspconfig.vimls.setup {}
-lspconfig.pylsp.setup {
+  end,
+})
+lspconfig.vimls.setup({})
+lspconfig.pylsp.setup({
   -- https://github.com/williamboman/nvim-lsp-installer/blob/main/lua/nvim-lsp-installer/servers/pylsp/README.md
   -- Install pylsp plugins with :PylspInstall pyls-flake8 pyls-isort python-lsp-black
   settings = {
     pylsp = {
-      configurationSources = {"flake8"},
+      configurationSources = { "flake8" },
       plugins = {
         black = {
-          enabled = true
+          enabled = true,
         },
         -- Use flake8 instead of pycodestyle,pyflakes,mccabe
         flake8 = {
-          enabled = true
+          enabled = true,
         },
         pycodestyle = {
-          enabled = false
+          enabled = false,
         },
         pyflakes = {
-          enabled = false
+          enabled = false,
         },
         mccabe = {
-          enabled = false
+          enabled = false,
         },
-      }
-    }
-  }
-}
-lspconfig.yamlls.setup {
+      },
+    },
+  },
+})
+lspconfig.yamlls.setup({
   on_attach = function(client, bufnr)
     client.server_capabilities.documentFormattingProvider = false
   end,
@@ -452,40 +511,6 @@ lspconfig.yamlls.setup {
       },
     },
   },
-}
-
--- Provide settings that should only apply to the "sumneko_lua" server
-lspconfig.sumneko_lua.setup({
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        path = lua_runtime_path,
-      },
-      format = {
-        enable = true,
-        defaultConfig = {
-          keep_one_space_between_table_and_bracket = "false",
-        }
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
-        ["codestyle-check"] = "Any",
-      },
-      -- This makes loading the lua lsp much slower. I generally don't need it.
-      -- workspace = {
-      --   -- Make the server aware of Neovim runtime files
-      --   library = vim.api.nvim_get_runtime_file("", true),
-      -- },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
-    },
-  }
 })
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
@@ -494,7 +519,7 @@ null_ls.setup({
   sources = {
     null_ls.builtins.formatting.jq,
     null_ls.builtins.formatting.gofmt,
-    null_ls.builtins.formatting.prettierd,
+    null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.terraform_fmt,
     null_ls.builtins.formatting.yamlfmt,
     null_ls.builtins.diagnostics.jsonlint,
@@ -503,7 +528,7 @@ null_ls.setup({
   -- you can reuse a shared lspconfig on_attach callback here
   on_attach = function(client, bufnr)
     if client.supports_method("textDocument/formatting") then
-      vim.api.nvim_clear_autocmds({group = augroup, buffer = bufnr})
+      vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
       vim.api.nvim_create_autocmd("BufWritePre", {
         group = augroup,
         buffer = bufnr,
@@ -513,7 +538,7 @@ null_ls.setup({
             async = false,
             filter = function(client)
               return client.name == "null-ls"
-            end
+            end,
           })
         end,
       })
@@ -522,10 +547,10 @@ null_ls.setup({
 })
 
 require("octo").setup({
-  github_hostname = vim.env.GH_HOST; -- GitHub Enterprise host (if set)
+  github_hostname = vim.env.GH_HOST, -- GitHub Enterprise host (if set)
 })
 
 require("notify").setup({
-    timeout = 1000,
+  timeout = 1000,
 })
 -- vim: ts=2 sts=2 sw=2 et

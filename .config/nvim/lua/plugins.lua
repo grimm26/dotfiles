@@ -1,11 +1,11 @@
 -- This file can be loaded by calling `lua require('plugins')` from your init.vim
 -- Only required if you have packer configured as `opt`
 -- vim.cmd [[packadd packer.nvim]]
-local packer_group = vim.api.nvim_create_augroup('Packer', {clear = true})
-vim.api.nvim_create_autocmd('BufWritePost', {
-  command = 'source <afile> | PackerCompile',
+local packer_group = vim.api.nvim_create_augroup("Packer", { clear = true })
+vim.api.nvim_create_autocmd("BufWritePost", {
+  command = "source <afile> | PackerCompile",
   group = packer_group,
-  pattern = 'plugins.lua'
+  pattern = "plugins.lua",
 })
 
 return require("packer").startup(function(use)
@@ -14,13 +14,14 @@ return require("packer").startup(function(use)
 
   use({
     "nvim-telescope/telescope.nvim",
-    requires = {{"nvim-lua/plenary.nvim"}}
+    requires = { { "nvim-lua/plenary.nvim" } },
   })
   use({
-    "nvim-telescope/telescope-file-browser.nvim", requires = {{"nvim-telescope/telescope.nvim"}}
+    "nvim-telescope/telescope-file-browser.nvim",
+    requires = { { "nvim-telescope/telescope.nvim" } },
   })
   -- Post-install/update hook with neovim command
-  use({"nvim-telescope/telescope-fzf-native.nvim", run = "make", requires = {{"nvim-telescope/telescope.nvim"}}})
+  use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make", requires = { { "nvim-telescope/telescope.nvim" } } })
 
   -- Simple plugins can be specified as strings in a list
   use({
@@ -44,7 +45,7 @@ return require("packer").startup(function(use)
     "prettier/vim-prettier",
     "kamykn/spelunker.vim",
     "mrjones2014/legendary.nvim", -- keymappings, commands, autocmds
-    'stevearc/dressing.nvim', -- fancy ui menu with legendary
+    "stevearc/dressing.nvim", -- fancy ui menu with legendary
     "numToStr/FTerm.nvim",
     "jose-elias-alvarez/null-ls.nvim",
   })
@@ -53,29 +54,29 @@ return require("packer").startup(function(use)
     "williamboman/mason-lspconfig.nvim",
     requires = {
       "neovim/nvim-lspconfig",
-    }
+    },
   })
 
   use({
-    'pwntester/octo.nvim',
+    "pwntester/octo.nvim",
     requires = {
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
-      'kyazdani42/nvim-web-devicons',
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "kyazdani42/nvim-web-devicons",
     },
   })
 
   use({
     "nvim-lualine/lualine.nvim",
-    requires = {"kyazdani42/nvim-web-devicons", opt = true}
+    requires = { "kyazdani42/nvim-web-devicons", opt = true },
   })
   -- colorschemes
-  use({"ishan9299/nvim-solarized-lua"})
+  use({ "ishan9299/nvim-solarized-lua" })
 
-  use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
+  use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
   use("nvim-treesitter/nvim-treesitter-textobjects")
 
-  use({"echasnovski/mini.nvim", branch = "stable"})
+  use({ "echasnovski/mini.nvim", branch = "stable" })
 
   use({
     "folke/noice.nvim",
@@ -90,7 +91,7 @@ return require("packer").startup(function(use)
       --   `nvim-notify` is only needed, if you want to use the notification view.
       --   If not available, we use `mini` as the fallback
       "rcarriga/nvim-notify",
-    }
+    },
   })
   use({
     "folke/trouble.nvim",
@@ -100,6 +101,6 @@ return require("packer").startup(function(use)
         -- your configuration comes here
         -- or leave it empty to use the default settings
       })
-    end
+    end,
   })
 end)

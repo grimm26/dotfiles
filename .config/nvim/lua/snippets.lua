@@ -27,7 +27,7 @@ ls.config.set_config({
   ext_opts = {
     [types.choiceNode] = {
       active = {
-        virt_text = {{"choiceNode", "Comment"}},
+        virt_text = { { "choiceNode", "Comment" } },
       },
     },
   },
@@ -39,16 +39,16 @@ ls.config.set_config({
 })
 
 ls.add_snippets("terraform", {
-  s("tags", {t("tags = local.common_tags")})
+  s("tags", { t("tags = local.common_tags") }),
 })
 ls.add_snippets("gitcommit", {
-  s("tfup", {t("update terraform and module versions")})
+  s("tfup", { t("update terraform and module versions") }),
 })
 
 require("luasnip.loaders.from_vscode").lazy_load()
 
-require('legendary').commands({
-  {":LuaSnipEdit", ":lua require('luasnip.loaders').edit_snippet_files()", description = "Edit Snippet files"},
+require("legendary").commands({
+  { ":LuaSnipEdit", ":lua require('luasnip.loaders').edit_snippet_files()", description = "Edit Snippet files" },
 })
 -- simple maps to make snippets work before adding nvim-cmp
 vim.cmd("imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' ")
