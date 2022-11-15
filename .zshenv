@@ -1,5 +1,4 @@
-#export PYTHONPATH=$(python -m site --user-site):$PYTHONPATH
-[ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+skip_global_compinit=1
 export GOPATH=~/go
 path+=(${GOPATH}/bin)
 path=('/usr/local/bin' '/usr/local/sbin' $path)
