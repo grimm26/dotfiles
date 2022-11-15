@@ -35,9 +35,5 @@ ohmyzsh/ohmyzsh path:plugins/systemd
 
 MichaelAquilina/zsh-you-should-use
 zsh-users/zsh-completions
-zsh-users/zsh-autosuggestions
-
-# Comment out znt cuz fzf plugin takes care of ctrl-r
-#ohmyzsh/ohmyzsh path:plugins/zsh-navigation-tools
 zsh-users/zsh-syntax-highlighting
-#zsh-users/zsh-history-substring-search
+zsh-users/zsh-autosuggestions
