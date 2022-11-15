@@ -63,11 +63,7 @@ alias gbp='git prune-branches'
 if [[ -d /usr/libexec/java_home ]]; then
   export JAVA_HOME=$(/usr/libexec/java_home)
 fi
-# completion system
-autoload -Uz compinit; compinit
-##
 
-#SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
 KEYCHAIN_INHERIT="local-once"
 if [[ -v SSH_AUTH_SOCK ]]; then
   KEYCHAIN_INHERIT="any"
