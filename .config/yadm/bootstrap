@@ -503,7 +503,14 @@ fi
 if [[ ! -v setup_MINIMAL ]]; then
   # tfswitch
   echo "tfswitch"
-  curl -sLS https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash -s - -b ${home_bin}
+  latest_tfswitch_version=$(GH_HOST=github.com gh release list --limit 1 --repo warrensbox/terraform-switcher |awk '{print $1}')
+  installed_tfswitch_version=$(tfswitch --version 2>/dev/null|awk 'NF{print $2}')
+  if [[ ${installed_tfswitch_version#v} != ${latest_tfswitch_version#v} ]]; then
+    print "Updating from ${installed_tfswitch_version#v} to ${latest_tfswitch_version#v}"
+    GH_HOST=github.com gh release download ${latest_tfswitch_version#v} --pattern "*_linux_${arch}.tar.gz" --repo warrensbox/terraform-switcher -D ${MY_TMP} \
+      && tar -C $home_bin -xzf ${MY_TMP}/terraform-switcher_${latest_tfswitch_version#v}_linux_${arch}.tar.gz tfswitch \
+      && chmod 755 ${home_bin}/tfswitch
+  fi
 
   # k9s
   echo "k9s"
