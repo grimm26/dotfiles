@@ -9,6 +9,135 @@
 # setopt XTRACE
 
 #zmodload zsh/zprof
+# Start configuration added by Zim install {{{
+#
+# User configuration sourced by interactive shells
+#
+
+# -----------------
+# Zsh configuration
+# -----------------
+
+#
+# History
+#
+
+# Remove older command from the history if a duplicate is to be added.
+setopt HIST_IGNORE_ALL_DUPS
+
+#
+# Input/output
+#
+
+# Set editor default keymap to emacs (`-e`) or vi (`-v`)
+bindkey -v
+
+# Prompt for spelling correction of commands.
+setopt CORRECT
+
+# Customize spelling correction prompt.
+#SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
+
+# Remove path separator from WORDCHARS.
+WORDCHARS=${WORDCHARS//[\/]}
+
+# -----------------
+# Zim configuration
+# -----------------
+
+# Use degit instead of git as the default tool to install and update modules.
+#zstyle ':zim:zmodule' use 'degit'
+
+# --------------------
+# Module configuration
+# --------------------
+
+#
+# git
+#
+
+# Set a custom prefix for the generated aliases. The default prefix is 'G'.
+zstyle ':zim:git' aliases-prefix 'g'
+
+#
+# input
+#
+
+# Append `../` to your input for each `.` you type after an initial `..`
+zstyle ':zim:input' double-dot-expand yes
+
+#
+# termtitle
+#
+
+# Set a custom terminal title format using prompt expansion escape sequences.
+# See http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Simple-Prompt-Escapes
+# If none is provided, the default '%n@%m: %~' is used.
+#zstyle ':zim:termtitle' format '%1~'
+
+#
+# zsh-autosuggestions
+#
+
+# Disable automatic widget re-binding on each precmd. This can be set when
+# zsh-users/zsh-autosuggestions is the last module in your ~/.zimrc.
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+
+# Customize the style that the suggestions are shown with.
+# See https://github.com/zsh-users/zsh-autosuggestions/blob/master/README.md#suggestion-highlight-style
+#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+
+#
+# zsh-syntax-highlighting
+#
+
+# Set what highlighters will be used.
+# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+
+# Customize the main highlighter styles.
+# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md#how-to-tweak-it
+#typeset -A ZSH_HIGHLIGHT_STYLES
+#ZSH_HIGHLIGHT_STYLES[comment]='fg=242'
+
+# ------------------
+# Initialize modules
+# ------------------
+
+ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+# Download zimfw plugin manager if missing.
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  if (( ${+commands[curl]} )); then
+    curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  else
+    mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh \
+        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  fi
+fi
+# Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated.
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
+# Initialize modules.
+source ${ZIM_HOME}/init.zsh
+
+# ------------------------------
+# Post-init module configuration
+# ------------------------------
+
+#
+# zsh-history-substring-search
+#
+
+zmodload -F zsh/terminfo +p:terminfo
+# Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
+for key ('^[[A' '^P' ${terminfo[kcuu1]}) bindkey ${key} history-substring-search-up
+for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey ${key} history-substring-search-down
+for key ('k') bindkey -M vicmd ${key} history-substring-search-up
+for key ('j') bindkey -M vicmd ${key} history-substring-search-down
+unset key
+# }}} End configuration added by Zim install
 
 BREW_PREFIX=/usr/local
 if [ -s ${NREW_PREFIX}/opt/chruby/share/chruby/chruby.sh ]; then
@@ -97,9 +226,6 @@ zmodload -ap zsh/mapfile mapfile
 
 autoload -Uz zmv
 autoload -Uz zed
-
-setopt correct
-#setopt correctall
 
 ## global aliases (for those who like them) ##
 
@@ -221,6 +347,30 @@ if (( $+commands[zoxide] )); then
   source ~/.zsh-cache/zoxide.init
 fi
 
+# Directory navigation
+alias -- -='cd -'
+alias 1='cd -1'
+alias 2='cd -2'
+alias 3='cd -3'
+alias 4='cd -4'
+alias 5='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
+
+alias md='mkdir -p'
+alias rd=rmdir
+
+function d () {
+  if [[ -n $1 ]]; then
+    dirs "$@"
+  else
+    dirs -v | head -n 10
+  fi
+}
+compdef _dirs d
+
 # Need bashcompinit for python argcomplete
 if command -v register-python-argcomplete &>/dev/null; then
   autoload -U bashcompinit
@@ -256,14 +406,6 @@ colorcheck() {
     }
     printf "\n";
   }'
-}
-
-mkcd () {
-  if [ -d "$1" ]; then
-    cd $1
-  else
-    command mkdir -pv $1 && cd $1
-  fi
 }
 
 tgp () { terragrunt plan -no-color|awk 'BEGIN{f="/tmp/plan.txt"}/^---/{o=!o};{print};{if(o&&!/^---/){print>f}}'; }
@@ -532,23 +674,23 @@ _fzf_compgen_dir() {
 ## END fzf
 
 # Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
-if whence antibody &>/dev/null; then
-  # Alias to save a static antibody file
-  alias antistatic="$(whence -p antibody) bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh"
-  if [[ -r ~/.zsh_plugins.sh ]]; then
-    export DISABLE_AUTO_UPDATE="true"
-    source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
-    unset DISABLE_AUTO_UPDATE
-    source ~/.zsh_plugins.sh
-  elif [[ -r ~/.zsh_plugins.txt ]]; then
-    source <(antibody init)
-    export DISABLE_AUTO_UPDATE="true"
-    source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
-    unset DISABLE_AUTO_UPDATE
-    antibody bundle < ~/.zsh_plugins.txt
-  fi
-  alias af=alias-finder
-fi
+# if whence antibody &>/dev/null; then
+#   # Alias to save a static antibody file
+#   alias antistatic="$(whence -p antibody) bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh"
+#   if [[ -r ~/.zsh_plugins.sh ]]; then
+#     export DISABLE_AUTO_UPDATE="true"
+#     source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
+#     unset DISABLE_AUTO_UPDATE
+#     source ~/.zsh_plugins.sh
+#   elif [[ -r ~/.zsh_plugins.txt ]]; then
+#     source <(antibody init)
+#     export DISABLE_AUTO_UPDATE="true"
+#     source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
+#     unset DISABLE_AUTO_UPDATE
+#     antibody bundle < ~/.zsh_plugins.txt
+#   fi
+#   alias af=alias-finder
+# fi
 ## START post antibody/zplug overrides
 alias gum='gcm && grup --prune && gmum'
 alias gom='gcm && grup --prune && gmom'
@@ -624,13 +766,6 @@ fif() {
   ug --hidden --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --bind "enter:execute(nvim {})+abort" --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
 }
 
-if (( $+commands[kubectl] )); then
-  echo "Loading kubectl completions."
-  if [[ ! -s ~/.zsh-cache/kubectl.init ]]; then
-    kubectl completion zsh > ~/.zsh-cache/kubectl.init
-  fi
-  source ~/.zsh-cache/kubectl.init
-fi
 if (( $+commands[starship] )); then
   echo "Loading starship prompt."
   if [[ ! -s ~/.zsh-cache/starship.init ]]; then

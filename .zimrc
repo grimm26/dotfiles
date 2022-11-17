@@ -1,0 +1,74 @@
+# Start configuration added by Zim install {{{
+#
+# This is not sourced during shell startup, and it's only used to configure the
+# zimfw plugin manager.
+#
+
+#
+# Modules
+#
+
+# Sets sane Zsh built-in environment options.
+zmodule environment
+# Applies correct bindkeys for input events.
+zmodule input
+# Sets a custom terminal title.
+zmodule termtitle
+# Utility aliases and functions. Adds colour to ls, grep and less.
+zmodule utility
+
+# ohmyzsh stuff
+zmodule ohmyzsh/ohmyzsh --root plugins/knife
+zmodule ohmyzsh/ohmyzsh --root plugins/kitchen
+zmodule ohmyzsh/ohmyzsh --root plugins/vi-mode
+zmodule ohmyzsh/ohmyzsh --root plugins/command-not-found
+zmodule ohmyzsh/ohmyzsh --root plugins/gem
+zmodule ohmyzsh/ohmyzsh --root plugins/history
+zmodule ohmyzsh/ohmyzsh --root plugins/extract
+zmodule ohmyzsh/ohmyzsh --root plugins/aliases
+zmodule ohmyzsh/ohmyzsh --root plugins/copyfile
+zmodule ohmyzsh/ohmyzsh --root plugins/copypath
+zmodule ohmyzsh/ohmyzsh --root plugins/genpass
+zmodule ohmyzsh/ohmyzsh --root plugins/isodate
+zmodule ohmyzsh/ohmyzsh --root plugins/jsontools
+zmodule ohmyzsh/ohmyzsh --root plugins/fzf
+zmodule ohmyzsh/ohmyzsh --root plugins/pyenv
+zmodule ohmyzsh/ohmyzsh --root plugins/systemadmin
+zmodule ohmyzsh/ohmyzsh --root plugins/urltools
+zmodule ohmyzsh/ohmyzsh --root plugins/web-search
+zmodule ohmyzsh/ohmyzsh --root plugins/systemd
+
+zmodule joke/zim-github-cli
+zmodule joke/zim-kubectl
+zmodule MichaelAquilina/zsh-you-should-use
+#
+# Completion
+#
+
+# Additional completion definitions for Zsh.
+zmodule zsh-users/zsh-completions --fpath src
+# Enables and configures smart and extensive tab completion.
+# completion must be sourced after all modules that add completion definitions.
+zmodule completion
+
+# modules that need to come afer completion because they use compdef
+zmodule ohmyzsh/ohmyzsh --root plugins/aws
+zmodule ohmyzsh/ohmyzsh --root plugins/git
+zmodule ohmyzsh/ohmyzsh --root plugins/terraform
+zmodule ohmyzsh/ohmyzsh --root plugins/ubuntu
+#
+
+#
+# Modules that must be initialized last
+#
+
+# Fish-like syntax highlighting for Zsh.
+# zsh-users/zsh-syntax-highlighting must be sourced after completion
+zmodule zsh-users/zsh-syntax-highlighting
+# Fish-like history search (up arrow) for Zsh.
+# zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting
+zmodule zsh-users/zsh-history-substring-search
+# Fish-like autosuggestions for Zsh.
+zmodule zsh-users/zsh-autosuggestions
+# }}} End configuration added by Zim install
+
