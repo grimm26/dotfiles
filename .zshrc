@@ -673,25 +673,7 @@ _fzf_compgen_dir() {
 }
 ## END fzf
 
-# Load up plugins (mostly ohmyzsh through antibody. We want this here so it always loads.
-# if whence antibody &>/dev/null; then
-#   # Alias to save a static antibody file
-#   alias antistatic="$(whence -p antibody) bundle < ~/.zsh_plugins.txt > ~/.zsh_plugins.sh"
-#   if [[ -r ~/.zsh_plugins.sh ]]; then
-#     export DISABLE_AUTO_UPDATE="true"
-#     source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
-#     unset DISABLE_AUTO_UPDATE
-#     source ~/.zsh_plugins.sh
-#   elif [[ -r ~/.zsh_plugins.txt ]]; then
-#     source <(antibody init)
-#     export DISABLE_AUTO_UPDATE="true"
-#     source $(antibody path ohmyzsh/ohmyzsh)/oh-my-zsh.sh
-#     unset DISABLE_AUTO_UPDATE
-#     antibody bundle < ~/.zsh_plugins.txt
-#   fi
-#   alias af=alias-finder
-# fi
-## START post antibody/zplug overrides
+## alias overrides
 alias gum='gcm && grup --prune && gmum'
 alias gom='gcm && grup --prune && gmom'
 # The ohmyzsh alias for this locks up
