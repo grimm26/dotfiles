@@ -3,11 +3,9 @@
 # zmodload zsh/datetime
 # setopt PROMPT_SUBST
 # PS4='+$EPOCHREALTIME %N:%i> '
-#
 # logfile=$(mktemp zshrc_profile.XXXXXXXX)
 # echo "Logging to $logfile"
 # exec 3>&2 2>$logfile
-#
 # setopt XTRACE
 
 #zmodload zsh/zprof
@@ -216,11 +214,10 @@ typeset -U path
 export PATH
 
 if (( $+commands[zoxide] )); then
-  if [[ -s ~/.zoxide.init ]]; then
-    source ~/.zoxide.init
-  else
-    eval "$(zoxide init --cmd cd zsh)"
+  if [[ ! -s ~/.zsh-cache/zoxide.init ]]; then
+    zoxide init --cmd cd zsh > ~/.zsh-cache/zoxide.init
   fi
+  source ~/.zsh-cache/zoxide.init
 fi
 
 # Need bashcompinit for python argcomplete

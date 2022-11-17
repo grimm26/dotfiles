@@ -3,11 +3,9 @@
 # zmodload zsh/datetime
 # setopt PROMPT_SUBST
 # PS4='+$EPOCHREALTIME %N:%i> '
-#
 # logfile=$(mktemp zlogin_profile.XXXXXXXX)
 # echo "Logging to $logfile"
 # exec 3>&2 2>$logfile
-#
 # setopt XTRACE
 
 #zmodload zsh/zprof
@@ -400,15 +398,27 @@ fif() {
   ug --hidden --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --bind "enter:execute(nvim {})+abort" --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
 }
 
-echo "Loading kubectl completions."
-whence -p kubectl &>/dev/null && \
-  source <(kubectl completion zsh)
-echo "Loading starship prompt."
-whence -p starship &>/dev/null && \
-  eval "$(starship init zsh)"
-echo "Loading direnv."
-whence -p direnv &>/dev/null && \
-  eval "$(direnv hook zsh)"
+if (( $+commands[kubectl] )); then
+  echo "Loading kubectl completions."
+  if [[ ! -s ~/.zsh-cache/kubectl.init ]]; then
+    kubectl completion zsh > ~/.zsh-cache/kubectl.init
+  fi
+  source ~/.zsh-cache/kubectl.init
+fi
+if (( $+commands[starship] )); then
+  echo "Loading starship prompt."
+  if [[ ! -s ~/.zsh-cache/starship.init ]]; then
+    starship init zsh --print-full-init > ~/.zsh-cache/starship.init
+  fi
+  source ~/.zsh-cache/starship.init
+fi
+if (( $+commands[direnv] )); then
+  echo "Loading direnv."
+  if [[ ! -s ~/.zsh-cache/direnv.init ]]; then
+    direnv hook zsh > ~/.zsh-cache/direnv.init
+  fi
+  source ~/.zsh-cache/direnv.init
+fi
 
 # ## End profiling
 # unsetopt XTRACE
