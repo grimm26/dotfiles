@@ -205,7 +205,7 @@ case $(uname) in
       # install fzf
       echo "fzf"
       if upinst_from_git https://github.com/junegunn/fzf ~/.fzf; then
-        (cd ~/.fzf && ./install --bin)
+        (cd ~/.fzf && ./install --key-bindings --completion --no-bash --no-fish --no-update-rc)
       fi
       if [[ $VERSION_ID -ge 19.10 ]]; then
         gdelta_pkg="git-delta"
