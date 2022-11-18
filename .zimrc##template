@@ -20,8 +20,6 @@ zmodule utility
 zmodule ssh
 
 # ohmyzsh stuff
-zmodule ohmyzsh/ohmyzsh --root plugins/knife
-zmodule ohmyzsh/ohmyzsh --root plugins/kitchen
 zmodule ohmyzsh/ohmyzsh --root plugins/vi-mode
 zmodule ohmyzsh/ohmyzsh --root plugins/command-not-found
 zmodule ohmyzsh/ohmyzsh --root plugins/gem
@@ -48,7 +46,7 @@ ohmyzsh/ohmyzsh path:plugins/brew
 
 zmodule joke/zim-github-cli
 zmodule joke/zim-kubectl
-zmodule MichaelAquilina/zsh-you-should-use
+zmodule MichaelAquilina/zsh-you-should-use --name you-should-use
 #
 # Completion
 #
