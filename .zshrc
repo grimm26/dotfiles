@@ -162,6 +162,7 @@ elif [ -s /usr/share/chruby/chruby.sh ]; then
   chruby ruby
 fi
 
+setopt CASE_GLOB
 # append history list to the history file; this is the default but we make sure
 # because it's required for share_history.
 setopt append_history
