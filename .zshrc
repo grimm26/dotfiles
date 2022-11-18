@@ -573,7 +573,7 @@ get_tg_latest_version () {
   fi
 
   if [[ -v retrieved_latest && ${retrieved_latest} != "null" ]]; then
-    echo ${retrieved_latest} > ~/.terragrunt_latest_version
+    echo ${retrieved_latest} >| ~/.terragrunt_latest_version
   fi
   export TG_LATEST_VERSION=$(cat ~/.terragrunt_latest_version)
 }
@@ -759,14 +759,14 @@ fif() {
 if (( $+commands[starship] )); then
   echo "Loading starship prompt."
   if [[ ! -s ~/.zsh-cache/starship.init ]]; then
-    starship init zsh --print-full-init > ~/.zsh-cache/starship.init
+    starship init zsh --print-full-init >| ~/.zsh-cache/starship.init
   fi
   source ~/.zsh-cache/starship.init
 fi
 if (( $+commands[direnv] )); then
   echo "Loading direnv."
   if [[ ! -s ~/.zsh-cache/direnv.init ]]; then
-    direnv hook zsh > ~/.zsh-cache/direnv.init
+    direnv hook zsh >| ~/.zsh-cache/direnv.init
   fi
   source ~/.zsh-cache/direnv.init
 fi
