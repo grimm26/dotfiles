@@ -66,6 +66,14 @@ zstyle ':zim:git' aliases-prefix 'g'
 # Append `../` to your input for each `.` you type after an initial `..`
 zstyle ':zim:input' double-dot-expand yes
 
+
+#
+# ssh
+#
+if [[ -n  ~/.ssh/id_*sa(#qN) ]]; then
+  my_ssh_keys=( ~/.ssh/*id_*sa(:t) )
+  zstyle ':zim:ssh' ids $my_ssh_keys
+fi
 #
 # termtitle
 #
@@ -446,7 +454,7 @@ else
   fi
 fi
 # Just load the top keys. ~/.ssh/config should have AddKeysToAgent set to yes.
-whence -p keychain &>/dev/null &&  [[ -n  ~/.ssh/id_*sa(#qN) ]] && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval ~/.ssh/id_*sa)
+#whence -p keychain &>/dev/null &&  [[ -n  ~/.ssh/id_*sa(#qN) ]] && eval $(keychain --agents ssh --inherit $KEYCHAIN_INHERIT --eval ~/.ssh/id_*sa)
 
 setopt HIST_IGNORE_SPACE
 export LC_COLLATE=C

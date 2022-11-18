@@ -16,6 +16,8 @@ zmodule input
 zmodule termtitle
 # Utility aliases and functions. Adds colour to ls, grep and less.
 zmodule utility
+# Provides a convenient way to load ssh-agent. This enables one-time login and caching of ssh credentials per session.
+zmodule ssh
 
 # ohmyzsh stuff
 zmodule ohmyzsh/ohmyzsh --root plugins/knife
