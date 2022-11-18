@@ -679,6 +679,11 @@ _fzf_compgen_path() {
 _fzf_compgen_dir() {
   command $FD_BIN --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
 }
+if (( ${+commands[bat]} )); then
+  export FZF_CTRL_T_OPTS="--preview 'command bat --color=always --line-range :500 {}' ${FZF_CTRL_T_OPTS}"
+fi
+
+if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
 ## END fzf
 
 ## alias overrides
@@ -771,15 +776,12 @@ if (( $+commands[direnv] )); then
   source ~/.zsh-cache/direnv.init
 fi
 
-# ## End profiling
-# unsetopt XTRACE
-# exec 2>&3 3>&-
 ### zlogin
 
 # Put "local" stuff in here, sensitive for work or specific to this machine
 if [[ -r ~/.zshrc.local ]]; then
   source ~/.zshrc.local
 fi
-## End profiling
+# # End profiling
 # unsetopt XTRACE
 # exec 2>&3 3>&-
