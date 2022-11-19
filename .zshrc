@@ -765,13 +765,6 @@ fif() {
   ug --hidden --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --bind "enter:execute(nvim {})+abort" --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
 }
 
-if (( $+commands[starship] )); then
-  echo "Loading starship prompt."
-  if [[ ! -s ~/.zsh-cache/starship.init ]]; then
-    starship init zsh --print-full-init >| ~/.zsh-cache/starship.init
-  fi
-  source ~/.zsh-cache/starship.init
-fi
 if (( $+commands[direnv] )); then
   echo "Loading direnv."
   if [[ ! -s ~/.zsh-cache/direnv.init ]]; then
