@@ -66,6 +66,10 @@ zstyle ':zim:git' aliases-prefix 'g'
 # Append `../` to your input for each `.` you type after an initial `..`
 zstyle ':zim:input' double-dot-expand yes
 
+#
+# completion cache
+#
+zstyle ':completion::complete:*' cache-path ~/.cache/zsh/zcompcache
 
 #
 # ssh
@@ -341,20 +345,6 @@ load-tfswitch() {
 autoload -Uz add-zsh-hook
 add-zsh-hook chpwd load-tfswitch
 load-tfswitch
-if [[ -d ${HOME}/.cargo/bin ]]; then
-  path=("${HOME}/.cargo/bin" $path)
-fi
-path=("$MY_BIN" $path)
-typeset -U path
-export PATH
-
-mkdir -p ~/.zsh-cache
-if (( $+commands[zoxide] )); then
-  if [[ ! -s ~/.zsh-cache/zoxide.init ]]; then
-    zoxide init --cmd cd zsh > ~/.zsh-cache/zoxide.init
-  fi
-  source ~/.zsh-cache/zoxide.init
-fi
 
 # Directory navigation
 alias -- -='cd -'
@@ -765,19 +755,23 @@ fif() {
   ug --hidden --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --bind "enter:execute(nvim {})+abort" --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
 }
 
-if (( $+commands[direnv] )); then
-  echo "Loading direnv."
-  if [[ ! -s ~/.zsh-cache/direnv.init ]]; then
-    direnv hook zsh >| ~/.zsh-cache/direnv.init
-  fi
-  source ~/.zsh-cache/direnv.init
-fi
-
 ### zlogin
+mkdir -p ~/.zsh-cache
+if (( $+commands[zoxide] )); then
+  zoxide_init=~/.zsh-cache/zoxide.init
+  if [[ ! -e $zoxide_init || $zoxide_init -ot ${commands[starship]} ]]; then
+    zoxide init --cmd cd zsh > $zoxide_init
+  fi
+  source $zoxide_init
+  zimfw check-dumpfile &>/dev/null
+fi
 
 # Put "local" stuff in here, sensitive for work or specific to this machine
 if [[ -r ~/.zshrc.local ]]; then
   source ~/.zshrc.local
+fi
+if (( $+commands[direnv] )); then
+  eval "$(direnv hook zsh)"
 fi
 # # End profiling
 # unsetopt XTRACE
