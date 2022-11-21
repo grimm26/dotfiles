@@ -216,7 +216,7 @@ case $(uname) in
       fi
       # git-delta
       echo "git-delta"
-      latest_delta_version=$(GH_HOST=github.com gh release list --limit 1 --repo dandavison/delta |awk '{print $1}')
+      latest_delta_version=$(GH_HOST=github.com gh release list --limit 1 --repo dandavison/delta |cut -f3)
       installed_delta_version=$(delta --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_delta_version} != $latest_delta_version ]]; then
         print "Updating from ${installed_delta_version} to $latest_delta_version"
@@ -225,7 +225,7 @@ case $(uname) in
       fi
       # bat
       echo "bat"
-      latest_bat_version=$(GH_HOST=github.com gh release list --limit 1 --repo sharkdp/bat |awk '{print $1}')
+      latest_bat_version=$(GH_HOST=github.com gh release list --limit 1 --repo sharkdp/bat |cut -f3)
       installed_bat_version=$(bat --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_bat_version#v} != ${latest_bat_version#v} ]]; then
         print "Updating from ${installed_bat_version#v} to ${latest_bat_version#v}"
@@ -233,19 +233,19 @@ case $(uname) in
           && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version#v}_amd64.deb
       fi
       echo "dive"
-      latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}')
+      latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |cut -f3)
       installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_dive_version#v} != ${latest_dive_version#v} ]]; then
         print "Updating from ${installed_dive_version#v} to ${latest_dive_version#v}"
-        GH_HOST=github.com gh release download --pattern '*amd64.deb' --repo wagoodman/dive -D ${MY_TMP} \
+        GH_HOST=github.com gh release download ${latest_dive_version} --pattern '*amd64.deb' --repo wagoodman/dive -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/dive_${latest_dive_version#v}_linux_amd64.deb
       fi
       # lsd
       echo "lsd"
-      latest_lsd_version=$(GH_HOST=github.com gh release list --limit 1 --repo Peltoche/lsd |awk '{print $1}')
+      latest_lsd_version=$(GH_HOST=github.com gh release list --limit 1 --repo Peltoche/lsd |cut -f3)
       installed_lsd_version=$(lsd --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_lsd_version} != $latest_lsd_version ]]; then
-        GH_HOST=github.com gh release download --pattern "${lsd_pkg}_*amd64.deb" --repo Peltoche/lsd -D ${MY_TMP} \
+        GH_HOST=github.com gh release download $latest_lsd_version --pattern "${lsd_pkg}_*amd64.deb" --repo Peltoche/lsd -D ${MY_TMP} \
           && sudo dpkg --install --skip-same-version ${MY_TMP}/lsd_${latest_lsd_version}_amd64.deb
       fi
       # chruby
@@ -273,10 +273,10 @@ case $(uname) in
       fi
       # direnv
       echo "direnv"
-      latest_direnv_version=$(GH_HOST=github.com gh release list --limit 1 --repo direnv/direnv |awk '{print $2}')
+      latest_direnv_version=$(GH_HOST=github.com gh release list --limit 1 --repo direnv/direnv |cut -f3)
       installed_direnv_version=$(direnv --version 2>/dev/null)
       if [[ ${installed_direnv_version#v} != ${latest_direnv_version#v} ]]; then
-        gh release download --pattern 'direnv.linux-amd64' --repo direnv/direnv -D $MY_TMP \
+        GH_HOST=github.com gh release download ${latest_direnv_version} --pattern 'direnv.linux-amd64' --repo direnv/direnv -D $MY_TMP \
           && mv ${MY_TMP}/direnv.linux-amd64 ${home_bin}/direnv \
           && chmod 755 ${home_bin}/direnv
       fi
@@ -313,7 +313,7 @@ case $(uname) in
       fi
       # zoxide
       print "zoxide"
-      latest_zoxide_version=$(GH_HOST=github.com gh release list --limit 1 --repo ajeetdsouza/zoxide |awk '{print $1}')
+      latest_zoxide_version=$(GH_HOST=github.com gh release list --limit 1 --repo ajeetdsouza/zoxide |cut -f3)
       installed_zoxide_version=$(zoxide --version 2>/dev/null|awk '{print $2}')
       if [[ "${installed_zoxide_version}" != "${latest_zoxide_version}" ]]; then
         print "Updating from ${installed_zoxide_version#v} to ${latest_zoxide_version#v}"
@@ -362,7 +362,7 @@ case $(uname) in
       # Latest doggo
       print "doggo"
       local current_doggo_version=$(doggo --version 2>/dev/null| awk '{print $1}')
-      local latest_doggo_version=$(GH_HOST=github.com gh release list --limit 1 --repo mr-karan/doggo |awk '{print $1}')
+      local latest_doggo_version=$(GH_HOST=github.com gh release list --limit 1 --repo mr-karan/doggo |cut -f3)
       if [[ "${current_doggo_version}" != "${latest_doggo_version}" ]]; then
         print "Updating from ${current_doggo_version} to ${latest_doggo_version}"
         local build_artifact="doggo_${latest_doggo_version#v}_linux_${arch}.tar.gz"
@@ -375,7 +375,7 @@ case $(uname) in
       fi
       # helm
       echo "helm"
-      latest_helm_version=$(GH_HOST=github.com gh release list --limit 1 --repo helm/helm |awk '{print $4}' )
+      latest_helm_version=$(GH_HOST=github.com gh release list --limit 1 --repo helm/helm |cut -f3 )
       installed_helm_version=$(helm version --short 2>/dev/null | cut -d+ -f1)
       if [[ ${installed_helm_version} != ${latest_helm_version} ]]; then
         print "Updating from ${installed_helm_version} to ${latest_helm_version}"
@@ -441,7 +441,7 @@ case $(uname) in
     npm install --location=global neovim
     # dive
     echo "dive"
-    latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |awk '{print $1}')
+    latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |cut -f3)
     installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
     if [[ ${installed_dive_version#v} != ${latest_dive_version#v} ]]; then
       GH_HOST=github.com gh release download --pattern '*darwin_amd64.tar.gz' --repo wagoodman/dive -D ${MY_TMP} \
@@ -478,7 +478,7 @@ esac
 print -n "starship: "
 if whence starship &> /dev/null; then
   installed_starship_version=$(starship --version 2>/dev/null|head -1 |awk '{print $2}')
-  latest_starship_version=$(GH_HOST=github.com gh release list --limit 1 --repo starship/starship |awk '{print $1}')
+  latest_starship_version=$(GH_HOST=github.com gh release list --limit 1 --repo starship/starship |cut -f3)
   if [[ "v"${installed_starship_version} != $latest_starship_version ]]; then
     print "updating."
     if [[ $(uname) == "Linux" ]]; then
@@ -503,7 +503,7 @@ fi
 if [[ ! -v setup_MINIMAL ]]; then
   # tfswitch
   echo "tfswitch"
-  latest_tfswitch_version=$(GH_HOST=github.com gh release list --limit 1 --repo warrensbox/terraform-switcher |awk '{print $1}')
+  latest_tfswitch_version=$(GH_HOST=github.com gh release list --limit 1 --repo warrensbox/terraform-switcher |cut -f3)
   installed_tfswitch_version=$(tfswitch --version 2>/dev/null|awk 'NF{print $2}')
   if [[ ${installed_tfswitch_version#v} != ${latest_tfswitch_version#v} ]]; then
     print "Updating from ${installed_tfswitch_version#v} to ${latest_tfswitch_version#v}"
@@ -514,7 +514,7 @@ if [[ ! -v setup_MINIMAL ]]; then
 
   # k9s
   echo "k9s"
-  latest_k9s_version=$(GH_HOST=github.com gh release list --limit 1 --repo derailed/k9s|awk '{print $1}')
+  latest_k9s_version=$(GH_HOST=github.com gh release list --limit 1 --repo derailed/k9s|cut -f3)
   installed_k9s_version=$(k9s version -s 2>/dev/null| grep Version | awk '{print $2}')
   if [[ ${installed_k9s_version} != $latest_k9s_version ]]; then
     print "Updating from ${installed_k9s_version} to $latest_k9s_version"

@@ -517,13 +517,14 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
+    null_ls.builtins.completion.spell,
+    null_ls.builtins.diagnostics.jsonlint,
+    null_ls.builtins.diagnostics.zsh,
     null_ls.builtins.formatting.jq,
     null_ls.builtins.formatting.gofmt,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.terraform_fmt,
     null_ls.builtins.formatting.yamlfmt,
-    null_ls.builtins.diagnostics.jsonlint,
-    null_ls.builtins.diagnostics.zsh,
   },
   -- you can reuse a shared lspconfig on_attach callback here
   on_attach = function(client, bufnr)
