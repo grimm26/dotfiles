@@ -40,9 +40,6 @@ return require("packer").startup(function(use)
     "tpope/vim-endwise",
     "tpope/vim-fugitive",
     "fatih/vim-go",
-    "elzr/vim-json",
-    "tmux-plugins/vim-tmux",
-    "prettier/vim-prettier",
     "kamykn/spelunker.vim",
     "mrjones2014/legendary.nvim", -- keymappings, commands, autocmds
     "stevearc/dressing.nvim", -- fancy ui menu with legendary
@@ -82,7 +79,28 @@ return require("packer").startup(function(use)
     "folke/noice.nvim",
     event = "VimEnter",
     config = function()
-      require("noice").setup()
+      require("noice").setup({
+        notify = {
+          enabled = true,
+          view = "split",
+        },
+        lsp = {
+          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = false, -- requires nvim-cmp
+          },
+        },
+        -- you can enable a preset for easier configuration
+        presets = {
+          bottom_search = true, -- use a classic bottom cmdline for search
+          command_palette = true, -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false, -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = false, -- add a border to hover docs and signature help
+        },
+      })
     end,
     requires = {
       -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries

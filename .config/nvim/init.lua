@@ -30,7 +30,8 @@ end
 -- hit TOP, continuing at BOTTOM" messages; when using the search
 -- count do not show "W" after the count message (see S below)
 set.shortmess:append({ s = true })
-set.mouse = ""
+set.mouse = "n"
+cmd("behave xterm")
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = "menuone,noselect"
 set.updatetime = 100
