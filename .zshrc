@@ -763,7 +763,6 @@ if (( $+commands[zoxide] )); then
     zoxide init --cmd cd zsh > $zoxide_init
   fi
   source $zoxide_init
-  zimfw check-dumpfile &>/dev/null
 fi
 
 # Put "local" stuff in here, sensitive for work or specific to this machine
