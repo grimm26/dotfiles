@@ -22,7 +22,9 @@ starter.setup({
 })
 require("mini.align").setup()
 require("mini.comment").setup({})
-require("mini.completion").setup({})
+require("mini.completion").setup({
+  lsp_completion = { source_func = "omnifunc", auto_setup = false },
+})
 require("mini.indentscope").setup({})
 require("mini.surround").setup({})
 require("mini.trailspace").setup({})
@@ -431,31 +433,66 @@ table.insert(lua_runtime_path, "lua/?.lua")
 table.insert(lua_runtime_path, "lua/?/init.lua")
 table.insert(lua_runtime_path, vim.fn.stdpath("config") .. "lua/?.lua")
 
+local lsp_on_attach_custom = function(client, bufnr)
+  local function buf_set_option(name, value)
+    vim.api.nvim_buf_set_option(bufnr, name, value)
+  end
+
+  buf_set_option("omnifunc", "v:lua.MiniCompletion.completefunc_lsp")
+
+  -- Mappings are created globally for simplicity
+
+  -- Currently all formatting is handled with 'null-ls' plugin
+  if vim.fn.has("nvim-0.8") == 1 then
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  else
+    client.resolved_capabilities.document_formatting = false
+    client.resolved_capabilities.document_range_formatting = false
+  end
+end
+
 require("mason-lspconfig").setup()
 local lspconfig = require("lspconfig")
-lspconfig.ansiblels.setup({})
-lspconfig.bashls.setup({})
+lspconfig.ansiblels.setup({
+  on_attach = lsp_on_attach_custom,
+})
+lspconfig.bashls.setup({
+  on_attach = lsp_on_attach_custom,
+})
 lspconfig.dockerls.setup({})
 lspconfig.gopls.setup({
-  on_attach = function(client, bufnr)
-    client.server_capabilities.documentFormattingProvider = false
-  end,
+  on_attach = lsp_on_attach_custom,
 })
+--Enable (broadcasting) snippet capability for completion
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
 lspconfig.jsonls.setup({
-  on_attach = function(client, bufnr)
-    client.server_capabilities.documentFormattingProvider = false
-  end,
+  capabilities = capabilities,
+  on_attach = lsp_on_attach_custom,
 })
-lspconfig.solargraph.setup({})
-lspconfig.marksman.setup({})
+lspconfig.solargraph.setup({
+  on_attach = lsp_on_attach_custom,
+})
+lspconfig.marksman.setup({
+  on_attach = lsp_on_attach_custom,
+})
 lspconfig.terraformls.setup({
-  on_attach = function(client, bufnr)
-    client.server_capabilities.documentFormattingProvider = false
-  end,
+  on_attach = lsp_on_attach_custom,
 })
-lspconfig.vimls.setup({})
+lspconfig.vimls.setup({
+  on_attach = lsp_on_attach_custom,
+})
 lspconfig.pylsp.setup({
-  -- https://github.com/williamboman/nvim-lsp-installer/blob/main/lua/nvim-lsp-installer/servers/pylsp/README.md
+  on_attach = function(client, bufnr)
+    local function buf_set_option(name, value)
+      vim.api.nvim_buf_set_option(bufnr, name, value)
+    end
+
+    buf_set_option("omnifunc", "v:lua.MiniCompletion.completefunc_lsp")
+  end,
+  -- https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/server_configurations/pylsp/README.md
   -- Install pylsp plugins with :PylspInstall pyls-flake8 pyls-isort python-lsp-black
   settings = {
     pylsp = {
@@ -482,9 +519,7 @@ lspconfig.pylsp.setup({
   },
 })
 lspconfig.yamlls.setup({
-  on_attach = function(client, bufnr)
-    client.server_capabilities.documentFormattingProvider = false
-  end,
+  on_attach = lsp_on_attach_custom,
   settings = {
     ["yaml"] = {
       -- don't freak out on Cloudformation
@@ -517,7 +552,6 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
-    null_ls.builtins.completion.spell,
     null_ls.builtins.diagnostics.jsonlint,
     null_ls.builtins.diagnostics.zsh,
     null_ls.builtins.formatting.jq,
