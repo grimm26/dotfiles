@@ -17,6 +17,7 @@ vim.lsp.set_log_level("error")
 if fn.has("termguicolors") == 1 then
   set.termguicolors = true
 end
+set.completeopt = { "menu", "menuone", "noselect" }
 require("lastplace")
 require("plugins")
 require("config_plugins")
@@ -30,8 +31,9 @@ end
 -- hit TOP, continuing at BOTTOM" messages; when using the search
 -- count do not show "W" after the count message (see S below)
 set.shortmess:append({ s = true })
-set.mouse = "n"
-cmd("behave xterm")
+set.mouse = ""
+-- cmd("behave xterm")
+set.spell = false
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = "menuone,noselect"
 set.updatetime = 100
