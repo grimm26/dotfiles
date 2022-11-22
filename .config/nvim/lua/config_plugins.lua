@@ -377,6 +377,10 @@ end
 local cmp = require("cmp")
 local lspkind = require("lspkind")
 cmp.setup({
+  completion = {
+    -- Gotta hit <C-Space> to trigger completion.
+    autocomplete = false,
+  },
   formatting = {
     format = lspkind.cmp_format({
       mode = "symbol_text",
