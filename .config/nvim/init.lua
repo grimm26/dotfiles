@@ -34,8 +34,6 @@ set.shortmess:append({ s = true })
 set.mouse = ""
 -- cmd("behave xterm")
 set.spell = false
--- Set completeopt to have a better completion experience
-vim.o.completeopt = "menuone,noselect"
 set.updatetime = 100
 set.undofile = true
 -- Show matching brackets when text indicator is over them
