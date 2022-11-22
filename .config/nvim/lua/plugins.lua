@@ -33,14 +33,12 @@ return require("packer").startup(function(use)
     -- "saadparwaiz1/cmp_luasnip",
     "L3MON4D3/LuaSnip",
     "rafamadriz/friendly-snippets",
-    "kamykn/popup-menu.nvim",
     "ellisonleao/glow.nvim",
     "lewis6991/gitsigns.nvim",
     "will133/vim-dirdiff",
     "tpope/vim-endwise",
     "tpope/vim-fugitive",
     "fatih/vim-go",
-    "kamykn/spelunker.vim",
     "mrjones2014/legendary.nvim", -- keymappings, commands, autocmds
     "stevearc/dressing.nvim", -- fancy ui menu with legendary
     "numToStr/FTerm.nvim",
