@@ -28,9 +28,12 @@ return require("packer").startup(function(use)
     "neovim/nvim-lspconfig",
     "williamboman/mason.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
-    -- "hrsh7th/nvim-cmp",
-    -- "hrsh7th/cmp-nvim-lsp",
-    -- "saadparwaiz1/cmp_luasnip",
+    "hrsh7th/nvim-cmp",
+    "hrsh7th/cmp-nvim-lsp",
+    "hrsh7th/cmp-buffer",
+    "hrsh7th/cmp-path",
+    "onsails/lspkind.nvim",
+    "saadparwaiz1/cmp_luasnip",
     "L3MON4D3/LuaSnip",
     "rafamadriz/friendly-snippets",
     "ellisonleao/glow.nvim",
@@ -78,16 +81,12 @@ return require("packer").startup(function(use)
     event = "VimEnter",
     config = function()
       require("noice").setup({
-        notify = {
-          enabled = true,
-          view = "split",
-        },
         lsp = {
           -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
           override = {
             ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
             ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = false, -- requires nvim-cmp
+            ["cmp.entry.get_documentation"] = true, -- requires nvim-cmp
           },
         },
         -- you can enable a preset for easier configuration

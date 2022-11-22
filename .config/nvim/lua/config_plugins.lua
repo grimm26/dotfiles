@@ -22,9 +22,6 @@ starter.setup({
 })
 require("mini.align").setup()
 require("mini.comment").setup({})
-require("mini.completion").setup({
-  lsp_completion = { source_func = "omnifunc", auto_setup = false },
-})
 require("mini.indentscope").setup({})
 require("mini.surround").setup({})
 require("mini.trailspace").setup({})
@@ -372,12 +369,90 @@ table.insert(lua_runtime_path, "lua/?.lua")
 table.insert(lua_runtime_path, "lua/?/init.lua")
 table.insert(lua_runtime_path, vim.fn.stdpath("config") .. "lua/?.lua")
 
-local lsp_on_attach_custom = function(client, bufnr)
-  local function buf_set_option(name, value)
-    vim.api.nvim_buf_set_option(bufnr, name, value)
-  end
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
 
-  buf_set_option("omnifunc", "v:lua.MiniCompletion.completefunc_lsp")
+local cmp = require("cmp")
+local lspkind = require("lspkind")
+cmp.setup({
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = "symbol_text",
+      menu = {
+        buffer = "[Buffer]",
+        nvim_lsp = "[LSP]",
+        luasnip = "[LuaSnip]",
+        nvim_lua = "[Lua]",
+        latex_symbols = "[Latex]",
+      },
+    }),
+  },
+  snippet = {
+    expand = function(args)
+      require("luasnip").lsp_expand(args.body)
+    end,
+  },
+  view = {
+    entries = "custom",
+  },
+  mapping = cmp.mapping.preset.insert({
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-e>"] = cmp.mapping.abort(),
+    ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+  }),
+  sources = cmp.config.sources({
+    { name = "nvim_lsp" },
+    { name = "luasnip" },
+    { name = "buffer" },
+  }),
+})
+
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline({ "/", "?" }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = "buffer" },
+  },
+})
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(":", {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = "path" },
+    { name = "cmdline" },
+  }),
+})
+
+local lsp_on_attach_custom = function(client, bufnr)
+  -- Set this when using mini.completion
+  -- local function buf_set_option(name, value)
+  --   vim.api.nvim_buf_set_option(bufnr, name, value)
+  -- end
+  --
+  -- buf_set_option("omnifunc", "v:lua.MiniCompletion.completefunc_lsp")
 
   -- Mappings are created globally for simplicity
 
@@ -391,46 +466,48 @@ local lsp_on_attach_custom = function(client, bufnr)
   end
 end
 
+-- Set up lspconfig.
+local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 require("mason-lspconfig").setup()
 local lspconfig = require("lspconfig")
 lspconfig.ansiblels.setup({
+  capabilities = cmp_capabilities,
   on_attach = lsp_on_attach_custom,
 })
 lspconfig.bashls.setup({
+  capabilities = cmp_capabilities,
   on_attach = lsp_on_attach_custom,
 })
-lspconfig.dockerls.setup({})
+lspconfig.dockerls.setup({
+  capabilities = cmp_capabilities,
+})
 lspconfig.gopls.setup({
+  capabilities = cmp_capabilities,
   on_attach = lsp_on_attach_custom,
 })
---Enable (broadcasting) snippet capability for completion
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 lspconfig.jsonls.setup({
-  capabilities = capabilities,
+  capabilities = cmp_capabilities,
   on_attach = lsp_on_attach_custom,
 })
 lspconfig.solargraph.setup({
+  capabilities = cmp_capabilities,
   on_attach = lsp_on_attach_custom,
 })
 lspconfig.marksman.setup({
+  capabilities = cmp_capabilities,
   on_attach = lsp_on_attach_custom,
 })
 lspconfig.terraformls.setup({
+  capabilities = cmp_capabilities,
   on_attach = lsp_on_attach_custom,
 })
 lspconfig.vimls.setup({
+  capabilities = cmp_capabilities,
   on_attach = lsp_on_attach_custom,
 })
 lspconfig.pylsp.setup({
-  on_attach = function(client, bufnr)
-    local function buf_set_option(name, value)
-      vim.api.nvim_buf_set_option(bufnr, name, value)
-    end
-
-    buf_set_option("omnifunc", "v:lua.MiniCompletion.completefunc_lsp")
-  end,
+  capabilities = cmp_capabilities,
   -- https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/server_configurations/pylsp/README.md
   -- Install pylsp plugins with :PylspInstall pyls-flake8 pyls-isort python-lsp-black
   settings = {
@@ -458,6 +535,7 @@ lspconfig.pylsp.setup({
   },
 })
 lspconfig.yamlls.setup({
+  capabilities = cmp_capabilities,
   on_attach = lsp_on_attach_custom,
   settings = {
     ["yaml"] = {
@@ -527,4 +605,5 @@ require("octo").setup({
 require("notify").setup({
   timeout = 1000,
 })
+
 -- vim: ts=2 sts=2 sw=2 et
