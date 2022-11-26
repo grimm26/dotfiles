@@ -251,6 +251,7 @@ require("legendary").setup({
       description = "Toggle mini.indentscope for this buffer",
       opts = { buffer = true, silent = true, noremap = true },
     },
+    { "<leader>mp", ":MarkdownPreviewToggle<cr>", description = "Toggle MardownPreview" },
   },
   -- Initial commands to bind
   commands = {
