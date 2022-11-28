@@ -66,6 +66,8 @@ zstyle ':zim:git' aliases-prefix 'g'
 # Append `../` to your input for each `.` you type after an initial `..`
 zstyle ':zim:input' double-dot-expand yes
 
+# caSE mATteRs!
+zstyle ':zim:*' case-sensitivity sensitive
 #
 # completion cache
 #
@@ -151,6 +153,10 @@ for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 # }}} End configuration added by Zim install
 
+# Set the completion matcher-list how I like.
+# try as-is, then try within words, then try toggled case, then try within words again (with toggled case)
+zstyle ':completion:*' matcher-list '' '+r:|?=**' 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+
 BREW_PREFIX=/usr/local
 if [ -s ${NREW_PREFIX}/opt/chruby/share/chruby/chruby.sh ]; then
   source ${BREW_PREFIX}/opt/chruby/share/chruby/chruby.sh
@@ -166,7 +172,6 @@ elif [ -s /usr/share/chruby/chruby.sh ]; then
   chruby ruby
 fi
 
-setopt CASE_GLOB
 # append history list to the history file; this is the default but we make sure
 # because it's required for share_history.
 setopt append_history
@@ -426,6 +431,9 @@ alias gnb='git nb'
 alias grtag='git rtag'
 alias ghpr='gh pr create'
 alias gbp='git prune-branches'
+# Override git pager
+alias gdl='git -c core.pager=less diff'
+alias gdp='git -c core.pager=$PAGER diff'
 
 if [[ -d /usr/libexec/java_home ]]; then
   export JAVA_HOME=$(/usr/libexec/java_home)
