@@ -207,13 +207,10 @@ case $(uname) in
       if upinst_from_git https://github.com/junegunn/fzf ~/.fzf; then
         (cd ~/.fzf && ./install --key-bindings --completion --no-bash --no-fish --no-update-rc)
       fi
-      if [[ $VERSION_ID -ge 19.10 ]]; then
-        gdelta_pkg="git-delta"
-        lsd_pkg="lsd"
-      else
-        gdelta_pkg="git-delta-musl"
-        lsd_pkg="lsd-musl"
-      fi
+
+      # Use more portable musl pkgs for delta and lsd
+      gdelta_pkg="git-delta-musl"
+      lsd_pkg="lsd-musl"
       # git-delta
       echo "git-delta"
       latest_delta_version=$(GH_HOST=github.com gh release list --limit 1 --repo dandavison/delta |cut -f3)
