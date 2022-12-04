@@ -356,7 +356,7 @@ require("mason-tool-installer").setup({
   -- if set to true this will check each tool for updates. If updates
   -- are available the tool will be updated.
   -- Default: false
-  auto_update = true,
+  auto_update = false,
 
   -- automatically install / update on startup. If set to false nothing
   -- will happen on startup. You can use `:MasonToolsUpdate` to install
