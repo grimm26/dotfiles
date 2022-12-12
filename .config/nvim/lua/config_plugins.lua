@@ -132,7 +132,7 @@ end
 require("lualine").setup({
   options = {
     icons_enabled = true,
-    theme = "powerline_dark",
+    theme = "solarized",
     component_separators = { left = "", right = "" },
     section_separators = { left = "", right = "" },
     disabled_filetypes = {},
@@ -301,13 +301,21 @@ ts.setup({
     "yaml",
   },
   ignore_install = {
+    "agda",
+    "beancount",
     "c_sharp",
     "clojure",
     "cooklang",
     "cuda",
+    "d",
+    "dart",
+    "dot",
     "elvish",
+    "erlang", -- broken, 2022-12-11
     "gleam",
     "glimmer",
+    "hack",
+    "haskell",
     "heex",
     "kotlin",
     "ocaml",
@@ -320,6 +328,8 @@ ts.setup({
     "vala",
   },
   highlight = { enable = true },
+  text_objects = { enable = true },
+  incremental_selection = { enable = true },
 })
 
 -- LSP settings

@@ -19,9 +19,9 @@ if fn.has("termguicolors") == 1 then
 end
 set.completeopt = { "menu", "menuone", "noselect" }
 require("lastplace")
-require("plugins")
+require("load_plugins")
 require("config_plugins")
-require("snippets")
+require("my_lua_snippets")
 -- See https://github.com/neovim/neovim/pull/20633, https://github.com/folke/noice.nvim/issues/47
 if fn.has("nvim-0.9.0") == 1 then
   set.shortmess:append({ C = true })
@@ -64,7 +64,8 @@ set.guifont = "Monaco:h14"
 -- Use Unix as the standard file type
 set.ffs = { "unix", "dos", "mac" }
 set.background = "dark"
-cmd("colorscheme solarized-high")
+g.solarized_visibility = "high"
+cmd.colorscheme("solarized-high")
 -- show me where my cursor is
 set.cursorline = true
 set.cursorcolumn = true
