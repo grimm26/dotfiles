@@ -400,7 +400,7 @@ local lsp_on_attach_custom = function(client, bufnr)
   end
 end
 
-require("config_cmp")
+require("cmp_config")
 -- Set up lspconfig.
 local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 require("mason-lspconfig").setup()

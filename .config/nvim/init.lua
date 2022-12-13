@@ -19,8 +19,8 @@ if fn.has("termguicolors") == 1 then
 end
 set.completeopt = { "menu", "menuone", "noselect" }
 require("lastplace")
-require("load_plugins")
-require("config_plugins")
+require("plugins_load")
+require("plugins_config")
 require("my_lua_snippets")
 -- See https://github.com/neovim/neovim/pull/20633, https://github.com/folke/noice.nvim/issues/47
 if fn.has("nvim-0.9.0") == 1 then
