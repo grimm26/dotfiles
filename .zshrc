@@ -767,8 +767,8 @@ fif() {
 mkdir -p ~/.zsh-cache
 if (( $+commands[zoxide] )); then
   zoxide_init=~/.zsh-cache/zoxide.init
-  if [[ ! -e $zoxide_init || $zoxide_init -ot ${commands[starship]} ]]; then
-    zoxide init --cmd cd zsh > $zoxide_init
+  if [[ ! -e $zoxide_init || $zoxide_init -ot ${commands[zoxide]} ]]; then
+    zoxide init --cmd cd zsh >| $zoxide_init
   fi
   source $zoxide_init
 fi
