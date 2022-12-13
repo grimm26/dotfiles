@@ -1,51 +1,20 @@
-format = """\
-    $username\
-    $hostname\
-    $kubernetes\
-    $directory\
-    $sudo\
-    $git_branch\
-    $git_state\
-    $git_status\
-    $git_commit\
-    $git_metrics\
-    $package\
-    $dotnet\
-    $golang\
-    $java\
-    $python\
-    $ruby\
-    $rust\
-    $conda\
-    $memory_usage\
-    $aws\
-    $terraform\
-    $env_var\
-    $cmd_duration\
-    $line_break\
-    $jobs\
-    $battery\
-    $time\
-    $status\
-    $character\
-"""
+format = """$all"""
+# Put language info and aws into rprompt
+right_format = """$java $python $ruby $go $perl $aws $terraform"""
 
 # A continuation prompt that displays two filled in arrows
 continuation_prompt = "▶▶(inverted) "
 
-command_timeout = 750
-
 [aws]
-format = 'on [$symbol($profile )(\($region\) )]($style)'
+format = '[$symbol($profile )(\($region\) )]($style)'
 symbol = " "
 style = "#ff9900" # aws orange
 force_display=true
-# [aws.region_aliases]
-# ap-southeast-2 = "au"
-# sa-east-1 = "br"
-# us-east-1 = "va"
-# us-east-2 = "oh"
-# us-west-2 = "or"
+[aws.region_aliases]
+ap-southeast-2 = "australia"
+sa-east-1 = "brazil"
+us-east-2 = "ohio"
+us-west-2 = "oregon"
 
 [conda]
 disabled = true
@@ -87,13 +56,20 @@ disabled = false
 [nodejs]
 disabled = true
 
+[perl]
+format = '[$symbol($version )]($style)'
+
+[python]
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+
 [ruby]
 detect_variables = []
+format = '[$symbol($version )]($style)'
+
+[rust]
+format = '[$symbol($version )]($style)'
 
 [status]
-disabled = false
-
-[sudo]
 disabled = false
 
 [terraform]
