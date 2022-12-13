@@ -50,6 +50,10 @@ tg () {
   terragrunt "$@"
 }
 
+# For omz aws plugin
+export SHOW_AWS_PROMPT=false
+
+export GCAL="-q US_IL"
 export lan_proxy="http://192.168.15.1:3128"
 export wlan_proxy="http://192.168.16.1:3128"
 if [[ -r ~/.zshenv.local ]]; then

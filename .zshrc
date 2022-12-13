@@ -266,7 +266,6 @@ alias -g T='|tail'
 alias nout='netstat -nputw'
 alias nin='netstat -ntl'
 
-export GCAL="-q US_IL"
 whence gcal &>/dev/null && alias cal=gcal
 
 # Alias for yadm do it works more like git g alias
