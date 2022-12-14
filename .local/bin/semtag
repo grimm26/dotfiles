@@ -46,7 +46,7 @@ while getopts ${optstring} arg; do
   esac
 done
 
-CURRENT_RELEASE=$(gh release list --exclude-drafts --limit 1 | awk '{print $1}' | sed 's/v//')
+CURRENT_RELEASE=$(gh release list --exclude-drafts --limit 1 | cut -f3 | sed 's/v//')
 IFS='.' read -r major minor patch <<< $CURRENT_RELEASE
 
 case "${BUMP_TYPE}" in
