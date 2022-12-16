@@ -687,11 +687,6 @@ export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 ## END fzf
 
-## alias overrides
-alias gum='gcm && grup --prune && gmum'
-alias gom='gcm && grup --prune && gmom'
-# The ohmyzsh alias for this locks up
-alias gtl='git tag --sort=-v:refname -n -l "${1}*"'
 alias gcl &>/dev/null && unalias gcl
 gcl() {
   readonly repo=${1}
