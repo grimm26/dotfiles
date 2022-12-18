@@ -393,6 +393,9 @@ if command -v register-python-argcomplete &>/dev/null; then
 fi
 
 ## zlogin
+capsoff() {
+  /usr/bin/setxkbmap -option caps:none
+}
 
 # The output will show you if this terminal is truecolor or not. If it is, the color transitions will be smooth.
 colorcheck() {
