@@ -1,0 +1,37 @@
+#!/usr/bin/env zsh
+# https://fosstodon.org/@chmouel/109538775049818590
+# rename easily
+# press f1 to move with nnn if there
+#
+# "easily". Seems overly complicated to me, but might be useful. -MK
+
+function rn() {
+    local args=() f n
+    [[ -n ${@} ]] && args=(-q $@)
+    f=($(FZF_DEFAULT_COMMAND="find . -maxdepth 1 -type f -printf '%P\n'" fzf --reverse --expect=f1 --height=50% -1 ${args[@]}))
+    [[ -z ${f} ]] && return
+    if [[ ${f[1]} == f1 ]];then
+        (( ${+commands[nnn]} )) || {
+            print "no nnn binary found"
+            return
+        }
+        rm -f /tmp/.lastd
+        env NNN_TMPFILE="/tmp/.lastd" nnn -p-
+        mv -v ${f[2]} $(sed -e 's/"$//' -e 's/^cd "//' /tmp/.lastd)
+        return
+    fi
+
+    n=${f}
+    vared -p 'Rename: ' -c n;
+    [[ ${n} == ${f} ]] && {
+        echo "no changes"
+        return
+    }
+    [[ -e ${n} ]] && {
+        read -q answer?"Do you want to overwrite $n?: "
+        [[ ${answer,,} != "y" ]] && return
+    }
+    mv -vf ${f} ${n}
+}
+
+rn $@
