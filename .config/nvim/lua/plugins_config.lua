@@ -443,27 +443,11 @@ lspconfig.vimls.setup({
 })
 lspconfig.pylsp.setup({
   capabilities = cmp_capabilities,
-  -- https://github.com/williamboman/mason-lspconfig.nvim/blob/main/lua/mason-lspconfig/server_configurations/pylsp/README.md
-  -- Install pylsp plugins with :PylspInstall pyls-flake8 pyls-isort python-lsp-black
   settings = {
     pylsp = {
-      configurationSources = { "flake8" },
       plugins = {
-        black = {
-          enabled = true,
-        },
-        -- Use flake8 instead of pycodestyle,pyflakes,mccabe
-        flake8 = {
-          enabled = true,
-        },
         pycodestyle = {
-          enabled = false,
-        },
-        pyflakes = {
-          enabled = false,
-        },
-        mccabe = {
-          enabled = false,
+          maxLineLength = 100,
         },
       },
     },
@@ -473,7 +457,7 @@ lspconfig.yamlls.setup({
   capabilities = cmp_capabilities,
   on_attach = lsp_on_attach_custom,
   settings = {
-    ["yaml"] = {
+    yaml = {
       -- don't freak out on Cloudformation
       customTags = {
         "!Base64",
@@ -508,6 +492,7 @@ null_ls.setup({
     null_ls.builtins.diagnostics.zsh,
     null_ls.builtins.formatting.jq,
     null_ls.builtins.formatting.gofmt,
+    null_ls.builtins.formatting.isort,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.terraform_fmt,
     null_ls.builtins.formatting.yamlfmt,
