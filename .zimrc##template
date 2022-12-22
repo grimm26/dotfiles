@@ -46,6 +46,7 @@ ohmyzsh/ohmyzsh path:plugins/brew
 
 zmodule joke/zim-github-cli
 zmodule joke/zim-kubectl
+zmodule joke/zim-helm
 zmodule joke/zim-starship
 zmodule MichaelAquilina/zsh-you-should-use --source you-should-use.plugin.zsh
 #
