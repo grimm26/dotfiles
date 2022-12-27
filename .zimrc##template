@@ -20,6 +20,7 @@ zmodule utility
 zmodule ssh
 
 # ohmyzsh stuff
+zmodule ohmyzsh/ohmyzsh --root lib --source clipboard.zsh
 zmodule ohmyzsh/ohmyzsh --root plugins/vi-mode
 zmodule ohmyzsh/ohmyzsh --root plugins/command-not-found
 zmodule ohmyzsh/ohmyzsh --root plugins/gem
