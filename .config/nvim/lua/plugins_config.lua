@@ -24,7 +24,6 @@ require("mini.align").setup()
 require("mini.comment").setup({})
 require("mini.indentscope").setup({})
 require("mini.surround").setup({})
-require("mini.trailspace").setup({})
 
 require("gitsigns").setup({
   diff_opts = {
@@ -212,7 +211,6 @@ require("legendary").setup({
   cache_path = string.format("%s/legendary/", vim.fn.stdpath("cache")),
   -- Initial keymaps to bind
   keymaps = {
-    { "<leader>ts", MiniTrailspace.trim, description = "Trim trailing whitespace." },
     { "<leader>fb", require("telescope").extensions.file_browser.file_browser, description = "Browse Files" },
     { "<leader>fd", require("telescope.builtin").find_files, description = "Find Files" },
     { "<leader>fg", require("telescope.builtin").live_grep, description = "Grep files" },
@@ -328,8 +326,6 @@ ts.setup({
     "vala",
   },
   highlight = { enable = true },
-  text_objects = { enable = true },
-  incremental_selection = { enable = true },
 })
 
 -- LSP settings
