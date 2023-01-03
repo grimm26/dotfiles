@@ -292,6 +292,7 @@ ts.setup({
     "python",
     "ruby",
     "rust",
+    "terraform",
     "toml",
     "typescript",
     "vim",
