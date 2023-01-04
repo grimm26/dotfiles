@@ -110,7 +110,7 @@ case $(uname) in
       done
       print "Neovim"
       if [[ ${NEOVIM_BUILD} == "latest" ]]; then
-        local latest_neovim_version=$(GH_HOST=github.com gh release list --limit 5 --repo neovim/neovim | grep 'Latest' | cut -f3)
+        local latest_neovim_version=$(GH_HOST=github.com gh release list --limit 1 --repo neovim/neovim --exclude-pre-releases --exclude-drafts| cut -f3)
         local installed_neovim_version=$(/usr/local/bin/nvim --version 2>/dev/null | head -1 | awk '{print $2}' |cut -d- -f1)
         if [[ ${installed_neovim_version} != $latest_neovim_version ]]; then
           print "Updating from ${installed_neovim_version} to $latest_neovim_version"
