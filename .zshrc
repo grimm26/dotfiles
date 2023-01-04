@@ -9,6 +9,14 @@
 # setopt XTRACE
 
 #zmodload zsh/zprof
+mkdir -p ~/.zsh-cache
+if (( $+commands[zoxide] )); then
+  zoxide_init=~/.zsh-cache/zoxide.init
+  if [[ ! -e $zoxide_init || $zoxide_init -ot ${commands[zoxide]} ]]; then
+    zoxide init --cmd cd zsh >| $zoxide_init
+  fi
+  source $zoxide_init
+fi
 # Start configuration added by Zim install {{{
 #
 # User configuration sourced by interactive shells
@@ -761,14 +769,6 @@ fif() {
 }
 
 ### zlogin
-mkdir -p ~/.zsh-cache
-if (( $+commands[zoxide] )); then
-  zoxide_init=~/.zsh-cache/zoxide.init
-  if [[ ! -e $zoxide_init || $zoxide_init -ot ${commands[zoxide]} ]]; then
-    zoxide init --cmd cd zsh >| $zoxide_init
-  fi
-  source $zoxide_init
-fi
 
 # Put "local" stuff in here, sensitive for work or specific to this machine
 if [[ -r ~/.zshrc.local ]]; then
