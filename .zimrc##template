@@ -61,7 +61,7 @@ zmodule zsh-users/zsh-completions --fpath src
 # completion must be sourced after all modules that add completion definitions.
 zmodule completion
 # modules that need to use compdef or something and so have to come after completion
-zmodule ohmyzsh/ohmyzsh --root plugins/aws
+zmodule grimm26/ohmyzsh-ohmyzsh --root plugins/aws --branch aws-plugin
 zmodule ohmyzsh/ohmyzsh --root plugins/git
 zmodule ohmyzsh/ohmyzsh --root plugins/terraform
 {% if yadm.distro == "Ubuntu" %}
