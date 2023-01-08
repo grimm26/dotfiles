@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Bitwarden
+GenericName=Password Vault
+Comment=Password Vault
+TryExec=/home/mark/.local/bin/bitwarden
+Exec=/home/mark/.local/bin/bitwarden
+Icon=/home/mark/.local/share/icons/bitwarden_icon.png
+Categories=Utility;Security
+MimeType=x-scheme-handler/bitwarden;text/html;
