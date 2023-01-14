@@ -3,8 +3,8 @@
 #
 
 # Versions
-GOLANG_VERSION="1.19.4"
-NODEJS_VERSION="18.12.1"
+GOLANG_VERSION="1.19.5"
+NODEJS_VERSION="18.13.0"
 PYTHON_VERSION="3.11.1"
 # Set NEOVIM_BUILD to nightly or latest. If set to nightly, this will not check nvim as it assumes you installed the nightly yourself.
 NEOVIM_BUILD="latest"
@@ -75,6 +75,12 @@ upinst_from_git() {
   return $EXIT_CODE
 }
 
+gh_latest_release() {
+  local this_repo=$1
+  local latest_release=$(GH_HOST=github.com gh release list --limit 1 --exclude-pre-releases --exclude-drafts --repo $this_repo | cut -f3)
+  echo $latest_release
+}
+
 INITIAL_PWD=$PWD
 # OS Type specific stuff first
 case $(uname) in
@@ -108,9 +114,27 @@ case $(uname) in
         dpkg -s $pkg &>/dev/null \
           || sudo apt-get install -y $pkg
       done
+      # Latest github cli
+      print "github cli (gh)"
+      if whence -p gh &>/dev/null; then
+        curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
+        local CURRENT_GH_VERSION=$(gh version |grep releases |cut -d/ -f8)
+        local LATEST_GH_VERSION=$(jq -r '.tag_name' ${MY_TMP}/gh_latest.json)
+        if [[ "${CURRENT_GH_VERSION}" != "${LATEST_GH_VERSION}" ]]; then
+          print "Updating from ${CURRENT_GH_VERSION} to ${LATEST_GH_VERSION}"
+          local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
+          (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
+        fi
+      else
+        print "Installing gh"
+        curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
+        local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
+        (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
+      fi
+
       print "Neovim"
       if [[ ${NEOVIM_BUILD} == "latest" ]]; then
-        local latest_neovim_version=$(GH_HOST=github.com gh release list --limit 1 --repo neovim/neovim --exclude-pre-releases --exclude-drafts| cut -f3)
+        local latest_neovim_version=$(gh_latest_release "neovim/neovim")
         local installed_neovim_version=$(/usr/local/bin/nvim --version 2>/dev/null | head -1 | awk '{print $2}' |cut -d- -f1)
         if [[ ${installed_neovim_version} != $latest_neovim_version ]]; then
           print "Updating from ${installed_neovim_version} to $latest_neovim_version"
@@ -131,24 +155,6 @@ case $(uname) in
             print "\nLeaving current version installed."
             ;;
         esac
-      fi
-
-      # Latest github cli
-      print "github cli (gh)"
-      if whence -p gh &>/dev/null; then
-        curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
-        local CURRENT_GH_VERSION=$(gh version |grep releases |cut -d/ -f8)
-        local LATEST_GH_VERSION=$(jq -r '.tag_name' ${MY_TMP}/gh_latest.json)
-        if [[ "${CURRENT_GH_VERSION}" != "${LATEST_GH_VERSION}" ]]; then
-          print "Updating from ${CURRENT_GH_VERSION} to ${LATEST_GH_VERSION}"
-          local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
-          (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
-        fi
-      else
-        print "Installing gh"
-        curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
-        local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
-        (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
       fi
 
       # golang
@@ -213,7 +219,7 @@ case $(uname) in
       lsd_pkg="lsd-musl"
       # git-delta
       echo "git-delta"
-      latest_delta_version=$(GH_HOST=github.com gh release list --limit 1 --repo dandavison/delta |cut -f3)
+      latest_delta_version=$(gh_latest_release "dandavison/delta")
       installed_delta_version=$(delta --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_delta_version} != $latest_delta_version ]]; then
         print "Updating from ${installed_delta_version} to $latest_delta_version"
@@ -222,7 +228,7 @@ case $(uname) in
       fi
       # bat
       echo "bat"
-      latest_bat_version=$(GH_HOST=github.com gh release list --limit 1 --repo sharkdp/bat |cut -f3)
+      latest_bat_version=$(gh_latest_release "sharkdp/bat")
       installed_bat_version=$(bat --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_bat_version#v} != ${latest_bat_version#v} ]]; then
         print "Updating from ${installed_bat_version#v} to ${latest_bat_version#v}"
@@ -230,7 +236,7 @@ case $(uname) in
           && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version#v}_amd64.deb
       fi
       echo "dive"
-      latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |cut -f3)
+      latest_dive_version=$(gh_latest_release "wagoodman/dive")
       installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_dive_version#v} != ${latest_dive_version#v} ]]; then
         print "Updating from ${installed_dive_version#v} to ${latest_dive_version#v}"
@@ -239,7 +245,7 @@ case $(uname) in
       fi
       # lsd
       echo "lsd"
-      latest_lsd_version=$(GH_HOST=github.com gh release list --limit 1 --repo Peltoche/lsd |cut -f3)
+      latest_lsd_version=$(gh_latest_release "Peltoche/lsd")
       installed_lsd_version=$(lsd --version 2>/dev/null|awk '{print $2}')
       if [[ ${installed_lsd_version} != $latest_lsd_version ]]; then
         GH_HOST=github.com gh release download $latest_lsd_version --pattern "${lsd_pkg}_*amd64.deb" --repo Peltoche/lsd -D ${MY_TMP} \
@@ -270,7 +276,7 @@ case $(uname) in
       fi
       # direnv
       echo "direnv"
-      latest_direnv_version=$(GH_HOST=github.com gh release list --limit 1 --repo direnv/direnv |cut -f3)
+      latest_direnv_version=$(gh_latest_release "direnv/direnv")
       installed_direnv_version=$(direnv --version 2>/dev/null)
       if [[ ${installed_direnv_version#v} != ${latest_direnv_version#v} ]]; then
         GH_HOST=github.com gh release download ${latest_direnv_version} --pattern 'direnv.linux-amd64' --repo direnv/direnv -D $MY_TMP \
@@ -310,7 +316,7 @@ case $(uname) in
       fi
       # zoxide
       print "zoxide"
-      latest_zoxide_version=$(GH_HOST=github.com gh release list --limit 1 --repo ajeetdsouza/zoxide |cut -f3)
+      latest_zoxide_version=$(gh_latest_release "ajeetdsouza/zoxide")
       installed_zoxide_version=$(zoxide --version 2>/dev/null|awk '{print $2}')
       if [[ "${installed_zoxide_version}" != "${latest_zoxide_version}" ]]; then
         print "Updating from ${installed_zoxide_version#v} to ${latest_zoxide_version#v}"
@@ -359,7 +365,7 @@ case $(uname) in
       # Latest doggo
       print "doggo"
       local current_doggo_version=$(doggo --version 2>/dev/null| awk '{print $1}')
-      local latest_doggo_version=$(GH_HOST=github.com gh release list --limit 1 --repo mr-karan/doggo |cut -f3)
+      local latest_doggo_version=$(gh_latest_release "mr-karan/doggo")
       if [[ "${current_doggo_version}" != "${latest_doggo_version}" ]]; then
         print "Updating from ${current_doggo_version} to ${latest_doggo_version}"
         local build_artifact="doggo_${latest_doggo_version#v}_linux_${arch}.tar.gz"
@@ -372,7 +378,7 @@ case $(uname) in
       fi
       # helm
       echo "helm"
-      latest_helm_version=$(GH_HOST=github.com gh release list --limit 1 --repo helm/helm |cut -f3 )
+      latest_helm_version=$(gh_latest_release "helm/helm")
       installed_helm_version=$(helm version --short 2>/dev/null | cut -d+ -f1)
       if [[ ${installed_helm_version} != ${latest_helm_version} ]]; then
         print "Updating from ${installed_helm_version} to ${latest_helm_version}"
@@ -384,6 +390,7 @@ case $(uname) in
     fi
     ;;
   Darwin)
+    # This section is pretty much abandoned because I don't use MacOS anymore.
     if command -v brew &>/dev/null; then
       echo "homebrew already installed"
     else
@@ -438,7 +445,7 @@ case $(uname) in
     npm install --location=global neovim
     # dive
     echo "dive"
-    latest_dive_version=$(GH_HOST=github.com gh release list --limit 1 --repo wagoodman/dive |cut -f3)
+    latest_dive_version=$(gh_latest_release "wagoodman/dive")
     installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
     if [[ ${installed_dive_version#v} != ${latest_dive_version#v} ]]; then
       GH_HOST=github.com gh release download --pattern '*darwin_amd64.tar.gz' --repo wagoodman/dive -D ${MY_TMP} \
@@ -475,7 +482,7 @@ esac
 print -n "starship: "
 if whence starship &> /dev/null; then
   installed_starship_version=$(starship --version 2>/dev/null|head -1 |awk '{print $2}')
-  latest_starship_version=$(GH_HOST=github.com gh release list --limit 1 --repo starship/starship |cut -f3)
+  latest_starship_version=$(gh_latest_release "starship/starship")
   if [[ "v"${installed_starship_version} != $latest_starship_version ]]; then
     print "updating."
     if [[ $(uname) == "Linux" ]]; then
@@ -500,7 +507,7 @@ fi
 if [[ ! -v setup_MINIMAL ]]; then
   # tfswitch
   echo "tfswitch"
-  latest_tfswitch_version=$(GH_HOST=github.com gh release list --limit 1 --repo warrensbox/terraform-switcher |cut -f3)
+  latest_tfswitch_version=$(gh_latest_release "warrensbox/terraform-switcher")
   installed_tfswitch_version=$(tfswitch --version 2>/dev/null|awk 'NF{print $2}')
   if [[ ${installed_tfswitch_version#v} != ${latest_tfswitch_version#v} ]]; then
     print "Updating from ${installed_tfswitch_version#v} to ${latest_tfswitch_version#v}"
@@ -511,7 +518,7 @@ if [[ ! -v setup_MINIMAL ]]; then
 
   # k9s
   echo "k9s"
-  latest_k9s_version=$(GH_HOST=github.com gh release list --limit 1 --repo derailed/k9s|cut -f3)
+  latest_k9s_version=$(gh_latest_release "derailed/k9s")
   installed_k9s_version=$(k9s version -s 2>/dev/null| grep Version | awk '{print $2}')
   if [[ ${installed_k9s_version} != $latest_k9s_version ]]; then
     print "Updating from ${installed_k9s_version} to $latest_k9s_version"
