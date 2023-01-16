@@ -44,6 +44,10 @@ ls.add_snippets("terraform", {
 ls.add_snippets("gitcommit", {
   s("tfup", { t("update terraform and module versions") }),
 })
+-- Bring in some html snippets to markdown
+ls.add_snippets("markdown", {
+  s("br", { t("<br/>") }),
+})
 
 require("luasnip.loaders.from_vscode").lazy_load()
 

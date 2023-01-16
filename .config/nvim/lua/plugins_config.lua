@@ -23,7 +23,7 @@ starter.setup({
 require("mini.align").setup()
 require("mini.comment").setup({})
 require("mini.indentscope").setup({})
-require("mini.surround").setup({})
+-- require("mini.surround").setup({})
 
 require("gitsigns").setup({
   diff_opts = {
@@ -327,6 +327,15 @@ ts.setup({
     "vala",
   },
   highlight = { enable = true },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "<CR>",
+      node_incremental = "<CR>",
+      scope_incremental = "<S-CR>",
+      node_decremental = "<BS>",
+    },
+  },
 })
 
 -- LSP settings
@@ -485,6 +494,7 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
+    -- null_ls.builtins.completion.spell,
     null_ls.builtins.diagnostics.jsonlint,
     null_ls.builtins.diagnostics.zsh,
     null_ls.builtins.formatting.jq,

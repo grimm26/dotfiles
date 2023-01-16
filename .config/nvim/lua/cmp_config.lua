@@ -58,7 +58,13 @@ cmp.setup({
     end, { "i", "s" }),
   }),
   sources = cmp.config.sources({
-    { name = "nvim_lsp" },
+    {
+      name = "nvim_lsp",
+      -- Filter out txt results to try to keep spelling suggestions out, but only want this for code
+      -- entry_filter = function(entry, ctx)
+      --   return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
+      -- end,
+    },
     { name = "luasnip" },
     { name = "buffer" },
   }),

@@ -46,7 +46,7 @@ set.timeoutlen = 500
 set.modeline = true
 set.modelines = 5
 set.hlsearch = false
-vim.wo.number = false
+vim.o.number = true
 -- Enable break indent
 set.breakindent = true
 set.expandtab = true
