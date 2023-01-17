@@ -22,8 +22,8 @@ starter.setup({
 })
 require("mini.align").setup()
 require("mini.comment").setup({})
-require("mini.indentscope").setup({})
--- require("mini.surround").setup({})
+-- require("mini.indentscope").setup({})
+require("mini.surround").setup({})
 
 require("gitsigns").setup({
   diff_opts = {
@@ -218,6 +218,8 @@ require("legendary").setup({
     { "<leader>help", require("telescope.builtin").help_tags, description = "List help tags" },
     { "<leader>gitf", require("telescope.builtin").git_files, description = "List files under Git control" },
     { "<leader>ci", require("telescope.builtin").git_commits, description = "List/Search Git commits" },
+    { "<leader>ca", ":lua vim.lsp.buf.code_action()<cr>", description = "Code Action menu" },
+
     {
       "<leader>lf",
       function()
@@ -241,13 +243,6 @@ require("legendary").setup({
         .. vim.fn.stdpath("config")
         .. "/lua/config_plugins.lua<cr>",
       description = "Edit vim plugins config",
-    },
-    -- Disable mini.indentscope
-    {
-      "<leader>mindent",
-      ":lua vim.b.miniindentscope_disable = not vim.b.miniindentscope_disable<cr>",
-      description = "Toggle mini.indentscope for this buffer",
-      opts = { buffer = true, silent = true, noremap = true },
     },
     { "<leader>mp", ":MarkdownPreviewToggle<cr>", description = "Toggle MardownPreview" },
   },
@@ -352,6 +347,7 @@ require("mason-tool-installer").setup({
   ensure_installed = {
     "bash-language-server",
     "black",
+    "codespell",
     "dockerfile-language-server",
     "gopls",
     "json-lsp",
@@ -494,7 +490,11 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 local null_ls = require("null-ls")
 null_ls.setup({
   sources = {
-    -- null_ls.builtins.completion.spell,
+    null_ls.builtins.code_actions.gitsigns,
+    null_ls.builtins.completion.spell.with({
+      filetypes = { "gitcommit", "markdown", "text" },
+    }),
+    null_ls.builtins.diagnostics.codespell,
     null_ls.builtins.diagnostics.jsonlint,
     null_ls.builtins.diagnostics.zsh,
     null_ls.builtins.formatting.jq,
