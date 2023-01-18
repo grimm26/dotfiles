@@ -245,6 +245,16 @@ require("legendary").setup({
       description = "Edit vim plugins config",
     },
     { "<leader>mp", ":MarkdownPreviewToggle<cr>", description = "Toggle MardownPreview" },
+    { "<leader>xx", ":TroubleToggle<cr>", description = "Toggle Trouble" },
+    { "<leader>xw", ":TroubleToggle workspace_diagnostics<cr>", description = "Toggle Trouble workspace diagnostics" },
+    { "<leader>xd", ":TroubleToggle document_diagnostics<cr>", description = "Toggle Trouble document diagnostics" },
+    { "<leader>xq", ":TroubleToggle quickfix<cr>", description = "Toggle Trouble quickfix" },
+    { "<leader>xl", ":TroubleToggle loclist<cr>", description = "Toggle Trouble window location list" },
+    {
+      "gR",
+      ":TroubleToggle lsp_references<cr>",
+      description = "Toggle Trouble references of the word under the cursor from the builtin LSP client",
+    },
   },
   -- Initial commands to bind
   commands = {
