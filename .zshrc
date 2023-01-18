@@ -548,7 +548,7 @@ aws_creds() {
   env | grep AWS
 }
 
-# List all occurrences of programm in current PATH
+# List all occurrences of program in current PATH
 plap() {
     emulate -L zsh
     if [[ $# = 0 ]] ; then
@@ -714,6 +714,15 @@ gcl() {
   fi
   cd ./"$(basename ${repo%%.git})"
 }
+# github atlantis apply PR
+apply() {
+  gh pr comment $1 --body "atlantis apply"
+}
+# github atlantis plan PR
+plan() {
+  gh pr comment $1 --body "atlantis plan"
+}
+
 command -v lsd &>/dev/null && alias ls=lsd
 ## END post antibody/zplug overrides
 
