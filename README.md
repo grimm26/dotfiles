@@ -18,7 +18,7 @@ The main tools that I use this to manage:
   - My vimrc is fairly commented and hopefully understandable. There is commented out stuff from old settings that I don't use anymore or that are covered by plugins that I now use.
   - optional script to install/update vim8 plugins instead of vim-plug if you like.
 
-# yadm vs stow.
+# yadm vs stow
 
 I was previously using some scripts and [GNU stow](https://www.gnu.org/software/stow/) to install the dotfiles from this repo. The old setup using stow is in the [legacy branch](https://github.com/grimm26/dotfiles/tree/legacy). It was kinda janky, so I decided to move to using yadm.
 
