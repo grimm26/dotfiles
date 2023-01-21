@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# nb = new branch
+yadm checkout main && yadm pull --ff-only && \
+yadm branch "$1" main && \
+yadm checkout "$1" && \
+yadm push --set-upstream origin "$1"
