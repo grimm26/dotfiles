@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# prune yadm branches
+for branch in $(yadm branch --merged main| grep -v main);do
+  for ref in $(yadm show-ref $branch |awk '{print $2}'); do
+    if [[ $ref == "refs/heads/${branch}" ]]; then
+      yadm branch -d $branch
+    elif [[ $ref =~ refs/remotes/.*/${branch} ]]; then
+      THIS_ORIGIN=$(cut -d/ -f3 <<< $ref)
+      yadm push $THIS_ORIGIN --delete $branch
+    fi
+  done
+done

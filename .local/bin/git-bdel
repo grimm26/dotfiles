@@ -4,7 +4,7 @@ set -e
 # bdel = branch delete
 # delete's local and remote branch
 THIS_BRANCH=$1
-for ref in $(git show-ref $1 |awk '{print $2}'); do
+for ref in $(git show-ref $THIS_BRANCH |awk '{print $2}'); do
   if [[ $ref == "refs/heads/${THIS_BRANCH}" ]]; then
     git branch -d $THIS_BRANCH
   elif [[ $ref =~ refs/remotes/.*/${THIS_BRANCH} ]]; then
