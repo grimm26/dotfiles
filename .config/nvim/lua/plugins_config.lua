@@ -214,7 +214,7 @@ require("legendary").setup({
     { "<leader>fb", require("telescope").extensions.file_browser.file_browser, description = "Browse Files" },
     { "<leader>fd", require("telescope.builtin").find_files, description = "Find Files" },
     { "<leader>fg", require("telescope.builtin").live_grep, description = "Grep files" },
-    { "<leader>fbuf", require("telescope.builtin").buffers, description = "List buffers" },
+    { "<leader>bn", require("telescope.builtin").buffers, description = "List buffers" },
     { "<leader>help", require("telescope.builtin").help_tags, description = "List help tags" },
     { "<leader>gitf", require("telescope.builtin").git_files, description = "List files under Git control" },
     { "<leader>ci", require("telescope.builtin").git_commits, description = "List/Search Git commits" },
