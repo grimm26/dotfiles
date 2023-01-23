@@ -20,6 +20,10 @@ zmodule utility
 zmodule ssh
 
 # ohmyzsh stuff
+# other omz plugins may need omz functions. It does
+# conflict with mkcd from zimfw, but they both essentially
+# do the same thing.
+zmodule ohmyzsh/ohmyzsh --root lib --source functions.zsh
 zmodule ohmyzsh/ohmyzsh --root lib --source clipboard.zsh
 zmodule ohmyzsh/ohmyzsh --root plugins/vi-mode
 zmodule ohmyzsh/ohmyzsh --root plugins/command-not-found
