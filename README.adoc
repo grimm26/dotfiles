@@ -13,7 +13,7 @@ The main tools that I use this to manage:
 * https://sw.kovidgoyal.net/kitty[kitty]
 ** A modern, multi platform terminal emulator
 * https://neovim.io[Neovim]
-** neovim is the primary editor and I have switched over to a lua config. The old `init.vim` is there as `_init.vim_` for posterity, but it is not used at all.
+** neovim is the primary editor and I have switched over to a lua config. The old `init.vim` is there as `\_init.vim_` for posterity, but it is not used at all.
 
 == yadm vs stow
 
