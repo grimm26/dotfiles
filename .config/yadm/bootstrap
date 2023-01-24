@@ -552,7 +552,7 @@ if [[ ! -v setup_MINIMAL ]]; then
     PIP_OPTIONS="--force-reinstall"
   fi
   echo "Python packages:"
-  for pkg in pip pipreqs argcomplete pre-commit 'boto3[crt]' asciidoc;do
+  for pkg in pip pipreqs argcomplete pre-commit 'boto3[crt]';do
     python -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
   done
 
