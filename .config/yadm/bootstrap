@@ -557,7 +557,7 @@ if [[ ! -v setup_MINIMAL ]]; then
   done
 
   print "Ruby Gems"
-  for pkg in aws-sdk-ec2 bundler fileutils octokit asciidoctor;do
+  for pkg in aws-sdk-ec2 bundler fileutils octokit asciidoctor kramdown-asciidoc;do
     gem install $pkg
   done
 
