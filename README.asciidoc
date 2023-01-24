@@ -1,0 +1,30 @@
+= Homedir management using yadm
+
+This is for managing my dotfiles (and more) with https://yadm.io[yadm].
+This is only tested working on MacOS Monterrey (12.3) and Ubuntu Jammy (22.04). It should also work on Ubuntu Focal and MacOS 11.
+
+The main tools that I use this to manage:
+
+* https://zsh.sourceforge.io[zsh]
+** dotfiles and plugins loaded with antibody
+** script to install stuff and dotfiles.
+* https://git-scm.com[git]
+** custom scripts and gitconfig
+* https://sw.kovidgoyal.net/kitty[kitty]
+** A modern, multi platform terminal emulator
+* https://neovim.io[Neovim]
+** neovim is the primary editor and I have switched over to a lua config. The old `init.vim` is there as `_init.vim_` for posterity, but it is not used at all.
+
+== yadm vs stow
+
+I was previously using some scripts and https://www.gnu.org/software/stow[GNU stow] to install the dotfiles from this repo. The old setup using stow is in the https://github.com/grimm26/dotfiles/tree/legacy[legacy branch]. It was kinda janky, so I decided to move to using yadm.
+
+== How to install
+
+*You must first install yadm*. I do this by cloning https://github.com/TheLocehiliosan/yadm[the repo] to `~/.yadm-project` and then `ln -s ../../.yadm-project/yadm ~/.local/bin/yadm`. This is what my setup assumes, but you can install yadm however you like.
+
+There is a https://github.com/grimm26/dotfiles/blob/main/.config/yadm/bootstrap[bootstrap script] that installs packages that I use.
+
+=== First time
+
+When running this the first time, you may have files in place of the ones that this package comes with. yadm will ask you if you want to overwrite them.
