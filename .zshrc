@@ -595,24 +595,24 @@ get_tg_latest_version
 
 tf11 () {
   tgsw 0.18.7
-  tfsw --latest-stable 0.11
+  tfsw --latest-stable 0.11.0
 }
 tf12 () {
   tgsw 0.24.4
-  tfsw --latest-stable 0.12
+  tfsw --latest-stable 0.12.0
 }
 # terraform 0.13 and up should work with the latest terragrunt version - 2021-09-10
 tf13 () {
   tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 0.13
+  tfsw --latest-stable 0.13.0
 }
 tf14 () {
   tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 0.14
+  tfsw --latest-stable 0.14.0
 }
 tf15 () {
   tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 0.15
+  tfsw --latest-stable 0.15.0
 }
 tf1.0 () {
   tgsw $TG_LATEST_VERSION
