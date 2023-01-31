@@ -17,6 +17,9 @@ fi
 if [[ -d ${HOME}/.cargo/bin ]]; then
   path=("${HOME}/.cargo/bin" $path)
 fi
+if [[ -d ${HOME}/.local/kitty.app/bin ]]; then
+  path+=(${HOME}/.local/kitty.app/bin)
+fi
 export MY_BIN="$HOME/.local/bin"
 path=("$MY_BIN" $path)
 typeset -U path

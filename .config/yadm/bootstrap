@@ -353,7 +353,6 @@ case $(uname) in
       fi
       if [[ $KITTY_VERSION != $LATEST_KITTY ]];then
         curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
-        ln -sf ~/.local/kitty.app/bin/kitty ~/.local/bin/
         # Place the kitty.desktop file somewhere it can be found by the OS
         cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
         # If you want to open text files and images in kitty via your file manager also add the kitty-open.desktop file
@@ -522,8 +521,9 @@ if [[ ! -v setup_MINIMAL ]]; then
   installed_k9s_version=$(k9s version -s 2>/dev/null| grep Version | awk '{print $2}')
   if [[ ${installed_k9s_version} != $latest_k9s_version ]]; then
     print "Updating from ${installed_k9s_version} to $latest_k9s_version"
-    GH_HOST=github.com gh release download $latest_k9s_version --pattern "k9s_$(uname -s)_$(uname -m).tar.gz" --repo derailed/k9s -D ${MY_TMP} \
-    && tar -C $home_bin -xzf ${MY_TMP}/k9s_$(uname -s)_$(uname -m).tar.gz k9s \
+    k9s_asset="k9s_$(uname -s)_${arch}.tar.gz"
+    GH_HOST=github.com gh release download $latest_k9s_version --pattern $k9s_asset --repo derailed/k9s -D ${MY_TMP} \
+    && tar -C $home_bin -xzf ${MY_TMP}/${k9s_asset} k9s \
     && chmod 755 ${home_bin}/k9s
   fi
 
