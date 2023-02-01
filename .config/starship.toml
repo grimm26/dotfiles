@@ -1,6 +1,6 @@
 format = """$all"""
 # Put language info and aws into rprompt
-right_format = """$java $python $ruby $go $perl $aws $terraform"""
+right_format = """$java $python $ruby $go $perl"""
 
 # A continuation prompt that displays two filled in arrows
 continuation_prompt = "▶▶(inverted) "
