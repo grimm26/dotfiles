@@ -13,7 +13,7 @@ end
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 g.mapleader = " "
 g.maplocalleader = " "
-vim.lsp.set_log_level("error")
+vim.lsp.set_log_level("off")
 if fn.has("termguicolors") == 1 then
   set.termguicolors = true
 end
