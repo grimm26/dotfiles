@@ -41,7 +41,7 @@ return require("packer").startup(function(use)
     "will133/vim-dirdiff",
     "tpope/vim-endwise",
     "tpope/vim-fugitive",
-    -- "fatih/vim-go",
+    "fatih/vim-go",
     "mrjones2014/legendary.nvim", -- keymappings, commands, autocmds
     "stevearc/dressing.nvim", -- fancy ui menu with legendary
     "numToStr/FTerm.nvim",

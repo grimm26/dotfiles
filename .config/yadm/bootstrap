@@ -5,7 +5,7 @@
 # Versions
 GOLANG_VERSION="1.20"
 NODEJS_VERSION="18.14.0"
-PYTHON_VERSION="3.11.1"
+PYTHON_VERSION="3.11.2"
 # Set NEOVIM_BUILD to nightly or latest. If set to nightly, this will not check nvim as it assumes you installed the nightly yourself.
 NEOVIM_BUILD="latest"
 while getopts 'M' OPT; do
