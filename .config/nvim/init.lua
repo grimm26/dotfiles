@@ -2,13 +2,26 @@ local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')
 local fn = vim.fn -- to call Vim functions e.g. fn.bufnr()
 local g = vim.g -- a table to access global variables (let g:something = foo)
 local set = vim.opt -- to set options
-
--- Install packer
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-
-if fn.empty(vim.fn.glob(install_path)) > 0 then
-  fn.execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
+fd = "fdfind"
+if vim.fn.executable("fdfind") == 1 then
+  fd = "fdfind"
+elseif vim.fn.executable("fd") == 1 then
+  fd = "fd"
 end
+
+-- load lazy plugin manager
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 -- Remap space as leader key
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 g.mapleader = " "
@@ -19,9 +32,10 @@ if fn.has("termguicolors") == 1 then
 end
 set.completeopt = { "menu", "menuone", "noselect" }
 require("lastplace")
-require("plugins_load")
-require("plugins_config")
-require("my_lua_snippets")
+require("lazy").setup("plugins")
+-- require("plugins_load")
+-- require("plugins_config")
+-- require("my_lua_snippets")
 -- See https://github.com/neovim/neovim/pull/20633, https://github.com/folke/noice.nvim/issues/47
 if fn.has("nvim-0.9.0") == 1 then
   set.shortmess:append({ C = true })
@@ -65,7 +79,6 @@ set.guifont = "Monaco:h14"
 set.ffs = { "unix", "dos", "mac" }
 set.background = "dark"
 g.solarized_visibility = "high"
-cmd.colorscheme("solarized-high")
 -- show me where my cursor is
 set.cursorline = true
 set.cursorcolumn = true
