@@ -3,6 +3,7 @@ return {
   { "hrsh7th/cmp-nvim-lsp", lazy = true },
   { "hrsh7th/cmp-buffer", lazy = true },
   { "hrsh7th/cmp-path", lazy = true },
+  { "hrsh7th/cmp-cmdline", lazy = true },
   {
     "hrsh7th/nvim-cmp",
     -- load cmp on InsertEnter
@@ -13,6 +14,7 @@ return {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
+      "hrsh7th/cmp-cmdline",
       "onsails/lspkind.nvim",
       "L3MON4D3/LuaSnip",
     },
