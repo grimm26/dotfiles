@@ -20,6 +20,9 @@ return {
       vim.api.nvim_create_user_command("FTermToggle", function()
         require("FTerm").toggle()
       end, { bang = true })
+      vim.api.nvim_create_user_command("TgPlan", function()
+        require("FTerm").scratch({ cmd = { "terragrunt", "plan" } })
+      end, { bang = true })
     end,
   },
 }

@@ -17,6 +17,18 @@ return {
         end,
         desc = "Code Action menu",
       },
+      {
+        "<leader>lf",
+        function()
+          vim.lsp.buf.format({
+            async = true,
+          })
+        end,
+        desc = "Format buffer with LSP",
+        buffer = true,
+        silent = true,
+        noremap = true,
+      },
     },
     config = function()
       local lsp_on_attach_custom = function(client, bufnr)

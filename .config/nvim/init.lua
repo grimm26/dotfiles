@@ -96,3 +96,5 @@ iabbrev taht that
 iabbrev endopint endpoint
 iabbrev updaet update
 ]])
+-- Set up some keymaps
+vim.keymap.set("n", "<leader>num", ":set number!<cr>", { desc = "Toggle line numbers" })
