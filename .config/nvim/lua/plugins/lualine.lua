@@ -38,9 +38,10 @@ return {
           lualine_z = {
             "location",
             {
+              -- Show if there are plugin updates from lazy.nvim
               require("lazy.status").updates,
               cond = require("lazy.status").has_updates,
-              color = { fg = "#ff9e64" },
+              color = { fg = "yellow" },
             },
           },
         },
