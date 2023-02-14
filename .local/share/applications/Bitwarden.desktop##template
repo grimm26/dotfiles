@@ -7,4 +7,4 @@ Comment=Bitwarden Password Vault
 Exec={{ env.HOME }}/.local/bin/bitwarden
 Icon={{ env.HOME }}/.local/share/icons/bitwarden_icon.png
 Categories=Utility;Security
-MimeType=x-scheme-handler/bitwarden;text/html;
+MimeType=x-scheme-handler/bitwarden;
