@@ -2,9 +2,10 @@
 Version=1.0
 Type=Application
 Name=Bitwarden
-GenericName=Password Vault
-Comment=Bitwarden Password Vault
+Comment=A secure and free password manager for all of your devices.
+StartupWMClass=Bitwarden
+GenericName=Password Manager
 Exec={{ env.HOME }}/.local/bin/bitwarden
 Icon={{ env.HOME }}/.local/share/icons/bitwarden_icon.png
-Categories=Utility;Security
+Categories=Utility
 MimeType=x-scheme-handler/bitwarden;
