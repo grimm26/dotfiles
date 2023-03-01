@@ -154,6 +154,11 @@ return {
   },
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
+    cmd = {
+      "MTU",
+      "MasonToolsUpdate",
+      "MasonToolsInstall",
+    },
     config = function()
       require("mason-tool-installer").setup({
         -- a list of all tools you want to ensure are installed upon
@@ -191,6 +196,7 @@ return {
         -- Default: true
         run_on_start = true,
       })
+      vim.api.nvim_create_user_command("MTU", "MasonToolsUpdate", { desc = "Run MasonToolsUpdate" })
     end,
   },
 }

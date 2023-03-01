@@ -1,16 +1,16 @@
 config {
   module = true
-  force = false
+  force  = false
 }
 
 plugin "aws" {
   deep_check = false
-  enabled = true
+  enabled    = true
 }
 
 plugin "terraform" {
   enabled = true
-  preset = "recommended"
+  preset  = "recommended"
 }
 
 rule "terraform_unused_declarations" {
@@ -19,5 +19,11 @@ rule "terraform_unused_declarations" {
 
 rule "terraform_module_pinned_source" {
   enabled = true
-  style = "semver"
+  style   = "semver"
+}
+rule "terraform_unused_required_providers" {
+  enabled = true
+}
+rule "terraform_required_providers" {
+  enabled = false
 }
