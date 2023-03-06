@@ -15,7 +15,9 @@ return {
           }),
           null_ls.builtins.diagnostics.codespell,
           null_ls.builtins.diagnostics.jsonlint,
-          null_ls.builtins.diagnostics.markdownlint,
+          null_ls.builtins.diagnostics.markdownlint.with({
+            extra_args = { "--disable", "MD013" },
+          }),
           null_ls.builtins.diagnostics.misspell,
           null_ls.builtins.diagnostics.zsh,
           null_ls.builtins.formatting.jq,
