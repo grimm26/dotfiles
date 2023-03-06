@@ -1,3 +1,4 @@
+MOZ_ENABLE_WAYLAND=1
 skip_global_compinit=1
 export GOPATH=~/go
 path+=(${GOPATH}/bin)
