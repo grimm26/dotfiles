@@ -565,9 +565,4 @@ if [[ ! -v setup_MINIMAL ]]; then
   go install github.com/RasmusLindroth/tut@latest
 fi
 
-# Checking for latest docker images that I use
-print "Syncing latest docker images"
-for docker_image in ghcr.io/tomwright/dasel:latest nicolargo/glances:latest-full ghcr.io/terraform-linters/tflint-bundle achannarasappa/ticker; do
-  docker pull $docker_image
-done
 rm -rf ${MY_TMP}
