@@ -37,12 +37,7 @@ return {
           lualine_y = { "progress" },
           lualine_z = {
             "location",
-            {
-              -- Show if there are plugin updates from lazy.nvim
-              require("lazy.status").updates,
-              cond = require("lazy.status").has_updates,
-              color = { fg = "yellow" },
-            },
+            "lazy",
           },
         },
         inactive_sections = {
@@ -54,7 +49,7 @@ return {
           lualine_z = {},
         },
         tabline = {},
-        extensions = {},
+        extensions = { "lazy" },
       })
     end,
   },
