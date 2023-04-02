@@ -24,7 +24,6 @@ return {
         "hcl",
         "html",
         "java",
-        "help",
         "html",
         "javascript",
         "json",
@@ -42,6 +41,7 @@ return {
         "terraform",
         "toml",
         "vim",
+        "vimdoc",
         "yaml",
       },
       ignore_install = {
