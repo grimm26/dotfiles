@@ -1,21 +1,28 @@
 #!/bin/bash
 # Simple script to cut a github release with semantic versioning.
+# Chef cookbook version will match metadata version.
 # "v" prefix is assumed.
 
 function usage {
-  echo "Usage: $(basename $0) -M|m|p|t" 2>&1
+  echo "Usage: $(basename $0) [-M|m|p|t]" 2>&1
   echo '   -M   Bumps a major version'
   echo '   -m   Bumps a minor version'
   echo '   -p   Bumps a patch/tiny version'
   echo '   -t   Bumps a patch/tiny version'
+  printf "\nChef cookbook release requires no flags, it will be read from metadata.\n"
   exit 1
 }
 
 function check_bump_set {
   if [[ "${BUMP_TYPE}x" != "x" ]]; then
     # BUMP_TYPE already set
-    echo "Only one option at a time is supported."
-    usage
+    if [[ ${BUMP_TYPE} == "chef" ]]; then
+      echo "tag is automatically set to match chef cookbook version ${chef_tag}"
+      return 1
+    else
+      echo "Only one option at a time is supported."
+      usage
+    fi
   fi
 }
 
@@ -24,19 +31,24 @@ command -v gh >/dev/null 2>&1 || {
   exit 1
 }
 
-if [[ ${#} -eq 0 ]]; then
+if [[ -a ./metadata.rb ]]; then
+  cookbook_version=$(grep -w '^version' metadata.rb |awk '{print $2}' | tr -C -d "v[:digit:].")
+  chef_tag="v${cookbook_version}"
+fi
+
+if [[ ${#} -eq 0 && -z "${chef_tag}" ]]; then
    usage
 fi
 
-BUMP_TYPE=""
+BUMP_TYPE="chef"
 # Define list of arguments expected in the input
 optstring=":Mmpt"
 
 while getopts ${optstring} arg; do
   case "${arg}" in
-    M) check_bump_set; BUMP_TYPE="major" ;;
-    m) check_bump_set; BUMP_TYPE="minor" ;;
-    p|t) check_bump_set; BUMP_TYPE="patch" ;;
+    M) check_bump_set && BUMP_TYPE="major" ;;
+    m) check_bump_set && BUMP_TYPE="minor" ;;
+    p|t) check_bump_set && BUMP_TYPE="patch" ;;
 
     ?)
       echo "Invalid option: -${OPTARG}."
@@ -46,18 +58,22 @@ while getopts ${optstring} arg; do
   esac
 done
 
-CURRENT_RELEASE=$(gh release list --exclude-drafts --limit 1 | cut -f3 | sed 's/v//')
-IFS='.' read -r major minor patch <<< $CURRENT_RELEASE
+if [[ ${BUMP_TYPE} == "chef" ]]; then
+  NEW_RELEASE="${chef_tag}"
+else
+  CURRENT_RELEASE=$(gh release list --exclude-drafts --limit 1 | cut -f3 | sed 's/v//')
+  IFS='.' read -r major minor patch <<< $CURRENT_RELEASE
 
-case "${BUMP_TYPE}" in
-  major) major=$((major+1)); minor=0; patch=0 ;;
-  minor) minor=$((minor+1)); patch=0 ;;
-  patch) patch=$((patch+1)) ;;
-  *)
-    echo >&2 "Somehow we got an invalid release type of ${BUMP_TYPE}"
-    exit 1
-    ;;
-esac
+  case "${BUMP_TYPE}" in
+    major) major=$((major+1)); minor=0; patch=0 ;;
+    minor) minor=$((minor+1)); patch=0 ;;
+    patch) patch=$((patch+1)) ;;
+    *)
+      echo >&2 "Somehow we got an invalid release type of ${BUMP_TYPE}"
+      exit 1
+      ;;
+  esac
 
-NEW_RELEASE="v${major}.${minor}.${patch}"
+  NEW_RELEASE="v${major}.${minor}.${patch}"
+fi
 exec gh release create $NEW_RELEASE
