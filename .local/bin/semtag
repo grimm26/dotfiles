@@ -76,4 +76,4 @@ else
 
   NEW_RELEASE="v${major}.${minor}.${patch}"
 fi
-exec gh release create $NEW_RELEASE
+exec gh release create $NEW_RELEASE --generate-notes
