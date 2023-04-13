@@ -70,7 +70,9 @@ return {
         capabilities = cmp_capabilities,
         on_attach = lsp_on_attach_custom,
       })
-
+      lspconfig.jdtls.setup({
+        capabilities = cmp_capabilities,
+      })
       lspconfig.jsonls.setup({
         capabilities = cmp_capabilities,
         on_attach = lsp_on_attach_custom,
@@ -169,6 +171,7 @@ return {
           "codespell",
           "dockerfile-language-server",
           "gopls",
+          "jdtls",
           "json-lsp",
           "jsonlint",
           "markdownlint",
