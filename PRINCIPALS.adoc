@@ -1,0 +1,25 @@
+= Guiding Principals For My Setup
+
+I get coworkers asking me on occasion how my setup works or what this or that thing is. I'll start by laying out why I have this setup.
+
+== CLI First
+
+I do most things from the command line, therefore my shell environment has a lot of customization of functions, aliases, prompt, etc.
+
+=== Component Summary
+
+I have used https://zsh.sourceforge.io/[zsh] for quite a while and am pretty settled into it.
+I've used https://grml.org/zsh/[grml zsh] setup in the past, but now use a mix of https://zimfw.sh/[zimfw], https://ohmyz.sh/[oh-my-zsh], and custom stuff.
+
+I work with https://github.com[GitHub] a lot, so I use https://cli.github.com[gh].
+Obviously I also use https://https://git-scm.com[git] a lot, too, so I use the git CLI tool, not any of the GUIs.
+
+I use https://starship.rs/[starship] for my prompt.
+You can use it with any shell, so if you switch shells you can at least keep your prompt exactly the same.
+This also enables one to share their prompt setup with people who don't run the same shell.
+
+I use https://github.com/ajeetdsouza/zoxide[zoxide] for a "smarter" cd command, https://github.com/lsd-rs/lsd[lsd] as a better `ls` command, https://direnv.net/[direnv] to control some environment variables per path, and other various little tools and libraries.
+
+I use https://neovim.io/[Neovim] for my editor with various plugins.
+
+I run everything in https://sw.kovidgoyal.net/kitty/[kitty terminal].
