@@ -18,8 +18,25 @@ I use https://starship.rs/[starship] for my prompt.
 You can use it with any shell, so if you switch shells you can at least keep your prompt exactly the same.
 This also enables one to share their prompt setup with people who don't run the same shell.
 
-I use https://github.com/ajeetdsouza/zoxide[zoxide] for a "smarter" cd command, https://github.com/lsd-rs/lsd[lsd] as a better `ls` command, https://direnv.net/[direnv] to control some environment variables per path, and other various little tools and libraries.
+I use https://github.com/ajeetdsouza/zoxide[zoxide] for a "smarter" cd command, https://github.com/lsd-rs/lsd[lsd] as a better `ls` command, https://direnv.net/[direnv] to control some environment variables per path, https://github.com/junegunn/fzf[fzf], and other various little tools and libraries.
 
 I use https://neovim.io/[Neovim] for my editor with various plugins.
 
 I run everything in https://sw.kovidgoyal.net/kitty/[kitty terminal].
+
+==== zsh
+I have a https://github.com/grimm26/dotfiles/blob/main/.zshenv[~/.zshenv] file (this is sourced first by zsh) that sets some pathing and environment variables.
+It also will source a `~/.zshrnv.local` for localized settings that I don't want in git :).
+I use the https://zimfw.sh/[zimfw] framework to manage my plugins, even oh-my-zsh plugins.
+The top of my https://github.com/grimm26/dotfiles/blob/main/.zshrc[~/.zshrc] initializes zimfw, installs it if it is not there already, and processes the https://github.com/grimm26/dotfiles/blob/main/.zimrc%23%23template[~/.zimrc] file that I have templated.
+The rest of the `~/.zshrc` is setting options, aliases, functions, the usual.
+
+==== zoxide
+
+==== starship
+
+==== gh
+
+==== neovim
+
+==== kitty
