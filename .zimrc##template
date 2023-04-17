@@ -55,6 +55,7 @@ zmodule joke/zim-kubectl
 zmodule joke/zim-helm
 zmodule joke/zim-starship
 zmodule MichaelAquilina/zsh-you-should-use --source you-should-use.plugin.zsh
+zmodule junegunn/fzf-git.sh --source fzf-git.sh
 #
 # Completion
 #
