@@ -50,11 +50,15 @@ ohmyzsh/ohmyzsh path:plugins/gnu-utils
 ohmyzsh/ohmyzsh path:plugins/brew
 {% endif %}
 
+# These just load completions
 zmodule joke/zim-github-cli
 zmodule joke/zim-kubectl
 zmodule joke/zim-helm
 zmodule joke/zim-starship
+
+# https://github.com/MichaelAquilina/zsh-you-should-use/blob/master/README.rst
 zmodule MichaelAquilina/zsh-you-should-use --source you-should-use.plugin.zsh
+# https://github.com/junegunn/fzf-git.sh/blob/main/README.md
 zmodule junegunn/fzf-git.sh --source fzf-git.sh
 #
 # Completion
@@ -66,7 +70,7 @@ zmodule zsh-users/zsh-completions --fpath src
 # completion must be sourced after all modules that add completion definitions.
 zmodule completion
 # modules that need to use compdef or something and so have to come after completion
-zmodule grimm26/ohmyzsh-ohmyzsh --root plugins/aws --branch aws-plugin
+zmodule ohmyzsh/ohmyzsh --root plugins/aws
 zmodule ohmyzsh/ohmyzsh --root plugins/git
 zmodule ohmyzsh/ohmyzsh --root plugins/terraform
 {% if yadm.distro == "Ubuntu" %}

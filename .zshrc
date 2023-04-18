@@ -17,6 +17,9 @@ if (( $+commands[zoxide] )); then
   fi
   source $zoxide_init
 fi
+
+# Disable ohmyzsh auto update checks.
+zstyle ':omz:update' mode disabled
 # Start configuration added by Zim install {{{
 #
 # User configuration sourced by interactive shells

@@ -34,13 +34,13 @@ command -v gh >/dev/null 2>&1 || {
 if [[ -a ./metadata.rb ]]; then
   cookbook_version=$(grep -w '^version' metadata.rb |awk '{print $2}' | tr -C -d "v[:digit:].")
   chef_tag="v${cookbook_version}"
+  BUMP_TYPE="chef"
 fi
 
 if [[ ${#} -eq 0 && -z "${chef_tag}" ]]; then
    usage
 fi
 
-BUMP_TYPE="chef"
 # Define list of arguments expected in the input
 optstring=":Mmpt"
 
