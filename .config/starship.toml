@@ -13,7 +13,9 @@ style = "#ff9900" # aws orange
 [aws.region_aliases]
 ap-southeast-2 = "australia"
 sa-east-1 = "brazil"
+us-east-1 = "virginia"
 us-east-2 = "ohio"
+us-west-1 = "california"
 us-west-2 = "oregon"
 
 [conda]
