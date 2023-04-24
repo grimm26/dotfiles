@@ -2,10 +2,15 @@
 #
 #
 
+# Utilities that we need to get started.
+(( ${+commands[gh]} )) || { echo "You need to install gh (https://cli.github.com/)" && exit 1; }
+(( ${+commands[curl]} )) || { echo "You need to install curl" && exit 1; }
+(( ${+commands[jq]} ))|| { echo "You need to install jq" && exit 1; }
+
 # Versions
-GOLANG_VERSION="1.20.3"
-NODEJS_VERSION="18.16.0"
-PYTHON_VERSION="3.11.3"
+GOLANG_VERSION=$(curl --silent https://endoflife.date/api/go.json |jq -r  '.[0].latest')
+NODEJS_VERSION=$(curl --silent https://endoflife.date/api/nodejs.json |jq -r '.[]| select(.support=="2023-10-18").latest')
+PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python.json |jq -r '.[0].latest')
 # Set NEOVIM_BUILD to nightly or latest. If set to nightly, this will not check nvim as it assumes you installed the nightly yourself.
 NEOVIM_BUILD="latest"
 while getopts 'M' OPT; do
