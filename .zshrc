@@ -84,11 +84,15 @@ zstyle ':zim:*' case-sensitivity sensitive
 #
 zstyle ':completion::complete:*' cache-path ~/.cache/zsh/zcompcache
 
+# in order to use #, ~ and ^ for filename generation grep word
+# *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
+# don't forget to quote '^', '~' and '#'!
+setopt extended_glob
 #
 # ssh
 #
-if [[ -n  ~/.ssh/id_*sa(#qN) ]]; then
-  my_ssh_keys=( ~/.ssh/*id_*sa(:t) )
+if [[ -n ~/.ssh/id_*(#qN) ]]; then
+  my_ssh_keys=( ~/.ssh/id_*~*.pub(:t) )
   zstyle ':zim:ssh' ids $my_ssh_keys
 fi
 #
@@ -203,11 +207,6 @@ setopt histignorespace
 # if a command is issued that can't be executed as a normal command, and the
 # command is the name of a directory, perform the cd command to that directory.
 setopt auto_cd
-
-# in order to use #, ~ and ^ for filename generation grep word
-# *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files
-# don't forget to quote '^', '~' and '#'!
-setopt extended_glob
 
 # display PID when suspending processes as well
 setopt longlistjobs
