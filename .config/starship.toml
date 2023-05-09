@@ -7,7 +7,7 @@ continuation_prompt = "▶▶(inverted) "
 
 [aws]
 format = '[$symbol($profile )(\($region\) )]($style)'
-symbol = " "
+symbol = "󰸏 "
 style = "#ff9900" # aws orange
 
 [aws.region_aliases]
