@@ -2,9 +2,10 @@
 
 # Find and replace a string in the current directory, optionally recursing down.
 
-optstring="Rt:"
+optstring="DRt:"
 while getopts ${optstring} arg; do
   case "${arg}" in
+    D) dry_run="true" ;;
     R) go_recursive=true ;;
     t) type="${OPTARG}" ;;
     ?)
@@ -25,11 +26,12 @@ find_command="${find_command} -type f"
 if [[ "${type}x" != "x" ]]; then
   find_command="${find_command} -name '${type}'"
 fi
-find_command="${find_command} -print"
+find_command="${find_command} -not -path '*/\.git/*' -print"
 
+[[ $dry_run == "true" ]] && echo $find_command
 for file in $(${find_command}); do
-  echo $file
   if grep -q ${find_string} $file; then
+    [[ $dry_run == "true" ]] && echo $file && continue
     sed -i -e "s/${find_string}/${replace_string}/g" $file
   fi
 done
