@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Find and replace a string in the current directory, optionally recursing down.
+
+optstring="Rt:"
+while getopts ${optstring} arg; do
+  case "${arg}" in
+    R) go_recursive=true ;;
+    t) type="${OPTARG}" ;;
+    ?)
+      echo "Invalid option: -${OPTARG}."
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+find_string=$1
+replace_string=$2
+
+find_command="find ."
+if [[ "${go_recursive}" != "true" ]]; then
+  find_command="${find_command} -maxdepth 1"
+fi
+find_command="${find_command} -type f"
+if [[ "${type}x" != "x" ]]; then
+  find_command="${find_command} -name '${type}'"
+fi
+find_command="${find_command} -print"
+
+for file in $(${find_command}); do
+  echo $file
+  if grep -q ${find_string} $file; then
+    sed -i -e "s/${find_string}/${replace_string}/g" $file
+  fi
+done
