@@ -566,9 +566,6 @@ if [[ ! -v setup_MINIMAL ]]; then
   for pkg in aws-sdk-ec2 bundler fileutils octokit asciidoctor kramdown-asciidoc;do
     gem install $pkg
   done
-
-  # Install mastodon TUI
-  go install github.com/RasmusLindroth/tut@latest
 fi
 
 rm -rf ${MY_TMP}
