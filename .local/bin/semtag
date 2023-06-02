@@ -35,9 +35,11 @@ if [[ -a ./metadata.rb ]]; then
   cookbook_version=$(grep -w '^version' metadata.rb |awk '{print $2}' | tr -C -d "v[:digit:].")
   chef_tag="v${cookbook_version}"
   BUMP_TYPE="chef"
+else
+  CURRENT_RELEASE=$(gh release list --exclude-drafts --limit 1 | cut -f3 | sed 's/v//')
 fi
 
-if [[ ${#} -eq 0 && -z "${chef_tag}" ]]; then
+if [[ ${#} -eq 0 && -z "${chef_tag}" && ! -z "${CURRENT_RELEASE}" ]]; then
    usage
 fi
 
@@ -61,19 +63,22 @@ done
 if [[ ${BUMP_TYPE} == "chef" ]]; then
   NEW_RELEASE="${chef_tag}"
 else
-  CURRENT_RELEASE=$(gh release list --exclude-drafts --limit 1 | cut -f3 | sed 's/v//')
-  IFS='.' read -r major minor patch <<< $CURRENT_RELEASE
+  if [[ "${CURRENT_RELEASE}x" == "x" ]]; then
+    NEW_RELEASE="v1.0.0"
+  else
+    IFS='.' read -r major minor patch <<< $CURRENT_RELEASE
 
-  case "${BUMP_TYPE}" in
-    major) major=$((major+1)); minor=0; patch=0 ;;
-    minor) minor=$((minor+1)); patch=0 ;;
-    patch) patch=$((patch+1)) ;;
-    *)
-      echo >&2 "Somehow we got an invalid release type of ${BUMP_TYPE}"
-      exit 1
-      ;;
-  esac
+    case "${BUMP_TYPE}" in
+      major) major=$((major+1)); minor=0; patch=0 ;;
+      minor) minor=$((minor+1)); patch=0 ;;
+      patch) patch=$((patch+1)) ;;
+      *)
+        echo >&2 "Somehow we got an invalid release type of ${BUMP_TYPE}"
+        exit 1
+        ;;
+    esac
 
-  NEW_RELEASE="v${major}.${minor}.${patch}"
+    NEW_RELEASE="v${major}.${minor}.${patch}"
+  fi
 fi
 exec gh release create $NEW_RELEASE --generate-notes
