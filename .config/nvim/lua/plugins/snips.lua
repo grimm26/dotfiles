@@ -56,6 +56,9 @@ return {
       ls.add_snippets("terraform", {
         s("tags", { t("tags = local.common_tags") }),
       })
+      ls.add_snippets("terraform", {
+        s("source", { t('source = "git::https://git.enova.com/tf-modules/"') }),
+      })
       ls.add_snippets("gitcommit", {
         s("tfup", { t("update terraform and module versions") }),
       })
