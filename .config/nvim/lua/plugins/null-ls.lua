@@ -20,7 +20,6 @@ return {
           }),
           null_ls.builtins.diagnostics.misspell,
           null_ls.builtins.diagnostics.zsh,
-          null_ls.builtins.formatting.jq,
           null_ls.builtins.formatting.gofmt,
           null_ls.builtins.formatting.isort,
           null_ls.builtins.formatting.prettierd.with({

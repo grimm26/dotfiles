@@ -91,7 +91,7 @@ return {
       })
       lspconfig.jsonls.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_no_fmt,
+        on_attach = lsp_on_attach_fmt_on_write,
       })
       lspconfig.solargraph.setup({
         capabilities = cmp_capabilities,
