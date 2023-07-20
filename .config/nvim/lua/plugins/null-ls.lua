@@ -13,7 +13,9 @@ return {
           null_ls.builtins.completion.spell.with({
             filetypes = { "gitcommit", "markdown", "text", "asciidoc" },
           }),
-          null_ls.builtins.diagnostics.codespell,
+          null_ls.builtins.diagnostics.codespell.with({
+            extra_args = { "-I", "~/.config/codespell.ignore_words" },
+          }),
           null_ls.builtins.diagnostics.jsonlint,
           null_ls.builtins.diagnostics.markdownlint.with({
             extra_args = { "--disable", "MD013" },
