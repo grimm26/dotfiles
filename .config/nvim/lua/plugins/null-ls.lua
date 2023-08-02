@@ -20,9 +20,7 @@ return {
           null_ls.builtins.diagnostics.markdownlint.with({
             extra_args = { "--disable", "MD013" },
           }),
-          null_ls.builtins.diagnostics.misspell,
           null_ls.builtins.diagnostics.zsh,
-          null_ls.builtins.formatting.gofmt,
           null_ls.builtins.formatting.isort,
           null_ls.builtins.formatting.prettierd.with({
             filetypes = { "javascript", "typescript", "vue", "less", "html", "graphql" },

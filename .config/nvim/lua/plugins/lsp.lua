@@ -83,7 +83,7 @@ return {
       })
       lspconfig.gopls.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_no_fmt,
+        on_attach = lsp_on_attach_fmt_on_write,
       })
       lspconfig.jdtls.setup({
         capabilities = cmp_capabilities,
@@ -193,7 +193,6 @@ return {
           "jsonlint",
           "markdownlint",
           "marksman",
-          "misspell",
           "prettierd",
           "python-lsp-server",
           "stylua",
