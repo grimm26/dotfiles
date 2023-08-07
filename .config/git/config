@@ -1,20 +1,20 @@
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [user]
     name = Mark Keisler
     email = mark@mitsein.net
 [trim]
-	protected = main,upstream-main
+    protected = main,upstream-main
     delete = all:origin
-	base = main
+    base = main
 [push]
-	default = upstream
+    default = upstream
 [pull]
-	ff = only
+    ff = only
 [fetch]
-	prune = true
+    prune = true
 [rebase]
-	autostash = true
+    autostash = true
 [rerere]
     enabled = true
 [core]
@@ -25,21 +25,21 @@
 [delta]
     features = line-numbers side-by-side
     syntax-theme = Solarized (dark)
-	navigate = true
+    navigate = true
 [delta "interactive"]
     keep-plus-minus-markers = false
 [diff]
     colorMoved = default
 [interactive]
-	diffFilter = delta --color-only --features=interactive
+    diffFilter = delta --color-only --features=interactive
 [merge]
-	conflictstyle = diff3
+    conflictstyle = diff3
 [help]
-	autocorrect = 20
+    autocorrect = 20
 [format]
     numbered = auto
 [tag]
-	sort = -version:refname
+    sort = -version:refname
 [color]
     branch = yes
     diff   = auto
