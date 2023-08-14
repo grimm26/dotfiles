@@ -322,7 +322,7 @@ case $(uname) in
       # zoxide
       print "zoxide"
       latest_zoxide_version=$(gh_latest_release "ajeetdsouza/zoxide")
-      installed_zoxide_version=$(zoxide --version 2>/dev/null|awk '{print $2}')
+      installed_zoxide_version="v$(zoxide --version 2>/dev/null|awk '{print $2}')"
       if [[ "${installed_zoxide_version}" != "${latest_zoxide_version}" ]]; then
         print "Updating from ${installed_zoxide_version#v} to ${latest_zoxide_version#v}"
         mkdir -p "${MY_TMP}/zoxide"
