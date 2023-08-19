@@ -37,6 +37,7 @@ require("lazy").setup("plugins", {
     enabled = true,
   },
 })
+vim.treesitter.query.set("lua", "injections", "")
 -- See https://github.com/neovim/neovim/pull/20633, https://github.com/folke/noice.nvim/issues/47
 if fn.has("nvim-0.9.0") == 1 then
   set.shortmess:append({ C = true })
