@@ -25,7 +25,6 @@ return {
           null_ls.builtins.formatting.prettierd.with({
             filetypes = { "javascript", "typescript", "vue", "less", "html", "graphql" },
           }),
-          null_ls.builtins.formatting.stylua,
           null_ls.builtins.formatting.terraform_fmt.with({
             extra_filetypes = { "hcl" },
           }),
