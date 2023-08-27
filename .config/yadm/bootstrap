@@ -5,7 +5,7 @@
 # Utilities that we need to get started.
 (( ${+commands[gh]} )) || { echo "You need to install gh (https://cli.github.com/)" && exit 1; }
 (( ${+commands[curl]} )) || { echo "You need to install curl" && exit 1; }
-(( ${+commands[jq]} ))|| { echo "You need to install jq" && exit 1; }
+(( ${+commands[jq]} )) || { echo "You need to install jq" && exit 1; }
 
 # Versions
 GOLANG_VERSION=$(curl --silent https://endoflife.date/api/go/1.21.json |jq -r  '.latest')
@@ -337,14 +337,14 @@ case $(uname) in
       echo "Install Hack Nerd font"
       need_nerd_font=0
       if [[ -f "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" ]]; then
-        if [[ $(strings "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" |grep -w Version: |head -1 |awk '{print $3}') != "3.0.1" ]]; then
+        if [[ $(strings "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" |grep -w Version: |head -1 |awk '{print $3}') != "3.0.2" ]]; then
           need_nerd_font=1
         fi
       else
         need_nerd_font=1
       fi
       if [[ $need_nerd_font -eq 1 ]]; then
-        curl -sLS https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.1/Hack.zip -o ${MY_TMP}/Hack.zip \
+        curl -sLS https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Hack.zip -o ${MY_TMP}/Hack.zip \
           && rm ~/.local/share/fonts/*Nerd* \
           && unzip -u ${MY_TMP}/Hack.zip -d ~/.local/share/fonts \
           && fc-cache -f -v ~/.local/share/fonts
