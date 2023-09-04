@@ -11,8 +11,8 @@
 GOLANG_VERSION=$(curl --silent https://endoflife.date/api/go/1.21.json |jq -r  '.latest')
 NODEJS_VERSION=$(curl --silent https://endoflife.date/api/nodejs/18.json |jq -r '.latest')
 PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.11.json |jq -r '.latest')
-# Set NEOVIM_BUILD to nightly or latest. If set to nightly, this will not check nvim as it assumes you installed the nightly yourself.
-NEOVIM_BUILD="latest"
+# Set NEOVIM_BUILD to nightly or latest. If set to nightly.
+NEOVIM_BUILD="nightly"
 while getopts 'M' OPT; do
   case $OPT in
     M) setup_MINIMAL=1 ;;
@@ -29,7 +29,7 @@ case "$(uname -m)" in
     ;;
 esac
 
-MY_TMP=/tmp/ybootstrap
+MY_TMP=/tmp/ybootstrap$$
 mkdir -p $MY_TMP
 
 # Check if we set up a file for public github settings. On my work machine, our local github settings are in my default environment and I use direnv to set the public ones where needed.  direnv doesn't help in a script :)
@@ -148,7 +148,7 @@ case $(uname) in
           [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
         fi
       elif [[ ${NEOVIM_BUILD} == "nightly" ]]; then
-        read -q "yn?Do you wish to refresh neovim nightly?"
+        read -q "yn?Do you wish to refresh neovim nightly? "
         case $yn in
           [Yy]*)
             print "\nInstalling latest nightly build."
@@ -221,7 +221,6 @@ case $(uname) in
 
       # Use more portable musl pkgs for delta and lsd
       gdelta_pkg="git-delta-musl"
-      lsd_pkg="lsd-musl"
       # git-delta
       echo "git-delta"
       latest_delta_version=$(gh_latest_release "dandavison/delta")
@@ -250,11 +249,11 @@ case $(uname) in
       fi
       # lsd
       echo "lsd"
-      latest_lsd_version=$(gh_latest_release "Peltoche/lsd")
+      latest_lsd_version=$(gh_latest_release "lsd-rs/lsd")
       installed_lsd_version=$(lsd --version 2>/dev/null|awk '{print $2}')
-      if [[ ${installed_lsd_version} != $latest_lsd_version ]]; then
-        GH_HOST=github.com gh release download $latest_lsd_version --pattern "${lsd_pkg}_*amd64.deb" --repo Peltoche/lsd -D ${MY_TMP} \
-          && sudo dpkg --install --skip-same-version ${MY_TMP}/lsd_${latest_lsd_version}_amd64.deb
+      if [[ ${installed_lsd_version#v} != ${latest_lsd_version#v} ]]; then
+        GH_HOST=github.com gh release download $latest_lsd_version --pattern "lsd_*amd64.deb" --repo lsd-rs/lsd -D ${MY_TMP} \
+          && sudo dpkg --install --skip-same-version ${MY_TMP}/lsd_*_amd64.deb
       fi
       # chruby
       echo "chruby"
