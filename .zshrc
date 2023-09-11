@@ -508,52 +508,6 @@ hex() {
 # Need this to get golang aws-sdk to use assumed role
 export AWS_SDK_LOAD_CONFIG=true
 
-aws_creds() {
-  for envar in $(env | grep AWS |cut -d= -f1);do
-    unset $envar
-  done
-  case "$1" in
-    clear)
-      for envar in $(env | grep AWS |cut -d= -f1);do
-        unset $envar
-      done
-      return
-      ;;
-    *)
-      if grep -qw $1 ~/.aws/config; then
-        export AWS_PROFILE=$1
-      else
-        echo "Invalid profile name <<$1>>"
-        return 1
-      fi
-      ;;
-  esac
-  case "$2" in
-    or)
-      export AWS_DEFAULT_REGION=us-west-2
-      export AWS_REGION=us-west-2
-      ;;
-    oh)
-      export AWS_DEFAULT_REGION=us-east-2
-      export AWS_REGION=us-east-2
-      ;;
-    va)
-      export AWS_DEFAULT_REGION=us-east-1
-      export AWS_REGION=us-east-1
-      ;;
-    cn|bj)
-      export AWS_DEFAULT_REGION=cn-north-1
-      export AWS_REGION=cn-north-1
-      ;;
-    ???*)
-      export AWS_DEFAULT_REGION=${2}
-      export AWS_REGION=${2}
-      ;;
-  esac
-  export AWS_SDK_LOAD_CONFIG=1
-  env | grep AWS
-}
-
 # List all occurrences of program in current PATH
 plap() {
     emulate -L zsh
@@ -636,6 +590,10 @@ tf1.4 () {
   tgsw $TG_LATEST_VERSION
   tfsw --latest-stable 1.4.0
 }
+tf1.5 () {
+  tgsw $TG_LATEST_VERSION
+  tfsw --latest-stable 1.5.0
+}
 alias tfver=terraform version | awk '{print $2}'
 go13 () {
   tf13
@@ -658,13 +616,13 @@ alias tgi="tg init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 tfup () {
-  local tf_version=${1:-"1.5.3"}
+  local tf_version=${1:-"1.5.5"}
   atlantis_yaml_mod.rb --tfver $tf_version
   audit-terraform-modules -r
   [[ -s locals.tf ]] && crush_tf_tags.pl
   if [[ -s  versions.tf ]]; then
     sed -i 's!terraform-providers/infoblox!infobloxopen/infoblox!g' versions.tf
-    sed -i 's!required_version =.*!required_version = \"~> 1.5\"!' versions.tf
+    sed -i 's!required_version =.*!required_version = \"~> 1.3\"!' versions.tf
   fi
   for tfile in *.tf; do
     sed -Ei 's/( source.+)\.git\?/\1?/' $tfile
