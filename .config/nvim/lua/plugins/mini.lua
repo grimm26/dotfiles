@@ -1,7 +1,7 @@
 return {
   {
     "echasnovski/mini.nvim",
-    branch = "stable",
+    version = false,
     config = function()
       -- Enable modules out of mini,nvim that we want to use
       local starter = require("mini.starter")
