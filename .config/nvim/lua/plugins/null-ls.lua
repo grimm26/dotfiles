@@ -21,14 +21,6 @@ return {
             extra_args = { "--disable", "MD013" },
           }),
           null_ls.builtins.diagnostics.zsh,
-          null_ls.builtins.formatting.isort,
-          null_ls.builtins.formatting.prettierd.with({
-            filetypes = { "javascript", "typescript", "vue", "less", "html", "graphql" },
-          }),
-          null_ls.builtins.formatting.terraform_fmt.with({
-            extra_filetypes = { "hcl" },
-          }),
-          null_ls.builtins.formatting.yamlfmt,
         },
         -- you can reuse a shared lspconfig on_attach callback here
         on_attach = function(client, bufnr)

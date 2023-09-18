@@ -20,51 +20,15 @@ return {
       {
         "<leader>lf",
         function()
-          vim.lsp.buf.format({
-            async = true,
-          })
+          require("conform").format({lsp_fallback = true})
         end,
-        desc = "Format buffer with LSP",
+        desc = "Format buffer with conform or LSP",
         buffer = true,
         silent = true,
         noremap = true,
       },
     },
     config = function()
-      local lsp_on_attach_no_fmt = function(client, bufnr)
-        -- Set this when using mini.completion
-        -- local function buf_set_option(name, value)
-        --   vim.api.nvim_buf_set_option(bufnr, name, value)
-        -- end
-        --
-        -- buf_set_option("omnifunc", "v:lua.MiniCompletion.completefunc_lsp")
-
-        -- Mappings are created globally for simplicity
-
-        -- Currently all formatting is handled with 'null-ls' plugin
-        if vim.fn.has("nvim-0.8") == 1 then
-          client.server_capabilities.documentFormattingProvider = false
-          client.server_capabilities.documentRangeFormattingProvider = false
-        else
-          client.resolved_capabilities.document_formatting = false
-          client.resolved_capabilities.document_range_formatting = false
-        end
-      end
-      local lsp_on_attach_fmt_on_write = function(client, bufnr)
-        if client.supports_method("textDocument/formatting") then
-          vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            group = augroup,
-            buffer = bufnr,
-            callback = function()
-              vim.lsp.buf.format({
-                bufnr = bufnr,
-                async = false,
-              })
-            end,
-          })
-        end
-      end
       require("cmp_config")
       -- Set up lspconfig.
       local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -72,42 +36,33 @@ return {
       local lspconfig = require("lspconfig")
       lspconfig.ansiblels.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_no_fmt,
       })
       lspconfig.bashls.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_no_fmt,
       })
       lspconfig.dockerls.setup({
         capabilities = cmp_capabilities,
       })
       lspconfig.gopls.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_fmt_on_write,
       })
       lspconfig.jdtls.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_fmt_on_write,
       })
       lspconfig.jsonls.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_fmt_on_write,
       })
       lspconfig.solargraph.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_no_fmt,
       })
       lspconfig.marksman.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_no_fmt,
       })
       lspconfig.terraformls.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_no_fmt,
       })
       lspconfig.vimls.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_no_fmt,
       })
       lspconfig.pylsp.setup({
         capabilities = cmp_capabilities,
@@ -123,7 +78,6 @@ return {
       })
       lspconfig.yamlls.setup({
         capabilities = cmp_capabilities,
-        on_attach = lsp_on_attach_no_fmt,
         settings = {
           yaml = {
             -- don't freak out on Cloudformation
