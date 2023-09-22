@@ -622,7 +622,7 @@ tfup () {
   [[ -s locals.tf ]] && crush_tf_tags.pl
   if [[ -s  versions.tf ]]; then
     sed -i 's!terraform-providers/infoblox!infobloxopen/infoblox!g' versions.tf
-    sed -i 's!required_version =.*!required_version = \"~> 1.3\"!' versions.tf
+    sed -i 's!required_version =.*!required_version = \"~> 1.5\"!' versions.tf
   fi
   for tfile in *.tf; do
     sed -Ei 's/( source.+)\.git\?/\1?/' $tfile
