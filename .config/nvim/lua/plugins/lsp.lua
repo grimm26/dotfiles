@@ -20,7 +20,7 @@ return {
       {
         "<leader>lf",
         function()
-          require("conform").format({lsp_fallback = true})
+          require("conform").format({ lsp_fallback = true })
         end,
         desc = "Format buffer with conform or LSP",
         buffer = true,
@@ -32,6 +32,9 @@ return {
       require("cmp_config")
       -- Set up lspconfig.
       local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
+      lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
+
       require("mason-lspconfig").setup()
       local lspconfig = require("lspconfig")
       lspconfig.ansiblels.setup({
@@ -50,7 +53,7 @@ return {
         capabilities = cmp_capabilities,
       })
       lspconfig.jsonls.setup({
-        capabilities = cmp_capabilities,
+        capabilities = lsp_capabilities,
       })
       lspconfig.solargraph.setup({
         capabilities = cmp_capabilities,
