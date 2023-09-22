@@ -16,7 +16,6 @@ return {
           null_ls.builtins.diagnostics.codespell.with({
             extra_args = { "-I", vim.fn.expand("~/.config/codespell.ignore_words") },
           }),
-          null_ls.builtins.diagnostics.jsonlint,
           null_ls.builtins.diagnostics.markdownlint.with({
             extra_args = { "--disable", "MD013" },
           }),
