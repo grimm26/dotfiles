@@ -12,7 +12,33 @@ return {
       history = true,
       delete_check_events = "TextChanged",
     },
+    keys = {
+      {
+        "<tab>",
+        function()
+          return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
+        end,
+        expr = true,
+        silent = true,
+        mode = "i",
+      },
+      {
+        "<tab>",
+        function()
+          require("luasnip").jump(1)
+        end,
+        mode = "s",
+      },
+      {
+        "<s-tab>",
+        function()
+          require("luasnip").jump(-1)
+        end,
+        mode = { "i", "s" },
+      },
+    },
     config = function()
+      require("luasnip.loaders.from_vscode").load({ paths = { "./my-snippets" } })
       local ls = require("luasnip")
       -- some shorthands...
       local s = ls.snippet
@@ -53,12 +79,6 @@ return {
         enable_autosnippets = true,
       })
 
-      ls.add_snippets("terraform", {
-        s("tags", { t("tags = local.common_tags") }),
-      })
-      ls.add_snippets("terraform", {
-        s("source", { t('source = "git::https://git.enova.com/tf-modules/"') }),
-      })
       ls.add_snippets("gitcommit", {
         s("tfup", { t("update terraform and module versions") }),
       })
@@ -66,8 +86,6 @@ return {
       ls.add_snippets("markdown", {
         s("br", { t("<br/>") }),
       })
-
-      require("luasnip.loaders.from_vscode").lazy_load()
 
       vim.api.nvim_create_user_command("LuaSnipEdit", function()
         require("luasnip.loaders").edit_snippet_files()

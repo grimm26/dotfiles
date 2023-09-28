@@ -39,6 +39,7 @@ return {
         "regex",
         "ruby",
         "rust",
+        "ssh_config",
         "terraform",
         "toml",
         "vim",
