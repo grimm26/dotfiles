@@ -12,12 +12,6 @@ OFF_COLOR="\033[0m"
 # Set English language
 LANG=en_US.UTF-8
 
-# Execute it as root user
-if [ "${USER}" != root ]; then
-  echo -e "${RED_COLOR}ERROR: must be root! Exiting...${OFF_COLOR}"
-  exit "${STATUS_ERROR}"
-fi
-
 # Current status
 USED_BEFORE="$(df -k / | awk 'NR>1 {print $3}')"
 
@@ -29,15 +23,15 @@ if [ -n "$(command -v snap)" ]; then
   if [ "${KEY}" = "y" ] || [ "${KEY}" = "" ]; then
     # remove unused snapd revisions
     echo "Removing unused snapd revisions..."
-    snap set system refresh.retain=2
+    sudo snap set system refresh.retain=2
     # shellcheck disable=SC2162
-    snap list --all | awk '/disabled/ {print $1, $3}' |
+    sudo snap list --all | awk '/disabled/ {print $1, $3}' |
     while read SNAP_NAME SNAP_REV; do
-      snap remove "${SNAP_NAME}" --revision="${SNAP_REV}";
+      sudo snap remove "${SNAP_NAME}" --revision="${SNAP_REV}";
     done
-    if [ -d /var/lib/snapd/cache ] && [ -n "$(ls -A /var/lib/snapd/cache)" ]; then
+    if [ -d /var/lib/snapd/cache ] && [ -n "$(sudo ls -A /var/lib/snapd/cache)" ]; then
       echo "Clearing snap cache."
-      rm /var/lib/snapd/cache/*
+      sudo rm /var/lib/snapd/cache/*
     fi
     echo "Nothing unused to uninstall"
   else
