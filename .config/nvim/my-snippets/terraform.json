@@ -12,9 +12,34 @@
     "body": [
       "module \"${1:module_name}\" {",
       "  source = \"git::https://git.enova.com/tf-modules/${2:module_source}?ref=v1.0.0\"",
+      "  providers = {",
+      "    ${3:child_provider} = ${4:parent_provider}",
+      "  }",
       "}",
       "$0"
     ],
     "description": "Create a module call"
+  },
+  "output": {
+    "prefix": "output",
+    "description": "Output an attribute.",
+    "body": [
+      "output \"${1:output}\" {",
+      "   value = ${2:value}",
+      "}",
+      "$0"
+    ]
+  },
+  "variable": {
+    "prefix": "variable",
+    "description": "Define variable.",
+    "body": [
+      "variable \"${1:myVariable}\" {",
+      "  description = \"${2:description}\"",
+      "  type = \"${3:type}\"",
+      "  default = \"${4:default_value}\"",
+      "}",
+      "$0"
+    ]
   }
 }
