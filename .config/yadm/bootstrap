@@ -122,13 +122,12 @@ case $(uname) in
       # Latest github cli
       print "github cli (gh)"
       if whence -p gh &>/dev/null; then
-        curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
         local CURRENT_GH_VERSION=$(gh version |grep releases |cut -d/ -f8)
-        local LATEST_GH_VERSION=$(jq -r '.tag_name' ${MY_TMP}/gh_latest.json)
+        local LATEST_GH_VERSION=$(gh_latest_release cli/cli)
         if [[ "${CURRENT_GH_VERSION}" != "${LATEST_GH_VERSION}" ]]; then
           print "Updating from ${CURRENT_GH_VERSION} to ${LATEST_GH_VERSION}"
-          local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
-          (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
+          GH_HOST=github.com gh release download ${LATEST_GH_VERSION} --repo cli/cli --pattern \*linux_${machine}.tar.gz -D $MY_TMP
+          (cd $MY_TMP && tar xzf gh_*_linux*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
         fi
       else
         print "Installing gh"
