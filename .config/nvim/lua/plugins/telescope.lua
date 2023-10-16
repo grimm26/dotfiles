@@ -2,6 +2,11 @@ return {
   -- fuzzy finder
   {
     "nvim-telescope/telescope.nvim",
+    dependencies = {
+      { "nvim-telescope/telescope-file-browser.nvim" },
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+      { "nvim-telescope/telescope-github.nvim" },
+    },
     cmd = "Telescope",
     keys = {
       {
@@ -70,20 +75,9 @@ return {
       })
       require("telescope").load_extension("fzf")
       require("telescope").load_extension("file_browser")
+      require("telescope").load_extension("yadm")
+      require("telescope").load_extension("gh")
     end,
     version = false, -- telescope did only one release, so use HEAD for now
-  },
-  {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-    },
-  },
-  {
-    "nvim-telescope/telescope-fzf-native.nvim",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-    },
-    build = "make",
   },
 }
