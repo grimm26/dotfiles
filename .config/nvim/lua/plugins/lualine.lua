@@ -49,7 +49,7 @@ return {
           lualine_z = {},
         },
         tabline = {},
-        extensions = { "lazy" },
+        extensions = { "lazy", "mason" },
       })
     end,
   },

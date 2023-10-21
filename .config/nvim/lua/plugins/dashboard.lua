@@ -21,9 +21,9 @@ return {
               key = "f",
             },
             {
-              desc = " Apps",
+              desc = "yadm",
               group = "DiagnosticHint",
-              action = "Telescope app",
+              action = "Telescope yadm",
               key = "a",
             },
             {
