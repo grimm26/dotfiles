@@ -24,7 +24,7 @@ return {
               desc = "yadm",
               group = "DiagnosticHint",
               action = "Telescope yadm",
-              key = "a",
+              key = "y",
             },
             {
               desc = " dotfiles",
