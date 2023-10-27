@@ -616,10 +616,10 @@ alias tgi="tg init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 tfup () {
-  local tf_version=${1:-"1.5.5"}
-  atlantis_yaml_mod.rb --tfver $tf_version
+  local tf_version=${1:-"1.5.7"}
+  awk -v tfver="v${tf_version}" '$1=="terraform_version:"{$2=tfver} 1' ./atlantis.yaml > ./atlantis.$$ && mv ./atlantis.$$ ./atlantis.yaml
   audit-terraform-modules -r
-  [[ -s locals.tf ]] && crush_tf_tags.pl
+  [[ -s locals.tf ]] && (( ${+commands[crush_tf_tags.pl]} )) && crush_tf_tags.pl
   if [[ -s  versions.tf ]]; then
     sed -i 's!terraform-providers/infoblox!infobloxopen/infoblox!g' versions.tf
     sed -i 's!required_version =.*!required_version = \"~> 1.5\"!' versions.tf
