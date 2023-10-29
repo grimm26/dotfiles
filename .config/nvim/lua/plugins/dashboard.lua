@@ -23,7 +23,7 @@ return {
             {
               desc = "yadm",
               group = "DiagnosticHint",
-              action = "Telescope yadm",
+              action = "Telescope yadm_files",
               key = "y",
             },
             {

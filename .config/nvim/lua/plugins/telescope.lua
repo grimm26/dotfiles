@@ -6,6 +6,7 @@ return {
       { "nvim-telescope/telescope-file-browser.nvim" },
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
       { "nvim-telescope/telescope-github.nvim" },
+      { "pschmitt/telescope-yadm.nvim" },
     },
     cmd = "Telescope",
     keys = {
@@ -75,7 +76,7 @@ return {
       })
       require("telescope").load_extension("fzf")
       require("telescope").load_extension("file_browser")
-      require("telescope").load_extension("yadm")
+      require("telescope").load_extension("yadm_files")
       require("telescope").load_extension("gh")
     end,
     version = false, -- telescope did only one release, so use HEAD for now
