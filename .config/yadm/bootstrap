@@ -9,8 +9,8 @@
 
 # Versions
 GOLANG_VERSION=$(curl --silent https://endoflife.date/api/go/1.21.json |jq -r  '.latest')
-NODEJS_VERSION=$(curl --silent https://endoflife.date/api/nodejs/18.json |jq -r '.latest')
-PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.11.json |jq -r '.latest')
+NODEJS_VERSION=$(curl --silent https://endoflife.date/api/nodejs/20.json |jq -r '.latest')
+PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.12.json |jq -r '.latest')
 # Set NEOVIM_BUILD to nightly or latest. If set to nightly.
 NEOVIM_BUILD="latest"
 while getopts 'M' OPT; do
