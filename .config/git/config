@@ -2,7 +2,7 @@
     defaultBranch = main
 [user]
     name = Mark Keisler
-    email = mark@mitsein.net
+    email = 127401+grimm26@users.noreply.github.com
 [trim]
     protected = main,upstream-main
     delete = all:origin
