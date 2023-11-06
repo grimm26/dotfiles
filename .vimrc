@@ -15,33 +15,16 @@ if has('eval')
   endif
   " Start loading plugins
   call plug#begin()
-  if has('nvim')
-    " nvim specific plugins
-    Plug 'averms/black-nvim',     {'do': ':UpdateRemotePlugins'}
-    Plug 'stsewd/isort.nvim',     {'do': ':UpdateRemotePlugins'}
-    Plug 'ellisonleao/glow.nvim', {'do': ':UpdateRemotePlugins'}
-    Plug 'echasnovski/mini.nvim', {'do': ':UpdateRemotePlugins', 'branch': 'stable'}
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-    Plug 'lewis6991/gitsigns.nvim', {'do': ':UpdateRemotePlugins'}
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'nvim-telescope/telescope.nvim'
-    Plug 'nvim-telescope/telescope-fzf-native.nvim', {'do': 'make'}
-    Plug 'kamykn/popup-menu.nvim'
-    Plug 'kyazdani42/nvim-web-devicons' " for file icons
-    Plug 'kyazdani42/nvim-tree.lua'
-    Plug 'ishan9299/nvim-solarized-lua'
-  else
-    " vim plugins instead of the nvim specific ones
-    Plug 'plasticboy/vim-markdown'
-    Plug 'fisadev/vim-isort'
-    Plug 'tpope/vim-commentary'
-    Plug 'tpope/vim-surround'
-    Plug 'vim-syntastic/syntastic'
-    Plug 'airblade/vim-gitgutter'
-    Plug 'preservim/nerdtree'
-    Plug 'junegunn/fzf.vim'
-    Plug 'lifepillar/vim-solarized8'
-  endif
+  " vim plugins instead of the nvim specific ones
+  Plug 'plasticboy/vim-markdown'
+  Plug 'fisadev/vim-isort'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-surround'
+  Plug 'vim-syntastic/syntastic'
+  Plug 'airblade/vim-gitgutter'
+  Plug 'preservim/nerdtree'
+  Plug 'junegunn/fzf.vim'
+  Plug 'lifepillar/vim-solarized8'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   Plug 'will133/vim-dirdiff'
