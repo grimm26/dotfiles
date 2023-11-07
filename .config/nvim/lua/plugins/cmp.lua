@@ -15,6 +15,7 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
+      "hrsh7th/cmp-copilot",
       "onsails/lspkind.nvim",
       "L3MON4D3/LuaSnip",
     },
@@ -28,6 +29,9 @@ return {
       local lspkind = require("lspkind")
       local luasnip = require("luasnip")
       cmp.setup({
+        sources = {
+          { name = "copilot" },
+        },
         completion = {
           -- Gotta hit <C-Space> to trigger completion.
           autocomplete = true,
@@ -41,6 +45,7 @@ return {
               luasnip = "[LuaSnip]",
               nvim_lua = "[Lua]",
               latex_symbols = "[Latex]",
+              copilot = "( )",
             },
           }),
         },
@@ -106,6 +111,15 @@ return {
           { name = "cmdline" },
         }),
       })
+    end,
+  },
+  {
+    "github/copilot.vim",
+    event = "VeryLazy",
+    config = function()
+      -- copilot assume mapped
+      vim.g.copilot_assume_mapped = true
+      vim.g.copilot_no_tab_map = true
     end,
   },
 }
