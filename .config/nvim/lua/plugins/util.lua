@@ -5,7 +5,7 @@ return {
   { "nvim-tree/nvim-web-devicons", lazy = true },
   {
     "mikesmithgh/kitty-scrollback.nvim",
-    enabled = false,
+    enabled = true,
     lazy = true,
     cmd = { "KittyScrollbackGenerateKittens", "KittyScrollbackCheckHealth" },
     event = { "User KittyScrollbackLaunch" },
