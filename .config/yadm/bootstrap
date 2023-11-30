@@ -197,7 +197,7 @@ case $(uname) in
       fi
       # Make sure we set an npm prefix for our user.
       npm config set prefix '~/.local/'
-      corepack enable
+      sudo corepack enable
       # Install jsonlint
       # npm install --location=global jsonlint
       # Install prettier
