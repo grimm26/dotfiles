@@ -41,6 +41,7 @@ zmodule ohmyzsh/ohmyzsh --root plugins/systemadmin
 zmodule ohmyzsh/ohmyzsh --root plugins/urltools
 zmodule ohmyzsh/ohmyzsh --root plugins/web-search
 zmodule ohmyzsh/ohmyzsh --root plugins/sudo
+zmodule ohmyzsh/ohmyzsh --root plugins/per-directory-history
 {% if yadm.distro == "Ubuntu" %}
 zmodule ohmyzsh/ohmyzsh --root plugins/systemd
 {% endif %}
