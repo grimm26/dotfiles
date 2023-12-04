@@ -1,4 +1,7 @@
-MOZ_ENABLE_WAYLAND=1
+if [[ $XDG_SESSION_TYPE == wayland ]]; then
+  export MOZ_ENABLE_WAYLAND=1
+  export QT_QPA_PLATFORM=wayland
+fi
 skip_global_compinit=1
 export GOPATH=~/go
 path+=(${GOPATH}/bin)
