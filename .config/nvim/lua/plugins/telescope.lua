@@ -11,7 +11,7 @@ return {
     cmd = "Telescope",
     keys = {
       {
-        "<leader>fd",
+        "<leader>ff",
         function()
           require("telescope.builtin").find_files()
         end,

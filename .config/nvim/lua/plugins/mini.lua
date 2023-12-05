@@ -7,6 +7,17 @@ return {
       require("mini.align").setup()
       require("mini.comment").setup({})
       -- require("mini.indentscope").setup({})
+      require("mini.files").setup()
+      -- keymappings for mini
+      local wk = require("which-key")
+      wk.register({
+        ["<leader>fd"] = {
+          function()
+            MiniFiles.open()
+          end,
+          "Open directory (MiniFiles)",
+        },
+      })
       require("mini.surround").setup({
         mappings = {
           add = "<leader>sa", -- Add surrounding in Normal and Visual modes
