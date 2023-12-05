@@ -119,6 +119,12 @@ case $(uname) in
         dpkg -s $pkg &>/dev/null \
           || sudo apt-get install -y $pkg
       done
+      if [[ $XDG_SESSION_TYPE == wayland ]]; then
+        for pkg in qtwayland5; then
+          dpkg -s $pkg &>/dev/null \
+            || sudo apt-get install -y $pkg
+        done
+      fi
       # Latest github cli
       print "github cli (gh)"
       if whence -p gh &>/dev/null; then
