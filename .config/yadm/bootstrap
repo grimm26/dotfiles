@@ -120,7 +120,7 @@ case $(uname) in
           || sudo apt-get install -y $pkg
       done
       if [[ $XDG_SESSION_TYPE == wayland ]]; then
-        for pkg in qtwayland5; then
+        for pkg in qtwayland5; do
           dpkg -s $pkg &>/dev/null \
             || sudo apt-get install -y $pkg
         done
