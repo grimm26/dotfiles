@@ -447,6 +447,7 @@ alias gnb='git nb'
 alias grtag='git rtag'
 alias ghpr='gh pr create'
 alias gbp='git prune-branches'
+alias gdc='git diff --compact-summary'
 # Override git pager
 alias gdl='git -c core.pager=less diff'
 alias gdp='git -c core.pager=$PAGER diff'
