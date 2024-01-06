@@ -195,7 +195,7 @@ case $(uname) in
         if [[ -d /usr/local/node-v${NODEJS_VERSION}-linux-x64 ]]; then
           sudo rm /usr/local/nodejs
           sudo ln -s /usr/local/node-v${NODEJS_VERSION}-linux-x64 /usr/local/nodejs
-          sudo chown -hR $(id -u): /usr/local/node-v${NODEJS_VERSION}-linux-x64
+          sudo chown -hR $(id -u):$(id -g) /usr/local/node-v${NODEJS_VERSION}-linux-x64
         fi
         if [[ -v OLD_NODEJS && "$OLD_NODEJS" != $(readlink /usr/local/nodejs) ]]; then
           sudo rm -rf $OLD_NODEJS
