@@ -40,6 +40,7 @@ return {
           "jsonlint",
           "markdownlint",
           "marksman",
+          "mdformat",
           "prettierd",
           "python-lsp-server",
           "stylua",
