@@ -226,6 +226,16 @@ case $(uname) in
         (cd ~/.fzf && ./install --key-bindings --completion --no-bash --no-fish --no-update-rc)
       fi
 
+      # https://github.com/razziel89/mdslw
+      echo "mdslw"
+      latest_mdslw_version=$(gh_latest_release "razziel89/mdslw")
+      installed_mdslw_version=$(mdslw --version 2>/dev/null|awk '{print $2}')
+      if [[ ${installed_mdslw_version} != $latest_mdslw_version ]]; then
+        print "Updating from ${installed_mdslw_version} to $latest_mdslw_version"
+        GH_HOST=github.com gh release download --pattern "mdslw_x86_64-unknown-linux-musl" --repo razziel89/mdslw -D $MY_TMP \
+          && mv ${MY_TMP}/mdslw_x86_64-unknown-linux-musl ${home_bin}/mdslw \
+          && chmod 755 ${home_bin}/mdslw
+      fi
       # Use more portable musl pkgs for delta and lsd
       gdelta_pkg="git-delta-musl"
       # git-delta

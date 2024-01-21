@@ -4,6 +4,11 @@ return {
     opts = {},
     config = function()
       require("conform").setup({
+        formatters = {
+          mdslw = {
+            prepend_args = { "--max-width", "0" },
+          },
+        },
         formatters_by_ft = {
           lua = { "stylua" },
           terraform = { "terraform_fmt" },
@@ -15,7 +20,7 @@ return {
           vue = { "prettierd" },
           html = { "prettierd" },
           graphql = { "prettierd" },
-          markdown = { "mdformat" },
+          markdown = { "mdslw", "mdformat" },
         },
         format_on_save = {
           -- These options will be passed to conform.format()

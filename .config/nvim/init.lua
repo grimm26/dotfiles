@@ -80,7 +80,7 @@ set.guifont = "Monaco:h14"
 -- Use Unix as the standard file type
 set.ffs = { "unix", "dos", "mac" }
 set.background = "dark"
-g.solarized_visibility = "high"
+-- g.solarized_visibility = "high"
 -- show me where my cursor is
 set.cursorline = true
 set.cursorcolumn = true
