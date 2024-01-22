@@ -8,4 +8,5 @@ set -e
 IFS='/' read UPSTREAM_OWNER UPSTREAM_REPO <<< $(gh api repos/:owner/:repo -q '.full_name')
 
 gh repo fork --remote --fork-name "${UPSTREAM_OWNER}-${UPSTREAM_REPO}"
+sleep 2
 git remote update --prune
