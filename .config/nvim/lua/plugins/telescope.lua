@@ -81,10 +81,20 @@ return {
             hijack_netrw = true,
           },
         },
+        mappings = {
+          i = {
+            ["<CR>"] = require("telescope.actions").select_vertical,
+          },
+          n = {
+            ["<CR>"] = require("telescope.actions").select_vertical,
+          },
+        },
       })
       require("telescope").load_extension("fzf")
       require("telescope").load_extension("file_browser")
       require("telescope").load_extension("yadm_files")
+      require("telescope").load_extension("git_or_files")
+      require("telescope").load_extension("git_or_yadm_files")
       require("telescope").load_extension("gh")
       require("telescope").load_extension("luasnip")
     end,
