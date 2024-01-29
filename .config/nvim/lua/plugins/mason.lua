@@ -71,22 +71,22 @@ return {
         -- debounce_hours = 5, -- at least 5 hours between attempts to install/update
       })
       vim.api.nvim_create_user_command("MTU", "MasonToolsUpdate", { desc = "Run MasonToolsUpdate" })
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "MasonToolsStartingInstall",
-        callback = function()
-          vim.schedule(function()
-            print("mason-tool-installer is starting")
-          end)
-        end,
-      })
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "MasonToolsUpdateCompleted",
-        callback = function(e)
-          vim.schedule(function()
-            print(vim.inspect(e.data)) -- print the table that lists the programs that were installed
-          end)
-        end,
-      })
+      -- vim.api.nvim_create_autocmd("User", {
+      --   pattern = "MasonToolsStartingInstall",
+      --   callback = function()
+      --     vim.schedule(function()
+      --       print("mason-tool-installer is starting")
+      --     end)
+      --   end,
+      -- })
+      -- vim.api.nvim_create_autocmd("User", {
+      --   pattern = "MasonToolsUpdateCompleted",
+      --   callback = function(e)
+      --     vim.schedule(function()
+      --       print(vim.inspect(e.data)) -- print the table that lists the programs that were installed
+      --     end)
+      --   end,
+      -- })
     end,
   },
 }
