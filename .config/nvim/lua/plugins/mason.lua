@@ -19,11 +19,6 @@ return {
   },
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
-    cmd = {
-      "MTU",
-      "MasonToolsUpdate",
-      "MasonToolsInstall",
-    },
     config = function()
       require("mason-tool-installer").setup({
         -- a list of all tools you want to ensure are installed upon
@@ -41,6 +36,7 @@ return {
           "markdownlint",
           "marksman",
           "mdformat",
+          "mdslw",
           "prettierd",
           "python-lsp-server",
           "stylua",
@@ -62,6 +58,17 @@ return {
         -- tools and check for updates.
         -- Default: true
         run_on_start = true,
+        -- set a delay (in ms) before the installation starts. This is only
+        -- effective if run_on_start is set to true.
+        -- e.g.: 5000 = 5 second delay, 10000 = 10 second delay, etc...
+        -- Default: 0
+        start_delay = 3000, -- 3 second delay  -- Only attempt to install if 'debounce_hours' number of hours has
+        -- elapsed since the last time Neovim was started. This stores a
+        -- timestamp in a file named stdpath('data')/mason-tool-installer-debounce.
+        -- This is only relevant when you are using 'run_on_start'. It has no
+        -- effect when running manually via ':MasonToolsInstall' etc....
+        -- Default: nil
+        -- debounce_hours = 5, -- at least 5 hours between attempts to install/update
       })
       vim.api.nvim_create_user_command("MTU", "MasonToolsUpdate", { desc = "Run MasonToolsUpdate" })
       vim.api.nvim_create_autocmd("User", {
