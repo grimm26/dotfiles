@@ -50,6 +50,7 @@ ohmyzsh/ohmyzsh path:plugins/gnu-utils
 ohmyzsh/ohmyzsh path:plugins/brew
 {% endif %}
 
+zmodule hlissner/zsh-autopair
 # These just load completions
 zmodule joke/zim-github-cli
 zmodule joke/zim-kubectl
