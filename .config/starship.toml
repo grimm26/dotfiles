@@ -46,14 +46,15 @@ ssh_only = false
 
 [kubernetes]
 disabled = false
-[kubernetes.context_aliases]
-"aws-br-wharf-production" = "br-prod"
-"aws-br-wharf-staging" = "br-staging"
-"aws-oh-wharf-production" = "oh-prod"
-"aws-oh-wharf-staging" = "oh-staging"
-"onprem-elk-wharf-monkeybusiness" = "monkeybusiness"
-"onprem-elk-wharf-staging" = "elk-staging"
-"onprem-oak-wharf-production" = "oak-prod"
+contexts = [
+  {context_pattern = "aws-br-wharf-production", context_alias = "br-prod"},
+  {context_pattern = "aws-br-wharf-staging",context_alias = "br-staging"},
+  {context_pattern = "aws-oh-wharf-production", context_alias = "oh-prod"},
+  {context_pattern = "aws-oh-wharf-staging",context_alias = "oh-staging"},
+  {context_pattern = "onprem-elk-wharf-monkeybusiness",context_alias = "monkeybusiness"},
+  {context_pattern = "onprem-elk-wharf-staging",context_alias = "elk-staging"},
+  {context_pattern = "onprem-oak-wharf-production",context_alias = "oak-prod"}
+]
 
 [nodejs]
 disabled = true
