@@ -447,6 +447,7 @@ alias gnb='git nb'
 alias grtag='git rtag'
 alias ghpr='gh pr create'
 alias approve='gh pr review --approve'
+alias merge='gh pr merge'
 alias gbp='git prune-branches'
 alias gdc='git diff --compact-summary'
 # Override git pager
