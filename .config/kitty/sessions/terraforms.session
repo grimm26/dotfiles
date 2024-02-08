@@ -1,4 +1,4 @@
-layout fat:bias=70
+layout fat:bias=50
 cd ~/git/terraforms
 launch --cwd ~/git/terraforms/production_643927032162
-launch --cwd ~/git/terraforms --dont-take-focus
+launch --cwd ~/git/tf-modules --dont-take-focus
