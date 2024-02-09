@@ -37,7 +37,6 @@ return {
           "marksman",
           "mdformat",
           "mdslw",
-          "misspell",
           "prettierd",
           "python-lsp-server",
           "stylua",
