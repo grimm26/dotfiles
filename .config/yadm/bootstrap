@@ -8,7 +8,7 @@
 (( ${+commands[jq]} )) || { echo "You need to install jq" && exit 1; }
 
 # Versions
-GOLANG_VERSION=$(curl --silent https://endoflife.date/api/go/1.21.json |jq -r  '.latest')
+GOLANG_VERSION=$(curl --silent https://endoflife.date/api/go/1.22.json |jq -r  '.latest')
 NODEJS_VERSION=$(curl --silent https://endoflife.date/api/nodejs/20.json |jq -r '.latest')
 PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.12.json |jq -r '.latest')
 # Set NEOVIM_BUILD to nightly or latest. If set to nightly.
