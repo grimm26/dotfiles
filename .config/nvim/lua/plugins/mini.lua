@@ -1,22 +1,12 @@
 return {
   {
     "echasnovski/mini.nvim",
-    version = false,
+    version = "*",
     config = function()
       -- Enable modules out of mini,nvim that we want to use
       require("mini.align").setup()
       require("mini.comment").setup({})
       -- require("mini.indentscope").setup({})
-      -- keymappings for mini
-      local wk = require("which-key")
-      wk.register({
-        ["<leader>fd"] = {
-          function()
-            MiniFiles.open()
-          end,
-          "Open directory (MiniFiles)",
-        },
-      })
       require("mini.surround").setup({
         mappings = {
           add = "<leader>sa", -- Add surrounding in Normal and Visual modes
