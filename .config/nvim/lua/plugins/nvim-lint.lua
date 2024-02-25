@@ -9,11 +9,13 @@ return {
         ansible = { "ansible_lint", "codespell" },
         asciidoc = { "codespell" },
         html = { "codespell" },
+        jinja = { "codespell", "curlylint" },
         json = { "codespell" },
         lua = { "codespell" },
         markdown = { "codespell", "markdownlint" },
         terraform = { "codespell" },
         python = { "codespell" },
+        zsh = { "zsh" },
       },
       -- LazyVim extension to easily override linter options
       -- or add custom linters.
