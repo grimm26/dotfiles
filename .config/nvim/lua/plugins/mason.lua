@@ -28,6 +28,7 @@ return {
           "bash-language-server",
           "black",
           "codespell",
+          "curlylint",
           "dockerfile-language-server",
           "gopls",
           "jdtls",
