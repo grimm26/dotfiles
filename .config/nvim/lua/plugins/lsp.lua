@@ -63,12 +63,6 @@ return {
       })
       lspconfig.terraformls.setup({
         capabilities = cmp_capabilities,
-        -- This is a workaround for https://github.com/hashicorp/terraform-ls/issues/1655
-        init_options = {
-          terraform = {
-            dummy = "dummy",
-          },
-        },
       })
       lspconfig.vimls.setup({
         capabilities = cmp_capabilities,
