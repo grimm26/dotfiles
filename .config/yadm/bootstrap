@@ -4,8 +4,8 @@
 
 # Utilities that we need to get started.
 (( ${+commands[gh]} )) || { echo "You need to install gh (https://cli.github.com/)" && exit 1; }
-(( ${+commands[curl]} )) || { echo "You need to install curl" && exit 1; }
-(( ${+commands[jq]} )) || { echo "You need to install jq" && exit 1; }
+(( ${+commands[curl]} )) || sudo apt-get install -y curl || { echo "You need to install curl" && exit 1; }
+(( ${+commands[jq]} )) || sudo apt-get install -y jq || { echo "You need to install jq" && exit 1; }
 
 # Versions
 GOLANG_VERSION=$(curl --silent https://endoflife.date/api/go/1.22.json |jq -r  '.latest')
@@ -330,7 +330,7 @@ case $(uname) in
       fi
       echo "kubectl"
       KUBECTL_STABLE=$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
-      MY_KUBECTL_VERSION=$(kubectl version --client --short 2>/dev/null | awk '{print $3}')
+      MY_KUBECTL_VERSION=$(kubectl version --client --output=json | jq -r '.clientVersion.gitVersion' 2>/dev/null)
       if [[ $KUBECTL_STABLE != $MY_KUBECTL_VERSION ]]; then
         curl -sLS https://storage.googleapis.com/kubernetes-release/release/$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o ${home_bin}/kubectl \
           && chmod 755 ${home_bin}/kubectl
