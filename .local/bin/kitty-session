@@ -18,7 +18,7 @@ fi
 
 # Fire it up
 if [[ -f ~/.config/kitty/sessions/${session_name}.conf ]]; then
-  kitty --session ~/.config/kitty/sessions/${session_name}.session --start-as=${session_window} --title ${session_name} --config ~/.config/kitty/kitty.conf --config ~/.config/kitty/sessions/${session_name}.conf &>/dev/null &
+  kitty --single-instance --instance-group ${session_name} --session ~/.config/kitty/sessions/${session_name}.session --start-as=${session_window} --title ${session_name} --config ~/.config/kitty/kitty.conf --config ~/.config/kitty/sessions/${session_name}.conf &>/dev/null &
 else
-  kitty --session ~/.config/kitty/sessions/${session_name}.session --start-as=${session_window} --title ${session_name} &>/dev/null &
+  kitty --single-instance --instance-group ${session_name} --session ~/.config/kitty/sessions/${session_name}.session --start-as=${session_window} --title ${session_name} &>/dev/null &
 fi
