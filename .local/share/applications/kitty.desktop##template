@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=kitty
+GenericName=Terminal emulator
+Comment=Fast, feature-rich, GPU based terminal
+TryExec={{ env.HOME }}/.local/kitty.app/bin/kitty
+Exec={{ env.HOME }}/.local/kitty.app/bin/kitty
+Icon={{ env.HOME }}/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png
+Categories=System;TerminalEmulator;
+Actions=Single
+
+[Desktop Action Single]
+Exec={{ env.HOME }}/.local/kitty.app/bin/kitty --single-instance --instance-group main
+Name=kitty (single instance)
