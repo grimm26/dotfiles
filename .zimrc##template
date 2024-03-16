@@ -18,6 +18,7 @@ zmodule termtitle
 zmodule utility
 # Provides a convenient way to load ssh-agent. This enables one-time login and caching of ssh credentials per session.
 zmodule ssh
+zmodule romkatv/powerlevel10k --use degit
 
 # ohmyzsh stuff
 # other omz plugins may need omz functions. It does
@@ -55,7 +56,7 @@ zmodule hlissner/zsh-autopair
 zmodule joke/zim-github-cli
 zmodule joke/zim-kubectl
 zmodule joke/zim-helm
-zmodule joke/zim-starship
+# zmodule joke/zim-starship
 
 # https://github.com/MichaelAquilina/zsh-you-should-use/blob/master/README.rst
 zmodule MichaelAquilina/zsh-you-should-use --source you-should-use.plugin.zsh
