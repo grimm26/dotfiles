@@ -34,7 +34,7 @@ return {
         dim_inactive = true,
         lualine_bold = true,
       })
-      -- vim.cmd.colorscheme("solarized-osaka-storm")
+      -- vim.cmd.colorscheme("solarized-osaka")
     end,
   },
 }
