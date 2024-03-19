@@ -142,6 +142,22 @@ case $(uname) in
         (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
       fi
 
+      # Latest mise
+      print "mise"
+      local LATEST_MISE_VERSION=$(gh_latest_release jdx/mise)
+      if whence -p mise &>/dev/null; then
+        local CURRENT_MISE_VERSION=$(mise version | awk '{print $1}')
+        if [[ "${CURRENT_MISE_VERSION/v}" != "${LATEST_MISE_VERSION/v}" ]]; then
+          print "Updating mise from ${CURRENT_MISE_VERSION/} to ${LATEST_MISE_VERSION/v}"
+          GH_HOST=github.com gh release download ${LATEST_MISE_VERSION} --repo jdx/mise --pattern \*-linux-x64 -D $MY_TMP \
+            && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise
+        fi
+      else
+        print "Installing mise fresh"
+        GH_HOST=github.com gh release download ${LATEST_MISE_VERSION} --repo jdx/mise --pattern \*-linux-x64 -D $MY_TMP \
+          && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise
+      fi
+
       print "Neovim"
       if [[ ${NEOVIM_BUILD} == "latest" ]]; then
         local latest_neovim_version=$(gh_latest_release "neovim/neovim")
