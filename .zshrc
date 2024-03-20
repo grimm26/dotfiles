@@ -396,23 +396,30 @@ function d () {
 }
 compdef _dirs d
 
-# Need bashcompinit for python argcomplete
-if command -v register-python-argcomplete &>/dev/null; then
-  autoload -U bashcompinit
-  bashcompinit
-
-  if command -v ansible &>/dev/null; then
-    eval $(register-python-argcomplete ansible)
-    eval $(register-python-argcomplete ansible-config)
-    eval $(register-python-argcomplete ansible-console)
-    eval $(register-python-argcomplete ansible-doc)
-    eval $(register-python-argcomplete ansible-galaxy)
-    eval $(register-python-argcomplete ansible-inventory)
-    eval $(register-python-argcomplete ansible-playbook)
-    eval $(register-python-argcomplete ansible-pull)
-    eval $(register-python-argcomplete ansible-vault)
-  fi
+if [[ -d ${HOME}/.pyenv ]]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init -)"
 fi
+
+# # Need bashcompinit for python argcomplete
+# if command -v register-python-argcomplete &>/dev/null; then
+#   autoload -U bashcompinit
+#   bashcompinit
+#
+#   if command -v ansible &>/dev/null; then
+#     eval $(register-python-argcomplete ansible)
+#     eval $(register-python-argcomplete ansible-config)
+#     eval $(register-python-argcomplete ansible-console)
+#     eval $(register-python-argcomplete ansible-doc)
+#     eval $(register-python-argcomplete ansible-galaxy)
+#     eval $(register-python-argcomplete ansible-inventory)
+#     eval $(register-python-argcomplete ansible-playbook)
+#     eval $(register-python-argcomplete ansible-pull)
+#     eval $(register-python-argcomplete ansible-vault)
+#   fi
+# fi
 
 ## zlogin
 capsoff() {

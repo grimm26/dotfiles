@@ -1,5 +1,0 @@
-pip
-pipreqs
-argcomplete
-pre-commit
-boto3[crt]

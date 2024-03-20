@@ -20,13 +20,20 @@ MISE_PKGS=(
   kubectl
   neovim@nightly
   node@lts
-  python@3.12
   tflint
   tfswitch
   zoxide
 )
-# Versions
+PYTHON_PKGS=(
+  ansible
+  argcomplete
+  'boto3[crt]'
+  pip
+  pipreqs
+  pre-commit
+)
 PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.12.json |jq -r '.latest')
+
 while getopts 'M' OPT; do
   case $OPT in
     M) setup_MINIMAL=1 ;;
@@ -162,7 +169,6 @@ case $(uname) in
     for tool in ${MISE_PKGS[@]};do
       mise use --yes --global $tool
     done
-    exit
 
     # Make sure we set an npm prefix for our user.
     npm config set prefix '~/.local/'
@@ -378,6 +384,31 @@ case $(uname) in
     exit
     ;;
 esac
+
+##
+echo "pyenv"
+if upinst_from_git https://github.com/pyenv/pyenv.git ~/.pyenv; then
+  (cd ~/.pyenv && src/configure && make -C src)
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init --path)"
+fi
+if [[ -d ~/.pyenv/plugins/pyenv-virtualenv ]]; then
+  (cd ~/.pyenv/plugins/pyenv-virtualenv && git pull)
+else
+  git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
+fi
+if ! pyenv global $PYTHON_VERSION &>/dev/null; then
+  print "Using pyenv to install python $PYTHON_VERSION"
+  pyenv install $PYTHON_VERSION
+  pyenv global $PYTHON_VERSION
+  PIP_OPTIONS="--force-reinstall"
+fi
+
+echo "Python packages:"
+for pkg in ${PYTHON_PKGS[@]};do
+  python3 -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
+done
 
 print "Ruby Gems"
 for pkg in aws-sdk-ec2 bundler fileutils octokit asciidoctor kramdown-asciidoc;do
