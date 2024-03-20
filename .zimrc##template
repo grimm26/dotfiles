@@ -38,7 +38,6 @@ zmodule ohmyzsh/ohmyzsh --root plugins/copypath
 zmodule ohmyzsh/ohmyzsh --root plugins/genpass
 zmodule ohmyzsh/ohmyzsh --root plugins/isodate
 zmodule ohmyzsh/ohmyzsh --root plugins/jsontools
-zmodule ohmyzsh/ohmyzsh --root plugins/pyenv
 zmodule ohmyzsh/ohmyzsh --root plugins/systemadmin
 zmodule ohmyzsh/ohmyzsh --root plugins/urltools
 zmodule ohmyzsh/ohmyzsh --root plugins/web-search

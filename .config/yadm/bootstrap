@@ -13,12 +13,14 @@ MISE_PKGS=(
   delta
   direnv
   dive
+  github-cli
   go
   helm
   k9s
   kubectl
   neovim@nightly
   node@lts
+  python@3.12
   tflint
   tfswitch
   zoxide
@@ -136,44 +138,35 @@ case $(uname) in
           || sudo apt-get install -y $pkg
       done
     fi
-    # Latest github cli
-    print "github cli (gh)"
-    if whence -p gh &>/dev/null; then
-      local CURRENT_GH_VERSION=$(gh version |grep releases |cut -d/ -f8)
-      local LATEST_GH_VERSION=$(gh_latest_release cli/cli)
-      if [[ "${CURRENT_GH_VERSION}" != "${LATEST_GH_VERSION}" ]]; then
-        print "Updating from ${CURRENT_GH_VERSION} to ${LATEST_GH_VERSION}"
-        GH_HOST=github.com gh release download ${LATEST_GH_VERSION} --repo cli/cli --pattern \*linux_${machine}.tar.gz -D $MY_TMP
-        (cd $MY_TMP && tar xzf gh_*_linux*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
-      fi
-    else
-      print "Installing gh"
-      curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
-      local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
-      (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
-    fi
 
-    # Latest mise
-    print "mise"
-    local LATEST_MISE_VERSION=$(gh_latest_release jdx/mise)
+    # Latest mise-en-place
+    print "Checking for mise-en-place"
+    curl -sSL https://api.github.com/repos/jdx/mise/releases/latest -o ${MY_TMP}/mise_latest.json
+    local LATEST_MISE_VERSION=$(jq -r '.name' ${MY_TMP}/mise_latest.json)
     if whence -p mise &>/dev/null; then
       local CURRENT_MISE_VERSION=$(mise version | awk '{print $1}')
       if [[ "${CURRENT_MISE_VERSION/v}" != "${LATEST_MISE_VERSION/v}" ]]; then
         print "Updating mise from ${CURRENT_MISE_VERSION/} to ${LATEST_MISE_VERSION/v}"
-        GH_HOST=github.com gh release download ${LATEST_MISE_VERSION} --repo jdx/mise --pattern \*-linux-x64 -D $MY_TMP \
-          && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise
+        local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/mise_latest.json | grep 'linux-x64$')
+        (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL \
+          && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise)
       fi
     else
-      print "Installing mise fresh"
-      GH_HOST=github.com gh release download ${LATEST_MISE_VERSION} --repo jdx/mise --pattern \*-linux-x64 -D $MY_TMP \
-        && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise
+      print "Installing mise $LATEST_MISE_VERSION fresh"
+      local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/mise_latest.json | grep 'linux-x64$')
+      (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL \
+        && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise)
     fi
 
     # Install mise tools
     for tool in ${MISE_PKGS[@]};do
-      mise use --global $tool
+      mise use --yes --global $tool
     done
     exit
+
+    # Make sure we set an npm prefix for our user.
+    npm config set prefix '~/.local/'
+    corepack enable
 
     # firefox. Ubuntu only pkgs firefox as a snap now, which sucks. Install it from mozilla.
     if [[ ! -d ~/.local/firefox ]]; then
@@ -182,10 +175,6 @@ case $(uname) in
         && tar -C ~/.local -xjf ${MY_TMP}/firefox.tar.bz2 \
         && ln -s ~/.local/firefox/firefox-bin ${home_bin}/firefox
     fi
-
-    # Make sure we set an npm prefix for our user.
-    npm config set prefix '~/.local/'
-    corepack enable
 
     # install fzf
     echo "fzf"
@@ -389,29 +378,6 @@ case $(uname) in
     exit
     ;;
 esac
-
-echo "pyenv"
-if upinst_from_git https://github.com/pyenv/pyenv.git ~/.pyenv; then
-  (cd ~/.pyenv && src/configure && make -C src)
-  export PYENV_ROOT="$HOME/.pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init --path)"
-fi
-if [[ -d ~/.pyenv/plugins/pyenv-virtualenv ]]; then
-  (cd ~/.pyenv/plugins/pyenv-virtualenv && git pull)
-else
-  git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
-fi
-if ! pyenv global $PYTHON_VERSION &>/dev/null; then
-  print "Using pyenv to install python $PYTHON_VERSION"
-  pyenv install $PYTHON_VERSION
-  pyenv global $PYTHON_VERSION
-  PIP_OPTIONS="--force-reinstall"
-fi
-echo "Python packages:"
-for pkg in pip pipreqs argcomplete pre-commit 'boto3[crt]';do
-  python -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
-done
 
 print "Ruby Gems"
 for pkg in aws-sdk-ec2 bundler fileutils octokit asciidoctor kramdown-asciidoc;do

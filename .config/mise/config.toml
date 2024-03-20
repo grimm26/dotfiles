@@ -13,6 +13,9 @@ helm = "latest"
 tfswitch = "latest"
 direnv = "latest"
 dive = "latest"
+github-cli = "latest"
+python = "3.12"
 
 [settings]
 not_found_auto_install = true
+python_compile = true
