@@ -1,0 +1,18 @@
+[tools]
+neovim = "nightly"
+node = "lts"
+awscli = "latest"
+go = "latest"
+tflint = "latest"
+k9s = "latest"
+kubectl = "latest"
+zoxide = "latest"
+cheat = "latest"
+delta = "latest"
+helm = "latest"
+tfswitch = "latest"
+direnv = "latest"
+dive = "latest"
+
+[settings]
+not_found_auto_install = true

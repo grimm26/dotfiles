@@ -7,11 +7,24 @@
 (( ${+commands[curl]} )) || sudo apt-get install -y curl || { echo "You need to install curl" && exit 1; }
 (( ${+commands[jq]} )) || sudo apt-get install -y jq || { echo "You need to install jq" && exit 1; }
 
+MISE_PKGS=(
+  awscli@latest
+  cheat
+  delta
+  direnv
+  dive
+  go
+  helm
+  k9s
+  kubectl
+  neovim@nightly
+  node@lts
+  tflint
+  tfswitch
+  zoxide
+)
 # Versions
-GOLANG_VERSION=$(curl --silent https://endoflife.date/api/go/1.22.json |jq -r  '.latest')
 PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.12.json |jq -r '.latest')
-# Set NEOVIM_BUILD to nightly or latest. If set to nightly.
-NEOVIM_BUILD="nightly"
 while getopts 'M' OPT; do
   case $OPT in
     M) setup_MINIMAL=1 ;;
@@ -113,263 +126,179 @@ case $(uname) in
     done
     SCRIPT_HOME=$(readlink -f ${0%/*})
 
-    if [[ ! -v setup_MINIMAL ]]; then
-      for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck docker.io plocate; do
+    for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck docker.io plocate; do
+      dpkg -s $pkg &>/dev/null \
+        || sudo apt-get install -y $pkg
+    done
+    if [[ $XDG_SESSION_TYPE == wayland ]]; then
+      for pkg in qtwayland5; do
         dpkg -s $pkg &>/dev/null \
           || sudo apt-get install -y $pkg
       done
-      if [[ $XDG_SESSION_TYPE == wayland ]]; then
-        for pkg in qtwayland5; do
-          dpkg -s $pkg &>/dev/null \
-            || sudo apt-get install -y $pkg
-        done
+    fi
+    # Latest github cli
+    print "github cli (gh)"
+    if whence -p gh &>/dev/null; then
+      local CURRENT_GH_VERSION=$(gh version |grep releases |cut -d/ -f8)
+      local LATEST_GH_VERSION=$(gh_latest_release cli/cli)
+      if [[ "${CURRENT_GH_VERSION}" != "${LATEST_GH_VERSION}" ]]; then
+        print "Updating from ${CURRENT_GH_VERSION} to ${LATEST_GH_VERSION}"
+        GH_HOST=github.com gh release download ${LATEST_GH_VERSION} --repo cli/cli --pattern \*linux_${machine}.tar.gz -D $MY_TMP
+        (cd $MY_TMP && tar xzf gh_*_linux*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
       fi
-      # Latest github cli
-      print "github cli (gh)"
-      if whence -p gh &>/dev/null; then
-        local CURRENT_GH_VERSION=$(gh version |grep releases |cut -d/ -f8)
-        local LATEST_GH_VERSION=$(gh_latest_release cli/cli)
-        if [[ "${CURRENT_GH_VERSION}" != "${LATEST_GH_VERSION}" ]]; then
-          print "Updating from ${CURRENT_GH_VERSION} to ${LATEST_GH_VERSION}"
-          GH_HOST=github.com gh release download ${LATEST_GH_VERSION} --repo cli/cli --pattern \*linux_${machine}.tar.gz -D $MY_TMP
-          (cd $MY_TMP && tar xzf gh_*_linux*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
-        fi
-      else
-        print "Installing gh"
-        curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
-        local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
-        (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
-      fi
+    else
+      print "Installing gh"
+      curl -sSL https://api.github.com/repos/cli/cli/releases/latest -o ${MY_TMP}/gh_latest.json
+      local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/gh_latest.json | grep linux_${machine}\.tar\.gz)
+      (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL && tar xzf gh*.tar.gz && cd gh*linux_${machine} && command cp bin/gh $home_bin && command rm ~/.local/share/man/man1/gh-*; command cp share/man/man1/*.1 ~/.local/share/man/man1)
+    fi
 
-      # Latest mise
-      print "mise"
-      local LATEST_MISE_VERSION=$(gh_latest_release jdx/mise)
-      if whence -p mise &>/dev/null; then
-        local CURRENT_MISE_VERSION=$(mise version | awk '{print $1}')
-        if [[ "${CURRENT_MISE_VERSION/v}" != "${LATEST_MISE_VERSION/v}" ]]; then
-          print "Updating mise from ${CURRENT_MISE_VERSION/} to ${LATEST_MISE_VERSION/v}"
-          GH_HOST=github.com gh release download ${LATEST_MISE_VERSION} --repo jdx/mise --pattern \*-linux-x64 -D $MY_TMP \
-            && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise
-        fi
-      else
-        print "Installing mise fresh"
+    # Latest mise
+    print "mise"
+    local LATEST_MISE_VERSION=$(gh_latest_release jdx/mise)
+    if whence -p mise &>/dev/null; then
+      local CURRENT_MISE_VERSION=$(mise version | awk '{print $1}')
+      if [[ "${CURRENT_MISE_VERSION/v}" != "${LATEST_MISE_VERSION/v}" ]]; then
+        print "Updating mise from ${CURRENT_MISE_VERSION/} to ${LATEST_MISE_VERSION/v}"
         GH_HOST=github.com gh release download ${LATEST_MISE_VERSION} --repo jdx/mise --pattern \*-linux-x64 -D $MY_TMP \
           && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise
       fi
+    else
+      print "Installing mise fresh"
+      GH_HOST=github.com gh release download ${LATEST_MISE_VERSION} --repo jdx/mise --pattern \*-linux-x64 -D $MY_TMP \
+        && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise
+    fi
 
-      # Install mise tools
-      for tool in node@lts awscli@latest neovim@nightly;do
-        mise use --global $tool
-      done
+    # Install mise tools
+    for tool in ${MISE_PKGS[@]};do
+      mise use --global $tool
+    done
+    exit
 
-      exit
-      # golang
-      if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
-        echo "Downloading and installing go ${GOLANG_VERSION}"
-        curl -sLSO https://dl.google.com/go/go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz \
-          && sudo rm -rf /usr/local/go 2>/dev/null \
-          && sudo tar -C /usr/local -xzf go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
-        rm go${GOLANG_VERSION}.${kernel}-${machine}.tar.gz
-        export PATH=${PATH}:/usr/local/go/bin
-      fi
-      # firefox. Ubuntu only pkgs firefox as a snap now, which sucks. Install it from mozilla.
-      if [[ ! -d ~/.local/firefox ]]; then
-        print "Installing firefox"
-        curl -sLSo ${MY_TMP}/firefox.tar.bz2 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US' \
-          && tar -C ~/.local -xjf ${MY_TMP}/firefox.tar.bz2 \
-          && ln -s ~/.local/firefox/firefox-bin ${home_bin}/firefox
-      fi
+    # firefox. Ubuntu only pkgs firefox as a snap now, which sucks. Install it from mozilla.
+    if [[ ! -d ~/.local/firefox ]]; then
+      print "Installing firefox"
+      curl -sLSo ${MY_TMP}/firefox.tar.bz2 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US' \
+        && tar -C ~/.local -xjf ${MY_TMP}/firefox.tar.bz2 \
+        && ln -s ~/.local/firefox/firefox-bin ${home_bin}/firefox
+    fi
 
-      # Make sure we set an npm prefix for our user.
-      npm config set prefix '~/.local/'
-      corepack enable
-      # Install jsonlint
-      # npm install --location=global jsonlint
-      # Install prettier
-      # npm install --location=global prettier
-      # npm install --location=global neovim
-      # luarocks Not gonna require this now
-      # if !command -v luarocks &>/dev/null && [[ $(luarocks --version |head -1 |awk '{print $2}') != "3.9.0" ]]; then
-      #   curl -L -o /tmp/luarocks_3-9-0.tar.gz https://github.com/luarocks/luarocks/archive/refs/tags/v3.9.0.tar.gz \
-      #     && tar -C /tmp/ -zxpf /tmp/luarocks_3-9-0.tar.gz \
-      #     && (cd /tmp/luarocks-3.9.0  && ./configure --prefix=${HOME}/.local && make && make install)
-      # else
-      #   if !command -v lua-format &> /dev/null; then
-      #     luarocks install --server=https://luarocks.org/dev luaformatter
-      #   fi
-      # fi
-      # install fzf
-      echo "fzf"
-      if upinst_from_git https://github.com/junegunn/fzf ~/.fzf; then
-        (cd ~/.fzf && ./install --key-bindings --completion --no-bash --no-fish --no-update-rc)
-      fi
+    # Make sure we set an npm prefix for our user.
+    npm config set prefix '~/.local/'
+    corepack enable
 
-      # Use more portable musl pkgs for delta and lsd
-      gdelta_pkg="git-delta-musl"
-      # git-delta
-      echo "git-delta"
-      latest_delta_version=$(gh_latest_release "dandavison/delta")
-      installed_delta_version=$(delta --version 2>/dev/null|awk '{print $2}')
-      if [[ ${installed_delta_version} != $latest_delta_version ]]; then
-        print "Updating from ${installed_delta_version} to $latest_delta_version"
-        GH_HOST=github.com gh release download --pattern "${gdelta_pkg}_${latest_delta_version}_amd64.deb" --repo dandavison/delta -D $MY_TMP \
-          && sudo dpkg --install --skip-same-version ${MY_TMP}/${gdelta_pkg}_${latest_delta_version}_amd64.deb
-      fi
-      # bat
-      echo "bat"
-      latest_bat_version=$(gh_latest_release "sharkdp/bat")
-      installed_bat_version=$(bat --version 2>/dev/null|awk '{print $2}')
-      if [[ ${installed_bat_version#v} != ${latest_bat_version#v} ]]; then
-        print "Updating from ${installed_bat_version#v} to ${latest_bat_version#v}"
-        GH_HOST=github.com gh release download --pattern "bat_${latest_bat_version#v}_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
-          && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version#v}_amd64.deb
-      fi
-      echo "dive"
-      latest_dive_version=$(gh_latest_release "wagoodman/dive")
-      installed_dive_version=$(dive --version 2>/dev/null|awk '{print $2}')
-      if [[ ${installed_dive_version#v} != ${latest_dive_version#v} ]]; then
-        print "Updating from ${installed_dive_version#v} to ${latest_dive_version#v}"
-        GH_HOST=github.com gh release download ${latest_dive_version} --pattern '*amd64.deb' --repo wagoodman/dive -D ${MY_TMP} \
-          && sudo dpkg --install --skip-same-version ${MY_TMP}/dive_${latest_dive_version#v}_linux_amd64.deb
-      fi
-      # lsd
-      echo "lsd"
-      latest_lsd_version=$(gh_latest_release "lsd-rs/lsd")
-      installed_lsd_version=$(lsd --version 2>/dev/null|awk '{print $2}')
-      if [[ ${installed_lsd_version#v} != ${latest_lsd_version#v} ]]; then
-        GH_HOST=github.com gh release download $latest_lsd_version --pattern "lsd_*amd64.deb" --repo lsd-rs/lsd -D ${MY_TMP} \
-          && sudo dpkg --install --skip-same-version ${MY_TMP}/lsd_*_amd64.deb
-      fi
-      # chruby
-      echo "chruby"
-      eval $(grep '^CHRUBY_VERSION' /usr/local/share/chruby/chruby.sh)
-      if [[ $CHRUBY_VERSION == "0.3.9" ]]; then
-        echo "up to date"
-      else
-        curl -sLS https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz -o chruby-0.3.9.tar.gz \
-          && tar -xzf chruby-0.3.9.tar.gz \
-          && cd chruby-0.3.9/ \
-          && sudo make install
-        cd $MY_TMP
-      fi
-      # ruby-install
-      echo "ruby-install"
-      if [[ $(ruby-install --version | awk '{print $2}') == "0.8.3" ]]; then
-        echo "up to date"
-      else
-        curl -sLS https://github.com/postmodern/ruby-install/archive/v0.8.3.tar.gz -o ruby-install-0.8.3.tar.gz \
-          && tar -xzf ruby-install-0.8.3.tar.gz \
-          && cd ruby-install-0.8.3/ \
-          && sudo make install
-        cd $MY_TMP
-      fi
-      # direnv
-      echo "direnv"
-      latest_direnv_version=$(gh_latest_release "direnv/direnv")
-      installed_direnv_version=$(direnv --version 2>/dev/null)
-      if [[ ${installed_direnv_version#v} != ${latest_direnv_version#v} ]]; then
-        GH_HOST=github.com gh release download ${latest_direnv_version} --pattern 'direnv.linux-amd64' --repo direnv/direnv -D $MY_TMP \
-          && mv ${MY_TMP}/direnv.linux-amd64 ${home_bin}/direnv \
-          && chmod 755 ${home_bin}/direnv
-      fi
+    # install fzf
+    echo "fzf"
+    if upinst_from_git https://github.com/junegunn/fzf ~/.fzf; then
+      (cd ~/.fzf && ./install --key-bindings --completion --no-bash --no-fish --no-update-rc)
+    fi
 
-      # Build batextras
-      echo "batextras"
-      if upinst_from_git https://github.com/eth-p/bat-extras; then
-        [[ -d ~/git/bat-extras ]] && cd ~/git/bat-extras
-        [[ -d ~/git/github/bat-extras ]] && cd ~/git/github/bat-extras
-        ./build.sh --no-verify \
-        && cp bin/* $home_bin
-        cd $MY_TMP
-      fi
-      echo "kubectl"
-      KUBECTL_STABLE=$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
-      MY_KUBECTL_VERSION=$(kubectl version --client --output=json | jq -r '.clientVersion.gitVersion' 2>/dev/null)
-      if [[ $KUBECTL_STABLE != $MY_KUBECTL_VERSION ]]; then
-        curl -sLS https://storage.googleapis.com/kubernetes-release/release/$(curl -sLS https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl -o ${home_bin}/kubectl \
-          && chmod 755 ${home_bin}/kubectl
-      fi
-      # zoxide
-      print "zoxide"
-      latest_zoxide_version=$(gh_latest_release "ajeetdsouza/zoxide")
-      installed_zoxide_version="v$(zoxide --version 2>/dev/null|awk '{print $2}')"
-      if [[ "${installed_zoxide_version}" != "${latest_zoxide_version}" ]]; then
-        print "Updating from ${installed_zoxide_version#v} to ${latest_zoxide_version#v}"
-        mkdir -p "${MY_TMP}/zoxide"
-        GH_HOST=github.com gh release download --pattern "*${latest_zoxide_version#v}-$(uname -m)-unknown-linux-musl*" --repo ajeetdsouza/zoxide -D $MY_TMP \
-          && tar -C "${MY_TMP}/zoxide" -xf $MY_TMP/zoxide*.tar.gz \
-          && cp "${MY_TMP}/zoxide/zoxide" "${home_bin}" \
-          && chmod 755 "${home_bin}/zoxide" \
-          && cp "${MY_TMP}/zoxide/man/man1/"* "$HOME/.local/share/man/man1/"
-      fi
+    # bat
+    echo "bat"
+    latest_bat_version=$(gh_latest_release "sharkdp/bat")
+    installed_bat_version=$(bat --version 2>/dev/null|awk '{print $2}')
+    if [[ ${installed_bat_version#v} != ${latest_bat_version#v} ]]; then
+      print "Updating from ${installed_bat_version#v} to ${latest_bat_version#v}"
+      GH_HOST=github.com gh release download --pattern "bat_${latest_bat_version#v}_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
+        && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version#v}_amd64.deb
+    fi
+    # lsd
+    echo "lsd"
+    latest_lsd_version=$(gh_latest_release "lsd-rs/lsd")
+    installed_lsd_version=$(lsd --version 2>/dev/null|awk '{print $2}')
+    if [[ ${installed_lsd_version#v} != ${latest_lsd_version#v} ]]; then
+      GH_HOST=github.com gh release download $latest_lsd_version --pattern "lsd_*amd64.deb" --repo lsd-rs/lsd -D ${MY_TMP} \
+        && sudo dpkg --install --skip-same-version ${MY_TMP}/lsd_*_amd64.deb
+    fi
+    # chruby
+    echo "chruby"
+    eval $(grep '^CHRUBY_VERSION' /usr/local/share/chruby/chruby.sh)
+    if [[ $CHRUBY_VERSION == "0.3.9" ]]; then
+      echo "up to date"
+    else
+      curl -sLS https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz -o chruby-0.3.9.tar.gz \
+        && tar -xzf chruby-0.3.9.tar.gz \
+        && cd chruby-0.3.9/ \
+        && sudo make install
+      cd $MY_TMP
+    fi
+    # ruby-install
+    echo "ruby-install"
+    if [[ $(ruby-install --version | awk '{print $2}') == "0.8.3" ]]; then
+      echo "up to date"
+    else
+      curl -sLS https://github.com/postmodern/ruby-install/archive/v0.8.3.tar.gz -o ruby-install-0.8.3.tar.gz \
+        && tar -xzf ruby-install-0.8.3.tar.gz \
+        && cd ruby-install-0.8.3/ \
+        && sudo make install
+      cd $MY_TMP
+    fi
 
-      # Hack Nerd font
-      echo "Install Hack Nerd and MesloLGS fonts"
-      need_nerd_font=0
-      if [[ -f "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" ]]; then
-        if [[ $(strings "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" |grep -w Version: |head -1 |awk '{print $3}') != "3.1.1" ]]; then
-          need_nerd_font=1
-        fi
-      else
+    # Build batextras
+    echo "batextras"
+    if upinst_from_git https://github.com/eth-p/bat-extras; then
+      [[ -d ~/git/bat-extras ]] && cd ~/git/bat-extras
+      [[ -d ~/git/github/bat-extras ]] && cd ~/git/github/bat-extras
+      ./build.sh --no-verify \
+      && cp bin/* $home_bin
+      cd $MY_TMP
+    fi
+
+    # Hack Nerd font
+    echo "Install Hack Nerd and MesloLGS fonts"
+    need_nerd_font=0
+    if [[ -f "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" ]]; then
+      if [[ $(strings "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" |grep -w Version: |head -1 |awk '{print $3}') != "3.1.1" ]]; then
         need_nerd_font=1
       fi
-      if [[ $need_nerd_font -eq 1 ]]; then
-        curl -sLS https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Hack.zip -o ${MY_TMP}/Hack.zip \
-          && rm ~/.local/share/fonts/*Nerd* \
-          && unzip -u ${MY_TMP}/Hack.zip -d ~/.local/share/fonts \
-          && rm ~/.local/share/fonts/*.md ~/.local/share/fonts/*.txt \
-          && fc-cache -f -v ~/.local/share/fonts
-      fi
-      if [[ ! -f "${HOME}/.local/share/fonts/MesloLGS_NF_Regular.ttf" ]]; then
-          curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Regular.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf" \
-          && curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Bold.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf" \
-          && curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Italic.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf" \
-          && curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Bold_Italic.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf" \
-          && fc-cache -f -v ~/.local/share/fonts
-      fi
+    else
+      need_nerd_font=1
+    fi
+    if [[ $need_nerd_font -eq 1 ]]; then
+      curl -sLS https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Hack.zip -o ${MY_TMP}/Hack.zip \
+        && rm ~/.local/share/fonts/*Nerd* \
+        && unzip -u ${MY_TMP}/Hack.zip -d ~/.local/share/fonts \
+        && rm ~/.local/share/fonts/*.md ~/.local/share/fonts/*.txt \
+        && fc-cache -f -v ~/.local/share/fonts
+    fi
+    if [[ ! -f "${HOME}/.local/share/fonts/MesloLGS_NF_Regular.ttf" ]]; then
+        curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Regular.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf" \
+        && curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Bold.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf" \
+        && curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Italic.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf" \
+        && curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Bold_Italic.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf" \
+        && fc-cache -f -v ~/.local/share/fonts
+    fi
 
-      # kitty
-      local KITTY_VERSION="1"
-      local LATEST_KITTY="2"
-      if whence kitty  &>/dev/null; then
-        local KITTY_VERSION=$(kitty --version | awk '{print $2}')
-        local LATEST_KITTY=$(curl --silent https://sw.kovidgoyal.net/kitty/current-version.txt)
-      fi
-      if [[ $KITTY_VERSION != $LATEST_KITTY ]];then
-        curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
-        # Place the kitty.desktop file somewhere it can be found by the OS
-        cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
-        # If you want to open text files and images in kitty via your file manager also add the kitty-open.desktop file
-        cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
-        # Update the paths to the kitty and its icon in the kitty.desktop file(s)
-        sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
-        sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
-      fi
-      # Latest doggo
-      print "doggo"
-      local current_doggo_version=$(doggo --version 2>/dev/null| awk '{print $1}')
-      local latest_doggo_version=$(gh_latest_release "mr-karan/doggo")
-      if [[ "${current_doggo_version}" != "${latest_doggo_version}" ]]; then
-        print "Updating from ${current_doggo_version} to ${latest_doggo_version}"
-        local build_artifact="doggo_${latest_doggo_version#v}_linux_${arch}.tar.gz"
-        mkdir -p "${MY_TMP}/doggo"
-        GH_HOST=github.com gh release download --pattern $build_artifact --repo mr-karan/doggo -D $MY_TMP \
-          && tar -C "${MY_TMP}/doggo" -xf $MY_TMP/doggo*.tar.gz \
-          && cp "${MY_TMP}/doggo/doggo" "${home_bin}" \
-          && chmod 755 "${home_bin}/doggo"
-        mkdir -p ~/.zcompletions && cp "${MY_TMP}/doggo/completions/doggo.zsh" ~/.zcompletions/_doggo
-      fi
-      # helm
-      echo "helm"
-      latest_helm_version=$(gh_latest_release "helm/helm")
-      installed_helm_version=$(helm version --short 2>/dev/null | cut -d+ -f1)
-      if [[ ${installed_helm_version} != ${latest_helm_version} ]]; then
-        print "Updating from ${installed_helm_version} to ${latest_helm_version}"
-        local helm_tar="helm-${latest_helm_version}-linux-${arch}.tar.gz"
-        (cd ${MY_TMP} && curl -sLOS https://get.helm.sh/${helm_tar} \
-          && tar xzf ${helm_tar} && cp linux-${arch}/helm ${home_bin} \
-          && chmod 755 ${home_bin}/helm)
-      fi
+    # kitty
+    local KITTY_VERSION="1"
+    local LATEST_KITTY="2"
+    if whence kitty  &>/dev/null; then
+      local KITTY_VERSION=$(kitty --version | awk '{print $2}')
+      local LATEST_KITTY=$(curl --silent https://sw.kovidgoyal.net/kitty/current-version.txt)
+    fi
+    if [[ $KITTY_VERSION != $LATEST_KITTY ]];then
+      curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
+      # Place the kitty.desktop file somewhere it can be found by the OS
+      cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
+      # If you want to open text files and images in kitty via your file manager also add the kitty-open.desktop file
+      cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
+      # Update the paths to the kitty and its icon in the kitty.desktop file(s)
+      sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+      sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+    fi
+    # Latest doggo
+    print "doggo"
+    local current_doggo_version=$(doggo --version 2>/dev/null| awk '{print $1}')
+    local latest_doggo_version=$(gh_latest_release "mr-karan/doggo")
+    if [[ "${current_doggo_version}" != "${latest_doggo_version}" ]]; then
+      print "Updating from ${current_doggo_version} to ${latest_doggo_version}"
+      local build_artifact="doggo_${latest_doggo_version#v}_linux_${arch}.tar.gz"
+      mkdir -p "${MY_TMP}/doggo"
+      GH_HOST=github.com gh release download --pattern $build_artifact --repo mr-karan/doggo -D $MY_TMP \
+        && tar -C "${MY_TMP}/doggo" -xf $MY_TMP/doggo*.tar.gz \
+        && cp "${MY_TMP}/doggo/doggo" "${home_bin}" \
+        && chmod 755 "${home_bin}/doggo"
+      mkdir -p ~/.zcompletions && cp "${MY_TMP}/doggo/completions/doggo.zsh" ~/.zcompletions/_doggo
     fi
     ;;
   Darwin)
@@ -461,89 +390,32 @@ case $(uname) in
     ;;
 esac
 
-# starship (prompt)
-print -n "starship: "
-if whence starship &> /dev/null; then
-  installed_starship_version=$(starship --version 2>/dev/null|head -1 |awk '{print $2}')
-  latest_starship_version=$(gh_latest_release "starship/starship")
-  if [[ "v"${installed_starship_version} != $latest_starship_version ]]; then
-    print "updating."
-    if [[ $(uname) == "Linux" ]]; then
-      curl -fsSL https://starship.rs/install.sh | bash --posix -s - -y -b ${home_bin} -p unknown-linux-gnu
-    else
-      curl -fsSL https://starship.rs/install.sh | bash --posix -s - -y -b ${home_bin}
-    fi
-    starship --version
-  else
-    print "up to date."
-  fi
+echo "pyenv"
+if upinst_from_git https://github.com/pyenv/pyenv.git ~/.pyenv; then
+  (cd ~/.pyenv && src/configure && make -C src)
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init --path)"
+fi
+if [[ -d ~/.pyenv/plugins/pyenv-virtualenv ]]; then
+  (cd ~/.pyenv/plugins/pyenv-virtualenv && git pull)
 else
-  print "installing."
-  if [[ $(uname) == "Linux" ]]; then
-    curl -fsSL https://starship.rs/install.sh | bash --posix -s - -y -b ${home_bin} -p unknown-linux-gnu
-  else
-    curl -fsSL https://starship.rs/install.sh | bash --posix -s - -y -b ${home_bin}
-  fi
-  starship --version
+  git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
 fi
-
-if [[ ! -v setup_MINIMAL ]]; then
-  # tfswitch
-  echo "tfswitch"
-  latest_tfswitch_version=$(gh_latest_release "warrensbox/terraform-switcher")
-  installed_tfswitch_version=$(tfswitch --version 2>/dev/null|awk 'NF{print $2}')
-  if [[ ${installed_tfswitch_version#v} != ${latest_tfswitch_version#v} ]]; then
-    print "Updating from ${installed_tfswitch_version#v} to ${latest_tfswitch_version#v}"
-    GH_HOST=github.com gh release download ${latest_tfswitch_version#v} --pattern "*_linux_${arch}.tar.gz" --repo warrensbox/terraform-switcher -D ${MY_TMP} \
-      && tar -C $home_bin -xzf ${MY_TMP}/terraform-switcher_${latest_tfswitch_version#v}_linux_${arch}.tar.gz tfswitch \
-      && chmod 755 ${home_bin}/tfswitch
-  fi
-
-  # k9s
-  echo "k9s"
-  latest_k9s_version=$(gh_latest_release "derailed/k9s")
-  installed_k9s_version=$(k9s version -s 2>/dev/null| grep Version | awk '{print $2}')
-  if [[ ${installed_k9s_version} != $latest_k9s_version ]]; then
-    print "Updating from ${installed_k9s_version} to $latest_k9s_version"
-    k9s_asset="k9s_$(uname -s)_${arch}.tar.gz"
-    GH_HOST=github.com gh release download $latest_k9s_version --pattern $k9s_asset --repo derailed/k9s -D ${MY_TMP} \
-    && tar -C $home_bin -xzf ${MY_TMP}/${k9s_asset} k9s \
-    && chmod 755 ${home_bin}/k9s
-  fi
-
-  # cheat
-  echo "cheat"
-  curl -sLS https://github.com/cheat/cheat/releases/latest/download/cheat-${kernel}-${machine}.gz -o ${MY_TMP}/cheat.tgz \
-    && gunzip -c ${MY_TMP}/cheat.tgz >${home_bin}/cheat
-  chmod 755 ${home_bin}/cheat
-  ##
-  echo "pyenv"
-  if upinst_from_git https://github.com/pyenv/pyenv.git ~/.pyenv; then
-    (cd ~/.pyenv && src/configure && make -C src)
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init --path)"
-  fi
-  if [[ -d ~/.pyenv/plugins/pyenv-virtualenv ]]; then
-    (cd ~/.pyenv/plugins/pyenv-virtualenv && git pull)
-  else
-    git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
-  fi
-  if ! pyenv global $PYTHON_VERSION &>/dev/null; then
-    print "Using pyenv to install python $PYTHON_VERSION"
-    pyenv install $PYTHON_VERSION
-    pyenv global $PYTHON_VERSION
-    PIP_OPTIONS="--force-reinstall"
-  fi
-  echo "Python packages:"
-  for pkg in pip pipreqs argcomplete pre-commit 'boto3[crt]';do
-    python -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
-  done
-
-  print "Ruby Gems"
-  for pkg in aws-sdk-ec2 bundler fileutils octokit asciidoctor kramdown-asciidoc;do
-    gem install $pkg
-  done
+if ! pyenv global $PYTHON_VERSION &>/dev/null; then
+  print "Using pyenv to install python $PYTHON_VERSION"
+  pyenv install $PYTHON_VERSION
+  pyenv global $PYTHON_VERSION
+  PIP_OPTIONS="--force-reinstall"
 fi
+echo "Python packages:"
+for pkg in pip pipreqs argcomplete pre-commit 'boto3[crt]';do
+  python -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
+done
+
+print "Ruby Gems"
+for pkg in aws-sdk-ec2 bundler fileutils octokit asciidoctor kramdown-asciidoc;do
+  gem install $pkg
+done
 
 rm -rf ${MY_TMP}
