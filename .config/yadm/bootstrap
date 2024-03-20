@@ -9,7 +9,6 @@
 
 # Versions
 GOLANG_VERSION=$(curl --silent https://endoflife.date/api/go/1.22.json |jq -r  '.latest')
-NODEJS_VERSION=$(curl --silent https://endoflife.date/api/nodejs/20.json |jq -r '.latest')
 PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.12.json |jq -r '.latest')
 # Set NEOVIM_BUILD to nightly or latest. If set to nightly.
 NEOVIM_BUILD="nightly"
@@ -158,31 +157,12 @@ case $(uname) in
           && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise
       fi
 
-      print "Neovim"
-      if [[ ${NEOVIM_BUILD} == "latest" ]]; then
-        local latest_neovim_version=$(gh_latest_release "neovim/neovim")
-        local installed_neovim_version=$(/usr/local/bin/nvim --version 2>/dev/null | head -1 | awk '{print $2}' |cut -d- -f1)
-        if [[ ${installed_neovim_version} != $latest_neovim_version ]]; then
-          print "Updating from ${installed_neovim_version} to $latest_neovim_version"
-          GH_HOST=github.com gh release download ${latest_neovim_version} --pattern "nvim.appimage" --repo neovim/neovim -D $MY_TMP \
-          && sudo install -m 755 ${MY_TMP}/nvim.appimage /usr/local/bin/nvim.appimage
-          [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
-        fi
-      elif [[ ${NEOVIM_BUILD} == "nightly" ]]; then
-        read -q "yn?Do you wish to refresh neovim nightly? "
-        case $yn in
-          [Yy]*)
-            print "\nInstalling latest nightly build."
-            GH_HOST=github.com gh release download nightly --pattern "nvim.appimage" --repo neovim/neovim -D $MY_TMP \
-            && sudo install -m 755 ${MY_TMP}/nvim.appimage /usr/local/bin/nvim.appimage
-            [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
-            ;;
-          *)
-            print "\nLeaving current version installed."
-            ;;
-        esac
-      fi
+      # Install mise tools
+      for tool in node@lts awscli@latest neovim@nightly;do
+        mise use --global $tool
+      done
 
+      exit
       # golang
       if [[ "go version go${GOLANG_VERSION} linux/amd64" != $(go version 2>/dev/null) ]]; then
         echo "Downloading and installing go ${GOLANG_VERSION}"
@@ -200,24 +180,6 @@ case $(uname) in
           && ln -s ~/.local/firefox/firefox-bin ${home_bin}/firefox
       fi
 
-      # nodejs
-      if [[ "v${NODEJS_VERSION}" != $(node --version 2>/dev/null) ]]; then
-        echo "Downloading and installing nodejs $NODEJS_VERSION"
-        if [[ -L /usr/local/nodejs ]]; then
-          OLD_NODEJS=$(readlink /usr/local/nodejs)
-        fi
-        curl -sLS -o ${MY_TMP}/node-v${NODEJS_VERSION}-linux-x64.tar.xz https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz \
-          && sudo tar -xJf ${MY_TMP}/node-v${NODEJS_VERSION}-linux-x64.tar.xz -C /usr/local/
-        if [[ -d /usr/local/node-v${NODEJS_VERSION}-linux-x64 ]]; then
-          sudo rm /usr/local/nodejs
-          sudo ln -s /usr/local/node-v${NODEJS_VERSION}-linux-x64 /usr/local/nodejs
-          sudo chown -hR $(id -u):$(id -g) /usr/local/node-v${NODEJS_VERSION}-linux-x64
-        fi
-        if [[ -v OLD_NODEJS && "$OLD_NODEJS" != $(readlink /usr/local/nodejs) ]]; then
-          sudo rm -rf $OLD_NODEJS
-        fi
-        PATH=/usr/local/nodejs/bin:$PATH
-      fi
       # Make sure we set an npm prefix for our user.
       npm config set prefix '~/.local/'
       corepack enable
@@ -310,21 +272,7 @@ case $(uname) in
           && mv ${MY_TMP}/direnv.linux-amd64 ${home_bin}/direnv \
           && chmod 755 ${home_bin}/direnv
       fi
-      # awscli
-      echo "awscli"
-      curl -sLS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
-        && rm -rf aws && unzip -q awscliv2.zip \
-        && if [[ -d /usr/local/aws-cli/v2 ]]; then
-          /usr/local/bin/aws --version
-          sudo ./aws/install --update
-          # Prune old installs
-          for version in /usr/local/aws-cli/v2/?*.?*.?*; do
-            [[ $(readlink /usr/local/aws-cli/v2/current) == "$version" ]] || sudo rm -rf $version
-          done
-        else
-          sudo ./aws/install
-        fi
-      /usr/local/bin/aws --version
+
       # Build batextras
       echo "batextras"
       if upinst_from_git https://github.com/eth-p/bat-extras; then
