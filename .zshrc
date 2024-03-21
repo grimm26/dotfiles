@@ -9,15 +9,6 @@
 # setopt XTRACE
 
 #zmodload zsh/zprof
-mkdir -p ~/.zsh-cache
-if (( $+commands[zoxide] )); then
-  zoxide_init=~/.zsh-cache/zoxide.init
-  if [[ ! -e $zoxide_init || $zoxide_init -ot ${commands[zoxide]} ]]; then
-    zoxide init --cmd cd zsh >| $zoxide_init
-  fi
-  source $zoxide_init
-fi
-
 # Disable ohmyzsh auto update checks.
 zstyle ':omz:update' mode disabled
 # Start configuration added by Zim install {{{
@@ -167,6 +158,15 @@ for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 # }}} End configuration added by Zim install
+mkdir -p ~/.zsh-cache
+if (( $+commands[zoxide] )); then
+  zoxide_init=~/.zsh-cache/zoxide.init
+  if [[ ! -e $zoxide_init || $zoxide_init -ot ${commands[zoxide]} ]]; then
+    zoxide init --cmd cd zsh >| $zoxide_init
+  fi
+  source $zoxide_init
+fi
+
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
