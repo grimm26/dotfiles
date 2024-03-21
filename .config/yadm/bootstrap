@@ -9,6 +9,8 @@
 
 MISE_PKGS=(
   awscli@latest
+  bat
+  bat-extras
   cheat
   delta
   direnv
@@ -188,15 +190,6 @@ case $(uname) in
       (cd ~/.fzf && ./install --key-bindings --completion --no-bash --no-fish --no-update-rc)
     fi
 
-    # bat
-    echo "bat"
-    latest_bat_version=$(gh_latest_release "sharkdp/bat")
-    installed_bat_version=$(bat --version 2>/dev/null|awk '{print $2}')
-    if [[ ${installed_bat_version#v} != ${latest_bat_version#v} ]]; then
-      print "Updating from ${installed_bat_version#v} to ${latest_bat_version#v}"
-      GH_HOST=github.com gh release download --pattern "bat_${latest_bat_version#v}_amd64.deb" --repo sharkdp/bat -D ${MY_TMP} \
-        && sudo dpkg --install --skip-same-version ${MY_TMP}/bat_${latest_bat_version#v}_amd64.deb
-    fi
     # lsd
     echo "lsd"
     latest_lsd_version=$(gh_latest_release "lsd-rs/lsd")
@@ -226,16 +219,6 @@ case $(uname) in
         && tar -xzf ruby-install-0.8.3.tar.gz \
         && cd ruby-install-0.8.3/ \
         && sudo make install
-      cd $MY_TMP
-    fi
-
-    # Build batextras
-    echo "batextras"
-    if upinst_from_git https://github.com/eth-p/bat-extras; then
-      [[ -d ~/git/bat-extras ]] && cd ~/git/bat-extras
-      [[ -d ~/git/github/bat-extras ]] && cd ~/git/github/bat-extras
-      ./build.sh --no-verify \
-      && cp bin/* $home_bin
       cd $MY_TMP
     fi
 

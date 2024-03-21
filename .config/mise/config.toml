@@ -14,6 +14,8 @@ tfswitch = "latest"
 direnv = "latest"
 dive = "latest"
 github-cli = "latest"
+bat = "latest"
+bat-extras = "latest"
 
 [settings]
 not_found_auto_install = true
