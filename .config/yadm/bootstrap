@@ -154,13 +154,9 @@ case $(uname) in
     curl -sSL https://api.github.com/repos/jdx/mise/releases/latest -o ${MY_TMP}/mise_latest.json
     local LATEST_MISE_VERSION=$(jq -r '.name' ${MY_TMP}/mise_latest.json)
     if whence -p mise &>/dev/null; then
-      local CURRENT_MISE_VERSION=$(mise version | awk '{print $1}')
-      if [[ "${CURRENT_MISE_VERSION/v}" != "${LATEST_MISE_VERSION/v}" ]]; then
-        print "Updating mise from ${CURRENT_MISE_VERSION/} to ${LATEST_MISE_VERSION/v}"
-        local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/mise_latest.json | grep 'linux-x64$')
-        (cd $MY_TMP && curl -sLSO $GH_DOWNLOAD_URL \
-          && install -m 755 ${MY_TMP}/mise-*-linux-x64 $home_bin/mise)
-      fi
+      # Use mise to update itself
+      print "Running mise self-update"
+      mise self-update --yes
     else
       print "Installing mise $LATEST_MISE_VERSION fresh"
       local GH_DOWNLOAD_URL=$(jq -r '.assets[].browser_download_url' ${MY_TMP}/mise_latest.json | grep 'linux-x64$')
