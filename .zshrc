@@ -648,13 +648,7 @@ tfup () {
   tfsw $tf_version
 }
 ## START fzf
-if [[ -d /usr/local/opt/fzf ]]; then
-  # homebrew OSX
-  export FZF_BASE=/usr/local/opt/fzf
-elif [[ -d ~/.fzf ]]; then
-  # git install linux
-   export FZF_BASE=${HOME}/.fzf
-fi
+eval "$(fzf --zsh)"
 if whence -p fdfind &>/dev/null; then
   export FD_BIN=fdfind
 fi
@@ -684,7 +678,6 @@ fi
 if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 ## END fzf
 
 alias gcl &>/dev/null && unalias gcl

@@ -15,6 +15,7 @@ MISE_PKGS=(
   delta
   direnv
   dive
+  fzf
   github-cli
   go
   helm
@@ -182,12 +183,6 @@ case $(uname) in
       curl -sLSo ${MY_TMP}/firefox.tar.bz2 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US' \
         && tar -C ~/.local -xjf ${MY_TMP}/firefox.tar.bz2 \
         && ln -s ~/.local/firefox/firefox-bin ${home_bin}/firefox
-    fi
-
-    # install fzf
-    echo "fzf"
-    if upinst_from_git https://github.com/junegunn/fzf ~/.fzf; then
-      (cd ~/.fzf && ./install --key-bindings --completion --no-bash --no-fish --no-update-rc)
     fi
 
     # lsd
