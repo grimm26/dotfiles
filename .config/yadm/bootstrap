@@ -15,6 +15,7 @@ MISE_PKGS=(
   delta
   direnv
   dive
+  fd
   fzf
   github-cli
   go

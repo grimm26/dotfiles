@@ -17,6 +17,7 @@ github-cli = "latest"
 bat = "latest"
 bat-extras = "latest"
 fzf = "latest"
+fd = "latest"
 
 [settings]
 not_found_auto_install = true

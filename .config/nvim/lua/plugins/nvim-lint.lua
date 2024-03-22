@@ -27,7 +27,7 @@ return {
         zsh = { "zsh" },
       }
       local lint_augroup = vim.api.nvim_create_augroup("nvim-lint", { clear = true })
-      local events = { "BufReadPost", "BufWritePost", "BufEnter", "InsertLeave" }
+      local events = { "BufReadPost", "BufWritePost", "InsertLeave" }
       vim.api.nvim_create_autocmd(events, {
         group = lint_augroup,
         callback = function()
