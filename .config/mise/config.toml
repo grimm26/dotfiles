@@ -18,6 +18,7 @@ bat = "latest"
 bat-extras = "latest"
 fzf = "latest"
 fd = "latest"
+lsd = "latest"
 
 [settings]
 not_found_auto_install = true

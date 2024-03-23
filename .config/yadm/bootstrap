@@ -22,6 +22,7 @@ MISE_PKGS=(
   helm
   k9s
   kubectl
+  lsd
   neovim@nightly
   node@lts
   tflint
@@ -182,14 +183,6 @@ case $(uname) in
         && ln -s ~/.local/firefox/firefox-bin ${home_bin}/firefox
     fi
 
-    # lsd
-    echo "lsd"
-    latest_lsd_version=$(gh_latest_release "lsd-rs/lsd")
-    installed_lsd_version=$(lsd --version 2>/dev/null|awk '{print $2}')
-    if [[ ${installed_lsd_version#v} != ${latest_lsd_version#v} ]]; then
-      GH_HOST=github.com gh release download $latest_lsd_version --pattern "lsd_*amd64.deb" --repo lsd-rs/lsd -D ${MY_TMP} \
-        && sudo dpkg --install --skip-same-version ${MY_TMP}/lsd_*_amd64.deb
-    fi
     # chruby
     echo "chruby"
     eval $(grep '^CHRUBY_VERSION' /usr/local/share/chruby/chruby.sh)
