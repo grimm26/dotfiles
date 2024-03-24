@@ -170,6 +170,7 @@ case $(uname) in
     for tool in ${MISE_PKGS[@]};do
       mise use --yes --global $tool
     done
+    mise up --yes
 
     # Make sure we set an npm prefix for our user.
     npm config set prefix '~/.local/'
