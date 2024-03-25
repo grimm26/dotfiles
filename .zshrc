@@ -655,7 +655,7 @@ fi
 if whence -p fd &>/dev/null; then
   export FD_BIN=fd
 fi
-export FZF_DEFAULT_COMMAND="$FD_BIN --type f --hidden --exclude .git --exclude .terraform"
+export FZF_DEFAULT_COMMAND="$FD_BIN --type file --hidden --exclude .git --exclude .terraform"
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 # Use ,, as the trigger sequence instead of the default **
 export FZF_COMPLETION_TRIGGER=',,'

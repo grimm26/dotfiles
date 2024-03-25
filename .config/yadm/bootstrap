@@ -167,10 +167,11 @@ case $(uname) in
     fi
 
     # Install mise tools
-    for tool in ${MISE_PKGS[@]};do
-      mise use --yes --global $tool
-    done
-    mise up --yes
+    # for tool in ${MISE_PKGS[@]};do
+    #   mise use --yes --global $tool
+    # done
+    # If we manage mise tools from ~/.config/yadm/bootstrap then this should be enough.
+    mise upgrade --yes
 
     # Make sure we set an npm prefix for our user.
     npm config set prefix '~/.local/'
