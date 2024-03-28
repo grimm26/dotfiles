@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+my_new_branch=$1
 # nb = new branch
 # Make a new branch and push it up to your fork right away.
 # Check if main exists and use instead of master
@@ -16,6 +17,5 @@ function git_main_branch() {
 }
 DEFAULT_BRANCH=$(git_main_branch)
 git checkout $DEFAULT_BRANCH && git pull --ff-only && \
-git branch "$1" $DEFAULT_BRANCH && \
-git checkout "$1" && \
-git push --set-upstream origin "$1"
+git checkout -b "$my_new_branch" && \
+git push --set-upstream origin "$my_new_branch"
