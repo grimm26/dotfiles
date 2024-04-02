@@ -209,8 +209,9 @@ case $(uname) in
       cd $MY_TMP
     fi
 
+    set -x
     # Hack Nerd font
-    echo "Install Hack Nerd and MesloLGS fonts"
+    echo "Install Hack Nerd, UbuntuNerd, and MesloLGS fonts"
     need_nerd_font=0
     if [[ -f "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" ]]; then
       if [[ $(strings "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" |grep -w Version: |head -1 |awk '{print $3}') != "3.1.1" ]]; then
@@ -219,19 +220,29 @@ case $(uname) in
     else
       need_nerd_font=1
     fi
+    if [[ -f "${HOME}/.local/share/fonts/UbuntuNerdFont-Medium.ttf" ]]; then
+      if [[ $(strings "${HOME}/.local/share/fonts/UbuntuNerdFont-Medium.ttf" |grep -w Version: |head -1 |awk '{print $3}') != "3.1.1" ]]; then
+        need_nerd_font=1
+      fi
+    else
+      need_nerd_font=1
+    fi
     if [[ $need_nerd_font -eq 1 ]]; then
-      curl -sLS https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Hack.zip -o ${MY_TMP}/Hack.zip \
-        && rm ~/.local/share/fonts/*Nerd* \
-        && unzip -u ${MY_TMP}/Hack.zip -d ~/.local/share/fonts \
-        && rm ~/.local/share/fonts/*.md ~/.local/share/fonts/*.txt \
-        && fc-cache -f -v ~/.local/share/fonts
+      (cd $MY_TMP && \
+        curl -sLSO "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/{Hack,Ubuntu,UbuntuMono}.zip" \
+        && rm ~/.local/share/fonts/*Nerd*
+        unzip -u Hack.zip \*.ttf -d ~/.local/share/fonts \
+        && unzip -u Ubuntu.zip \*.ttf -d ~/.local/share/fonts \
+        && unzip -u UbuntuMono.zip \*.ttf -d ~/.local/share/fonts \
+        && fc-cache -f -v ~/.local/share/fonts)
     fi
     if [[ ! -f "${HOME}/.local/share/fonts/MesloLGS_NF_Regular.ttf" ]]; then
-        curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Regular.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf" \
-        && curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Bold.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf" \
-        && curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Italic.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf" \
-        && curl -sLS -o ~/.local/share/fonts/MesloLGS_NF_Bold_Italic.ttf "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf" \
-        && fc-cache -f -v ~/.local/share/fonts
+      autoload zmv
+      (cd $MY_TMP && \
+        curl -sLSO "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20{Regular,Bold,Italic,Bold%20Italic}.ttf" \
+        && zmv '*%20*' '${f:gs/\%20/_}' \
+        && mv MesloLGS_NF*.ttf ~/.local/share/fonts/ \
+        && fc-cache -f -v ~/.local/share/fonts)
     fi
 
     # kitty
