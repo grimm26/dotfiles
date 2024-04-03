@@ -209,7 +209,6 @@ case $(uname) in
       cd $MY_TMP
     fi
 
-    set -x
     # Hack Nerd font
     echo "Install Hack Nerd, UbuntuNerd, and MesloLGS fonts"
     need_nerd_font=0
