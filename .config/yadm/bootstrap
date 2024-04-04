@@ -33,6 +33,7 @@ PYTHON_PKGS=(
   ansible
   argcomplete
   'boto3[crt]'
+  httpie
   pip
   pipreqs
   pre-commit

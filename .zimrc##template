@@ -43,13 +43,14 @@ zmodule ohmyzsh/ohmyzsh --root plugins/systemadmin
 zmodule ohmyzsh/ohmyzsh --root plugins/urltools
 zmodule ohmyzsh/ohmyzsh --root plugins/web-search
 zmodule ohmyzsh/ohmyzsh --root plugins/sudo
+zmodule ohmyzsh/ohmyzsh --root plugins/httpie
 {% if yadm.distro == "Ubuntu" %}
 zmodule ohmyzsh/ohmyzsh --root plugins/systemd
 {% endif %}
 {% if yadm.os == "Darwin" %}
-ohmyzsh/ohmyzsh path:plugins/macos
-ohmyzsh/ohmyzsh path:plugins/gnu-utils
-ohmyzsh/ohmyzsh path:plugins/brew
+zmodule ohmyzsh/ohmyzsh --root plugins/macos
+zmodule ohmyzsh/ohmyzsh --root plugins/gnu-utils
+zmodule ohmyzsh/ohmyzsh --root plugins/brew
 {% endif %}
 
 zmodule hlissner/zsh-autopair
