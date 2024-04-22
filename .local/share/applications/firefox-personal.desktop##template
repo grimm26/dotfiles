@@ -2,9 +2,9 @@
 Version=1.0
 Type=Application
 Terminal=false
-Name=Firefox (local)
+Name=Firefox personal (local)
 GenericName=Web Browser
 Comment=Local full Firefox install
 Icon={{ env.HOME }}/.local/firefox/browser/chrome/icons/default/default48.png
-Exec=env MOZ_ENABLE_WAYLAND=1 {{ env.HOME }}/.local/firefox/firefox-bin %u
+Exec=env MOZ_ENABLE_WAYLAND=1 {{ env.HOME }}/.local/firefox/firefox-bin -P personal %u
 Categories=Network;WebBrowser;
