@@ -26,9 +26,20 @@ if [[ -d ${HOME}/.local/kitty.app/bin ]]; then
 fi
 export MY_BIN="$HOME/.local/bin"
 path=("$MY_BIN" $path)
+if [[ -d ${HOME}/.tenv/bin ]]; then
+  path=("${HOME}/.tenv/bin" $path)
+fi
 typeset -U path
 export PATH
 
+# Without this terragrunt will try to use opentofu if possible.
+# tenv is happy to provide it :)
+export TERRAGRUNT_TFPATH=terraform
+if (( ${+commands[tenv]} )); then
+  # set the default constraint on what terraform version we allow.
+  # https://github.com/tofuutils/tenv#project-binaries
+  export TFENV_TERRAFORM_DEFAULT_CONSTRAINT="<= 1.7.5"
+fi
 # ignore ~/.ssh/known_hosts entries
 alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -o "PreferredAuthentications=password,keyboard-interactive"'
 
@@ -43,7 +54,7 @@ typeset -U fpath
 export LESS="-EFRX"
 export CHEF_ENV_PATH="$HOME/git/chef/environments"
 export LC_COLLATE=C
-if command -v nvim &>/dev/null; then
+if (( ${+commands[nvim]} )); then
   export EDITOR=nvim
 else
   export EDITOR=vim

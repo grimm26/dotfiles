@@ -277,6 +277,20 @@ case $(uname) in
         && chmod 755 "${home_bin}/doggo"
       mkdir -p ~/.zcompletions && cp "${MY_TMP}/doggo/completions/doggo.zsh" ~/.zcompletions/_doggo
     fi
+    # Latest tenv
+    print "tenv"
+    local current_tenv_version=$(tenv version 2>/dev/null| awk '{print $3}')
+    local latest_tenv_version=$(gh_latest_release "tofuutils/tenv")
+    if [[ "${current_tenv_version}" != "${latest_tenv_version}" ]]; then
+      print "Updating from ${current_tenv_version} to ${latest_tenv_version}"
+      local build_artifact="tenv_${latest_tenv_version}_Linux_x86_64.tar.gz"
+      mkdir -p "${MY_TMP}/tenv"
+      GH_HOST=github.com gh release download --pattern $build_artifact --repo tofuutils/tenv -D $MY_TMP \
+        && tar -C "${MY_TMP}/tenv" -xf $MY_TMP/tenv*.tar.gz \
+        && install -D -t "${HOME}/.tenv/bin" "${MY_TMP}/t*" \
+        && chmod 755 "${home_bin}/tenv"
+    fi
+    exit
     ;;
   Darwin)
     # This section is pretty much abandoned because I don't use MacOS anymore.

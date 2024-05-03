@@ -166,6 +166,13 @@ if (( $+commands[zoxide] )); then
   fi
   source $zoxide_init
 fi
+if (( $+commands[tenv] )); then
+  tenv_init=~/.zsh-cache/tenv.init
+  if [[ ! -e $tenv_init || $tenv_init -ot ${commands[tenv]} ]]; then
+    tenv completion zsh >| $tenv_init
+  fi
+  source $tenv_init
+fi
 
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -368,9 +375,30 @@ load-tfswitch() {
     fi
   fi
 }
+load-tenv() {
+  if [[ -f ./atlantis.yaml ]]; then
+    autoload is-at-least
+    tf_version=$(grep terraform_version ./atlantis.yaml | awk '{print $2}' | tr -d 'v')
+    if [[ -n $tf_version ]]; then
+      export TFENV_TERRAFORM_VERSION=$tf_version
+      if whence -p tgsw &>/dev/null; then
+        if is-at-least 0.13.0 $tf_version; then
+          export TG_VERSION=latest
+        elif is-at-least 0.12.0 $tf_version; then
+          export TG_VERSION=0.24.4
+        elif is-at-least 0.11.0 $tf_version; then
+          export TG_VERSION=0.18.7
+        fi
+      fi
+    fi
+  else
+    unset TFENV_TERRAFORM_VERSION
+    unset TG_VERSION
+  fi
+}
 autoload -Uz add-zsh-hook
-add-zsh-hook chpwd load-tfswitch
-load-tfswitch
+add-zsh-hook chpwd load-tenv
+load-tenv
 
 # Directory navigation
 alias -- -='cd -'
@@ -542,6 +570,7 @@ alias viaws="vim -O ~/.aws/config ~/.aws/credentials"
 setopt prompt_subst
 setopt TRANSIENT_RPROMPT
 #
+# This is replaced with tenv
 # create a cache file for what the latest version of terragrunt is.
 # If the file is older than 24 hours, refresh it.
 # The globbing is a little complicated here:
@@ -564,77 +593,68 @@ get_tg_latest_version () {
   fi
   export TG_LATEST_VERSION=$(cat ~/.terragrunt_latest_version)
 }
-
-get_tg_latest_version
+# get_tg_latest_version
 
 tf11 () {
-  tgsw 0.18.7
-  tfsw --latest-stable 0.11.0
+  if (( ${+commands[tenv]} )); then
+    tenv use terragrunt "~> 0.18.7"
+    tenv use terraform "~> 0.11.0"
+  else
+    tgsw 0.18.7
+    tfsw --latest-stable 0.11.0
+  fi
 }
 tf12 () {
-  tgsw 0.24.4
-  tfsw --latest-stable 0.12.0
+  if (( ${+commands[tenv]} )); then
+    tenv use terragrunt "~> 0.24.4"
+    tenv use terraform "~> 0.12.0"
+  else
+    tgsw 0.24.4
+    tfsw --latest-stable 0.12.0
+  fi
 }
 # terraform 0.13 and up should work with the latest terragrunt version - 2021-09-10
 tf13 () {
-  tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 0.13.0
+  if (( ${+commands[tenv]} )); then
+    tenv use terragrunt latest
+    tenv use terraform "~> 0.13.0"
+  else
+    tgsw $TG_LATEST_VERSION
+    tfsw --latest-stable 0.13.0
+  fi
 }
 tf14 () {
-  tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 0.14.0
+  if (( ${+commands[tenv]} )); then
+    tenv use terragrunt latest
+    tenv use terraform "~> 0.14.0"
+  else
+    tgsw $TG_LATEST_VERSION
+    tfsw --latest-stable 0.14.0
+  fi
 }
 tf15 () {
-  tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 0.15.0
+  if (( ${+commands[tenv]} )); then
+    tenv use terragrunt latest
+    tenv use terraform "~> 0.15.0"
+  else
+    tgsw $TG_LATEST_VERSION
+    tfsw --latest-stable 0.15.0
+  fi
 }
-tf1.0 () {
-  tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 1.0.0
-}
-tf1.1 () {
-  tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 1.1.0
-}
-tf1.2 () {
-  tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 1.2.0
-}
-tf1.3 () {
-  tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 1.3.0
-}
-tf1.4 () {
-  tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 1.4.0
-}
-tf1.5 () {
-  tgsw $TG_LATEST_VERSION
-  tfsw --latest-stable 1.5.0
-}
-alias tfver=terraform version | awk '{print $2}'
-go13 () {
-  tf13
-  tf 0.13upgrade -yes
-  audit-terraform-modules -r
-  atlantis_yaml_mod.rb --tfver $(terraform version | awk '{print $2}')
-}
-go14 () {
-  tf14
-  audit-terraform-modules -r
-  atlantis_yaml_mod.rb --tfver $(terraform version | awk '{print $2}')
-}
-go15 () {
-  tf15
-  audit-terraform-modules -r
-  atlantis_yaml_mod.rb --tfver $(terraform version | awk '{print $2}')
-  tf fmt
+tf1x () {
+  if (( ${+commands[tenv]} )); then
+    tenv use terragrunt latest
+    tenv use terraform "~> 1.0"
+  else
+    tgsw $TG_LATEST_VERSION
+    tfsw --latest-stable 1.0
+  fi
 }
 alias tgi="tg init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 tfup () {
-  local tf_version=${1:-"1.5.7"}
+  local tf_version=${1:-"1.7.5"}
   awk -v tfver="v${tf_version}" '$1=="terraform_version:"{$2=tfver} 1' ./atlantis.yaml > ./atlantis.$$ && mv ./atlantis.$$ ./atlantis.yaml
   audit-terraform-modules -r
   [[ -s locals.tf ]] && (( ${+commands[crush_tf_tags.pl]} )) && crush_tf_tags.pl
@@ -645,7 +665,13 @@ tfup () {
   for tfile in *.tf; do
     sed -Ei 's/( source.+)\.git\?/\1?/' $tfile
   done
-  tfsw $tf_version
+
+  if (( ${+commands[tenv]} )); then
+    tenv use terraform $tf_version
+    tenv use terragrunt latest
+  else
+    tfsw $tf_version
+  fi
 }
 ## START fzf
 eval "$(fzf --zsh)"
