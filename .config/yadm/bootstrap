@@ -287,10 +287,8 @@ case $(uname) in
       mkdir -p "${MY_TMP}/tenv"
       GH_HOST=github.com gh release download --pattern $build_artifact --repo tofuutils/tenv -D $MY_TMP \
         && tar -C "${MY_TMP}/tenv" -xf $MY_TMP/tenv*.tar.gz \
-        && install -D -t "${HOME}/.tenv/bin" "${MY_TMP}/t*" \
-        && chmod 755 "${home_bin}/tenv"
+        && install -D -t "${HOME}/.tenv/bin" ${MY_TMP}/tenv/t*
     fi
-    exit
     ;;
   Darwin)
     # This section is pretty much abandoned because I don't use MacOS anymore.
