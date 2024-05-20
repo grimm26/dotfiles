@@ -5,7 +5,7 @@ return {
     config = function()
       -- Enable modules out of mini,nvim that we want to use
       require("mini.align").setup()
-      require("mini.comment").setup({})
+      -- require("mini.comment").setup({})
       -- require("mini.indentscope").setup({})
       require("mini.surround").setup({
         mappings = {
