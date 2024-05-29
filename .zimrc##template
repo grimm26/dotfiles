@@ -44,7 +44,6 @@ zmodule ohmyzsh/ohmyzsh --root plugins/urltools
 zmodule ohmyzsh/ohmyzsh --root plugins/web-search
 zmodule ohmyzsh/ohmyzsh --root plugins/sudo
 zmodule ohmyzsh/ohmyzsh --root plugins/httpie
-zmodule ohmyzsh/ohmyzsh --root plugins/kitty
 {% if yadm.distro == "Ubuntu" %}
 zmodule ohmyzsh/ohmyzsh --root plugins/systemd
 {% endif %}
@@ -77,6 +76,7 @@ zmodule completion
 # modules that need to use compdef or something and so have to come after completion
 zmodule ohmyzsh/ohmyzsh --root plugins/aws
 zmodule ohmyzsh/ohmyzsh --root plugins/git
+zmodule ohmyzsh/ohmyzsh --root plugins/kitty
 zmodule ohmyzsh/ohmyzsh --root plugins/terraform
 {% if yadm.distro == "Ubuntu" %}
 zmodule ohmyzsh/ohmyzsh --root plugins/ubuntu
