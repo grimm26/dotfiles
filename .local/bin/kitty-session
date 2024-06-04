@@ -2,7 +2,7 @@
 
 # kick off a kitty session file
 session_name=${1}
-session_window=${2:-maximized}
+session_window=${2:-fullscreen}
 
 # If we were not provided a session name, prompt for one of the sessions we have available.
 if [[ "${session_name}x" == "x" ]]; then
