@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Terminal=false
-Name=Firefox personal (local)
+Name=Firefox (local install)
 GenericName=Web Browser
 Comment=Local full Firefox install
 Icon={{ env.HOME }}/.local/firefox/browser/chrome/icons/default/default48.png
