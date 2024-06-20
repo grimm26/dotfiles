@@ -14,9 +14,6 @@ return {
           delay = 1000,
           ignore_whitespace = false,
         },
-        yadm = {
-          enable = true,
-        },
         on_attach = function(bufnr)
           local gs = package.loaded.gitsigns
 
