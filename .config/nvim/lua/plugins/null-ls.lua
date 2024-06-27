@@ -11,9 +11,9 @@ return {
       null_ls.setup({
         sources = {
           null_ls.builtins.code_actions.gitsigns,
-          null_ls.builtins.completion.spell.with({
-            filetypes = { "gitcommit", "markdown", "text", "asciidoc" },
-          }),
+          -- null_ls.builtins.completion.spell.with({
+          --   filetypes = { "gitcommit", "markdown", "text", "asciidoc" },
+          -- }),
           null_ls.builtins.diagnostics.codespell.with({
             extra_args = { "-I", vim.fn.expand("~/.config/codespell.ignore_words") },
           }),
