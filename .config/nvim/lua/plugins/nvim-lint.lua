@@ -9,6 +9,8 @@ return {
       codespell_linter.args = {
         "-I",
         vim.fn.expand("~/.config/codespell.ignore_words"),
+        "--stdin-single-line",
+        "-",
       }
       markdownlint_linter.args = {
         "--disable",
