@@ -269,13 +269,13 @@ case $(uname) in
     local latest_doggo_version=$(gh_latest_release "mr-karan/doggo")
     if [[ "${current_doggo_version}" != "${latest_doggo_version}" ]]; then
       print "Updating from ${current_doggo_version} to ${latest_doggo_version}"
-      local build_artifact="doggo_${latest_doggo_version#v}_linux_${arch}.tar.gz"
+      local build_artifact="doggo_${latest_doggo_version#v}_Linux_$(uname -m).tar.gz"
       mkdir -p "${MY_TMP}/doggo"
       GH_HOST=github.com gh release download --pattern $build_artifact --repo mr-karan/doggo -D $MY_TMP \
-        && tar -C "${MY_TMP}/doggo" -xf $MY_TMP/doggo*.tar.gz \
-        && cp "${MY_TMP}/doggo/doggo" "${home_bin}" \
+        && tar -C "${MY_TMP}" -xzf "$MY_TMP/${build_artifact}" \
+        && cp "${MY_TMP}/${build_artifact/.tar.gz/}/doggo" "${home_bin}" \
         && chmod 755 "${home_bin}/doggo"
-      mkdir -p ~/.zcompletions && cp "${MY_TMP}/doggo/completions/doggo.zsh" ~/.zcompletions/_doggo
+      mkdir -p ~/.zcompletions && "${home_bin}/doggo" completions zsh >| ~/.zcompletions/_doggo
     fi
     # Latest tenv
     print "tenv"
