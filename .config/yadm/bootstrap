@@ -16,7 +16,6 @@ MISE_PKGS=(
   direnv
   dive
   fd
-  fzf
   github-cli
   go
   helm
@@ -288,6 +287,18 @@ case $(uname) in
       GH_HOST=github.com gh release download --pattern $build_artifact --repo tofuutils/tenv -D $MY_TMP \
         && tar -C "${MY_TMP}/tenv" -xf $MY_TMP/tenv*.tar.gz \
         && install -D -t "${HOME}/.tenv/bin" ${MY_TMP}/tenv/t*
+    fi
+    # Latest fzf
+    print "fzf"
+    local current_fzf_version=$(fzf --version 2>/dev/null| awk '{print $3}')
+    local latest_fzf_version=$(gh_latest_release "junegunn/fzf")
+    if [[ "${current_fzf_version#v}" != "${latest_fzf_version#v}" ]]; then
+      print "Updating from ${current_fzf_version#v} to ${latest_fzf_version#v}"
+      local build_artifact="fzf-${latest_fzf_version#v}-linux_amd64.tar.gz"
+      mkdir -p "${MY_TMP}/fzf"
+      GH_HOST=github.com gh release download --pattern $build_artifact --repo junegunn/fzf -D $MY_TMP \
+        && tar -C "${MY_TMP}/fzf" -xzf $MY_TMP/$build_artifact \
+        && install -D -t "${home_bin}" ${MY_TMP}/fzf/fzf
     fi
     ;;
   Darwin)
