@@ -290,7 +290,7 @@ case $(uname) in
     fi
     # Latest fzf
     print "fzf"
-    local current_fzf_version=$(fzf --version 2>/dev/null| awk '{print $3}')
+    local current_fzf_version=$(fzf --version 2>/dev/null| awk '{print $1}')
     local latest_fzf_version=$(gh_latest_release "junegunn/fzf")
     if [[ "${current_fzf_version#v}" != "${latest_fzf_version#v}" ]]; then
       print "Updating from ${current_fzf_version#v} to ${latest_fzf_version#v}"
