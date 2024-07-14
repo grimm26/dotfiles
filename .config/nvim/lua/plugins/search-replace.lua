@@ -8,29 +8,30 @@ return {
         default_replace_multi_buffer_options = "egcI",
       })
       local wk = require("which-key")
-      wk.register({
-        r = {
-          mode = { "n" },
-          name = "SearchReplaceSingleBuffer",
-          s = { "<CMD>SearchReplaceSingleBufferSelections<CR>", "SearchReplaceSingleBuffer [s]election list" },
-          o = { "<CMD>SearchReplaceSingleBufferOpen<CR>", "[o]pen" },
-          w = { "<CMD>SearchReplaceSingleBufferCWord<CR>", "[w]ord" },
-          W = { "<CMD>SearchReplaceSingleBufferCWORD<CR>", "[W]ORD" },
-          e = { "<CMD>SearchReplaceSingleBufferCExpr<CR>", "[e]xpr" },
-          f = { "<CMD>SearchReplaceSingleBufferCFile<CR>", "[f]ile" },
-
-          b = {
-            name = "SearchReplaceMultiBuffer",
-
-            s = { "<CMD>SearchReplaceMultiBufferSelections<CR>", "SearchReplaceMultiBuffer [s]election list" },
-            o = { "<CMD>SearchReplaceMultiBufferOpen<CR>", "[o]pen" },
-            w = { "<CMD>SearchReplaceMultiBufferCWord<CR>", "[w]ord" },
-            W = { "<CMD>SearchReplaceMultiBufferCWORD<CR>", "[W]ORD" },
-            e = { "<CMD>SearchReplaceMultiBufferCExpr<CR>", "[e]xpr" },
-            f = { "<CMD>SearchReplaceMultiBufferCFile<CR>", "[f]ile" },
-          },
+      wk.add({
+        { "<leader>r", group = "SearchReplaceSingleBuffer" },
+        { "<leader>rW", "<CMD>SearchReplaceSingleBufferCWORD<CR>", desc = "[W]ORD" },
+        { "<leader>rb", group = "SearchReplaceMultiBuffer" },
+        { "<leader>rbW", "<CMD>SearchReplaceMultiBufferCWORD<CR>", desc = "[W]ORD" },
+        { "<leader>rbe", "<CMD>SearchReplaceMultiBufferCExpr<CR>", desc = "[e]xpr" },
+        { "<leader>rbf", "<CMD>SearchReplaceMultiBufferCFile<CR>", desc = "[f]ile" },
+        { "<leader>rbo", "<CMD>SearchReplaceMultiBufferOpen<CR>", desc = "[o]pen" },
+        {
+          "<leader>rbs",
+          "<CMD>SearchReplaceMultiBufferSelections<CR>",
+          desc = "SearchReplaceMultiBuffer [s]election list",
         },
-      }, { prefix = "<leader>" })
+        { "<leader>rbw", "<CMD>SearchReplaceMultiBufferCWord<CR>", desc = "[w]ord" },
+        { "<leader>re", "<CMD>SearchReplaceSingleBufferCExpr<CR>", desc = "[e]xpr" },
+        { "<leader>rf", "<CMD>SearchReplaceSingleBufferCFile<CR>", desc = "[f]ile" },
+        { "<leader>ro", "<CMD>SearchReplaceSingleBufferOpen<CR>", desc = "[o]pen" },
+        {
+          "<leader>rs",
+          "<CMD>SearchReplaceSingleBufferSelections<CR>",
+          desc = "SearchReplaceSingleBuffer [s]election list",
+        },
+        { "<leader>rw", "<CMD>SearchReplaceSingleBufferCWord<CR>", desc = "[w]ord" },
+      })
 
       -- show the effects of a search / replace in a live preview window
       -- vim.o.inccommand = "split"
