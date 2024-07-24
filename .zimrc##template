@@ -29,7 +29,7 @@ zmodule ohmyzsh/ohmyzsh --root lib --source functions.zsh
 zmodule ohmyzsh/ohmyzsh --root lib --source clipboard.zsh
 #zmodule ohmyzsh/ohmyzsh --root plugins/vi-mode # This breaks repeating x on CLI
 zmodule ohmyzsh/ohmyzsh --root plugins/command-not-found
-zmodule ohmyzsh/ohmyzsh --root plugins/gem
+# zmodule ohmyzsh/ohmyzsh --root plugins/gem
 zmodule ohmyzsh/ohmyzsh --root plugins/history
 zmodule ohmyzsh/ohmyzsh --root plugins/extract
 zmodule ohmyzsh/ohmyzsh --root plugins/aliases
