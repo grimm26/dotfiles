@@ -377,9 +377,13 @@ load-tfswitch() {
 load-tenv() {
   if [[ -f ./atlantis.yaml ]]; then
     autoload is-at-least
-    tf_version=$(grep terraform_version ./atlantis.yaml | awk '{print $2}' | tr -d 'v')
-    if [[ -n $tf_version ]]; then
-      export TFENV_TERRAFORM_VERSION=$tf_version
+    local atlantis_tf_version=$(grep terraform_version ./atlantis.yaml | awk '{print $2}')
+    local local_tf_version="x"
+    [[ -s .terraform-version ]] && local_tf_version=$(cat .terraform-version)
+    if [[ -n $atlantis_tf_version && $local_tf_version != ${atlantis_tf_version/v} ]]; then
+      #export TFENV_TERRAFORM_VERSION=$tf_version
+      unset TFENV_TERRAFORM_VERSION
+      tenv tf use ${atlantis_tf_version/v} --working-dir
       if whence -p tgsw &>/dev/null; then
         if is-at-least 0.13.0 $tf_version; then
           export TG_VERSION=latest
