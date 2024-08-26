@@ -347,6 +347,8 @@
   # typeset -g POWERLEVEL9K_DIR_PREFIX='%fin '
 
   #####################################[ vcs: git status ]######################################
+  # Switch between gitstatus daemon and vcs_info
+  typeset -g POWERLEVEL9K_DISABLE_GITSTATUS=false
   # Branch icon. Set this parameter to '\UE0A0 ' for the popular Powerline branch icon.
   typeset -g POWERLEVEL9K_VCS_BRANCH_ICON='\uF126 '
 

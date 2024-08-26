@@ -573,7 +573,6 @@ alias viaws="vim -O ~/.aws/config ~/.aws/credentials"
 setopt prompt_subst
 setopt TRANSIENT_RPROMPT
 #
-# This is replaced with tenv
 # create a cache file for what the latest version of terragrunt is.
 # If the file is older than 24 hours, refresh it.
 # The globbing is a little complicated here:
@@ -581,22 +580,33 @@ setopt TRANSIENT_RPROMPT
 # - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
 # - '.' matches "regular files"
 # - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
+# get_tg_latest_version () {
+#   local retrieved_latest="null"
+#   if [[ -s ~/.terragrunt_latest_version ]]; then
+#     if [[ -n ~/.terragrunt_latest_version(#qN.mh+24) ]]; then
+#       retrieved_latest=$(curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v')
+#     fi
+#   else
+#     retrieved_latest=$(curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v')
+#   fi
+#
+#   if [[ -v retrieved_latest && ${retrieved_latest} != "null" ]]; then
+#     echo ${retrieved_latest} >| ~/.terragrunt_latest_version
+#   fi
+#   export TG_LATEST_VERSION=$(cat ~/.terragrunt_latest_version)
+# }
 get_tg_latest_version () {
   local retrieved_latest="null"
-  if [[ -s ~/.terragrunt_latest_version ]]; then
-    if [[ -n ~/.terragrunt_latest_version(#qN.mh+24) ]]; then
-      retrieved_latest=$(curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v')
+  [[ -d ~/.tenv/Terragrunt ]] || return
+  if [[ -s ~/.tenv/Terragrunt/version ]]; then
+    if [[ -n ~/.tenv/Terragrunt/version(#qN.mh+24) ]]; then
+      teng tg install latest
     fi
   else
-    retrieved_latest=$(curl -sLS  https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest |jq -r '.tag_name' |tr -d 'v')
+    teng tg install latest
   fi
-
-  if [[ -v retrieved_latest && ${retrieved_latest} != "null" ]]; then
-    echo ${retrieved_latest} >| ~/.terragrunt_latest_version
-  fi
-  export TG_LATEST_VERSION=$(cat ~/.terragrunt_latest_version)
 }
-# get_tg_latest_version
+get_tg_latest_version
 
 tf11 () {
   if (( ${+commands[tenv]} )); then
