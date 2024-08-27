@@ -600,7 +600,7 @@ get_tg_latest_version () {
   [[ -d ~/.tenv/Terragrunt ]] || return
   if [[ -s ~/.tenv/Terragrunt/version ]]; then
     if [[ -n ~/.tenv/Terragrunt/version(#qN.mh+24) ]]; then
-      teng tg install latest
+      tenv tg install latest
     fi
   else
     teng tg install latest
