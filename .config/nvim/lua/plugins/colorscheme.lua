@@ -11,7 +11,7 @@ return {
   {
     -- More features than ishan9299/nvim-solarized-lua
     "maxmx03/solarized.nvim",
-    -- enabled = false,
+    enabled = true,
     lazy = false,
     priority = 1000,
     ---@type solarized.config
@@ -38,6 +38,17 @@ return {
         lualine_bold = true,
       })
       vim.cmd.colorscheme("solarized-osaka")
+    end,
+  },
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    enabled = false,
+    priority = 1000,
+    opts = {},
+    config = function(_, opts)
+      vim.o.background = "dark"
+      vim.cmd([[colorscheme tokyonight-night]])
     end,
   },
 }

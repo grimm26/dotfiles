@@ -3,6 +3,7 @@ return {
   { "hrsh7th/cmp-nvim-lsp", lazy = true },
   {
     "neovim/nvim-lspconfig",
+    enabled = true,
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "mason.nvim",
@@ -62,6 +63,9 @@ return {
         capabilities = cmp_capabilities,
       })
       lspconfig.terraformls.setup({
+        on_init = function(client, _)
+          client.server_capabilities.semanticTokensProvider = nil
+        end,
         capabilities = cmp_capabilities,
       })
       lspconfig.vimls.setup({
