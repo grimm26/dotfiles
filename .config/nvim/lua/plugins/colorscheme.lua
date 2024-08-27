@@ -5,27 +5,30 @@ return {
     priority = 1000,
     enabled = false,
     config = function()
-      -- vim.cmd.colorscheme("solarized")
+      vim.cmd.colorscheme("solarized")
     end,
   },
   {
     -- More features than ishan9299/nvim-solarized-lua
     "maxmx03/solarized.nvim",
+    -- enabled = false,
     lazy = false,
     priority = 1000,
-    config = function()
-      require("solarized").setup({
-        transparent = false,
-        -- neo theme gives better highlighting
-        theme = "neo",
-      })
+    ---@type solarized.config
+    opts = {
+      -- palette = "selenized",
+    },
+    config = function(_, opts)
+      vim.o.termguicolors = true
       vim.o.background = "dark"
+      require("solarized").setup(opts)
       vim.cmd.colorscheme("solarized")
     end,
   },
   {
     -- also more features, highlighting is not as good.
     "craftzdog/solarized-osaka.nvim",
+    enabled = false,
     lazy = false,
     priority = 1000,
     config = function()
@@ -34,7 +37,7 @@ return {
         dim_inactive = true,
         lualine_bold = true,
       })
-      -- vim.cmd.colorscheme("solarized-osaka")
+      vim.cmd.colorscheme("solarized-osaka")
     end,
   },
 }
