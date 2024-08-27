@@ -597,13 +597,18 @@ setopt TRANSIENT_RPROMPT
 # }
 get_tg_latest_version () {
   local retrieved_latest="null"
-  [[ -d ~/.tenv/Terragrunt ]] || return
-  if [[ -s ~/.tenv/Terragrunt/version ]]; then
-    if [[ -n ~/.tenv/Terragrunt/version(#qN.mh+24) ]]; then
+  if (( ${+commands[tenv]} )); then
+    if [[ -f ~/.tenv_tg_check ]]; then
+      if [[ -n ~/.tenv_tg_check(#qN.mh+24) ]]; then
+        print "Checking for latest terragrunt version"
+        tenv tg install latest
+        touch ~/.tenv_tg_check
+      fi
+    else
+      print "Checking for latest terragrunt version"
       tenv tg install latest
+      touch ~/.tenv_tg_check
     fi
-  else
-    teng tg install latest
   fi
 }
 get_tg_latest_version
