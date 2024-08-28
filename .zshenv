@@ -38,10 +38,13 @@ export TERRAGRUNT_TFPATH=terraform
 if (( ${+commands[tenv]} )); then
   # set the default constraint on what terraform version we allow.
   # https://github.com/tofuutils/tenv#project-binaries
-  export TFENV_TERRAFORM_DEFAULT_CONSTRAINT="<= 1.7.5"
+  # export TFENV_TERRAFORM_DEFAULT_CONSTRAINT="<= 1.7.5"
   # Have tenv automatically install versions that aren't installed
   export TENV_AUTO_INSTALL=true
 fi
+export TERRAGRUNT_FORWARD_TF_STDOUT=1
+export TERRAGRUNT_LOG_LEVEL=error
+
 # ignore ~/.ssh/known_hosts entries
 alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -o "PreferredAuthentications=password,keyboard-interactive"'
 
