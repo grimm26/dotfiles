@@ -45,13 +45,12 @@ zmodule ohmyzsh/ohmyzsh --root plugins/urltools
 zmodule ohmyzsh/ohmyzsh --root plugins/web-search
 zmodule ohmyzsh/ohmyzsh --root plugins/sudo
 zmodule ohmyzsh/ohmyzsh --root plugins/httpie
-{% if yadm.distro == "Ubuntu" %}
-zmodule ohmyzsh/ohmyzsh --root plugins/systemd
-{% endif %}
 {% if yadm.os == "Darwin" %}
 zmodule ohmyzsh/ohmyzsh --root plugins/macos
 zmodule ohmyzsh/ohmyzsh --root plugins/gnu-utils
 zmodule ohmyzsh/ohmyzsh --root plugins/brew
+{% else %}
+zmodule ohmyzsh/ohmyzsh --root plugins/systemd
 {% endif %}
 
 zmodule hlissner/zsh-autopair
@@ -80,6 +79,9 @@ zmodule ohmyzsh/ohmyzsh --root plugins/git
 zmodule ohmyzsh/ohmyzsh --root plugins/kitty
 zmodule ohmyzsh/ohmyzsh --root plugins/terraform
 {% if yadm.distro == "Ubuntu" %}
+zmodule ohmyzsh/ohmyzsh --root plugins/ubuntu
+{% endif %}
+{% if yadm.distro == "Linuxmint" %}
 zmodule ohmyzsh/ohmyzsh --root plugins/ubuntu
 {% endif %}
 
