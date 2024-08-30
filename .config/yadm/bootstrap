@@ -118,29 +118,38 @@ case $(uname) in
   Linux)
     local arch=$(dpkg-architecture -q DEB_BUILD_ARCH)
     source /etc/os-release
-    if [[ $ID != "ubuntu" ]]; then
+    if [[ $ID != "ubuntu" && $ID != "linuxmint" ]]; then
       echo "I only wrote this for ubuntu."
       exit 1
     fi
     cd $MY_TMP
     # Latest git
-    if [[ "$NAME" == "Ubuntu" && 21 > $VERSION_ID ]]; then
-      # Earlier than jammy
-      if ! grep -q git-core/ppa /etc/apt/sources.list.d/* 2>/dev/null; then
-        sudo add-apt-repository -y ppa:git-core/ppa
-      fi
-    else
-      if ! add-apt-repository -L | grep -q git-core/ppa; then
-        sudo add-apt-repository -y -P ppa:git-core/ppa
+    if [[ "$NAME" == "Ubuntu" ]]; then
+      if [[ 21 > $VERSION_ID ]]; then
+        # Earlier than jammy
+        if ! grep -q git-core/ppa /etc/apt/sources.list.d/* 2>/dev/null; then
+          sudo add-apt-repository -y ppa:git-core/ppa
+        fi
+      elif [[ 22 -eq $VERSION_ID ]]; then
+        if ! add-apt-repository -L | grep -q git-core/ppa; then
+          sudo add-apt-repository -y -P ppa:git-core/ppa
+        fi
       fi
     fi
-    for pkg in libfuse2 fonts-firacode fonts-hack fonts-symbola curl git libcurl4-openssl-dev keychain jq source-highlight fd-find ripgrep liblua5.3-dev lua5.3 cmake ugrep; do
+    if [[ $ID == "ubuntu" ]]; then
+      CURSES_DEV_PKG="libncursesw5-dev"
+      LIBEFUSE_PKG="libfuse2"
+    elif [[ $ID == "linuxmint" ]]; then
+      CURSES_DEV_PKG="libncurses-dev"
+      LIBEFUSE_PKG="libfuse2t64"
+    fi
+    for pkg in $LIBEFUSE_PKG fonts-firacode fonts-hack fonts-symbola curl git libcurl4-openssl-dev jq source-highlight fd-find ripgrep liblua5.3-dev lua5.3 cmake ugrep; do
       dpkg -s $pkg &>/dev/null \
         || sudo apt-get install -y $pkg
     done
     SCRIPT_HOME=$(readlink -f ${0%/*})
 
-    for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck docker.io plocate; do
+    for pkg in make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm $CURSES_DEV_PKG xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev shellcheck docker.io plocate; do
       dpkg -s $pkg &>/dev/null \
         || sudo apt-get install -y $pkg
     done
@@ -178,7 +187,7 @@ case $(uname) in
     corepack enable
 
     # firefox. Ubuntu only pkgs firefox as a snap now, which sucks. Install it from mozilla.
-    if [[ ! -d ~/.local/firefox ]]; then
+    if [[ $ID == "ubuntu" && ! -d ~/.local/firefox ]]; then
       print "Installing firefox"
       curl -sLSo ${MY_TMP}/firefox.tar.bz2 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US' \
         && tar -C ~/.local -xjf ${MY_TMP}/firefox.tar.bz2 \
@@ -199,12 +208,12 @@ case $(uname) in
     fi
     # ruby-install
     echo "ruby-install"
-    if [[ $(ruby-install --version | awk '{print $2}') == "0.8.3" ]]; then
+    if [[ $(ruby-install --version | awk '{print $2}') == "0.9.3" ]]; then
       echo "up to date"
     else
-      curl -sLS https://github.com/postmodern/ruby-install/archive/v0.8.3.tar.gz -o ruby-install-0.8.3.tar.gz \
-        && tar -xzf ruby-install-0.8.3.tar.gz \
-        && cd ruby-install-0.8.3/ \
+      curl -sLS https://github.com/postmodern/ruby-install/archive/v0.9.3.tar.gz -o ruby-install-0.9.3.tar.gz \
+        && tar -xzf ruby-install-0.9.3.tar.gz \
+        && cd ruby-install-0.9.3/ \
         && sudo make install
       cd $MY_TMP
     fi
