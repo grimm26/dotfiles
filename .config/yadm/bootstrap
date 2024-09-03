@@ -22,7 +22,7 @@ MISE_PKGS=(
   k9s
   kubectl
   lsd
-  neovim@nightly
+  neovim@stable
   node@lts
   tflint
   tfswitch
@@ -38,6 +38,8 @@ PYTHON_PKGS=(
   pre-commit
 )
 PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.12.json |jq -r '.latest')
+# Set NEOVIM_BUILD to nightly or latest. If set to nightly.
+NEOVIM_BUILD="stable"
 
 while getopts 'M' OPT; do
   case $OPT in
@@ -160,6 +162,31 @@ case $(uname) in
       done
     fi
 
+    # Manage neovim outside of mise and install it in a global spot
+    print "Neovim"
+    if [[ ${NEOVIM_BUILD} == "stable" ]]; then
+      local latest_neovim_version=$(gh_latest_release "neovim/neovim")
+      local installed_neovim_version=$(/usr/local/bin/nvim --version 2>/dev/null | head -1 | awk '{print $2}' |cut -d- -f1)
+      if [[ ${installed_neovim_version} != $latest_neovim_version ]]; then
+        print "Updating from ${installed_neovim_version} to $latest_neovim_version"
+        GH_HOST=github.com gh release download ${latest_neovim_version} --pattern "nvim.appimage" --repo neovim/neovim -D $MY_TMP \
+        && sudo install -m 755 ${MY_TMP}/nvim.appimage /usr/local/bin/nvim.appimage
+        [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
+      fi
+    elif [[ ${NEOVIM_BUILD} == "nightly" ]]; then
+      read -q "yn?Do you wish to refresh neovim nightly? "
+      case $yn in
+        [Yy]*)
+          print "\nInstalling latest nightly build."
+          GH_HOST=github.com gh release download nightly --pattern "nvim.appimage" --repo neovim/neovim -D $MY_TMP \
+          && sudo install -m 755 ${MY_TMP}/nvim.appimage /usr/local/bin/nvim.appimage
+          [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
+          ;;
+        *)
+          print "\nLeaving current version installed."
+          ;;
+      esac
+    fi
     # Latest mise-en-place
     print "Checking for mise-en-place"
     curl -sSL https://api.github.com/repos/jdx/mise/releases/latest -o ${MY_TMP}/mise_latest.json
