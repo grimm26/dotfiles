@@ -186,14 +186,6 @@ case $(uname) in
     npm config set prefix '~/.local/'
     corepack enable
 
-    # firefox. Ubuntu only pkgs firefox as a snap now, which sucks. Install it from mozilla.
-    if [[ $ID == "ubuntu" && ! -d ~/.local/firefox ]]; then
-      print "Installing firefox"
-      curl -sLSo ${MY_TMP}/firefox.tar.bz2 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US' \
-        && tar -C ~/.local -xjf ${MY_TMP}/firefox.tar.bz2 \
-        && ln -s ~/.local/firefox/firefox-bin ${home_bin}/firefox
-    fi
-
     # chruby
     echo "chruby"
     eval $(grep '^CHRUBY_VERSION' /usr/local/share/chruby/chruby.sh)
