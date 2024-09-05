@@ -328,6 +328,17 @@ case $(uname) in
         && tar -C "${MY_TMP}/fzf" -xzf $MY_TMP/$build_artifact \
         && install -D -t "${home_bin}" ${MY_TMP}/fzf/fzf
     fi
+    # Latest aws-iam-authenticator
+    print "aws-iam-authenticator"
+    local current_aws_iam_auth_version=$(aws-iam-authenticator version | jq -r '.Version' 2>/dev/null)
+    local latest_aws_iam_auth_version=$(gh_latest_release "kubernetes-sigs/aws-iam-authenticator")
+    if [[ "${current_aws_iam_auth_version#v}" != "${latest_aws_iam_auth_version#v}" ]]; then
+      print "Updating from ${current_aws_iam_auth_version#v} to ${latest_aws_iam_auth_version#v}"
+      local build_artifact="aws-iam-authenticator_${latest_aws_iam_auth_version#v}_linux_amd64"
+      mkdir -p "${MY_TMP}/aws-iam-authenticator"
+      GH_HOST=github.com gh release download --pattern $build_artifact --repo kubernetes-sigs/aws-iam-authenticator -D $MY_TMP \
+        && install -m 755 ${MY_TMP}/$build_artifact "${home_bin}/aws-iam-authenticator"
+    fi
     ;;
   Darwin)
     # This section is pretty much abandoned because I don't use MacOS anymore.
