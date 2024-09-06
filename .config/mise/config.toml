@@ -24,3 +24,5 @@ cosign = "latest"
 [settings]
 not_found_auto_install = true
 python_compile = true
+go_set_gobin = false
+go_set_gopath = false
