@@ -91,6 +91,23 @@ return {
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
+    keys = {
+      {
+        "<leader>gdh",
+        "<cmd>DiffviewFileHistory<cr>",
+        desc = "Repo history",
+      },
+      {
+        "<leader>gdf",
+        "<cmd>DiffviewFileHistory --follow %<cr>",
+        desc = "File history",
+      },
+      {
+        "<leader>gdl",
+        "<cmd>.DiffviewFileHistory --follow<cr>",
+        desc = "Line history",
+      },
+    },
     opts = {},
   },
 }
