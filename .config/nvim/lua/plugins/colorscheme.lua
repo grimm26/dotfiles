@@ -1,27 +1,33 @@
 return {
   {
-    "ishan9299/nvim-solarized-lua",
-    lazy = false,
-    priority = 1000,
-    enabled = false,
-    config = function()
-      vim.cmd.colorscheme("solarized")
-    end,
-  },
-  {
     -- More features than ishan9299/nvim-solarized-lua
+    -- https://github.com/maxmx03/solarized.nvim
     "maxmx03/solarized.nvim",
     enabled = true,
     lazy = false,
     priority = 1000,
     ---@type solarized.config
     opts = {
-      -- palette = "selenized",
+      variant = "summer",
+      error_lens = {
+        text = true,
+        symbol = true,
+      },
     },
     config = function(_, opts)
       vim.o.termguicolors = true
       vim.o.background = "dark"
       require("solarized").setup(opts)
+      vim.cmd.colorscheme("solarized")
+    end,
+  },
+  -- disabled themes
+  {
+    "ishan9299/nvim-solarized-lua",
+    lazy = false,
+    priority = 1000,
+    enabled = false,
+    config = function()
       vim.cmd.colorscheme("solarized")
     end,
   },
