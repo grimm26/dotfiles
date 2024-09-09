@@ -595,6 +595,7 @@ setopt TRANSIENT_RPROMPT
 #   export TG_LATEST_VERSION=$(cat ~/.terragrunt_latest_version)
 # }
 get_tg_latest_version () {
+  [[ -f ~/.tenv_need_tg]] || exit
   local retrieved_latest="null"
   if (( ${+commands[tenv]} )); then
     if [[ -f ~/.tenv_tg_check ]]; then
