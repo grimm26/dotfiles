@@ -36,6 +36,23 @@ return {
       { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
     },
     build = "make tiktoken", -- Only on MacOS or Linux
+    keys = {
+      {
+        "<leader>ccq",
+        function()
+          local input = vim.fn.input("Quick Chat: ")
+          if input ~= "" then
+            require("CopilotChat").ask(input, { selection = require("CopilotChat.select").buffer })
+          end
+        end,
+        desc = "CopilotChat - Quick chat",
+      },
+      {
+        "<leader>ccr",
+        "<cmd>CopilotChatReview<cr>",
+        desc = "CopilotChat - Review Selected Code",
+      },
+    },
     opts = {
       debug = true, -- Enable debugging
       -- See Configuration section for rest

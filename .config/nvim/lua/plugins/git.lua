@@ -84,7 +84,17 @@ return {
   },
   {
     "tpope/vim-fugitive",
+    enabled = false,
     cmd = "Git",
+  },
+  {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- required
+      "sindrets/diffview.nvim", -- optional - Diff integration
+      "nvim-telescope/telescope.nvim", -- optional
+    },
+    config = true,
   },
   {
     "sindrets/diffview.nvim",
@@ -92,6 +102,11 @@ return {
       "nvim-tree/nvim-web-devicons",
     },
     keys = {
+      {
+        "<leader>gdo",
+        "<cmd>DiffviewOpen<cr>",
+        desc = "Open Diff view",
+      },
       {
         "<leader>gdh",
         "<cmd>DiffviewFileHistory<cr>",
