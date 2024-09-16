@@ -132,16 +132,16 @@ case $(uname) in
         if ! grep -q git-core/ppa /etc/apt/sources.list.d/* 2>/dev/null; then
           sudo add-apt-repository -y ppa:git-core/ppa
         fi
-      elif [[ 22 -eq $VERSION_ID ]]; then
+      else
         if ! add-apt-repository -L | grep -q git-core/ppa; then
           sudo add-apt-repository -y -P ppa:git-core/ppa
         fi
       fi
     fi
-    if [[ $ID == "ubuntu" ]]; then
+    if [[ $ID == "ubuntu" && $VERSION_ID -le 22 ]]; then
       CURSES_DEV_PKG="libncursesw5-dev"
       LIBEFUSE_PKG="libfuse2"
-    elif [[ $ID == "linuxmint" ]]; then
+    else
       CURSES_DEV_PKG="libncurses-dev"
       LIBEFUSE_PKG="libfuse2t64"
     fi
