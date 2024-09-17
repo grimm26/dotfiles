@@ -4,6 +4,12 @@ return {
   { "onsails/lspkind.nvim", lazy = true },
   { "nvim-tree/nvim-web-devicons", lazy = true },
   {
+    "lambdalisue/vim-suda",
+    init = function()
+      vim.g.suda_smart_edit = 1
+    end,
+  },
+  {
     "mikesmithgh/kitty-scrollback.nvim",
     enabled = true,
     lazy = true,
