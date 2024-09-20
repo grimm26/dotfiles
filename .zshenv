@@ -43,6 +43,7 @@ if (( ${+commands[tenv]} )); then
   export TENV_AUTO_INSTALL=true
 fi
 export TERRAGRUNT_LOG_DISABLE=1
+export TERRAGRUNT_DISABLE_COMMAND_VALIDATION=1
 
 # ignore ~/.ssh/known_hosts entries
 alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -o "PreferredAuthentications=password,keyboard-interactive"'
