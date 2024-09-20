@@ -601,12 +601,14 @@ get_tg_latest_version () {
       if [[ -f ~/.tenv_tg_check ]]; then
         if [[ -n ~/.tenv_tg_check(#qN.mh+24) ]]; then
           print "Checking for latest terragrunt version"
-          tenv tg use latest --install
+          tenv tg install latest
+          tenv tg use latest
           touch ~/.tenv_tg_check
         fi
       else
         print "Checking for latest terragrunt version"
-        tenv tg use latest --install
+        tenv tg install latest
+        tenv tg use latest
         touch ~/.tenv_tg_check
       fi
     fi
