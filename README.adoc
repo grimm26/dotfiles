@@ -21,7 +21,7 @@ I was previously using some scripts and https://www.gnu.org/software/stow[GNU st
 
 == How to install
 
-*You must first install yadm*. I do this by cloning https://github.com/TheLocehiliosan/yadm[the repo] to `~/.yadm-project` and then `ln -s ../../.yadm-project/yadm ~/.local/bin/yadm`. This is what my setup assumes, but you can install yadm however you like.
+*You must first install yadm*. I do this yb installing from apt, but you can install by cloning https://github.com/TheLocehiliosan/yadm[the repo] to `~/.yadm-project` and then `ln -s ../../.yadm-project/yadm ~/.local/bin/yadm`.
 
 There is a https://github.com/grimm26/dotfiles/blob/main/.config/yadm/bootstrap[bootstrap script] that installs packages that I use.
 
