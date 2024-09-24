@@ -383,14 +383,15 @@ load-tenv() {
     if [[ -n $atlantis_tf_version && $local_tf_version != ${atlantis_tf_version/v} ]]; then
       #export TFENV_TERRAFORM_VERSION=$tf_version
       unset TFENV_TERRAFORM_VERSION
+      unset TG_VERSION
       tenv tf use ${atlantis_tf_version/v} --working-dir
       if whence -p tgsw &>/dev/null; then
         if is-at-least 0.13.0 $tf_version; then
-          export TG_VERSION=latest
+          tenv tg use latest --working-dir
         elif is-at-least 0.12.0 $tf_version; then
-          export TG_VERSION=0.24.4
+          tenv tg use 0.24.0 --working-dir
         elif is-at-least 0.11.0 $tf_version; then
-          export TG_VERSION=0.18.7
+          tenv tg use 0.18.7 --working-dir
         fi
       fi
     fi
