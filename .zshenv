@@ -42,7 +42,8 @@ if (( ${+commands[tenv]} )); then
   # Have tenv automatically install versions that aren't installed
   export TENV_AUTO_INSTALL=true
 fi
-export TERRAGRUNT_LOG_DISABLE=1
+# export TERRAGRUNT_LOG_DISABLE=1
+export TERRAGRUNT_FORWARD_TF_STDOUT=1
 export TERRAGRUNT_DISABLE_COMMAND_VALIDATION=1
 
 # ignore ~/.ssh/known_hosts entries
