@@ -43,10 +43,14 @@ if (( ${+commands[tenv]} )); then
   export TENV_AUTO_INSTALL=true
 fi
 # export TERRAGRUNT_LOG_DISABLE=1
+# https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-forward-tf-stdout
 export TERRAGRUNT_FORWARD_TF_STDOUT=1
+# https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-disable-command-validation
 export TERRAGRUNT_DISABLE_COMMAND_VALIDATION=1
+# https://terragrunt.gruntwork.io/docs/features/provider-cache/
+export TERRAGRUNT_PROVIDER_CACHE=1
 
-# ignore ~/.ssh/known_hosts entries
+ #ignore ~/.ssh/known_hosts entries
 alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -o "PreferredAuthentications=password,keyboard-interactive"'
 
 if [[ -d /usr/local/opt/curl/share/zsh/site-functions ]]; then
