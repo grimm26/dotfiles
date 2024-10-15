@@ -49,6 +49,8 @@ export TERRAGRUNT_FORWARD_TF_STDOUT=1
 export TERRAGRUNT_DISABLE_COMMAND_VALIDATION=1
 # https://terragrunt.gruntwork.io/docs/features/provider-cache/
 export TERRAGRUNT_PROVIDER_CACHE=1
+# Disable terraform checkpoint https://developer.hashicorp.com/terraform/cli/commands#upgrade-and-security-bulletin-checks
+export CHECKPOINT_DISABLE=1
 
  #ignore ~/.ssh/known_hosts entries
 alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -o "PreferredAuthentications=password,keyboard-interactive"'
