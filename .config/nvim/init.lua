@@ -9,34 +9,13 @@ elseif vim.fn.executable("fd") == 1 then
   fd = "fd"
 end
 
--- load lazy plugin manager
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
--- Remap space as leader key
-vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
-g.mapleader = " "
-g.maplocalleader = " "
 vim.lsp.set_log_level("off")
 if fn.has("termguicolors") == 1 then
   set.termguicolors = true
 end
 set.completeopt = { "menu", "menuone", "noselect" }
 require("lastplace")
-require("lazy").setup("plugins", {
-  checker = {
-    enabled = true,
-  },
-})
+require("config.lazy")
 vim.treesitter.query.set("lua", "injections", "")
 -- See https://github.com/neovim/neovim/pull/20633, https://github.com/folke/noice.nvim/issues/47
 if fn.has("nvim-0.9.0") == 1 then
