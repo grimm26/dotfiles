@@ -60,7 +60,7 @@ return {
         capabilities = cmp_capabilities,
       })
       lspconfig.marksman.setup({
-        capabilities = cmp_capabilities,
+        capabilities = lsp_capabilities,
       })
       lspconfig.terraformls.setup({
         on_init = function(client, _)

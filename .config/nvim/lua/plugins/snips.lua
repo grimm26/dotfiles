@@ -85,6 +85,7 @@ return {
       -- Bring in some html snippets to markdown
       ls.add_snippets("markdown", {
         s("br", { t("<br/>") }),
+        s("mdi", { t("<!-- mdslw-ignore-start -->"), i(1), t("<!-- mdslw-ignore-end -->") }),
       })
 
       vim.api.nvim_create_user_command("LuaSnipEdit", function()
