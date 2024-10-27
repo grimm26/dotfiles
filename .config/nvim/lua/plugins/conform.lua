@@ -6,7 +6,7 @@ return {
       require("conform").setup({
         formatters = {
           mdslw = {
-            prepend_args = { "--max-width", "0" },
+            prepend_args = { "--max-width", "5000" },
           },
         },
         formatters_by_ft = {
@@ -20,7 +20,7 @@ return {
           vue = { "prettierd" },
           html = { "prettierd" },
           graphql = { "prettierd" },
-          -- markdown = { "mdslw", "mdformat" },
+          markdown = { "mdslw", "mdformat" },
         },
         format_on_save = {
           -- These options will be passed to conform.format()
