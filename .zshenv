@@ -29,7 +29,7 @@ path=("$MY_BIN" $path)
 if [[ -d ${HOME}/.tenv/bin ]]; then
   path=("${HOME}/.tenv/bin" $path)
 fi
-typeset -U path
+typeset -U PATH path
 export PATH
 
 # Without this terragrunt will try to use opentofu if possible.
