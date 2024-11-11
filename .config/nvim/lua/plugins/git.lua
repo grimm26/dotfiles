@@ -94,7 +94,26 @@ return {
       "sindrets/diffview.nvim", -- optional - Diff integration
       "nvim-telescope/telescope.nvim", -- optional
     },
-    config = true,
+    opts = {
+      graph_style = "kitty",
+      git_services = {
+        ["github.com"] = "https://github.com/${owner}/${repository}/compare/${branch_name}?expand=1",
+        ["git.enova.com"] = "https://git.enova.com/${owner}/${repository}/compare/${branch_name}?expand=1",
+      },
+      kind = "split_below_all",
+      commit_editor = {
+        kind = "floating",
+      },
+      commit_select_view = {
+        kind = "floating",
+      },
+      commit_view = {
+        kind = "floating",
+      },
+      log_view = {
+        kind = "split_below_all",
+      },
+    },
   },
   {
     "sindrets/diffview.nvim",
