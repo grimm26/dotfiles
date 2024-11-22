@@ -158,6 +158,7 @@ for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 # }}} End configuration added by Zim install
+unalias acp &>/dev/null # remove the alias for apt acp so it doesn't get in the way of the aws acp()
 mkdir -p ~/.zsh-cache
 if (( $+commands[zoxide] )); then
   zoxide_init=~/.zsh-cache/zoxide.init
@@ -599,16 +600,17 @@ get_tg_latest_version () {
     local retrieved_latest="null"
     if (( ${+commands[tenv]} )); then
       if [[ -f ~/.tenv_tg_check ]]; then
+        setopt monitor
         if [[ -n ~/.tenv_tg_check(#qN.mh+24) ]]; then
-          print "Checking for latest terragrunt version"
-          tenv tg install latest
-          tenv tg use latest
+          # print "Checking for latest terragrunt version"
+          (tenv tg install latest &&
+            tenv tg use latest) &
           touch ~/.tenv_tg_check
         fi
       else
-        print "Checking for latest terragrunt version"
-        tenv tg install latest
-        tenv tg use latest
+        # print "Checking for latest terragrunt version"
+        (tenv tg install latest &&
+          tenv tg use latest) &
         touch ~/.tenv_tg_check
       fi
     fi
