@@ -80,6 +80,10 @@ tg () {
   terragrunt "$@"
 }
 
+whatsmyip () {
+  curl -s https://checkip.amazonaws.com/
+}
+
 # For omz aws plugin
 export SHOW_AWS_PROMPT=false
 
