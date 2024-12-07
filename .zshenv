@@ -29,6 +29,17 @@ path=("$MY_BIN" $path)
 if [[ -d ${HOME}/.tenv/bin ]]; then
   path=("${HOME}/.tenv/bin" $path)
 fi
+# Probably unnecessary since this is in .profile
+if [[ -d ${HOME}/.pyenv ]]; then
+  if [[ ":$PATH:" == *":$PYENV_ROOT/bin:"* ]]; then
+    :
+  else
+    export PYENV_ROOT="$HOME/.pyenv"
+    path=("$PYENV_ROOT/bin" $path)
+    [[ -d $PYENV_ROOT/bin ]] && path=("$PYENV_ROOT/bin" $path)
+    eval "$(pyenv init -)"
+  fi
+fi
 typeset -U PATH path
 export PATH
 
