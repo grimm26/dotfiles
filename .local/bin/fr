@@ -24,7 +24,7 @@ if [[ "${go_recursive}" != "true" ]]; then
 fi
 find_command="${find_command} -type f"
 if [[ "${type}x" != "x" ]]; then
-  find_command="${find_command} -name '${type}'"
+  find_command="${find_command} -type ${type}"
 fi
 find_command="${find_command} -not -path '*/\.git/*' -print"
 
