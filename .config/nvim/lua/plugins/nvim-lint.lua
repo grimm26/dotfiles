@@ -19,6 +19,7 @@ return {
       lint.linters_by_ft = {
         ansible = { "ansible_lint", "codespell" },
         asciidoc = { "codespell" },
+        gitcommit = { "gitlint" },
         html = { "codespell" },
         jinja = { "codespell", "curlylint" },
         json = { "codespell" },

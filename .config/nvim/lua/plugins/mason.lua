@@ -30,6 +30,7 @@ return {
           "codespell",
           "curlylint",
           "dockerfile-language-server",
+          "gitlint",
           "gopls",
           "jdtls",
           "json-lsp",
