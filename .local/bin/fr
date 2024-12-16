@@ -18,18 +18,19 @@ shift $((OPTIND - 1))
 find_string=$1
 replace_string=$2
 
-find_command="find ."
+find_command=(find .)
 if [[ "${go_recursive}" != "true" ]]; then
-  find_command="${find_command} -maxdepth 1"
+  find_command+=(-maxdepth 1)
 fi
-find_command="${find_command} -type f"
 if [[ "${type}x" != "x" ]]; then
-  find_command="${find_command} -type ${type}"
+  find_command+=(-type "${type}")
+else
+  find_command+=(-type f)
 fi
-find_command="${find_command} -not -path '*/\.git/*' -print"
+find_command+=(-not -path '*/\.git/*' -print)
 
-[[ $dry_run == "true" ]] && echo $find_command
-for file in $(${find_command}); do
+[[ $dry_run == "true" ]] && echo "${find_command[@]}"
+for file in $("${find_command[@]}"); do
   if grep -q ${find_string} $file; then
     [[ $dry_run == "true" ]] && echo $file && continue
     sed -i -e "s/${find_string}/${replace_string}/g" $file
