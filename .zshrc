@@ -377,28 +377,25 @@ load-tfswitch() {
 }
 load-tenv() {
   if [[ -f ./atlantis.yaml ]]; then
+    #export TFENV_TERRAFORM_VERSION=$tf_version
+    unset TFENV_TERRAFORM_VERSION
+    unset TG_VERSION
     autoload is-at-least
     local atlantis_tf_version=$(grep terraform_version ./atlantis.yaml | awk '{print $2}')
     local local_tf_version="x"
     [[ -s .terraform-version ]] && local_tf_version=$(cat .terraform-version)
     if [[ -n $atlantis_tf_version && $local_tf_version != ${atlantis_tf_version/v} ]]; then
-      #export TFENV_TERRAFORM_VERSION=$tf_version
-      unset TFENV_TERRAFORM_VERSION
-      unset TG_VERSION
       tenv tf use ${atlantis_tf_version/v} --working-dir
-      if whence -p tgsw &>/dev/null; then
-        if is-at-least 0.13.0 $tf_version; then
-          tenv tg use latest --working-dir
-        elif is-at-least 0.12.0 $tf_version; then
-          tenv tg use 0.24.0 --working-dir
-        elif is-at-least 0.11.0 $tf_version; then
-          tenv tg use 0.18.7 --working-dir
-        fi
+    fi
+    if whence -p tenv &>/dev/null; then
+      if is-at-least 0.13.0 ${atlantis_tf_version/v}; then
+        tenv tg use latest --working-dir
+      elif is-at-least 0.12.0 ${atlantis_tf_version/v}; then
+        tenv tg use 0.24.0 --working-dir
+      elif is-at-least 0.11.0 ${atlantis_tf_version/v}; then
+        tenv tg use 0.18.7 --working-dir
       fi
     fi
-  else
-    unset TFENV_TERRAFORM_VERSION
-    unset TG_VERSION
   fi
 }
 autoload -Uz add-zsh-hook
@@ -677,7 +674,7 @@ alias tgi="tg init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 tfup () {
-  local tf_version=${1:-"1.7.5"}
+  local tf_version=${1:-"1.9.8"}
   awk -v tfver="v${tf_version}" '$1=="terraform_version:"{$2=tfver} 1' ./atlantis.yaml > ./atlantis.$$ && mv ./atlantis.$$ ./atlantis.yaml
   audit-terraform-modules -r
   [[ -s locals.tf ]] && (( ${+commands[crush_tf_tags.pl]} )) && crush_tf_tags.pl
