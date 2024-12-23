@@ -52,6 +52,8 @@ if (( ${+commands[tenv]} )); then
   # export TFENV_TERRAFORM_DEFAULT_CONSTRAINT="<= 1.7.5"
   # Have tenv automatically install versions that aren't installed
   export TENV_AUTO_INSTALL=true
+  # https://github.com/tofuutils/tenv/issues/305
+  export TENV_DETACHED_PROXY=false
 fi
 # https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-forward-tf-stdout
 export TERRAGRUNT_LOG_FORMAT=bare
