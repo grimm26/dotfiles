@@ -7,7 +7,7 @@ return {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
       { "nvim-telescope/telescope-github.nvim" },
       { "pschmitt/telescope-yadm.nvim" },
-      { "benfowler/telescope-luasnip.nvim" },
+      -- { "benfowler/telescope-luasnip.nvim" },
     },
     cmd = "Telescope",
     keys = {
@@ -60,13 +60,13 @@ return {
         end,
         desc = "Browse Files",
       },
-      {
-        "<leader>fl",
-        function()
-          require("telescope").extensions.luasnip.luasnip()
-        end,
-        desc = "Browse Luasnip snippets",
-      },
+      -- {
+      --   "<leader>fl",
+      --   function()
+      --     require("telescope").extensions.luasnip.luasnip()
+      --   end,
+      --   desc = "Browse Luasnip snippets",
+      -- },
     },
     config = function()
       require("telescope").setup({
@@ -88,7 +88,7 @@ return {
       require("telescope").load_extension("git_or_files")
       require("telescope").load_extension("git_or_yadm_files")
       require("telescope").load_extension("gh")
-      require("telescope").load_extension("luasnip")
+      -- require("telescope").load_extension("luasnip")
     end,
     version = false, -- telescope did only one release, so use HEAD for now
   },

@@ -1,5 +1,5 @@
 return {
-  { "saadparwaiz1/cmp_luasnip", lazy = true },
+  { "saadparwaiz1/cmp_luasnip", enabled = false, lazy = true },
   { "hrsh7th/cmp-nvim-lsp", lazy = true },
   { "hrsh7th/cmp-buffer", lazy = true },
   { "hrsh7th/cmp-path", lazy = true },
@@ -16,7 +16,7 @@ return {
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
       "onsails/lspkind.nvim",
-      "L3MON4D3/LuaSnip",
+      -- "L3MON4D3/LuaSnip",
     },
     config = function()
       local has_words_before = function()
@@ -26,7 +26,8 @@ return {
 
       local cmp = require("cmp")
       local lspkind = require("lspkind")
-      local luasnip = require("luasnip")
+      -- NOTE: LuaSnip disabled
+      -- local luasnip = require("luasnip")
       cmp.setup({
         completion = {
           -- Gotta hit <C-Space> to trigger completion.
@@ -38,17 +39,18 @@ return {
             menu = {
               buffer = "[Buffer]",
               nvim_lsp = "[LSP]",
-              luasnip = "[LuaSnip]",
+              -- NOTE: LuaSnip disabled
+              -- luasnip = "[LuaSnip]",
               nvim_lua = "[Lua]",
-              latex_symbols = "[Latex]",
             },
           }),
         },
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
+        -- NOTE: LuaSnip disable
+        -- snippet = {
+        --   expand = function(args)
+        --     luasnip.lsp_expand(args.body)
+        --   end,
+        -- },
         view = {
           entries = "custom",
         },
@@ -59,8 +61,9 @@ return {
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
+            -- NOTE: LuaSnip disabled
+            -- elseif luasnip.expand_or_jumpable() then
+            --   luasnip.expand_or_jump()
             elseif has_words_before() then
               cmp.complete()
             else
@@ -71,8 +74,9 @@ return {
           ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-              luasnip.jump(-1)
+            -- NOTE: LuaSnip disabled
+            -- elseif luasnip.jumpable(-1) then
+            --   luasnip.jump(-1)
             else
               fallback()
             end
@@ -86,7 +90,7 @@ return {
             --   return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
             -- end,
           },
-          { name = "luasnip" },
+          -- { name = "luasnip" }, -- NOTE: LuaSnip disabled
           { name = "buffer" },
         }),
       })
