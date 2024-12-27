@@ -38,7 +38,7 @@ return {
       },
     },
     config = function()
-      require("luasnip.loaders.from_vscode").load({ paths = { "./my-snippets" } })
+      require("luasnip.loaders.from_vscode").load({ paths = { "./snippets" } })
       local ls = require("luasnip")
       -- some shorthands...
       local s = ls.snippet

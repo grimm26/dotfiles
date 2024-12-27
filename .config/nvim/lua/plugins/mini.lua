@@ -1,7 +1,7 @@
 return {
   {
     "echasnovski/mini.nvim",
-    version = "*",
+    version = false,
     config = function()
       -- Enable modules out of mini,nvim that we want to use
       require("mini.align").setup()

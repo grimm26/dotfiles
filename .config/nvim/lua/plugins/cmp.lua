@@ -30,7 +30,7 @@ return {
       cmp.setup({
         completion = {
           -- Gotta hit <C-Space> to trigger completion.
-          autocomplete = true,
+          autocomplete = false,
         },
         formatting = {
           format = lspkind.cmp_format({
