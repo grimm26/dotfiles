@@ -19,6 +19,7 @@ tfswitch = "latest"
 zoxide = "latest"
 usage = "latest"
 cosign = "latest"
+zig = "latest"
 
 [settings]
 not_found_auto_install = true
