@@ -1,0 +1,4 @@
+font-family = "Hack Nerd Font Mono"
+font-size = 14
+theme = "Solarized Dark - Patched"
+# command = zsh --login --interactive
