@@ -1,4 +1,5 @@
 font-family = "Hack Nerd Font Mono"
 font-size = 14
 theme = "Solarized Dark - Patched"
+copy-on-select = clipboard
 # command = zsh --login --interactive
