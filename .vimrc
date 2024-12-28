@@ -1,56 +1,5 @@
 " Check if this is probably vim-tiny
 if has('eval')
-  " Things needed pre-plugin load
-  if isdirectory(expand("$HOME/.fzf"))
-    set rtp+=~/.fzf
-  elseif isdirectory("/usr/local/opt/fzf")
-    set rtp+=/usr/local/opt/fzf
-  endif
-  "" Plugin stuff
-  " Install vim-plug if it isn't here.
-  let data_dir = '~/.vim'
-  if empty(glob(data_dir . '/autoload/plug.vim'))
-    silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
-  " Start loading plugins
-  call plug#begin()
-  " vim plugins instead of the nvim specific ones
-  Plug 'plasticboy/vim-markdown'
-  Plug 'fisadev/vim-isort'
-  Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-surround'
-  Plug 'vim-syntastic/syntastic'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'preservim/nerdtree'
-  Plug 'junegunn/fzf.vim'
-  Plug 'lifepillar/vim-solarized8'
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
-  Plug 'will133/vim-dirdiff'
-  Plug 'tpope/vim-endwise'
-  Plug 'tpope/vim-fugitive'
-  Plug 'fatih/vim-go'
-  Plug 'elzr/vim-json'
-  Plug 'dietsche/vim-lastplace'
-  Plug 'hashivim/vim-terraform'
-  Plug 'tmux-plugins/vim-tmux'
-  Plug 'wincent/terminus'
-  Plug 'z0mbix/vim-shfmt'
-  Plug 'prettier/vim-prettier'
-  Plug 'kamykn/spelunker.vim'
-  call plug#end()
-  silent! helptags ALL
-  " Run PlugInstall if there are missing plugins
-  autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)')) PlugInstall --sync | source $MYVIMRC | endif
-
-  "" General config
-  command! PU PlugUpdate | PlugUpgrade
-  command! PI PlugInstall --sync | source $MYVIMRC
-  if executable('ugrep')
-      set grepprg=ugrep\ -RInk\ -j\ -u\ --tabs=1\ --ignore-files
-      set grepformat=%f:%l:%c:%m,%f+%l+%c+%m,%-G%f\\\|%l\\\|%c\\\|%m
-  endif
   " Set up persistent undo across all files.
   set undofile
   if !isdirectory(expand("$HOME/.vim/undodir"))
@@ -163,11 +112,6 @@ set background=dark
 "g:solarized_visibility= "normal"| "high" or "low"
 "------------------------------------------------
 "g:solarized_termcolors= 16 | 256
-if has('nvim')
-  colorscheme solarized-high
-else
-  colorscheme solarized8_high
-endif
 " show me where my cursor is
 set cursorline cursorcolumn
 
@@ -180,7 +124,6 @@ set nosmartcase
 " Always show the status line
 set laststatus=2
 if has('eval')
-  let g:airline#extensions#tabline#formatter = 'unique_tail'
 
   " Format the status line
   "set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
@@ -206,75 +149,6 @@ if has('eval')
       en
       return ''
   endfunction
-
-  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  " => Nerd Tree
-  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  map <leader>nn :NERDTreeToggle<cr>
-  map <leader>nb :NERDTreeFromBookmark
-  map <leader>nf :NERDTreeFind<cr>
-  autocmd StdinReadPre * let s:std_in=1
-  " Start NERDTree when Vim is started without file arguments.
-  " autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
-  " Start NERDTree when Vim starts with a directory argument.
-  autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') | execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | wincmd p | endif
-
-  ""
-  " fzf
-  ""
-  nnoremap <leader>ff :Files<cr>
-  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  " => vim-airline config (force color)
-  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  let g:airline_theme="base16_solarized"
-  let g:airline_solarized_bg='dark'
-  let g:airline_powerline_fonts = 1
-  "let g:airline_theme="luna"
-
-  " Syntastic Settings
-  " statusline stuff
-  set statusline+=%#warningmsg#
-  set statusline+=%{SyntasticStatuslineFlag()}
-  set statusline+=%*
-  " Check my syntax
-  let g:syntastic_always_populate_loc_list = 1
-  let g:syntastic_auto_loc_list = 2
-  let g:syntastic_check_on_open = 1
-  "let g:syntastic_debug = 3
-  "let g:syntastic_debug_file = "~/syntastic.log"
-  " Don't check it on write because that gets annoying
-  let g:syntastic_check_on_wq = 0
-  " python stuff
-  let g:syntastic_python_checkers=['flake8']
-  "" Commented out the pylint/flake8 options below in order to allow them to be
-  "" set per project.
-  " I don't care about long lines
-  " let g:syntastic_python_flake8_args = "--extend-ignore E501"
-  " I don't care about long lines and duplicates of what flake8 does
-  "let g:syntastic_python_pylint_args = "--disable=C0301,undefined-variable,unused-import,unused-variable"
-  " end syntastic
-  "autocmd BufNewFile,BufRead *.template set ft=json
-  let g:vim_json_syntax_conceal = 0
-  " do good terraform stuff
-  let g:terraform_fmt_on_save = 1
-  let g:terraform_align = 1
-
-  " shfmt options
-  let g:shfmt_extra_args = '-i 2 -bn -ci'
-  let g:shfmt_fmt_on_save = 1
-
-  " gitgutter
-  let g:gitgutter_preview_win_floating = 1
-
-  let g:TerminusMouse=0
-  " highlight trailing spaces
-  highlight ExtraWhitespace ctermbg=red guibg=red
-  match ExtraWhitespace /\s\+$/
-  autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-  autocmd BufWinLeave * call clearmatches()
-  "
 
   " spelling
   " turn off vim builtin spelling, cuz we using spelunker
