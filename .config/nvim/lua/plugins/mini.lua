@@ -6,6 +6,8 @@ return {
       -- Enable modules out of mini,nvim that we want to use
       require("mini.align").setup()
       -- require("mini.comment").setup({})
+      require("mini.icons").setup()
+      MiniIcons.mock_nvim_web_devicons()
       -- require("mini.indentscope").setup({})
       require("mini.surround").setup({
         mappings = {
