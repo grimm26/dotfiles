@@ -811,6 +811,18 @@ if (( $+commands[direnv] )); then
   eval "$(direnv hook zsh)"
 fi
 #
+run_updates() {
+  # Update zim
+  print "Updating zim"
+  zimfw update
+
+  print "Installing/updating gh extensions"
+  # Install/update GH extenstions
+  # install
+  gh ext install meiji163/gh-notify
+  # upgrade
+  gh ext upgrade --all
+}
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 # # End profiling
