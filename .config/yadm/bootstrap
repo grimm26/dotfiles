@@ -430,6 +430,14 @@ case $(uname) in
 esac
 
 ##
+echo "coloscript"
+# Only install if it isn't there. I doubt this will change.
+if [[ ! -d /opt/shell-color-scripts ]]; then
+  if upinst_from_git https://gitlab.com/dwt1/shell-color-scripts $MY_TMP/colorscripts; then
+    (cd $MY_TMP/colorscripts && sudo make install && sudo cp completions/_colorscript /usr/share/zsh/site-functions)
+  fi
+fi
+
 echo "pyenv"
 if upinst_from_git https://github.com/pyenv/pyenv.git ~/.pyenv; then
   (cd ~/.pyenv && src/configure && make -C src)

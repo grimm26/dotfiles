@@ -1,0 +1,7 @@
+Enabled: yes
+Types: deb
+URIs: https://cli.github.com/packages
+Suites: stable
+Components: main
+Signed-by: /etc/apt/keyrings/githubcli-archive-keyring.gpg
+Architectures: amd64

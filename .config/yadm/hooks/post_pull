@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Get UBUNTU_CODENAME
+source /etc/os-release
+
+CUSTOM_PKG_SOURCES_DIR=/tmp/custom_pkg_sources
+[ -d $CUSTOM_PKG_SOURCES_DIR ] || mkdir $CUSTOM_PKG_SOURCES_DIR
+
+# Write out sources that include UBUNTU_CODENAME
+cat > ${CUSTOM_PKG_SOURCES_DIR}/git-core-ppa-${UBUNTU_CODENAME}.sources <<EOF
+Enabled: yes
+Types: deb
+URIs: https://ppa.launchpadcontent.net/git-core/ppa/ubuntu
+Suites: ${UBUNTU_CODENAME}
+Components: main
+Signed-by: /etc/apt/keyrings/git-core-ppa-${UBUNTU_CODENAME}.gpg
+EOF
+
+cp ~/.config/yadm/pkg_sources/git-core-ppa-gpg ${CUSTOM_PKG_SOURCES_DIR}/git-core-ppa-${UBUNTU_CODENAME}.gpg
+
+# Put custom pkg sources into place
+(cd $CUSTOM_PKG_SOURCES_DIR && \
+for source in *.sources; do
+  if ! diff -Nq "$source" "/etc/apt/sources.list.d/${source}" &>/dev/null; then
+    sudo cp "$source" "/etc/apt/sources.list.d/${source}"
+  fi
+done; \
+for key in *.gpg; do
+  if ! diff -Nq "$key" "/etc/apt/keyrings/${key}" &>/dev/null; then
+    sudo cp "$key" "/etc/apt/keyrings/${key}"
+  fi
+done; \
+)
+# Put pkg sources into place
+(cd ~/.config/yadm/pkg_sources && \
+for source in *.sources; do
+  if ! diff -Nq "$source" "/etc/apt/sources.list.d/${source}" &>/dev/null; then
+    sudo cp "$source" "/etc/apt/sources.list.d/${source}"
+  fi
+done; \
+for key in *.gpg; do
+  if ! diff -Nq "$key" "/etc/apt/keyrings/${key}" &>/dev/null; then
+    sudo cp "$key" "/etc/apt/keyrings/${key}"
+  fi
+done; \
+)
