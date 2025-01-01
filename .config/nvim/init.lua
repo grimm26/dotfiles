@@ -70,13 +70,10 @@ set.laststatus = 2
 --
 g.vim_json_syntax_conceal = 0
 -- help my common typos
-cmd([[
-iabbrev adn and
-iabbrev teh the
-iabbrev taht that
-iabbrev endopint endpoint
-iabbrev updaet update
-]])
+cmd.iabbrev("adn and") -- codespell:ignore
+cmd.iabbrev("teh the") -- codespell:ignore
+cmd.iabbrev("taht that") -- codespell:ignore
+cmd.iabbrev("endopint endpoint")
+cmd.iabbrev("updaet update")
 -- Set up some keymaps
-vim.keymap.set("n", "<leader>num", ":set number!<cr>", { desc = "Toggle line numbers" })
 vim.filetype.add({ extension = { tfstate = "json" } })
