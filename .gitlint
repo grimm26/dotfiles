@@ -138,4 +138,4 @@ min-length=1
 # under [general] section above.
 [contrib-title-conventional-commits]
 # Specify allowed commit types. For details see: https://www.conventionalcommits.org/
-# types = bugfix,user-story,epic
+types = breaking,docs,refactor,style,feat,perf,fix
