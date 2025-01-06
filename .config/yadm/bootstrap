@@ -37,7 +37,7 @@ PYTHON_PKGS=(
   pipreqs
   pre-commit
 )
-PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.12.json |jq -r '.latest')
+PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.13.json |jq -r '.latest')
 # Set NEOVIM_BUILD to nightly or latest. If set to nightly.
 NEOVIM_BUILD="stable"
 
