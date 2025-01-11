@@ -6,6 +6,9 @@ return {
     "lambdalisue/vim-suda",
     init = function()
       vim.g.suda_smart_edit = 1
+      vim.api.nvim_create_user_command("W", function(opts)
+        vim.cmd("SudaWrite " .. vim.trim(opts.args) or "")
+      end, { nargs = "*" })
     end,
   },
   {
