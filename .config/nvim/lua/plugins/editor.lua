@@ -1,4 +1,5 @@
 return {
+  { "tpope/vim-endwise" },
   {
     "RRethy/vim-illuminate",
     event = { "BufReadPost", "BufNewFile" },
@@ -51,5 +52,24 @@ return {
       { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "Todo" },
       { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme" },
     },
+  },
+  {
+    "folke/ts-comments.nvim",
+    opts = {
+      lang = {
+        hcl = {
+          "# %s",
+          "// %s",
+          "/* %s */",
+        },
+        terraform = {
+          "# %s",
+          "// %s",
+          "/* %s */",
+        },
+      },
+    },
+    event = "VeryLazy",
+    enabled = vim.fn.has("nvim-0.10.0") == 1,
   },
 }
