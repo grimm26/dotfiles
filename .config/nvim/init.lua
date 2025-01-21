@@ -21,12 +21,12 @@ vim.treesitter.query.set("lua", "injections", "")
 if fn.has("nvim-0.9.0") == 1 then
   set.shortmess:append({ C = true })
   set.splitkeep = "screen" -- Reduce scroll during window split
-  -- cmd("set shortmess+=C")
 end
 -- don't give "search hit BOTTOM, continuing at TOP" or "search
 -- hit TOP, continuing at BOTTOM" messages; when using the search
 -- count do not show "W" after the count message (see S below)
 set.shortmess:append({ s = true })
+
 set.mouse = ""
 -- cmd("behave xterm")
 set.spell = false
