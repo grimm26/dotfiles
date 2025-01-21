@@ -328,6 +328,13 @@ case $(uname) in
         && tar -C "${MY_TMP}/fzf" -xzf $MY_TMP/$build_artifact \
         && install -D -t "${home_bin}" ${MY_TMP}/fzf/fzf
     fi
+    # Install hishtory
+    if [[ -d ~/.history ]]; then
+      print "hishtory already installed"
+    else
+      print "Installing hishtory"
+      curl --silent https://hishtory.dev/install.py | python3 - --offline
+    fi
     # Latest aws-iam-authenticator
     print "aws-iam-authenticator"
     local current_aws_iam_auth_version=$(aws-iam-authenticator version | jq -r '.Version' 2>/dev/null)

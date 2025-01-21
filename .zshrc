@@ -689,8 +689,8 @@ tfup () {
     tfsw $tf_version
   fi
 }
-## START fzf
-eval "$(fzf --zsh)"
+## {{{ START fzf
+source <(fzf --zsh)
 if whence -p fdfind &>/dev/null; then
   export FD_BIN=fdfind
 fi
@@ -720,7 +720,7 @@ fi
 if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 
-## END fzf
+# END fzf }}}
 
 alias gcl &>/dev/null && unalias gcl
 gcl() {
@@ -829,3 +829,12 @@ misc_updates() {
 # unsetopt XTRACE
 # exec 2>&3 3>&-
 
+
+# Hishtory Config:
+if [[ -d ~/.hishtory ]]; then
+  # Disable ^R history bind cuz we gonna use hishtory
+  bindkey -r "^R"
+  path+=(${HOME}/.hishtory)
+  source /home/mkeisler/.hishtory/config.zsh
+  hishtory config-set displayed-columns CWD Timestamp Runtime Command
+fi
