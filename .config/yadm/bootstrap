@@ -329,7 +329,7 @@ case $(uname) in
         && install -D -t "${home_bin}" ${MY_TMP}/fzf/fzf
     fi
     # Install hishtory
-    if [[ -d ~/.history ]]; then
+    if [[ -d ~/.hishtory ]]; then
       print "hishtory already installed"
     else
       print "Installing hishtory"
