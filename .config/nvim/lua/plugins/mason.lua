@@ -2,13 +2,11 @@ return {
   {
     "williamboman/mason.nvim",
     build = ":MasonUpdate",
-    config = function()
-      require("mason").setup({
-        pip = {
-          install_args = { "--upgrade" },
-        },
-      })
-    end,
+    opts = {
+      pip = {
+        install_args = { "--upgrade" },
+      },
+    },
   },
   {
     "williamboman/mason-lspconfig.nvim",
