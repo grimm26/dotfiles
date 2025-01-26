@@ -22,9 +22,13 @@ vim.g.maplocalleader = " "
 
 -- Setup lazy.nvim
 require("lazy").setup({
+  checker = {
+    enabled = true,
+    frequency = 60 * 60 * 24,
+  },
+  rocks = { enabled = false },
   spec = {
     -- import your plugins
     { import = "plugins" },
   },
-  checker = { enabled = true },
 })
