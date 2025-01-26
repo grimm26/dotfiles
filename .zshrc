@@ -835,6 +835,6 @@ if [[ -d ~/.hishtory ]]; then
   # Disable ^R history bind cuz we gonna use hishtory
   bindkey -r "^R"
   path+=(${HOME}/.hishtory)
-  source /home/mkeisler/.hishtory/config.zsh
+  source ${HOME}/.hishtory/config.zsh
   hishtory config-set displayed-columns CWD Timestamp Runtime Command
 fi
