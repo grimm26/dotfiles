@@ -169,8 +169,8 @@ case $(uname) in
       local installed_neovim_version=$(/usr/local/bin/nvim --version 2>/dev/null | head -1 | awk '{print $2}' |cut -d- -f1)
       if [[ ${installed_neovim_version} != $latest_neovim_version ]]; then
         print "Updating from ${installed_neovim_version} to $latest_neovim_version"
-        GH_HOST=github.com gh release download ${latest_neovim_version} --pattern "nvim.appimage" --repo neovim/neovim -D $MY_TMP \
-        && sudo install -m 755 ${MY_TMP}/nvim.appimage /usr/local/bin/nvim.appimage
+        GH_HOST=github.com gh release download ${latest_neovim_version} --pattern "nvim-linux-$(uname -m).appimage" --repo neovim/neovim -D $MY_TMP \
+        && sudo install -m 755 ${MY_TMP}/nvim-linux-$(uname -m).appimage /usr/local/bin/nvim.appimage
         [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
       fi
     elif [[ ${NEOVIM_BUILD} == "nightly" ]]; then
@@ -178,8 +178,8 @@ case $(uname) in
       case $yn in
         [Yy]*)
           print "\nInstalling latest nightly build."
-          GH_HOST=github.com gh release download nightly --pattern "nvim.appimage" --repo neovim/neovim -D $MY_TMP \
-          && sudo install -m 755 ${MY_TMP}/nvim.appimage /usr/local/bin/nvim.appimage
+          GH_HOST=github.com gh release download nightly --pattern "nvim-linux-$(uname -m).appimage" --repo neovim/neovim -D $MY_TMP \
+          && sudo install -m 755 ${MY_TMP}/nvim-linux-$(uname -m).appimage /usr/local/bin/nvim.appimage
           [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
           ;;
         *)
