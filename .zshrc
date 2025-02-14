@@ -389,7 +389,9 @@ load-tenv() {
     fi
     if whence -p tenv &>/dev/null; then
       if is-at-least 0.13.0 ${atlantis_tf_version/v}; then
-        tenv tg use latest --working-dir --quiet
+        # locked on 0.72.9 for now https://github.com/gruntwork-io/terragrunt/issues/3885
+        tenv tg use 0.72.9 --working-dir --quiet
+        #tenv tg use latest --working-dir --quiet
       elif is-at-least 0.12.0 ${atlantis_tf_version/v}; then
         tenv tg use 0.24.0 --working-dir --quiet
       elif is-at-least 0.11.0 ${atlantis_tf_version/v}; then

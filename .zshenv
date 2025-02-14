@@ -43,9 +43,6 @@ fi
 typeset -U PATH path
 export PATH
 
-# Without this terragrunt will try to use opentofu if possible.
-# tenv is happy to provide it :)
-export TERRAGRUNT_TFPATH=terraform
 if (( ${+commands[tenv]} )); then
   # set the default constraint on what terraform version we allow.
   # https://github.com/tofuutils/tenv#project-binaries
@@ -55,10 +52,16 @@ if (( ${+commands[tenv]} )); then
   # https://github.com/tofuutils/tenv/issues/305
   export TENV_DETACHED_PROXY=false
 fi
+# Without this terragrunt will try to use opentofu if possible.
+# tenv is happy to provide it :)
+export TERRAGRUNT_TFPATH=terraform
+export TG_TF_PATH=terraform
 # https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-forward-tf-stdout
 export TERRAGRUNT_LOG_FORMAT=bare
+export TG_LOG_FORMAT=bare
 # https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-disable-command-validation
 export TERRAGRUNT_DISABLE_COMMAND_VALIDATION=1
+export TG_DISABLE_COMMAND_VALIDATION=true
 # https://terragrunt.gruntwork.io/docs/features/provider-cache/
 # export TERRAGRUNT_PROVIDER_CACHE=1
 # Disable terraform checkpoint https://developer.hashicorp.com/terraform/cli/commands#upgrade-and-security-bulletin-checks
