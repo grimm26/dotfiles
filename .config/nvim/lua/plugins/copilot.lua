@@ -1,6 +1,7 @@
 return {
   {
     "zbirenbaum/copilot.lua",
+    enabled = true,
     event = "VeryLazy",
     cmd = "Copilot",
     keys = {
@@ -31,6 +32,7 @@ return {
     -- Set up some keymaps
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "main",
+    enabled = true,
     dependencies = {
       { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
       { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
