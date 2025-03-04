@@ -600,13 +600,13 @@ get_tg_latest_version () {
         setopt monitor
         if [[ -n ~/.tenv_tg_check(#qN.mh+24) ]]; then
           # print "Checking for latest terragrunt version"
-          (tenv tg install latest &&
+          (tenv tg install "~> 0.75" &&
             tenv tg use latest) &
           touch ~/.tenv_tg_check
         fi
       else
         # print "Checking for latest terragrunt version"
-        (tenv tg install latest &&
+        (tenv tg install "~> 0.75" &&
           tenv tg use latest) &
         touch ~/.tenv_tg_check
       fi
