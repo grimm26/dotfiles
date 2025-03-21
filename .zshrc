@@ -375,17 +375,28 @@ load-tfswitch() {
     fi
   fi
 }
+
+atlantis_tf_tool() {
+  if grep -q 'terraform_distribution: opentofu' ./atlantis.yaml; then
+    print opentofu
+  else
+    print terraform
+  fi
+}
 load-tenv() {
   if [[ -f ./atlantis.yaml ]]; then
-    #export TFENV_TERRAFORM_VERSION=$tf_version
     unset TFENV_TERRAFORM_VERSION
     unset TG_VERSION
     autoload is-at-least
+    local atlantis_tf_tool=$(atlantis_tf_tool)
     local atlantis_tf_version=$(grep terraform_version ./atlantis.yaml | awk '{print $2}')
     local local_tf_version="x"
+    local local_tofu_version="x"
+    local tftool="terraform"
     [[ -s .terraform-version ]] && local_tf_version=$(cat .terraform-version)
+    [[ -s .opentofu-version ]] && local_tofu_version=$(cat .opentofu-version)
     if [[ -n $atlantis_tf_version && $local_tf_version != ${atlantis_tf_version/v} ]]; then
-      tenv tf use ${atlantis_tf_version/v} --working-dir --quiet
+      tenv $atlantis_tf_tool use ${atlantis_tf_version/v} --working-dir --quiet
     fi
     if whence -p tenv &>/dev/null; then
       if is-at-least 0.13.0 ${atlantis_tf_version/v}; then

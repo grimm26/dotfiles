@@ -44,23 +44,16 @@ typeset -U PATH path
 export PATH
 
 if (( ${+commands[tenv]} )); then
-  # set the default constraint on what terraform version we allow.
-  # https://github.com/tofuutils/tenv#project-binaries
-  # export TFENV_TERRAFORM_DEFAULT_CONSTRAINT="<= 1.7.5"
   # Have tenv automatically install versions that aren't installed
   export TENV_AUTO_INSTALL=true
   # https://github.com/tofuutils/tenv/issues/305
   export TENV_DETACHED_PROXY=false
+  export TOFUENV_TOFU_DEFAULT_VERSION=1.9.0
+  export TFENV_TERRAFORM_DEFAULT_VERSION=1.9.8
 fi
-# Without this terragrunt will try to use opentofu if possible.
-# tenv is happy to provide it :)
-export TERRAGRUNT_TFPATH=terraform
-export TG_TF_PATH=terraform
 # https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-forward-tf-stdout
-export TERRAGRUNT_LOG_FORMAT=bare
 export TG_LOG_FORMAT=bare
 # https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-disable-command-validation
-export TERRAGRUNT_DISABLE_COMMAND_VALIDATION=1
 export TG_DISABLE_COMMAND_VALIDATION=true
 # https://terragrunt.gruntwork.io/docs/features/provider-cache/
 # export TERRAGRUNT_PROVIDER_CACHE=1
