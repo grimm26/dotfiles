@@ -85,7 +85,20 @@ export TFSWITCH_BIN=${HOME}/.local/bin/terraform
 alias tfsw="tfswitch --bin $TFSWITCH_BIN"
 
 tg () {
-  terragrunt "$@"
+  local has_path=false
+  for arg in "$@"; do
+    if [[ $arg == --tf-path* ]]; then
+      has_path=true
+      break
+    fi
+  done
+  if [[ $has_path == true ]]; then
+      terragrunt "$@"
+  elif [[ -s .opentofu.version ]]; then
+    terragrunt --log-level=error --tf-path=tofu "$@"
+  else
+    terragrunt --log-level=error --tf-path=terraform "$@"
+  fi
 }
 
 whatsmyip () {
