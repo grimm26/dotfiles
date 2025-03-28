@@ -45,6 +45,7 @@ zmodule ohmyzsh/ohmyzsh --root plugins/urltools
 zmodule ohmyzsh/ohmyzsh --root plugins/web-search
 zmodule ohmyzsh/ohmyzsh --root plugins/sudo
 zmodule ohmyzsh/ohmyzsh --root plugins/httpie
+zmodule ohmyzsh/ohmyzsh --root plugins/zsh-show-path
 {% if yadm.os == "Darwin" %}
 zmodule ohmyzsh/ohmyzsh --root plugins/macos
 zmodule ohmyzsh/ohmyzsh --root plugins/gnu-utils
