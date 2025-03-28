@@ -834,6 +834,10 @@ misc_updates() {
   # upgrade
   GH_HOST=github.com gh ext upgrade --all
 }
+
+show-path () {
+  print ${(F)path}
+}
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 # # End profiling
