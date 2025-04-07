@@ -1,6 +1,5 @@
 return {
   { "onsails/lspkind.nvim", lazy = true },
-  { "hrsh7th/cmp-nvim-lsp", lazy = true },
   {
     "neovim/nvim-lspconfig",
     enabled = true,
@@ -8,7 +7,6 @@ return {
     dependencies = {
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/cmp-nvim-lsp",
     },
     keys = {
       {
@@ -31,7 +29,7 @@ return {
     },
     config = function()
       -- Set up lspconfig.
-      local cmp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local cmp_capabilities = require("blink.cmp").get_lsp_capabilities()
       local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
       lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
 

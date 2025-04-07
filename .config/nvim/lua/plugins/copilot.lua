@@ -19,9 +19,10 @@ return {
         gitcommit = false,
         gitrebase = false,
         help = false,
-        markdown = false,
+        markdown = true,
         yaml = false,
       },
+      panel = { enabled = false },
       suggestion = {
         enabled = true,
         auto_trigger = true,

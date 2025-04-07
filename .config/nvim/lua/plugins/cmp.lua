@@ -1,12 +1,13 @@
 return {
-  { "saadparwaiz1/cmp_luasnip", lazy = true },
-  { "hrsh7th/cmp-nvim-lsp", lazy = true },
-  { "hrsh7th/cmp-buffer", lazy = true },
-  { "hrsh7th/cmp-path", lazy = true },
-  { "hrsh7th/cmp-cmdline", lazy = true },
+  { "saadparwaiz1/cmp_luasnip", lazy = true, enabled = false },
+  { "hrsh7th/cmp-nvim-lsp", lazy = true, enabled = false },
+  { "hrsh7th/cmp-buffer", lazy = true, enabled = false },
+  { "hrsh7th/cmp-path", lazy = true, enabled = false },
+  { "hrsh7th/cmp-cmdline", lazy = true, enabled = false },
   {
     "hrsh7th/nvim-cmp",
     -- load cmp on InsertEnter
+    enabled = false,
     event = "InsertEnter",
     -- these dependencies will only be loaded when cmp loads
     -- dependencies are always lazy-loaded unless specified otherwise
