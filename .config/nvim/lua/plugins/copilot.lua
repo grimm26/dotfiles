@@ -24,7 +24,7 @@ return {
       },
       panel = { enabled = false },
       suggestion = {
-        enabled = true,
+        enabled = false,
         auto_trigger = true,
       },
     },

@@ -10,10 +10,14 @@ return {
     opts = {
       keymap = { preset = "super-tab" },
       completion = {
-        ghost_text = { enabled = true },
+        ghost_text = {
+          enabled = true,
+          show_with_menu = false,
+        },
         list = { selection = { auto_insert = false } },
         documentation = { auto_show = true, window = { border = "rounded" } },
         menu = {
+          auto_show = true,
           draw = {
             padding = 0,
             columns = { { "kind_icon", gap = 1 }, { gap = 1, "label" }, { "kind", gap = 2 } },
@@ -61,8 +65,14 @@ return {
         },
       },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "dictionary" },
+        default = { "copilot", "lsp", "path", "snippets", "buffer", "dictionary" },
         providers = {
+          copilot = {
+            name = "copilot",
+            module = "blink-copilot",
+            score_offset = 100,
+            async = true,
+          },
           dictionary = {
             module = "blink-cmp-dictionary",
             min_keyword_length = 3,
