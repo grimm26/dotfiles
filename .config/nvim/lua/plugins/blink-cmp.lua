@@ -5,6 +5,7 @@ return {
       "rafamadriz/friendly-snippets",
       "Kaiser-Yang/blink-cmp-dictionary",
       "fang2hou/blink-copilot",
+      "L3MON4D3/LuaSnip",
     },
     version = "1.*",
     opts = {
@@ -64,8 +65,9 @@ return {
           },
         },
       },
+      snippets = { preset = "luasnip" },
       sources = {
-        default = { "copilot", "lsp", "path", "snippets", "buffer", "dictionary" },
+        default = { "snippets", "copilot", "lsp", "path", "buffer", "dictionary" },
         providers = {
           copilot = {
             name = "copilot",
