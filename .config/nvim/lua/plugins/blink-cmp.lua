@@ -78,6 +78,10 @@ return {
           dictionary = {
             module = "blink-cmp-dictionary",
             min_keyword_length = 3,
+            name = "dict",
+            opts = {
+              dictionary_files = { vim.fn.expand("~/.config/nvim/spell/en.utf-8.add") },
+            },
           },
         },
       },
