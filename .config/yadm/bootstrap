@@ -459,9 +459,9 @@ else
 fi
 if ! pyenv global $PYTHON_VERSION &>/dev/null; then
   print "Using pyenv to install python $PYTHON_VERSION"
-  pyenv install $PYTHON_VERSION
-  pyenv global $PYTHON_VERSION
-  PIP_OPTIONS="--force-reinstall"
+  pyenv install $PYTHON_VERSION \
+    && pyenv global $PYTHON_VERSION \
+    && PIP_OPTIONS="--force-reinstall"
 fi
 
 echo "Python packages:"
