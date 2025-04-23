@@ -56,7 +56,9 @@ export TG_LOG_FORMAT=bare
 # https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-disable-command-validation
 export TG_DISABLE_COMMAND_VALIDATION=true
 # https://terragrunt.gruntwork.io/docs/features/provider-cache/
-# export TERRAGRUNT_PROVIDER_CACHE=1
+# export TG_PROVIDER_CACHE=1
+export TG_PROVIDER_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
+export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 # Disable terraform checkpoint https://developer.hashicorp.com/terraform/cli/commands#upgrade-and-security-bulletin-checks
 export CHECKPOINT_DISABLE=1
 
@@ -85,19 +87,27 @@ export TFSWITCH_BIN=${HOME}/.local/bin/terraform
 alias tfsw="tfswitch --bin $TFSWITCH_BIN"
 
 tg () {
-  local has_path=false
+  local has_tf_path=false
+  local has_log_level=false
+  local extra_args=()
   for arg in "$@"; do
     if [[ $arg == --tf-path* ]]; then
-      has_path=true
-      break
+      local has_tf_path=true
+    elif [[ $arg == --log-level* ]]; then
+      local has_log_level=true
+    elif [[ $arg == init ]]; then
+      extra_args+=( --provider-cache )
     fi
   done
-  if [[ $has_path == true ]]; then
-      terragrunt "$@"
+  if [[ $has_log_level == false ]]; then
+    extra_args+=( --log-level=error )
+  fi
+  if [[ $has_tf_path == true ]]; then
+    terragrunt "$@" ${^extra_args}
   elif [[ -s .opentofu.version ]]; then
-    terragrunt --log-level=error --tf-path=tofu "$@"
+    terragrunt "$@" ${^extra_args} --tf-path=tofu
   else
-    terragrunt --log-level=error --tf-path=terraform "$@"
+    terragrunt "$@" ${^extra_args} --tf-path=terraform
   fi
 }
 
