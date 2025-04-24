@@ -8,7 +8,7 @@ return {
           prepend_args = { "--max-width", "5000", "--suppressions", "!!!" },
         },
         mdformat = {
-          prepend_args = { "--extensions", "mkdocs" },
+          prepend_args = { "--extensions", "admon", "--align-semantic-breaks-in-lists" },
         },
       },
       formatters_by_ft = {
