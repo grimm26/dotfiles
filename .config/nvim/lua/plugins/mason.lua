@@ -35,7 +35,6 @@ return {
           "jsonlint",
           "markdownlint",
           "marksman",
-          "mdformat",
           "mdslw",
           "prettierd",
           "python-lsp-server",

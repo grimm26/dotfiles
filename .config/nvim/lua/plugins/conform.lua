@@ -2,9 +2,13 @@ return {
   {
     "stevearc/conform.nvim",
     opts = {
+      notify_no_formatters = true,
       formatters = {
         mdslw = {
-          prepend_args = { "--max-width", "5000" },
+          prepend_args = { "--max-width", "5000", "--suppressions", "!!!" },
+        },
+        mdformat = {
+          prepend_args = { "--extensions", "mkdocs" },
         },
       },
       formatters_by_ft = {
@@ -20,10 +24,12 @@ return {
         graphql = { "prettierd" },
         markdown = { "mdslw", "mdformat" },
       },
+      default_format_opts = {
+        lsp_format = "never",
+      },
       format_on_save = {
         -- These options will be passed to conform.format()
         timeout_ms = 500,
-        lsp_fallback = true,
       },
     },
   },
