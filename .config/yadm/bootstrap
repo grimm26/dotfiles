@@ -167,29 +167,34 @@ case $(uname) in
     fi
 
     # Manage neovim outside of mise and install it in a global spot
-    print "Neovim"
-    if [[ ${NEOVIM_BUILD} == "stable" ]]; then
-      local latest_neovim_version=$(gh_latest_release "neovim/neovim")
-      local installed_neovim_version=$(/usr/local/bin/nvim --version 2>/dev/null | head -1 | awk '{print $2}' |cut -d- -f1)
-      if [[ ${installed_neovim_version} != $latest_neovim_version ]]; then
-        print "Updating from ${installed_neovim_version} to $latest_neovim_version"
-        GH_HOST=github.com gh release download ${latest_neovim_version} --pattern "nvim-linux-$(uname -m).appimage" --repo neovim/neovim -D $MY_TMP \
-        && sudo install -m 755 ${MY_TMP}/nvim-linux-$(uname -m).appimage /usr/local/bin/nvim.appimage
-        [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
-      fi
-    elif [[ ${NEOVIM_BUILD} == "nightly" ]]; then
-      read -q "yn?Do you wish to refresh neovim nightly? "
-      case $yn in
-        [Yy]*)
-          print "\nInstalling latest nightly build."
-          GH_HOST=github.com gh release download nightly --pattern "nvim-linux-$(uname -m).appimage" --repo neovim/neovim -D $MY_TMP \
+    # Don't bother on focal or below since the appimage doesn't work with that old glibc
+    if [[ 22 > $VERSION_ID ]]; then
+      echo "Skipping neovim. Neovim appimage doesn't work on Ubuntu 20.04 or earlier."
+    else
+      print "Neovim"
+      if [[ ${NEOVIM_BUILD} == "stable" ]]; then
+        local latest_neovim_version=$(gh_latest_release "neovim/neovim")
+        local installed_neovim_version=$(/usr/local/bin/nvim --version 2>/dev/null | head -1 | awk '{print $2}' |cut -d- -f1)
+        if [[ ${installed_neovim_version} != $latest_neovim_version ]]; then
+          print "Updating from ${installed_neovim_version} to $latest_neovim_version"
+          GH_HOST=github.com gh release download ${latest_neovim_version} --pattern "nvim-linux-$(uname -m).appimage" --repo neovim/neovim -D $MY_TMP \
           && sudo install -m 755 ${MY_TMP}/nvim-linux-$(uname -m).appimage /usr/local/bin/nvim.appimage
           [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
-          ;;
-        *)
-          print "\nLeaving current version installed."
-          ;;
-      esac
+        fi
+      elif [[ ${NEOVIM_BUILD} == "nightly" ]]; then
+        read -q "yn?Do you wish to refresh neovim nightly? "
+        case $yn in
+          [Yy]*)
+            print "\nInstalling latest nightly build."
+            GH_HOST=github.com gh release download nightly --pattern "nvim-linux-$(uname -m).appimage" --repo neovim/neovim -D $MY_TMP \
+            && sudo install -m 755 ${MY_TMP}/nvim-linux-$(uname -m).appimage /usr/local/bin/nvim.appimage
+            [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
+            ;;
+          *)
+            print "\nLeaving current version installed."
+            ;;
+        esac
+      fi
     fi
     # Latest mise-en-place
     print "Checking for mise-en-place"
