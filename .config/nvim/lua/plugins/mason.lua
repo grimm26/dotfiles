@@ -40,7 +40,6 @@ return {
           "python-lsp-server",
           "stylua",
           "isort",
-          "solargraph",
           "terraform-ls",
           "vim-language-server",
           "yaml-language-server",

@@ -5,7 +5,7 @@ return {
     enabled = true,
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "mason.nvim",
+      "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
     },
     keys = {
@@ -52,9 +52,6 @@ return {
       })
       lspconfig.jsonls.setup({
         capabilities = lsp_capabilities,
-      })
-      lspconfig.solargraph.setup({
-        capabilities = cmp_capabilities,
       })
       lspconfig.marksman.setup({
         capabilities = lsp_capabilities,
