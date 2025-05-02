@@ -103,11 +103,11 @@ tg () {
     extra_args+=( --log-level=error )
   fi
   if [[ $has_tf_path == true ]]; then
-    terragrunt "$@" ${^extra_args}
+    terragrunt ${^extra_args} "$@"
   elif [[ -s .opentofu.version ]]; then
-    terragrunt "$@" ${^extra_args} --tf-path=tofu
+    terragrunt ${^extra_args} --tf-path=tofu "$@"
   else
-    terragrunt "$@" ${^extra_args} --tf-path=terraform
+    terragrunt ${^extra_args} --tf-path=terraform "$@"
   fi
 }
 
