@@ -485,11 +485,13 @@ for pkg in ${(k)PIPX_PKGS};do
   print "installing pipx $pkg"
   pipx install $pkg
 done
+# TODO: be fancy and check if injected pkgs are already there.
 pipx inject mdformat mdformat-mkdocs
 pipx inject mdformat mdformat-admon
 pipx upgrade-all --include-injected
 
 print "Ruby Gems"
+unset GEMRC
 for pkg in aws-sdk-ec2 bundler fileutils octokit asciidoctor kramdown-asciidoc;do
   gem install $pkg
 done
