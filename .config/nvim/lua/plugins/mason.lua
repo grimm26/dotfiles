@@ -1,6 +1,7 @@
 return {
   {
     "mason-org/mason.nvim",
+    -- version = "^1.0.0",
     build = ":MasonUpdate",
     opts = {
       pip = {
@@ -10,6 +11,7 @@ return {
   },
   {
     "mason-org/mason-lspconfig.nvim",
+    -- version = "^1.0.0",
     dependencies = {
       "neovim/nvim-lspconfig",
     },

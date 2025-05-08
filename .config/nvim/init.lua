@@ -26,6 +26,14 @@ end
 -- hit TOP, continuing at BOTTOM" messages; when using the search
 -- count do not show "W" after the count message (see S below)
 set.shortmess:append({ s = true })
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.name == "terraformls" then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
+  end,
+})
 
 set.mouse = ""
 -- cmd("behave xterm")
