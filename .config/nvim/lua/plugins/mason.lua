@@ -10,14 +10,6 @@ return {
     },
   },
   {
-    "mason-org/mason-lspconfig.nvim",
-    -- version = "^1.0.0",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-    },
-    config = true,
-  },
-  {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     config = function()
       require("mason-tool-installer").setup({

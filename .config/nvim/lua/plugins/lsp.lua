@@ -5,8 +5,8 @@ return {
     enabled = true,
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "mason-org/mason.nvim",
-      "mason-org/mason-lspconfig.nvim",
+      { "mason-org/mason.nvim" },
+      { "mason-org/mason-lspconfig.nvim", config = true },
     },
     keys = {
       {
