@@ -6,7 +6,7 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       { "mason-org/mason.nvim" },
-      { "mason-org/mason-lspconfig.nvim", config = true },
+      { "mason-org/mason-lspconfig.nvim" },
     },
     keys = {
       {
@@ -33,39 +33,34 @@ return {
       local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
       lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-      require("mason-lspconfig").setup()
-      local lspconfig = require("lspconfig")
-      lspconfig.ansiblels.setup({
+      vim.lsp.config("ansiblels", {
         capabilities = cmp_capabilities,
       })
-      lspconfig.bashls.setup({
+      vim.lsp.config("bashls", {
         capabilities = cmp_capabilities,
       })
-      lspconfig.dockerls.setup({
+      vim.lsp.config("dockerls", {
         capabilities = cmp_capabilities,
       })
-      lspconfig.gopls.setup({
+      vim.lsp.config("gopls", {
         capabilities = cmp_capabilities,
       })
-      lspconfig.jdtls.setup({
+      vim.lsp.config("jdtls", {
         capabilities = cmp_capabilities,
       })
-      lspconfig.jsonls.setup({
+      vim.lsp.config("jsonls", {
         capabilities = lsp_capabilities,
       })
-      lspconfig.marksman.setup({
-        capabilities = lsp_capabilities,
-      })
-      lspconfig.terraformls.setup({
+      vim.lsp.config("terraformls", {
         on_init = function(client, _)
           client.server_capabilities.semanticTokensProvider = nil
         end,
         capabilities = cmp_capabilities,
       })
-      lspconfig.vimls.setup({
+      vim.lsp.config("vimls", {
         capabilities = cmp_capabilities,
       })
-      lspconfig.pylsp.setup({
+      vim.lsp.config("pylsp", {
         capabilities = cmp_capabilities,
         settings = {
           pylsp = {
@@ -77,7 +72,7 @@ return {
           },
         },
       })
-      lspconfig.yamlls.setup({
+      vim.lsp.config("yamlls", {
         capabilities = cmp_capabilities,
         settings = {
           yaml = {
@@ -106,6 +101,7 @@ return {
           },
         },
       })
+      require("mason-lspconfig").setup()
     end,
   },
 }
