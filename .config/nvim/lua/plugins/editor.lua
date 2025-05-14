@@ -78,4 +78,9 @@ return {
       float_buffer = false,
     },
   },
+  {
+    "sQVe/sort.nvim",
+    cmd = { "Sort" },
+    config = true,
+  },
 }
