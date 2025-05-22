@@ -86,6 +86,36 @@ alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
 export TFSWITCH_BIN=${HOME}/.local/bin/terraform
 alias tfsw="tfswitch --bin $TFSWITCH_BIN"
 
+tgtf () {
+  local has_log_level=false
+  local extra_args=()
+  for arg in "$@"; do
+    if [[ $arg == --log-level* ]]; then
+      local has_log_level=true
+    elif [[ $arg == init ]]; then
+      extra_args+=( --provider-cache )
+    fi
+  done
+  if [[ $has_log_level == false ]]; then
+    extra_args+=( --log-level=error )
+  fi
+  terragrunt ${^extra_args} --tf-path terraform run "$@"
+}
+tgtofu () {
+  local has_log_level=false
+  local extra_args=()
+  for arg in "$@"; do
+    if [[ $arg == --log-level* ]]; then
+      local has_log_level=true
+    elif [[ $arg == init ]]; then
+      extra_args+=( --provider-cache )
+    fi
+  done
+  if [[ $has_log_level == false ]]; then
+    extra_args+=( --log-level=error )
+  fi
+  terragrunt ${^extra_args} --tf-path tofu run "$@"
+}
 tg () {
   local has_tf_path=false
   local has_log_level=false
@@ -104,10 +134,14 @@ tg () {
   fi
   if [[ $has_tf_path == true ]]; then
     terragrunt ${^extra_args} "$@"
-  elif [[ -s .opentofu.version ]]; then
-    terragrunt ${^extra_args} --tf-path=tofu "$@"
+  elif [[ -s atlantis.yaml ]]; then
+    if grep -q 'terraform_distribution: opentofu' atlantis.yaml; then
+      terragrunt ${^extra_args} --tf-path tofu "$@"
+    else
+      terragrunt ${^extra_args} --tf-path terraform "$@"
+    fi
   else
-    terragrunt ${^extra_args} --tf-path=terraform "$@"
+    terragrunt ${^extra_args} "$@"
   fi
 }
 

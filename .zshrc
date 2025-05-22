@@ -378,7 +378,7 @@ load-tfswitch() {
 
 atlantis_tf_tool() {
   if grep -q 'terraform_distribution: opentofu' ./atlantis.yaml; then
-    print opentofu
+    print tofu
   else
     print terraform
   fi
