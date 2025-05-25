@@ -359,7 +359,7 @@ atlantis_tf_tool() {
   fi
 }
 load-tenv() {
-  if [[ -f ./atlantis.yaml ]]; then
+  if [[ -s ./atlantis.yaml ]]; then
     unset TFENV_TERRAFORM_VERSION
     unset TG_VERSION
     autoload is-at-least
@@ -368,6 +368,11 @@ load-tenv() {
     local local_tf_version="x"
     local local_tofu_version="x"
     local tftool="terraform"
+    if [[ "${atlantis_tf_tool}" == "tofu" ]]; then
+      [[ -s .terraform-version ]] && rm .terraform-version
+    elif [[  "${atlantis_tf_tool}" == "terraform" ]]; then
+      [[ -s .opentofu-version ]] && rm .opentofu-version
+    fi
     [[ -s .terraform-version ]] && local_tf_version=$(cat .terraform-version)
     [[ -s .opentofu-version ]] && local_tofu_version=$(cat .opentofu-version)
     if [[ -n $atlantis_tf_version && $local_tf_version != ${atlantis_tf_version/v} ]]; then
@@ -603,16 +608,16 @@ get_tg_latest_version
 
 tf11 () {
   if (( ${+commands[tenv]} )); then
-    tenv use terragrunt "~> 0.18.7"
-    tenv use terraform "~> 0.11.0"
+    tenv tg use "~> 0.18.7"
+    tenv tf use "~> 0.11.0"
   else
     echo "No tenv installed."
   fi
 }
 tf12 () {
   if (( ${+commands[tenv]} )); then
-    tenv use terragrunt "~> 0.24.4"
-    tenv use terraform "~> 0.12.0"
+    tenv tg use "~> 0.24.4"
+    tenv tf use "~> 0.12.0"
   else
     echo "No tenv installed."
   fi
@@ -620,32 +625,32 @@ tf12 () {
 # terraform 0.13 and up should work with the latest terragrunt version - 2021-09-10
 tf13 () {
   if (( ${+commands[tenv]} )); then
-    tenv use terragrunt latest
-    tenv use terraform "~> 0.13.0"
+    tenv tg use latest
+    tenv tf use "~> 0.13.0"
   else
     echo "No tenv installed."
   fi
 }
 tf14 () {
   if (( ${+commands[tenv]} )); then
-    tenv use terragrunt latest
-    tenv use terraform "~> 0.14.0"
+    tenv tg use latest
+    tenv tf use "~> 0.14.0"
   else
     echo "No tenv installed."
   fi
 }
 tf15 () {
   if (( ${+commands[tenv]} )); then
-    tenv use terragrunt latest
-    tenv use terraform "~> 0.15.0"
+    tenv tg use latest
+    tenv tf use "~> 0.15.0"
   else
     echo "No tenv installed."
   fi
 }
 tf1x () {
   if (( ${+commands[tenv]} )); then
-    tenv use terragrunt latest
-    tenv use terraform "~> 1.0"
+    tenv tg use latest
+    tenv tf use "~> 1.0"
   else
     echo "No tenv installed."
   fi
