@@ -350,31 +350,6 @@ else
 fi
 [ -d /usr/local/opt/openjdk/bin ] && path=("/usr/local/opt/openjdk/bin" $path)
 [ -d /usr/local/opt/curl/bin ] && path=("/usr/local/opt/curl/bin" $path)
-[ -f ~/.git_functions ] && source ~/.git_functions
-
-load-tfswitch() {
-  local tfswitchrc_path=".tfswitchrc"
-
-  if [ -f "$tfswitchrc_path" ]; then
-    tfsw
-  fi
-  if [[ -f ./atlantis.yaml ]]; then
-    autoload is-at-least
-    tf_version=$(grep terraform_version ./atlantis.yaml | awk '{print $2}' | tr -d 'v')
-    if [[ -n $tf_version ]]; then
-      tfsw $tf_version
-      if whence -p tgsw &>/dev/null; then
-        if is-at-least 0.13.0 $tf_version; then
-          tgsw $TG_LATEST_VERSION
-        elif is-at-least 0.12.0 $tf_version; then
-          tgsw 0.24.4
-        elif is-at-least 0.11.0 $tf_version; then
-          tgsw 0.18.7
-        fi
-      fi
-    fi
-  fi
-}
 
 atlantis_tf_tool() {
   if grep -q 'terraform_distribution: opentofu' ./atlantis.yaml; then
@@ -631,8 +606,7 @@ tf11 () {
     tenv use terragrunt "~> 0.18.7"
     tenv use terraform "~> 0.11.0"
   else
-    tgsw 0.18.7
-    tfsw --latest-stable 0.11.0
+    echo "No tenv installed."
   fi
 }
 tf12 () {
@@ -640,8 +614,7 @@ tf12 () {
     tenv use terragrunt "~> 0.24.4"
     tenv use terraform "~> 0.12.0"
   else
-    tgsw 0.24.4
-    tfsw --latest-stable 0.12.0
+    echo "No tenv installed."
   fi
 }
 # terraform 0.13 and up should work with the latest terragrunt version - 2021-09-10
@@ -650,8 +623,7 @@ tf13 () {
     tenv use terragrunt latest
     tenv use terraform "~> 0.13.0"
   else
-    tgsw $TG_LATEST_VERSION
-    tfsw --latest-stable 0.13.0
+    echo "No tenv installed."
   fi
 }
 tf14 () {
@@ -659,8 +631,7 @@ tf14 () {
     tenv use terragrunt latest
     tenv use terraform "~> 0.14.0"
   else
-    tgsw $TG_LATEST_VERSION
-    tfsw --latest-stable 0.14.0
+    echo "No tenv installed."
   fi
 }
 tf15 () {
@@ -668,8 +639,7 @@ tf15 () {
     tenv use terragrunt latest
     tenv use terraform "~> 0.15.0"
   else
-    tgsw $TG_LATEST_VERSION
-    tfsw --latest-stable 0.15.0
+    echo "No tenv installed."
   fi
 }
 tf1x () {
@@ -677,8 +647,7 @@ tf1x () {
     tenv use terragrunt latest
     tenv use terraform "~> 1.0"
   else
-    tgsw $TG_LATEST_VERSION
-    tfsw --latest-stable 1.0
+    echo "No tenv installed."
   fi
 }
 alias tgi="tg run init -- -upgrade -reconfigure"
