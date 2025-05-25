@@ -250,14 +250,14 @@ case $(uname) in
     echo "Install Hack Nerd, UbuntuNerd, and MesloLGS fonts"
     need_nerd_font=0
     if [[ -f "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" ]]; then
-      if [[ $(strings "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" |grep -w Version: |head -1 |awk '{print $3}') != "3.2.1" ]]; then
+      if [[ $(strings "${HOME}/.local/share/fonts/HackNerdFont-Regular.ttf" |grep -w Version: |head -1 |awk '{print $3}') != "3.4.0" ]]; then
         need_nerd_font=1
       fi
     else
       need_nerd_font=1
     fi
     if [[ -f "${HOME}/.local/share/fonts/UbuntuNerdFont-Medium.ttf" ]]; then
-      if [[ $(strings "${HOME}/.local/share/fonts/UbuntuNerdFont-Medium.ttf" |grep -w Version: |head -1 |awk '{print $3}') != "3.2.1" ]]; then
+      if [[ $(strings "${HOME}/.local/share/fonts/UbuntuNerdFont-Medium.ttf" |grep -w Version: |head -1 |awk '{print $3}') != "3.4.0" ]]; then
         need_nerd_font=1
       fi
     else
@@ -265,7 +265,7 @@ case $(uname) in
     fi
     if [[ $need_nerd_font -eq 1 ]]; then
       (cd $MY_TMP && \
-        curl -sLSO "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/{Hack,Ubuntu,UbuntuMono,NerdFontsSymbolsOnly}.zip" \
+        curl -sLSO "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/{Hack,Ubuntu,UbuntuMono,NerdFontsSymbolsOnly}.zip" \
         && rm ~/.local/share/fonts/*Nerd*
         unzip -u Hack.zip \*.ttf -d ~/.local/share/fonts \
         && unzip -u Ubuntu.zip \*.ttf -d ~/.local/share/fonts \
