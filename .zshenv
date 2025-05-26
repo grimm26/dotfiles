@@ -84,6 +84,31 @@ fi
 alias kit=kitchen
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
 
+terraform () {
+  if [[ -a terragrunt.hcl ]]; then
+    for arg in "$@"; do
+      if [[ $arg == init ]]; then
+        export TG_PROVIDER_CACHE=1
+      fi
+    done
+    TG_TF_PATH=terraform terragrunt run "$@"
+  else
+    command terraform "$@"
+  fi
+}
+tofu () {
+  if [[ -a terragrunt.hcl ]]; then
+    for arg in "$@"; do
+      if [[ $arg == init ]]; then
+        export TG_PROVIDER_CACHE=1
+      fi
+    done
+    TG_TF_PATH=tofu terragrunt run "$@"
+  else
+    command tofu "$@"
+  fi
+}
+
 tgtf () {
   local has_log_level=false
   local extra_args=()
