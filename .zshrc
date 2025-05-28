@@ -378,14 +378,12 @@ load-tenv() {
     if [[ -n $atlantis_tf_version && $local_tf_version != ${atlantis_tf_version/v} ]]; then
       tenv $atlantis_tf_tool use ${atlantis_tf_version/v} --working-dir --quiet
     fi
-    if whence -p tenv &>/dev/null; then
-      if is-at-least 0.13.0 ${atlantis_tf_version/v}; then
-        tenv tg use latest --working-dir --quiet
-      elif is-at-least 0.12.0 ${atlantis_tf_version/v}; then
-        tenv tg use 0.24.0 --working-dir --quiet
-      elif is-at-least 0.11.0 ${atlantis_tf_version/v}; then
-        tenv tg use 0.18.7 --working-dir --quiet
-      fi
+    if is-at-least 0.13.0 ${atlantis_tf_version/v}; then
+      tenv tg use latest --working-dir --quiet
+    elif is-at-least 0.12.0 ${atlantis_tf_version/v}; then
+      tenv tg use 0.24.0 --working-dir --quiet
+    elif is-at-least 0.11.0 ${atlantis_tf_version/v}; then
+      tenv tg use 0.18.7 --working-dir --quiet
     fi
   fi
 }
@@ -656,6 +654,7 @@ tf1x () {
   fi
 }
 alias tgi="tg run init -- -upgrade -reconfigure"
+alias tfii="terraform init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 tfup () {

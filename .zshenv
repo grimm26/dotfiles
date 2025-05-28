@@ -85,25 +85,51 @@ alias kit=kitchen
 alias tglog="TF_LOG=TRACE TF_LOG_PATH=./tflog.out terragrunt"
 
 terraform () {
+  local need_env=0
   if [[ -a terragrunt.hcl ]]; then
     for arg in "$@"; do
       if [[ $arg == init ]]; then
         export TG_PROVIDER_CACHE=1
+        need_env=1
+        continue
       fi
+      case $arg in
+        plan|apply|destroy|import|state|validate|taint|untaint)
+          need_env=1
+          ;;
+      esac
     done
-    TG_TF_PATH=terraform terragrunt run "$@"
+    if [[ typeset -f tfenv >/dev/null && $need_env == 1 ]]; then
+      tfenv
+      atlantis_kube_link
+    fi
+    TG_TF_PATH=terraform terragrunt run -- "$@"
+    unset TG_PROVIDER_CACHE
   else
     command terraform "$@"
   fi
 }
 tofu () {
+  local need_env=0
   if [[ -a terragrunt.hcl ]]; then
     for arg in "$@"; do
       if [[ $arg == init ]]; then
         export TG_PROVIDER_CACHE=1
+        need_env=1
+        continue
       fi
+      case $arg in
+        plan|apply|destroy|import|state|validate|taint|untaint)
+          need_env=1
+          ;;
+      esac
     done
-    TG_TF_PATH=tofu terragrunt run "$@"
+    if [[ typeset -f tfenv >/dev/null && $need_env == 1 ]]; then
+      tfenv
+      atlantis_kube_link
+    fi
+    TG_TF_PATH=tofu terragrunt run -- "$@"
+    unset TG_PROVIDER_CACHE
   else
     command tofu "$@"
   fi

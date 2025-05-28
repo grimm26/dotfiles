@@ -1363,6 +1363,7 @@
   # Custom icon.
   typeset -g POWERLEVEL9K_TERRAFORM_VERSION_VISUAL_IDENTIFIER_EXPANSION='󱁢'
   typeset -g POWERLEVEL9K_TERRAFORM_VERSION_SHOW_ON_UPGLOB='*.tf' 
+  typeset -g POWERLEVEL9K_OPENTOFU_VERSION_SHOW_ON_UPGLOB='*.tf|*.tofu' 
 
   #[ aws: aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) ]#
   # Show aws only when the command you are typing invokes one of these tools.
