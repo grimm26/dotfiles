@@ -99,7 +99,7 @@ terraform () {
           ;;
       esac
     done
-    if [[ typeset -f tfenv >/dev/null && $need_env == 1 ]]; then
+    if typeset -f tfenv >/dev/null && [[ $need_env == 1 ]]; then
       tfenv
       atlantis_kube_link
     fi
@@ -124,7 +124,7 @@ tofu () {
           ;;
       esac
     done
-    if [[ typeset -f tfenv >/dev/null && $need_env == 1 ]]; then
+    if typeset -f tfenv >/dev/null && [[ $need_env == 1 ]]; then
       tfenv
       atlantis_kube_link
     fi
