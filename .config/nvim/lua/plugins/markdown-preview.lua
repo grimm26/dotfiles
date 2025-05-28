@@ -18,4 +18,18 @@ return {
       { "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", desc = "Toggle MardownPreview" },
     },
   },
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+    opts = {
+      preview = {
+        icon_provider = "mini", -- "mini" or "devicons"
+      },
+    },
+    -- For blink.cmp's completion
+    -- source
+    dependencies = {
+      "saghen/blink.cmp",
+    },
+  },
 }
