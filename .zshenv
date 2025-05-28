@@ -102,6 +102,7 @@ terraform () {
     if typeset -f tfenv >/dev/null && [[ $need_env == 1 ]]; then
       tfenv
       atlantis_kube_link
+      source $ENOVA_ATLANTIS_VAR_CACHE
     fi
     TG_TF_PATH=terraform terragrunt run -- "$@"
     unset TG_PROVIDER_CACHE
@@ -127,6 +128,7 @@ tofu () {
     if typeset -f tfenv >/dev/null && [[ $need_env == 1 ]]; then
       tfenv
       atlantis_kube_link
+      source $ENOVA_ATLANTIS_VAR_CACHE
     fi
     TG_TF_PATH=tofu terragrunt run -- "$@"
     unset TG_PROVIDER_CACHE
