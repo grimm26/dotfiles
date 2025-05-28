@@ -10,10 +10,15 @@ return {
         mdformat = {
           prepend_args = { "--extensions", "admon", "--align-semantic-breaks-in-lists" },
         },
+        keep_sorted = {
+          command = "keep-sorted",
+          args = { "$FILENAME" },
+          stdin = false,
+        },
       },
       formatters_by_ft = {
         lua = { "stylua" },
-        terraform = { "terraform_fmt" },
+        terraform = { "terraform_fmt", "keep_sorted" },
         hcl = { "terraform_fmt" },
         yaml = { "yamlfmt" },
         python = { "isort", "black" },
