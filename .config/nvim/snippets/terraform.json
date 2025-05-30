@@ -41,5 +41,19 @@
       "}",
       "$0"
     ]
+  },
+  "keep-sorted-start": {
+    "prefix": "kss",
+    "description": "Start a keep-sorted block.",
+    "body": [
+      "# keep-sorted start block=yes"
+    ]
+  },
+  "keep-sorted-end": {
+    "prefix": "kse",
+    "description": "End a keep-sorted block.",
+    "body": [
+      "# keep-sorted end"
+    ]
   }
 }
