@@ -13,6 +13,9 @@ return {
         text = true,
         symbol = true,
       },
+      plugins = {
+        noice = true,
+      },
     },
     config = function(_, opts)
       vim.o.termguicolors = true
