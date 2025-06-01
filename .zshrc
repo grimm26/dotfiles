@@ -294,8 +294,6 @@ alias nin='netstat -ntl'
 
 whence gcal &>/dev/null && alias cal=gcal
 
-# Alias for yadm do it works more like git g alias
-alias y=yadm
 alias yp='yadm push'
 alias yl='yadm pull'
 alias yst='yadm status'
@@ -351,6 +349,14 @@ fi
 [ -d /usr/local/opt/openjdk/bin ] && path=("/usr/local/opt/openjdk/bin" $path)
 [ -d /usr/local/opt/curl/bin ] && path=("/usr/local/opt/curl/bin" $path)
 
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
 atlantis_tf_tool() {
   if grep -q 'terraform_distribution: opentofu' ./atlantis.yaml; then
     print tofu
@@ -358,6 +364,7 @@ atlantis_tf_tool() {
     print terraform
   fi
 }
+
 load-tenv() {
   if [[ -s ./atlantis.yaml ]]; then
     unset TFENV_TERRAFORM_VERSION
