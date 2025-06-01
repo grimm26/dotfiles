@@ -2,6 +2,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     -- tag = "v0.9.2",
+    branch = "master",
     build = ":TSUpdate",
     dependencies = { "OXY2DEV/markview.nvim" },
     event = { "BufReadPost", "BufNewFile" },
@@ -10,6 +11,7 @@ return {
       { "<c-space>", desc = "Increment selection" },
       { "<bs>", desc = "Schrink selection", mode = "x" },
     },
+    lazy = false,
     ---@type TSConfig
     opts = {
       highlight = {

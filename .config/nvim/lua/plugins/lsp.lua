@@ -104,4 +104,12 @@ return {
       require("mason-lspconfig").setup()
     end,
   },
+  {
+    "zeioth/garbage-day.nvim",
+    dependencies = "neovim/nvim-lspconfig",
+    event = "VeryLazy",
+    opts = {
+      notifications = true,
+    },
+  },
 }
