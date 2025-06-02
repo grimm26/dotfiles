@@ -496,4 +496,9 @@ for pkg in aws-sdk-ec2 bundler fileutils octokit asciidoctor kramdown-asciidoc;d
   gem install $pkg
 done
 
+# Install/update rust/cargo things
+# Should probably not always do this as it takes forever for cargo installs.
+# * rustup
+# * cargo install --locked tree-sitter-cli
+# * cargo install --locked yazi-fm yazi-cli
 rm -rf ${MY_TMP}
