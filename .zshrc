@@ -614,7 +614,7 @@ get_tg_latest_version
 tf11 () {
   if (( ${+commands[tenv]} )); then
     tenv tg use "~> 0.18.7"
-    tenv tf use "~> 0.11.0"
+    tenv terraform use "~> 0.11.0"
   else
     echo "No tenv installed."
   fi
@@ -622,7 +622,7 @@ tf11 () {
 tf12 () {
   if (( ${+commands[tenv]} )); then
     tenv tg use "~> 0.24.4"
-    tenv tf use "~> 0.12.0"
+    tenv terraform use "~> 0.12.0"
   else
     echo "No tenv installed."
   fi
@@ -631,7 +631,7 @@ tf12 () {
 tf13 () {
   if (( ${+commands[tenv]} )); then
     tenv tg use latest
-    tenv tf use "~> 0.13.0"
+    tenv terraform use "~> 0.13.0"
   else
     echo "No tenv installed."
   fi
@@ -639,7 +639,7 @@ tf13 () {
 tf14 () {
   if (( ${+commands[tenv]} )); then
     tenv tg use latest
-    tenv tf use "~> 0.14.0"
+    tenv terraform use "~> 0.14.0"
   else
     echo "No tenv installed."
   fi
@@ -647,7 +647,7 @@ tf14 () {
 tf15 () {
   if (( ${+commands[tenv]} )); then
     tenv tg use latest
-    tenv tf use "~> 0.15.0"
+    tenv terraform use "~> 0.15.0"
   else
     echo "No tenv installed."
   fi
@@ -655,7 +655,7 @@ tf15 () {
 tf1x () {
   if (( ${+commands[tenv]} )); then
     tenv tg use latest
-    tenv tf use "~> 1.0"
+    tenv terraform use "~> 1.0"
   else
     echo "No tenv installed."
   fi
@@ -674,7 +674,7 @@ tfup () {
   done
 
   if (( ${+commands[tenv]} )); then
-    tenv tf use $tf_version --working-dir
+    tenv terraform use $tf_version --working-dir
     tenv tg use latest
   else
     tfsw $tf_version
