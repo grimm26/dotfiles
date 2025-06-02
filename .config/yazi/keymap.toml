@@ -1,0 +1,4 @@
+[[mgr.prepend_keymap]]
+on = "-"
+run = "leave"
+desc = "Move to the parent directory."
