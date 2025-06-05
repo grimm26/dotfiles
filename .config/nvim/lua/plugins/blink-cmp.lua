@@ -85,7 +85,14 @@ return {
           },
         },
       },
-      fuzzy = { implementation = "prefer_rust_with_warning" },
+      fuzzy = {
+        implementation = "prefer_rust_with_warning",
+        sorts = {
+          "exact",
+          "score",
+          "sort_text",
+        },
+      },
     },
     opts_extend = { "sources.default" },
   },
