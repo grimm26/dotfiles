@@ -7,27 +7,6 @@
 (( ${+commands[curl]} )) || sudo apt-get install -y curl || { echo "You need to install curl" && exit 1; }
 (( ${+commands[jq]} )) || sudo apt-get install -y jq || { echo "You need to install jq" && exit 1; }
 
-MISE_PKGS=(
-  awscli@latest
-  bat
-  bat-extras
-  cheat
-  delta
-  direnv
-  dive
-  fd
-  github-cli
-  go
-  helm
-  k9s
-  kubectl
-  lsd
-  neovim@stable
-  node@lts
-  tflint
-  tfswitch
-  zoxide
-)
 PYTHON_PKGS=(
   argcomplete
   'boto3[crt]'
@@ -37,8 +16,6 @@ PYTHON_PKGS=(
   pipreqs
 )
 PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.13.json |jq -r '.latest')
-# Set NEOVIM_BUILD to nightly or latest. If set to nightly.
-NEOVIM_BUILD="stable"
 
 while getopts 'M' OPT; do
   case $OPT in
@@ -161,36 +138,6 @@ case $(uname) in
       done
     fi
 
-    # Manage neovim outside of mise and install it in a global spot
-    # Don't bother on focal or below since the appimage doesn't work with that old glibc
-    if [[ 22 > $VERSION_ID ]]; then
-      echo "Skipping neovim. Neovim appimage doesn't work on Ubuntu 20.04 or earlier."
-    else
-      print "Neovim"
-      if [[ ${NEOVIM_BUILD} == "stable" ]]; then
-        local latest_neovim_version=$(gh_latest_release "neovim/neovim")
-        local installed_neovim_version=$(/usr/local/bin/nvim --version 2>/dev/null | head -1 | awk '{print $2}' |cut -d- -f1)
-        if [[ ${installed_neovim_version} != $latest_neovim_version ]]; then
-          print "Updating from ${installed_neovim_version} to $latest_neovim_version"
-          GH_HOST=github.com gh release download ${latest_neovim_version} --pattern "nvim-linux-$(uname -m).appimage" --repo neovim/neovim -D $MY_TMP \
-          && sudo install -m 755 ${MY_TMP}/nvim-linux-$(uname -m).appimage /usr/local/bin/nvim.appimage
-          [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
-        fi
-      elif [[ ${NEOVIM_BUILD} == "nightly" ]]; then
-        read -q "yn?Do you wish to refresh neovim nightly? "
-        case $yn in
-          [Yy]*)
-            print "\nInstalling latest nightly build."
-            GH_HOST=github.com gh release download nightly --pattern "nvim-linux-$(uname -m).appimage" --repo neovim/neovim -D $MY_TMP \
-            && sudo install -m 755 ${MY_TMP}/nvim-linux-$(uname -m).appimage /usr/local/bin/nvim.appimage
-            [[ -L /usr/local/bin/nvim ]] || sudo ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
-            ;;
-          *)
-            print "\nLeaving current version installed."
-            ;;
-        esac
-      fi
-    fi
     # Latest mise-en-place
     print "Checking for mise-en-place"
     curl -sSL https://api.github.com/repos/jdx/mise/releases/latest -o ${MY_TMP}/mise_latest.json
@@ -414,13 +361,6 @@ case $(uname) in
         && tar -C ${MY_TMP} -xzf ${MY_TMP}/dive-*darwin_amd64.tar.gz \
         && cp ${MY_TMP}/dive ${home_bin} \
         && chmod 755 ${home_bin}/dive
-    fi
-    # neovim
-    if [[ "NVIM v${NEOVIM_VERSION}" != $(nvim --version |head -1) ]]; then
-      echo neovim
-      curl -sLSo ${MY_TMP}/nvim-macos.tar.gz https://github.com/neovim/neovim/releases/download/v${NEOVIM_VERSION}/nvim-macos.tar.gz \
-        && gtar -C ~/.local/ -xzf ${MY_TMP}/nvim-macos.tar.gz \
-        && ln -sf ~/local/nvim-macos/bin/nvim ${home_bin}/nvim
     fi
 
     # kitty

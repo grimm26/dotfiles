@@ -27,6 +27,8 @@ goreleaser = "latest"
 "cargo:tree-sitter-cli" = "latest"
 "cargo:yazi-fm" = "latest"
 "cargo:yazi-cli" = "latest"
+"ubi:achannarasappa/ticker" = "latest"
+"aqua:neovim/neovim" = "latest"
 
 [settings]
 not_found_auto_install = true
