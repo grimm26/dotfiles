@@ -36,11 +36,6 @@ PYTHON_PKGS=(
   pipx
   pipreqs
 )
-typeset -A PIPX_PKGS=(
-  [glances]=1
-  [mdformat]=1
-  [pre-commit]=1
-)
 PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.13.json |jq -r '.latest')
 # Set NEOVIM_BUILD to nightly or latest. If set to nightly.
 NEOVIM_BUILD="stable"
@@ -477,18 +472,6 @@ echo "Python packages:"
 for pkg in $PYTHON_PKGS;do
   python3 -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
 done
-
-for i in $(pipx list --short);do
-  unset "PIPX_PKGS[$i]"
-done
-for pkg in ${(k)PIPX_PKGS};do
-  print "installing pipx $pkg"
-  pipx install $pkg
-done
-# TODO: be fancy and check if injected pkgs are already there.
-pipx inject mdformat mdformat-mkdocs
-pipx inject mdformat mdformat-admon
-pipx upgrade-all --include-injected
 
 print "Ruby Gems"
 unset GEMRC
