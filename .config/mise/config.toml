@@ -1,5 +1,7 @@
 [tools]
+"aqua:junegunn/fzf" = "latest"
 "aqua:neovim/neovim" = "latest"
+"aqua:tofuutils/tenv"  = "latest"
 "aqua:yazi" = "latest"
 "cargo:tree-sitter-cli" = "latest"
 "pipx:glances" = "latest"
@@ -7,6 +9,7 @@
 "pipx:pre-commit" = "latest"
 "ubi:achannarasappa/ticker" = "latest"
 "ubi:mikefarah/yq"  = "latest"
+"ubi:mr-karan/doggo" = "latest"
 "ubi:sharkdp/fd" = "latest"
 awscli = "2"
 bat = "latest"

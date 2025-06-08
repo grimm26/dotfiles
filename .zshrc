@@ -174,6 +174,13 @@ if (( $+commands[tenv] )); then
   fi
   source $tenv_init
 fi
+if (( $+commands[doggo] )); then
+  doggo_init=~/.zsh-cache/doggo.init
+  if [[ ! -e $doggo_init || $doggo_init -ot ${commands[doggo]} ]]; then
+    doggo completions zsh >| $doggo_init
+  fi
+  source $doggo_init
+fi
 
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -681,36 +688,36 @@ tfup () {
   fi
 }
 ## {{{ START fzf
-source <(fzf --zsh)
-if whence -p fdfind &>/dev/null; then
-  export FD_BIN=fdfind
-fi
-if whence -p fd &>/dev/null; then
-  export FD_BIN=fd
-fi
-export FZF_DEFAULT_COMMAND="$FD_BIN --type file --hidden --exclude .git --exclude .terraform"
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-# Use ,, as the trigger sequence instead of the default **
-export FZF_COMPLETION_TRIGGER=',,'
-# Use fd (https://github.com/sharkdp/fd) instead of the default find
-# command for listing path candidates.
-# - The first argument to the function ($1) is the base path to start traversal
-# - See the source code (completion.{bash,zsh}) for the details.
-# Override _fzf_compgen_{path,dir} to use fd and ignore .terraform
-_fzf_compgen_path() {
-  echo "$1"
-  command $FD_BIN --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
-}
-_fzf_compgen_dir() {
-  command $FD_BIN --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
-}
-if (( ${+commands[bat]} )); then
-  export FZF_CTRL_T_OPTS="--preview 'command bat --color=always --line-range :500 {}' ${FZF_CTRL_T_OPTS}"
-fi
+if (( ${+commands[fzf]} )); then
+  source <(fzf --zsh)
+  if (( ${+commands[fdfind]} )); then
+    export FD_BIN=fdfind
+  elif (( ${+commands[fd]} )); then
+    export FD_BIN=fd
+  fi
+  export FZF_DEFAULT_COMMAND="$FD_BIN --type file --hidden --exclude .git --exclude .terraform"
+  export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+  # Use ,, as the trigger sequence instead of the default **
+  export FZF_COMPLETION_TRIGGER=',,'
+  # Use fd (https://github.com/sharkdp/fd) instead of the default find
+  # command for listing path candidates.
+  # - The first argument to the function ($1) is the base path to start traversal
+  # - See the source code (completion.{bash,zsh}) for the details.
+  # Override _fzf_compgen_{path,dir} to use fd and ignore .terraform
+  _fzf_compgen_path() {
+    echo "$1"
+    command $FD_BIN --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
+  }
+  _fzf_compgen_dir() {
+    command $FD_BIN --type d --hidden --follow --exclude ".git" --exclude ".terraform" . "$1"
+  }
+  if (( ${+commands[bat]} )); then
+    export FZF_CTRL_T_OPTS="--preview 'command bat --color=always --line-range :500 {}' ${FZF_CTRL_T_OPTS}"
+  fi
 
-if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
-export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
-
+  if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
+  export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
+fi
 # END fzf }}}
 
 alias gcl &>/dev/null && unalias gcl

@@ -48,7 +48,7 @@ if (( ${+commands[tenv]} )); then
   export TENV_AUTO_INSTALL=true
   # https://github.com/tofuutils/tenv/issues/305
   export TENV_DETACHED_PROXY=false
-  export TOFUENV_TOFU_DEFAULT_VERSION=1.9.0
+  export TOFUENV_TOFU_DEFAULT_VERSION=1.9.1
   export TFENV_TERRAFORM_DEFAULT_VERSION=1.9.8
 fi
 # https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-forward-tf-stdout

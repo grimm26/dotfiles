@@ -241,44 +241,6 @@ case $(uname) in
       sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
       sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
     fi
-    # Latest doggo
-    print "doggo"
-    local current_doggo_version=$(doggo --version 2>/dev/null| awk '{print $1}')
-    local latest_doggo_version=$(gh_latest_release "mr-karan/doggo")
-    if [[ "${current_doggo_version}" != "${latest_doggo_version}" ]]; then
-      print "Updating from ${current_doggo_version} to ${latest_doggo_version}"
-      local build_artifact="doggo_${latest_doggo_version#v}_Linux_$(uname -m).tar.gz"
-      mkdir -p "${MY_TMP}/doggo"
-      GH_HOST=github.com gh release download --pattern $build_artifact --repo mr-karan/doggo -D $MY_TMP \
-        && tar -C "${MY_TMP}" -xzf "$MY_TMP/${build_artifact}" \
-        && cp "${MY_TMP}/${build_artifact/.tar.gz/}/doggo" "${home_bin}" \
-        && chmod 755 "${home_bin}/doggo"
-      mkdir -p ~/.zcompletions && "${home_bin}/doggo" completions zsh >| ~/.zcompletions/_doggo
-    fi
-    # Latest tenv
-    print "tenv"
-    local current_tenv_version=$(tenv version 2>/dev/null| awk '{print $3}')
-    local latest_tenv_version=$(gh_latest_release "tofuutils/tenv")
-    if [[ "${current_tenv_version}" != "${latest_tenv_version}" ]]; then
-      print "Updating from ${current_tenv_version} to ${latest_tenv_version}"
-      local build_artifact="tenv_${latest_tenv_version}_Linux_x86_64.tar.gz"
-      mkdir -p "${MY_TMP}/tenv"
-      GH_HOST=github.com gh release download --pattern $build_artifact --repo tofuutils/tenv -D $MY_TMP \
-        && tar -C "${MY_TMP}/tenv" -xf $MY_TMP/tenv*.tar.gz \
-        && install -D -t "${HOME}/.tenv/bin" ${MY_TMP}/tenv/t*
-    fi
-    # Latest fzf
-    print "fzf"
-    local current_fzf_version=$(fzf --version 2>/dev/null| awk '{print $1}')
-    local latest_fzf_version=$(gh_latest_release "junegunn/fzf")
-    if [[ "${current_fzf_version#v}" != "${latest_fzf_version#v}" ]]; then
-      print "Updating from ${current_fzf_version#v} to ${latest_fzf_version#v}"
-      local build_artifact="fzf-${latest_fzf_version#v}-linux_amd64.tar.gz"
-      mkdir -p "${MY_TMP}/fzf"
-      GH_HOST=github.com gh release download --pattern $build_artifact --repo junegunn/fzf -D $MY_TMP \
-        && tar -C "${MY_TMP}/fzf" -xzf $MY_TMP/$build_artifact \
-        && install -D -t "${home_bin}" ${MY_TMP}/fzf/fzf
-    fi
     # Install hishtory
     if [[ -d ~/.hishtory ]]; then
       print "hishtory already installed"
