@@ -11,6 +11,7 @@
 "ubi:mikefarah/yq"  = "latest"
 "ubi:mr-karan/doggo" = "latest"
 "ubi:sharkdp/fd" = "latest"
+"ubi:terraform-linters/tflint" = "latest"
 awscli = "2"
 bat = "latest"
 bat-extras = "latest"
