@@ -8,7 +8,6 @@
 # Modules
 #
 
-zmodule joke/zim-mise
 # Sets sane Zsh built-in environment options.
 zmodule environment
 # Applies correct bindkeys for input events.

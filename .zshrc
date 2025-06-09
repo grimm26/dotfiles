@@ -160,6 +160,13 @@ unset key
 # }}} End configuration added by Zim install
 unalias acp &>/dev/null # remove the alias for apt acp so it doesn't get in the way of the aws acp()
 mkdir -p ~/.zsh-cache
+if (( $+commands[mise] )); then
+  mise_init=~/.zsh-cache/mise.init
+  if [[ ! -e $mise_init || $mise_init -ot ${commands[mise]} ]]; then
+    mise completion zsh >| $mise_init
+  fi
+  source $mise_init
+fi
 if (( $+commands[zoxide] )); then
   zoxide_init=~/.zsh-cache/zoxide.init
   if [[ ! -e $zoxide_init || $zoxide_init -ot ${commands[zoxide]} ]]; then
