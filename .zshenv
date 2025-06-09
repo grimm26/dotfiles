@@ -42,7 +42,7 @@ if [[ -d ${HOME}/.pyenv ]]; then
 fi
 typeset -U PATH path
 export PATH
-eval "$(mise activate zsh)"
+(( ${+commands[mise]} )) && eval "$(mise activate zsh)"
 
 if (( ${+commands[tenv]} )); then
   # Have tenv automatically install versions that aren't installed
