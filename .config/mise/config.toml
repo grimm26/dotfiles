@@ -1,14 +1,14 @@
 [tools]
 "aqua:junegunn/fzf" = "latest"
 "aqua:neovim/neovim" = "latest"
-"aqua:tofuutils/tenv"  = "latest"
+"aqua:tofuutils/tenv" = "latest"
 "aqua:yazi" = "latest"
 "cargo:tree-sitter-cli" = "latest"
 "pipx:glances" = "latest"
 "pipx:mdformat" = { version = "latest", extras = "mdformat-mkdocs,mdformat-admon" }
 "pipx:pre-commit" = "latest"
 "ubi:achannarasappa/ticker" = "latest"
-"ubi:mikefarah/yq"  = "latest"
+"ubi:mikefarah/yq" = "latest"
 "ubi:mr-karan/doggo" = "latest"
 "ubi:sharkdp/fd" = "latest"
 "ubi:terraform-linters/tflint" = "latest"
@@ -29,10 +29,10 @@ lazygit = "latest"
 lsd = "latest"
 node = "lts"
 tflint = "latest"
-tfswitch = "latest"
 usage = "latest"
 zig = "latest"
 zoxide = "latest"
+cargo-binstall = "latest"
 
 [settings]
 not_found_auto_install = true
@@ -40,3 +40,6 @@ python_compile = true
 go_set_gobin = false
 go_set_gopath = false
 idiomatic_version_file_enable_tools = []
+
+[settings.cargo]
+binstall = true
