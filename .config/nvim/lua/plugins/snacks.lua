@@ -111,7 +111,7 @@ return {
                 action = function()
                   vim.ui.open("https://" .. github_hostname .. "/notifications")
                 end,
-                key = "n",
+                key = "N",
                 icon = " ",
                 height = 5,
                 enabled = true,
