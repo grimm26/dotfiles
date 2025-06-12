@@ -724,6 +724,33 @@ if (( ${+commands[fzf]} )); then
 
   if (( ${+FZF_DEFAULT_COMMAND} )) export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
   export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
+  # fd - cd to selected directory
+  fcd() {
+    local dir
+    dir=$(find ${1:-.} -path '*/\.*' -prune \
+                    -o -type d -print 2> /dev/null | fzf +m) &&
+    cd "$dir"
+  }
+  # cdf - cd into the directory of the selected file
+  cdf() {
+     local file
+     local dir
+     file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+  }
+  # using ugrep combined with preview
+  # select file to open in vim
+  # find-in-file - usage: fif <searchTerm>
+  fif() {
+    if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+    ug --hidden --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --bind "enter:execute(nvim {})+abort" --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
+  }
+
+  # Interactive directory change
+  cdd() {
+    local dir
+    dir=$(fd -t d | fzf --prompt="Directory: " --height=50% --border)
+    [[ -n $dir ]] && cd "$dir"
+  }
 fi
 # END fzf }}}
 
@@ -785,27 +812,6 @@ awsp ()
     fi
 }
 
-# fd - cd to selected directory
-fcd() {
-  local dir
-  dir=$(find ${1:-.} -path '*/\.*' -prune \
-                  -o -type d -print 2> /dev/null | fzf +m) &&
-  cd "$dir"
-}
-# cdf - cd into the directory of the selected file
-cdf() {
-   local file
-   local dir
-   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
-}
-# using ugrep combined with preview
-# select file to open in vim
-# find-in-file - usage: fif <searchTerm>
-fif() {
-  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-  ug --hidden --binary-files=without-match --exclude-dir=.terraform --exclude-dir=.git --files-with-matches --no-messages "$1" | fzf --bind "enter:execute(nvim {})+abort" --preview "highlight -O ansi -l {} 2> /dev/null | ug --color=always --colors=cx=0:mt=y --ignore-case --pretty --context=10 '$1' {}"
-}
-
 ### zlogin
 
 # Put "local" stuff in here, sensitive for work or specific to this machine
@@ -828,6 +834,11 @@ misc_updates() {
   # upgrade
   GH_HOST=github.com gh ext upgrade --all
 }
+
+# custom directory navigation
+hash -d nvim=~/.config/nvim
+hash -d tf=~/git/terraforms
+hash -d tfmod=~/git/tf-modules
 
 show-path () {
   print ${(F)path}
