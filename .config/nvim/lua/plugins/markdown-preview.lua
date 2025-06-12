@@ -21,8 +21,16 @@ return {
   {
     "OXY2DEV/markview.nvim",
     lazy = false,
+    keys = {
+      { "<leader>mvt", "<cmd>Markview Toggle<cr>", desc = "Toggle Markview" },
+      { "<leader>mvs", "<cmd>Markview splitToggle<cr>", desc = "Toggle Markview Split view" },
+      { "<leader>mvh", "<cmd>Markview HybridToggle<cr>", desc = "Toggle Markview Hybrid view" },
+    },
     opts = {
       preview = {
+        enable = true,
+        enable_hybrid_mode = true,
+        hybrid_modes = { "n", "no", "c" },
         icon_provider = "mini", -- "mini" or "devicons"
       },
     },
