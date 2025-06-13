@@ -5,6 +5,7 @@
 "aqua:yazi" = "latest"
 "cargo:tree-sitter-cli" = "latest"
 "pipx:glances" = "latest"
+"pipx:httpie" = "latest"
 "pipx:mdformat" = { version = "latest", pipx_args = "--preinstall mdformat-mkdocs --preinstall mdformat-admon" }
 "pipx:pre-commit" = "latest"
 "ubi:achannarasappa/ticker" = "latest"
