@@ -105,14 +105,20 @@ fi
 if ! pyenv global $PYTHON_VERSION &>/dev/null; then
   print "Using pyenv to install python $PYTHON_VERSION"
   pyenv install $PYTHON_VERSION \
-    && pyenv global $PYTHON_VERSION \
-    && PIP_OPTIONS="--force-reinstall"
+    && pyenv global $PYTHON_VERSION
+  echo "Reinstalling python packages"
+  for pkg in $PYTHON_PKGS;do
+    python3 -m pip install --upgrade --user --force-reinstall $pkg
+  done
+  for pkg in $(mise list -i --no-header |grep pipx:  |awk '{print $1}');do
+    mise install -f $pkg
+  done
+else
+  echo "Python packages:"
+  for pkg in $PYTHON_PKGS;do
+    python3 -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
+  done
 fi
-
-echo "Python packages:"
-for pkg in $PYTHON_PKGS;do
-  python3 -m pip install --upgrade --user ${PIP_OPTIONS} $pkg | grep -v "Requirement already satisfied"
-done
 # OS Type specific stuff first
 case $(uname) in
   Linux)
