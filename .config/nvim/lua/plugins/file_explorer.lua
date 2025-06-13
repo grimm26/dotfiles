@@ -2,7 +2,7 @@ return {
   {
     -- file explorer
     "stevearc/oil.nvim",
-    enabled = false,
+    enabled = true,
     config = function()
       -- helper function to parse output
       local function parse_output(proc)
@@ -80,6 +80,7 @@ return {
   },
   {
     "mikavilpas/yazi.nvim",
+    enabled = false,
     event = "VeryLazy",
     dependencies = {
       -- check the installation instructions at
