@@ -1,11 +1,14 @@
 [tools]
+# keep-sorted start
 "aqua:junegunn/fzf" = "latest"
 "aqua:neovim/neovim" = "latest"
 "aqua:tofuutils/tenv" = "latest"
 "aqua:yazi" = "latest"
 "cargo:tree-sitter-cli" = "latest"
+"pipx:ansible" = "latest"
 "pipx:glances" = "latest"
 "pipx:httpie" = "latest"
+"pipx:jsonschema" = "latest"
 "pipx:mdformat" = { version = "latest", pipx_args = "--preinstall mdformat-mkdocs --preinstall mdformat-admon" }
 "pipx:pre-commit" = "latest"
 "ubi:achannarasappa/ticker" = "latest"
@@ -16,6 +19,7 @@
 awscli = "2"
 bat = "latest"
 bat-extras = "latest"
+cargo-binstall = "latest"
 cheat = "latest"
 cosign = "latest"
 delta = "latest"
@@ -29,18 +33,21 @@ kubectl = "latest"
 lazygit = "latest"
 lsd = "latest"
 node = "lts"
+rust = "latest"
 tflint = "latest"
 usage = "latest"
 zig = "latest"
 zoxide = "latest"
-cargo-binstall = "latest"
+# keep-sorted end
 
 [settings]
-not_found_auto_install = true
-python_compile = true
+# keep-sorted start
 go_set_gobin = false
 go_set_gopath = false
 idiomatic_version_file_enable_tools = []
+not_found_auto_install = true
+python_compile = true
+# keep-sorted end
 
 [settings.cargo]
 binstall = true
