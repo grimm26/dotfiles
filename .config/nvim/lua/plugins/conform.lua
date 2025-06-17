@@ -24,7 +24,7 @@ return {
         lua = { "stylua" },
         markdown = { "mdslw", "mdformat" },
         python = { "isort", "black" },
-        terraform = { "terraform_fmt", "keep_sorted" },
+        terraform = { "keep_sorted", "terraform_fmt" },
         toml = { "keep_sorted" },
         typescript = { "prettierd" },
         vue = { "prettierd" },
