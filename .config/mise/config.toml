@@ -5,7 +5,7 @@
 "aqua:tofuutils/tenv" = "latest"
 "aqua:yazi" = "latest"
 "cargo:tree-sitter-cli" = "latest"
-"pipx:ansible" = "latest"
+"pipx:ansible-core" = "latest"
 "pipx:glances" = "latest"
 "pipx:httpie" = "latest"
 "pipx:jsonschema" = "latest"
