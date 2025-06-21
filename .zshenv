@@ -105,7 +105,7 @@ terraform () {
       atlantis_kube_link
       source $ENOVA_ATLANTIS_VAR_CACHE
     fi
-    TG_TF_PATH=terraform terragrunt run -- "$@"
+    TG_TF_PATH=terraform command terragrunt run -- "$@"
     unset TG_PROVIDER_CACHE
   else
     command terraform "$@"
@@ -131,7 +131,7 @@ tofu () {
       atlantis_kube_link
       source $ENOVA_ATLANTIS_VAR_CACHE
     fi
-    TG_TF_PATH=tofu terragrunt run -- "$@"
+    TG_TF_PATH=tofu command terragrunt run -- "$@"
     unset TG_PROVIDER_CACHE
   else
     command tofu "$@"
@@ -151,7 +151,7 @@ tgtf () {
   if [[ $has_log_level == false ]]; then
     extra_args+=( --log-level=error )
   fi
-  TG_TF_PATH=terraform terragrunt ${^extra_args} run "$@"
+  TG_TF_PATH=terraform command terragrunt ${^extra_args} run "$@"
 }
 tgtofu () {
   local has_log_level=false
@@ -166,9 +166,11 @@ tgtofu () {
   if [[ $has_log_level == false ]]; then
     extra_args+=( --log-level=error )
   fi
-  TG_TF_PATH=tofu terragrunt ${^extra_args} run "$@"
+  TG_TF_PATH=tofu command terragrunt ${^extra_args} run "$@"
 }
-tg () {
+alias tg=terragrunt
+terragrunt () {
+  local need_env=0
   local has_tf_path=false
   local has_log_level=false
   local extra_args=()
@@ -179,21 +181,49 @@ tg () {
       local has_log_level=true
     elif [[ $arg == init ]]; then
       extra_args+=( --provider-cache )
+      need_env=1
+    else
+      case $arg in
+	plan|apply|destroy|import|state|validate|taint|untaint)
+	  need_env=1
+	  ;;
+      esac
     fi
   done
+  if [[ -v TG_TF_PATH ]]; then
+    local has_tf_path=true
+  fi
   if [[ $has_log_level == false ]]; then
     extra_args+=( --log-level=error )
   fi
+  local rebuilt_args=()
+  if [[ ${#extra_args} -gt 0 ]]; then
+    for arg in "$@"; do
+      if [[ $arg == -- ]]; then
+        rebuilt_args+=($extra_args)
+	rebuilt_args+=("--")
+      else
+	rebuilt_args+=("$arg")
+      fi
+    done
+  else
+    rebuilt_args=$@
+  fi
+  if typeset -f tfenv >/dev/null && [[ $need_env == 1 ]]; then
+    tfenv
+    atlantis_kube_link
+    source $ENOVA_ATLANTIS_VAR_CACHE
+  fi
   if [[ $has_tf_path == true ]]; then
-    terragrunt ${^extra_args} "$@"
+    terragrunt ${^rebuilt_args}
   elif [[ -s atlantis.yaml ]]; then
     if grep -q 'terraform_distribution: opentofu' atlantis.yaml; then
-      TG_TF_PATH=tofu terragrunt ${^extra_args} "$@"
+      TG_TF_PATH=tofu command terragrunt ${^rebuilt_args}
     else
-      TG_TF_PATH=terraform terragrunt ${^extra_args} "$@"
+      TG_TF_PATH=terraform command terragrunt ${^rebuilt_args}
     fi
   else
-    terragrunt ${^extra_args} "$@"
+    command terragrunt ${^rebuilt_args}
   fi
 }
 
