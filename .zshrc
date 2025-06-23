@@ -676,6 +676,7 @@ tf1x () {
 }
 alias tgi="tg run init -- -upgrade -reconfigure"
 alias tfii="terraform init -upgrade -reconfigure"
+alias ttii="tofu init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"
 alias tfu="tf12 && terraform 0.12upgrade -yes;chompeof *.tf"
 tfup () {
