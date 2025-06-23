@@ -13,6 +13,7 @@
 "pipx:pre-commit" = "latest"
 "ubi:achannarasappa/ticker" = "latest"
 "ubi:mikefarah/yq" = "latest"
+"ubi:minamijoyo/hcledit" = "latest"
 "ubi:mr-karan/doggo" = "latest"
 "ubi:sharkdp/fd" = "latest"
 "ubi:terraform-linters/tflint" = "latest"

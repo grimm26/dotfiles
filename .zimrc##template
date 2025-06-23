@@ -78,6 +78,7 @@ zmodule ohmyzsh/ohmyzsh --root plugins/aws
 zmodule ohmyzsh/ohmyzsh --root plugins/git
 zmodule ohmyzsh/ohmyzsh --root plugins/kitty
 zmodule ohmyzsh/ohmyzsh --root plugins/terraform
+zmodule ohmyzsh/ohmyzsh --root plugins/opentofu
 {% if yadm.distro == "Ubuntu" %}
 zmodule ohmyzsh/ohmyzsh --root plugins/ubuntu
 {% endif %}
