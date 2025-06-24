@@ -89,11 +89,6 @@ terraform () {
   local need_env=0
   if [[ -a terragrunt.hcl ]]; then
     for arg in "$@"; do
-      if [[ $arg == init ]]; then
-        export TG_PROVIDER_CACHE=1
-        need_env=1
-        continue
-      fi
       case $arg in
         plan|apply|destroy|import|state|validate|taint|untaint)
           need_env=1
@@ -106,7 +101,6 @@ terraform () {
       source $ENOVA_ATLANTIS_VAR_CACHE
     fi
     TG_TF_PATH=terraform command terragrunt run -- "$@"
-    unset TG_PROVIDER_CACHE
   else
     command terraform "$@"
   fi
@@ -115,11 +109,6 @@ tofu () {
   local need_env=0
   if [[ -a terragrunt.hcl ]]; then
     for arg in "$@"; do
-      if [[ $arg == init ]]; then
-        export TG_PROVIDER_CACHE=1
-        need_env=1
-        continue
-      fi
       case $arg in
         plan|apply|destroy|import|state|validate|taint|untaint)
           need_env=1
@@ -132,42 +121,11 @@ tofu () {
       source $ENOVA_ATLANTIS_VAR_CACHE
     fi
     TG_TF_PATH=tofu command terragrunt run -- "$@"
-    unset TG_PROVIDER_CACHE
   else
     command tofu "$@"
   fi
 }
 
-tgtf () {
-  local has_log_level=false
-  local extra_args=()
-  for arg in "$@"; do
-    if [[ $arg == --log-level* ]]; then
-      local has_log_level=true
-    elif [[ $arg == init ]]; then
-      extra_args+=( --provider-cache )
-    fi
-  done
-  if [[ $has_log_level == false ]]; then
-    extra_args+=( --log-level=error )
-  fi
-  TG_TF_PATH=terraform command terragrunt ${^extra_args} run "$@"
-}
-tgtofu () {
-  local has_log_level=false
-  local extra_args=()
-  for arg in "$@"; do
-    if [[ $arg == --log-level* ]]; then
-      local has_log_level=true
-    elif [[ $arg == init ]]; then
-      extra_args+=( --provider-cache )
-    fi
-  done
-  if [[ $has_log_level == false ]]; then
-    extra_args+=( --log-level=error )
-  fi
-  TG_TF_PATH=tofu command terragrunt ${^extra_args} run "$@"
-}
 alias tg=terragrunt
 terragrunt () {
   local need_env=0
@@ -177,10 +135,7 @@ terragrunt () {
   for arg in "$@"; do
     if [[ $arg == --tf-path* ]]; then
       local has_tf_path=true
-    elif [[ $arg == --log-level* ]]; then
-      local has_log_level=true
     elif [[ $arg == init ]]; then
-      extra_args+=( --provider-cache )
       need_env=1
     else
       case $arg in
@@ -193,17 +148,14 @@ terragrunt () {
   if [[ -v TG_TF_PATH ]]; then
     local has_tf_path=true
   fi
-  if [[ $has_log_level == false ]]; then
-    extra_args+=( --log-level=error )
-  fi
   local rebuilt_args=()
   if [[ ${#extra_args} -gt 0 ]]; then
     for arg in "$@"; do
       if [[ $arg == -- ]]; then
         rebuilt_args+=($extra_args)
-	rebuilt_args+=("--")
+	      rebuilt_args+=("--")
       else
-	rebuilt_args+=("$arg")
+	      rebuilt_args+=("$arg")
       fi
     done
   else
