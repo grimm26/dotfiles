@@ -34,6 +34,7 @@ return {
         icon_provider = "mini", -- "mini" or "devicons"
       },
     },
+    priority = 40,
     -- For blink.cmp's completion
     -- source
     dependencies = {
