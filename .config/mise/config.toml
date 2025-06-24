@@ -5,6 +5,7 @@
 "aqua:tofuutils/tenv" = "latest"
 "aqua:yazi" = "latest"
 "cargo:tree-sitter-cli" = "latest"
+"go:github.com/go-delve/delve/cmd/dlv" = "latest"
 "pipx:ansible-core" = "latest"
 "pipx:glances" = "latest"
 "pipx:httpie" = "latest"
@@ -43,6 +44,7 @@ zoxide = "latest"
 
 [settings]
 # keep-sorted start
+experimental = true
 go_set_gobin = false
 go_set_gopath = false
 idiomatic_version_file_enable_tools = []
