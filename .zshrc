@@ -482,7 +482,6 @@ colorcheck() {
   }'
 }
 
-tgp () { terragrunt plan -no-color|awk 'BEGIN{f="/tmp/plan.txt"}/^---/{o=!o};{print};{if(o&&!/^---/){print>f}}'; }
 tgl () {
   if [ -x =landscape ]; then
     case "$1" in
@@ -675,6 +674,7 @@ tf1x () {
   fi
 }
 alias tgi="tg run init -- -upgrade -reconfigure"
+alias tgp="tg run plan"
 alias tfii="terraform init -upgrade -reconfigure"
 alias ttii="tofu init -upgrade -reconfigure"
 alias tgu="tf12 && terragrunt 0.12upgrade -yes;chompeof *.tf;uniq main.tf > main.tfu;mv main.tfu main.tf;sed -i tmp '/^\s*$/d' versions.tf;rm versions.tftmp"

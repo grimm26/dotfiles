@@ -152,14 +152,16 @@ terragrunt () {
   if [[ ${#extra_args} -gt 0 ]]; then
     for arg in "$@"; do
       if [[ $arg == -- ]]; then
-        rebuilt_args+=($extra_args)
+        for extra in "${extra_args[@]}"; do
+          rebuilt_args+=($extra)
+        done
 	      rebuilt_args+=("--")
       else
 	      rebuilt_args+=("$arg")
       fi
     done
   else
-    rebuilt_args=$@
+    rebuilt_args=("$@")
   fi
   if typeset -f tfenv >/dev/null && [[ $need_env == 1 ]]; then
     tfenv
@@ -167,15 +169,15 @@ terragrunt () {
     source $ENOVA_ATLANTIS_VAR_CACHE
   fi
   if [[ $has_tf_path == true ]]; then
-    terragrunt ${^rebuilt_args}
+    terragrunt "${rebuilt_args[@]}"
   elif [[ -s atlantis.yaml ]]; then
     if grep -q 'terraform_distribution: opentofu' atlantis.yaml; then
-      TG_TF_PATH=tofu command terragrunt ${^rebuilt_args}
+      TG_TF_PATH=tofu command terragrunt "${rebuilt_args[@]}"
     else
-      TG_TF_PATH=terraform command terragrunt ${^rebuilt_args}
+      TG_TF_PATH=terraform command terragrunt "${rebuilt_args[@]}"
     fi
   else
-    command terragrunt ${^rebuilt_args}
+    command terragrunt "${rebuilt_args[@]}"
   fi
 }
 
