@@ -21,6 +21,7 @@ return {
         hcl = { "terraform_fmt" },
         html = { "prettierd" },
         javascript = { "prettierd" },
+        json = { "jq" },
         lua = { "stylua" },
         markdown = { "mdslw", "mdformat" },
         python = { "isort", "black" },
