@@ -10,6 +10,17 @@
           "terraform"
         ],
         "path": "./terraform.json"
+      },
+      {
+        "language": [
+          "plaintext",
+          "markdown",
+          "tex",
+          "html",
+          "global",
+          "all"
+        ],
+        "path": "./global.json"
       }
     ]
   }

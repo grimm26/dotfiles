@@ -1,0 +1,23 @@
+{
+  "keep-sorted-start-block": {
+    "prefix": "kssb",
+    "description": "Start keep-sorted with block.",
+    "body": [
+      "# keep-sorted start block=yes"
+    ]
+  },
+  "keep-sorted-start": {
+    "prefix": "kss",
+    "description": "Start keep-sorted.",
+    "body": [
+      "# keep-sorted start"
+    ]
+  },
+  "keep-sorted-end": {
+    "prefix": "kse",
+    "description": "End a keep-sorted block.",
+    "body": [
+      "# keep-sorted end"
+    ]
+  }
+}
