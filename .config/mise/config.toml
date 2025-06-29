@@ -4,7 +4,6 @@
 "aqua:neovim/neovim" = "latest"
 "aqua:tofuutils/tenv" = "latest"
 "aqua:yazi" = "latest"
-"cargo:hurl" = "latest"
 "cargo:tree-sitter-cli" = "latest"
 "go:github.com/go-delve/delve/cmd/dlv" = "latest"
 "go:github.com/google/keep-sorted" = "latest"
