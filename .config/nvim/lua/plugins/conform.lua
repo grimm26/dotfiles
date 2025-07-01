@@ -18,7 +18,7 @@ return {
       },
       formatters_by_ft = {
         graphql = { "prettierd" },
-        hcl = { "terraform_fmt" },
+        hcl = { "keep_sorted", "terraform_fmt" },
         html = { "prettierd" },
         javascript = { "prettierd" },
         json = { "jq" },

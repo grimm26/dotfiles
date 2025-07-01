@@ -83,6 +83,10 @@ return {
               dictionary_files = { vim.fn.expand("~/.config/nvim/spell/en.utf-8.add") },
             },
           },
+          lsp = {
+            enabled = true,
+            score_offset = -10,
+          },
         },
       },
       fuzzy = {
