@@ -49,7 +49,6 @@ if (( ${+commands[tenv]} )); then
   export TENV_AUTO_INSTALL=true
   # https://github.com/tofuutils/tenv/issues/305
   export TENV_DETACHED_PROXY=false
-  export TOFUENV_TOFU_DEFAULT_VERSION=1.9.1
   export TFENV_TERRAFORM_DEFAULT_VERSION=1.9.8
 fi
 # https://terragrunt.gruntwork.io/docs/reference/cli-options/#terragrunt-forward-tf-stdout
@@ -169,7 +168,7 @@ terragrunt () {
     source $ENOVA_ATLANTIS_VAR_CACHE
   fi
   if [[ $has_tf_path == true ]]; then
-    terragrunt "${rebuilt_args[@]}"
+    command terragrunt "${rebuilt_args[@]}"
   elif [[ -s atlantis.yaml ]]; then
     if grep -q 'terraform_distribution: opentofu' atlantis.yaml; then
       TG_TF_PATH=tofu command terragrunt "${rebuilt_args[@]}"
