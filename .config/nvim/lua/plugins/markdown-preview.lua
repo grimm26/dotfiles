@@ -21,6 +21,7 @@ return {
   {
     "OXY2DEV/markview.nvim",
     lazy = false,
+    priority = 49,
     keys = {
       { "<leader>mvt", "<cmd>Markview Toggle<cr>", desc = "Toggle Markview" },
       { "<leader>mvs", "<cmd>Markview splitToggle<cr>", desc = "Toggle Markview Split view" },
@@ -34,7 +35,6 @@ return {
         icon_provider = "mini", -- "mini" or "devicons"
       },
     },
-    priority = 40,
     -- For blink.cmp's completion
     -- source
     dependencies = {
