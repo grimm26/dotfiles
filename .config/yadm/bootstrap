@@ -50,7 +50,7 @@ if [[ -d ${HOME}/bin && ! -L ${HOME}/bin ]]; then
   ln -s $home_bin ${HOME}/bin
 fi
 
-## Like an "UPSERT," clone or update the git project and return if a config/install is warranetd because of initial clone or chanegs were pulled.
+## Like an "UPSERT," clone or update the git project and return if a config/install is warranted because of initial clone or chanegs were pulled.
 upinst_from_git() {
   readonly git_url=${1:?"Supply the project git url as first parameter to install_from_git()"}
   readonly repo_name=${${git_url##*/}%.git}

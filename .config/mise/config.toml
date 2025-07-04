@@ -7,9 +7,11 @@
 "cargo:tree-sitter-cli" = "latest"
 "go:github.com/go-delve/delve/cmd/dlv" = "latest"
 "go:github.com/google/keep-sorted" = "latest"
+"go:github.com/wagoodman/dive" = "latest"
 "pipx:ansible-core" = "latest"
 "pipx:glances" = "latest"
 "pipx:httpie" = "latest"
+"pipx:identify" = "latest"
 "pipx:jsonschema" = "latest"
 "pipx:mdformat" = { version = "latest", pipx_args = "--preinstall mdformat-mkdocs --preinstall mdformat-admon" }
 "pipx:pre-commit" = "latest"
