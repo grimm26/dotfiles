@@ -21,4 +21,10 @@ return {
     -- version = "^2.0.0", -- pin major version, include fixes and features that do not have breaking changes
     opts = {},
   },
+  {
+    "stevearc/overseer.nvim",
+    opts = {
+      templates = { "builtin", "user.run_script" },
+    },
+  },
 }
