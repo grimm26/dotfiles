@@ -1,5 +1,6 @@
 [tools]
 # keep-sorted start
+"aqua:helm" = "latest"
 "aqua:junegunn/fzf" = "latest"
 "aqua:neovim/neovim" = "latest"
 "aqua:tofuutils/tenv" = "latest"
@@ -34,7 +35,6 @@ cheat = "latest"
 delta = "latest"
 go = "latest"
 goreleaser = "latest"
-helm = "latest"
 k9s = "latest"
 kubectl = "latest"
 lazygit = "latest"
