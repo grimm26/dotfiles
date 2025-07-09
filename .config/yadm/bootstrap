@@ -13,6 +13,7 @@ PYTHON_PKGS=(
   pip
   pipx
   pipreqs
+  python-hcl2
 )
 PYTHON_VERSION=$(curl --silent https://endoflife.date/api/python/3.13.json |jq -r '.latest')
 
