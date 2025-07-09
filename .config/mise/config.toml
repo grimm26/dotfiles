@@ -28,6 +28,7 @@
 "ubi:sharkdp/fd" = "latest"
 "ubi:sigstore/cosign" = "latest"
 "ubi:terraform-linters/tflint" = "latest"
+"ubi:tmccombs/hcl2json" = "latest"
 awscli = "2"
 bat = "latest"
 bat-extras = "latest"
