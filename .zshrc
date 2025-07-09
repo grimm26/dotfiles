@@ -837,9 +837,10 @@ misc_updates() {
 }
 
 # custom directory navigation
-hash -d nvim=~/.config/nvim
-hash -d tf=~/git/terraforms
-hash -d tfmod=~/git/tf-modules
+[[ -d ~/.config/nvim ]] && hash -d nvim=~/.config/nvim
+[[ -d ~/git/terraforms ]] && hash -d tf=~/git/terraforms
+[[ -d ~/git/tf-modules ]] && hash -d tfmod=~/git/tf-modules
+[[ -d ~/git/appinfra ]] && hash -d appinfra=~/git/appinfra
 
 show-path () {
   print ${(F)path}
